@@ -1,0 +1,190 @@
+- generic [active] [ref=e1]:
+  - link "Installateurspagina" [ref=e2] [cursor=pointer]:
+    - /url: installateurs.html
+  - navigation [ref=e3]:
+    - link [ref=e4] [cursor=pointer]:
+      - /url: index.html
+      - img [ref=e5]:
+        - generic [ref=e8]: SOLYX ENERGY
+    - list [ref=e9]:
+      - listitem [ref=e10]:
+        - link "Hoe werkt het" [ref=e11] [cursor=pointer]:
+          - /url: hoe-werkt-het.html
+      - listitem [ref=e12]:
+        - link "Besparen" [ref=e13] [cursor=pointer]:
+          - /url: besparen.html
+      - listitem [ref=e14]:
+        - link "Aan de slag" [ref=e15] [cursor=pointer]:
+          - /url: how-to-get-it.html
+      - listitem [ref=e16]:
+        - link "FAQ" [ref=e17] [cursor=pointer]:
+          - /url: faq.html
+      - listitem [ref=e18]:
+        - link "Shop" [ref=e19] [cursor=pointer]:
+          - /url: shop.html
+    - link "Bereken" [ref=e20] [cursor=pointer]:
+      - /url: besparen.html
+  - generic [ref=e22]:
+    - generic [ref=e23]:
+      - heading "Veelgestelde vragen" [level=1] [ref=e24]
+      - paragraph [ref=e25]: Vind direct antwoorden over de WaterAccu, Nymo, installatie en meer. Kies een categorie om de vragen te bekijken.
+    - generic [ref=e26]:
+      - complementary [ref=e27]:
+        - generic [ref=e28]: Categorieën
+        - generic [ref=e29]:
+          - button "Algemene vragen 5 vragen" [ref=e30] [cursor=pointer]:
+            - generic [ref=e31]: Algemene vragen
+            - generic [ref=e32]: 5 vragen
+          - button "Werking van de WaterAccu 5 vragen" [ref=e33] [cursor=pointer]:
+            - generic [ref=e34]: Werking van de WaterAccu
+            - generic [ref=e35]: 5 vragen
+          - button "Inpassen van de Nymo 5 vragen" [ref=e36] [cursor=pointer]:
+            - generic [ref=e37]: Inpassen van de Nymo
+            - generic [ref=e38]: 5 vragen
+          - button "De WaterAccu aanschaffen 5 vragen" [ref=e39] [cursor=pointer]:
+            - generic [ref=e40]: De WaterAccu aanschaffen
+            - generic [ref=e41]: 5 vragen
+          - button "Nymo x Homey 5 vragen" [ref=e42] [cursor=pointer]:
+            - generic [ref=e43]: Nymo x Homey
+            - generic [ref=e44]: 5 vragen
+          - button "Boilerkeuze 5 vragen" [ref=e45] [cursor=pointer]:
+            - generic [ref=e46]: Boilerkeuze
+            - generic [ref=e47]: 5 vragen
+          - button "Combineren met andere systemen 5 vragen" [ref=e48] [cursor=pointer]:
+            - generic [ref=e49]: Combineren met andere systemen
+            - generic [ref=e50]: 5 vragen
+          - button "Installatie 5 vragen" [ref=e51] [cursor=pointer]:
+            - generic [ref=e52]: Installatie
+            - generic [ref=e53]: 5 vragen
+      - generic [ref=e55]:
+        - heading "Algemene vragen" [level=2] [ref=e56]
+        - generic [ref=e57]:
+          - button "Wat is een WaterAccu? En waarom wil ik er een?" [expanded] [ref=e58] [cursor=pointer]:
+            - generic [ref=e59]: Wat is een WaterAccu? En waarom wil ik er een?
+          - generic [ref=e62]: De WaterAccu is geen 'echte' batterij, maar onze term voor het opslaan van energie als warm water. Hij bestaat uit de Nymo en een standaard elektrische boiler, waarmee huishoudens hun zonne-energie beter benutten en besparen op gas. Hij produceert geen elektriciteit maar warm water — en gemiddeld gaat 20–25% van je energierekening naar het verwarmen van water.
+        - generic [ref=e63]:
+          - button "Is een zonneboiler hetzelfde als een WaterAccu?" [ref=e64] [cursor=pointer]:
+            - generic [ref=e65]: Is een zonneboiler hetzelfde als een WaterAccu?
+          - generic [ref=e67]: Ja! De WaterAccu is simpelweg de term die Solyx Energy gebruikt om de opslag van zonne-energie te benadrukken. Maar het is precies hetzelfde als een zonneboiler. 😊
+        - generic [ref=e68]:
+          - button "Waarom zou ik mijn eigen zonne-energie meer willen gebruiken?" [ref=e69] [cursor=pointer]:
+            - generic [ref=e70]: Waarom zou ik mijn eigen zonne-energie meer willen gebruiken?
+          - generic [ref=e72]: Om kosten te besparen én omdat het duurzaam is. Gemiddeld wordt maar 31% van de opgewekte zonne-energie door het huishouden zelf gebruikt — 69% gaat terug naar het net. De meeste huishoudens verwarmen water nog met gas, dus je overschot aan zonne-energie daarvoor inzetten is een slimmere keuze. De besparing groeit bovendien naarmate de salderingsregeling wordt afgebouwd.
+        - generic [ref=e73]:
+          - button "Hoeveel kan ik besparen met de WaterAccu?" [ref=e74] [cursor=pointer]:
+            - generic [ref=e75]: Hoeveel kan ik besparen met de WaterAccu?
+          - generic [ref=e77]: Je besparing hangt af van het aantal personen in je huishouden en je aantal zonnepanelen. Gemiddeld besparen klanten €338 per jaar. Vul je situatie in op onze website voor een persoonlijke schatting.
+        - generic [ref=e78]:
+          - button "Hoe zit het met de salderingsregeling en terugleverkosten?" [ref=e79] [cursor=pointer]:
+            - generic [ref=e80]: Hoe zit het met de salderingsregeling en terugleverkosten?
+          - generic [ref=e82]: De salderingsregeling wordt in 2027 afgeschaft. Tot die tijd worden verbruik en opwek jaarlijks met elkaar verrekend. Vanaf 2027 levert teruglevering veel minder op. Terugleverkosten worden nu al bovenop het salderen in rekening gebracht — genoeg redenen om je eigen zonne-energie meer te gebruiken!
+    - generic [ref=e83]:
+      - heading "Heb je een vraag, of wil je advies?" [level=2] [ref=e84]
+      - paragraph [ref=e85]: Laat je gegevens achter en we helpen je graag persoonlijk verder.
+      - generic [ref=e86]:
+        - generic [ref=e87]:
+          - generic [ref=e88]: Naam
+          - textbox "Naam" [ref=e89]
+        - generic [ref=e90]:
+          - generic [ref=e91]: E-mail
+          - textbox "E-mail" [ref=e92]
+        - generic [ref=e93]:
+          - generic [ref=e94]: Woonplaats
+          - textbox "Woonplaats" [ref=e95]
+        - generic [ref=e96]:
+          - generic [ref=e97]: Telefoonnummer
+          - textbox "Telefoonnummer" [ref=e98]
+        - generic [ref=e99]:
+          - generic [ref=e100]: Aantal personen in huishouden
+          - spinbutton "Aantal personen in huishouden" [ref=e101]
+        - generic [ref=e102]:
+          - generic [ref=e103]: Aantal zonnepanelen
+          - spinbutton "Aantal zonnepanelen" [ref=e104]
+        - generic [ref=e105]:
+          - generic [ref=e106]: Huidige manier van tapwaterverwarming
+          - combobox "Huidige manier van tapwaterverwarming" [ref=e107] [cursor=pointer]:
+            - option "Maak een keuze…" [disabled] [selected]
+            - option "CV-combiketel"
+            - option "Elektrische boiler"
+        - generic [ref=e108]:
+          - generic [ref=e109]: Bericht
+          - textbox "Bericht" [ref=e110]
+        - generic [ref=e111]:
+          - checkbox "Houd me op de hoogte van ontwikkelingen van Solyx. Wij mailen alleen de écht coole dingen." [checked] [ref=e112] [cursor=pointer]
+          - generic [ref=e113] [cursor=pointer]: Houd me op de hoogte van ontwikkelingen van Solyx. Wij mailen alleen de écht coole dingen.
+        - button "Verstuur bericht" [ref=e114] [cursor=pointer]
+    - generic [ref=e115]:
+      - heading "Liever direct contact?" [level=2] [ref=e116]
+      - generic [ref=e117]:
+        - generic [ref=e118]:
+          - img [ref=e120]
+          - generic [ref=e123]:
+            - generic [ref=e124]: Email
+            - link "info@solyxenergy.nl" [ref=e126] [cursor=pointer]:
+              - /url: mailto:info@solyxenergy.nl
+        - generic [ref=e127]:
+          - img [ref=e129]
+          - generic [ref=e131]:
+            - generic [ref=e132]: Telefoon
+            - link "033 208 7460" [ref=e134] [cursor=pointer]:
+              - /url: tel:0332087460
+        - generic [ref=e135]:
+          - img [ref=e137]
+          - generic [ref=e140]:
+            - generic [ref=e141]: Support
+            - generic [ref=e142]: Persoonlijk contact
+  - contentinfo [ref=e143]:
+    - generic [ref=e144]:
+      - generic [ref=e145]:
+        - img [ref=e146]:
+          - generic [ref=e149]: SOLYX ENERGY
+        - paragraph [ref=e150]: Slimme energieopslag voor huishoudens met zonnepanelen. Simpel, betaalbaar, direct resultaat.
+      - generic [ref=e151]:
+        - generic [ref=e152]: Product
+        - list [ref=e153]:
+          - listitem [ref=e154]:
+            - link "WaterAccu" [ref=e155] [cursor=pointer]:
+              - /url: "#"
+          - listitem [ref=e156]:
+            - link "Nymo controller" [ref=e157] [cursor=pointer]:
+              - /url: "#"
+          - listitem [ref=e158]:
+            - link "Shop" [ref=e159] [cursor=pointer]:
+              - /url: "#"
+      - generic [ref=e160]:
+        - generic [ref=e161]: Installatie
+        - list [ref=e162]:
+          - listitem [ref=e163]:
+            - link "Hoe werkt het" [ref=e164] [cursor=pointer]:
+              - /url: "#"
+          - listitem [ref=e165]:
+            - link "Klantverhalen" [ref=e166] [cursor=pointer]:
+              - /url: "#"
+          - listitem [ref=e167]:
+            - link "FAQ" [ref=e168] [cursor=pointer]:
+              - /url: "#"
+          - listitem [ref=e169]:
+            - link "Contact" [ref=e170] [cursor=pointer]:
+              - /url: "#"
+      - generic [ref=e171]:
+        - generic [ref=e172]: Bedrijf
+        - list [ref=e173]:
+          - listitem [ref=e174]:
+            - link "Over Solyx" [ref=e175] [cursor=pointer]:
+              - /url: "#"
+          - listitem [ref=e176]:
+            - link "Werken bij" [ref=e177] [cursor=pointer]:
+              - /url: "#"
+          - listitem [ref=e178]:
+            - link "Blog & Nieuws" [ref=e179] [cursor=pointer]:
+              - /url: "#"
+          - listitem [ref=e180]:
+            - link "Partners" [ref=e181] [cursor=pointer]:
+              - /url: "#"
+    - generic [ref=e182]:
+      - generic [ref=e183]: © 2025 Solyx Energy BV · Alle rechten voorbehouden
+      - generic [ref=e184]:
+        - link "Privacy" [ref=e185] [cursor=pointer]:
+          - /url: "#"
+        - link "Voorwaarden" [ref=e186] [cursor=pointer]:
+          - /url: "#"

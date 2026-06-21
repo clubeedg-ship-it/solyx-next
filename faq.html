@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+  <link rel="icon" type="image/png" sizes="64x64" href="midia/favicon.png">
+  <link rel="apple-touch-icon" href="midia/apple-touch-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Veelgestelde vragen — Solyx Energy</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+<link href="https://fonts.cdnfonts.com/css/alliance-no-2" rel="stylesheet">
+<style>
+:root{
+  --green:#35A847;--green-deep:#1E7A30;--green-light:#EBF8ED;
+  --orange:#F4831F;--ink:#3D3D3D;--ink-mid:#5A5A5A;--ink-muted:#888888;
+  --white:#FFFFFF;--off-white:#F7F9F7;--border:rgba(60,60,60,.1);
+  --font-head:'Inter',sans-serif;
+  --font-body:'Alliance No.2','DM Sans',Georgia,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--font-head);color:var(--ink);background:var(--off-white);min-height:100vh;}
+img{max-width:100%;height:auto;}
+
+/* ── BLOB CANVAS ── */
+#gc{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+.blob{position:absolute;border-radius:50%;filter:blur(90px);mix-blend-mode:multiply;will-change:transform;}
+.blob-1{width:900px;height:900px;background:radial-gradient(circle,rgba(57,171,72,.28) 0%,rgba(57,171,72,.09) 45%,transparent 70%);top:-200px;left:-200px;animation:bl1 14s ease-in-out infinite;}
+@keyframes bl1{0%{transform:translate(0,0)}25%{transform:translate(55vw,80px)}50%{transform:translate(60vw,-60px)}75%{transform:translate(25vw,100px)}100%{transform:translate(0,0)}}
+.blob-2{width:1000px;height:1000px;background:radial-gradient(circle,rgba(57,171,72,.22) 0%,rgba(30,122,48,.08) 45%,transparent 70%);bottom:-250px;right:-250px;animation:bl2 18s ease-in-out infinite;animation-delay:-7s;}
+@keyframes bl2{0%{transform:translate(0,0)}33%{transform:translate(-60vw,-80px)}66%{transform:translate(-30vw,60px)}100%{transform:translate(0,0)}}
+.blob-3{width:800px;height:800px;background:radial-gradient(circle,rgba(57,171,72,.18) 0%,rgba(57,171,72,.06) 50%,transparent 70%);top:30vh;left:20vw;animation:bl3 22s ease-in-out infinite;animation-delay:-4s;}
+@keyframes bl3{0%{transform:translate(0,0)}25%{transform:translate(40vw,-15vh)}50%{transform:translate(20vw,20vh)}75%{transform:translate(-10vw,10vh)}100%{transform:translate(0,0)}}
+
+/* ── INSTALLER BAR ── */
+#installer-bar{position:fixed;top:0;left:0;right:0;z-index:601;display:none;align-items:center;justify-content:flex-start;padding:6px 48px;pointer-events:none;}
+#installer-bar a{pointer-events:all;font-family:var(--font-head);font-size:12px;font-weight:500;color:var(--ink-mid);text-decoration:none;transition:color .2s;letter-spacing:.01em;}
+#installer-bar a:hover{color:var(--ink);}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:600;display:flex;align-items:center;justify-content:space-between;padding:16px 48px;background:linear-gradient(180deg,rgba(255,255,255,.7),rgba(255,255,255,.5));backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border-bottom:1px solid rgba(255,255,255,.55);box-shadow:0 8px 30px rgba(28,36,34,.1),inset 0 1px 0 rgba(255,255,255,.7);transition:box-shadow .4s;}
+nav.scrolled{background:linear-gradient(180deg,rgba(255,255,255,.7),rgba(255,255,255,.5));backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border-bottom:1px solid rgba(255,255,255,.55);box-shadow:0 8px 30px rgba(28,36,34,.1),inset 0 1px 0 rgba(255,255,255,.7);}
+.nav-logo{display:flex;align-items:center;text-decoration:none;}
+footer{background:#080c0a;padding:60px 48px 40px;margin-top:80px;}
+.fg{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px;}
+.fbt{font-family:var(--font-body);font-size:14px;color:var(--ink-muted);line-height:1.65;margin-top:16px;}
+.fct{font-family:var(--font-head);font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:16px;}
+.flinks{list-style:none;display:flex;flex-direction:column;gap:10px;}
+.flinks a{font-family:var(--font-head);font-size:13px;color:rgba(255,255,255,.5);text-decoration:none;transition:color .2s;}
+.flinks a:hover{color:#fff;}
+.fbottom{max-width:1100px;margin:0 auto;border-top:1px solid rgba(255,255,255,.05);padding-top:24px;display:flex;justify-content:space-between;align-items:center;}
+.fcopy{font-family:var(--font-head);font-size:12px;color:rgba(255,255,255,.2);}
+@media(max-width:900px){.fg{grid-template-columns:1fr 1fr;gap:32px;}footer{padding:48px 24px 32px;}}
+.nav-links{display:flex;gap:32px;list-style:none;}
+.nav-links a{font-family:var(--font-head);font-size:13px;font-weight:500;color:var(--ink-mid);text-decoration:none;transition:color .2s;}
+.nav-links a:hover,.nav-links a.active{color:var(--ink);}
+.btn-orange{background:#F4831F;color:#fff;font-family:var(--font-head);font-size:13px;font-weight:700;padding:10px 22px;border-radius:999px;border:none;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;transition:background .2s,transform .2s;}
+.btn-orange:hover{background:#d96f10;transform:translateY(-1px);}
+
+/* ── SCROLL PROGRESS ── */
+#scroll-progress{position:fixed;top:0;left:0;height:2px;background:var(--green);z-index:700;width:0%;transition:width .3s ease;}
+
+/* ── PAGE WRAPPER ── */
+.page{position:relative;z-index:1;padding-top:100px;}
+
+/* ── FAQ WRAP ── */
+.faq-wrap{max-width:980px;margin:0 auto;padding:0 32px 80px;}
+
+/* ── HEADER ── */
+.faq-header{text-align:center;padding:56px 0 48px;}
+.faq-tag{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-head);font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--green);margin-bottom:22px;padding:6px 16px;border:1px solid rgba(53,168,71,.3);border-radius:999px;background:rgba(53,168,71,.08);}
+.faq-tag-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+.faq-title{font-family:var(--font-head);font-size:clamp(36px,5vw,60px);font-weight:900;letter-spacing:-.03em;line-height:1.05;margin-bottom:16px;color:var(--ink);}
+.faq-title .hl{display:inline;background:var(--green);color:#fff;padding:2px 10px 4px;border-radius:4px;box-decoration-break:clone;-webkit-box-decoration-break:clone;}
+.faq-desc{font-family:var(--font-body);font-size:17px;line-height:1.65;color:var(--ink-mid);max-width:520px;margin:0 auto 32px;}
+.btn-cta{background:var(--orange);color:#fff;font-family:var(--font-head);font-size:13px;font-weight:700;padding:12px 28px;border-radius:999px;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:background .2s,transform .2s;text-decoration:none;}
+.btn-cta:hover{background:#d96f10;transform:translateY(-1px);}
+
+/* ── MASTER / DETAIL LAYOUT ── */
+.faq-layout{display:grid;grid-template-columns:300px 1fr;gap:44px;align-items:start;}
+
+/* Left: sticky category list */
+.faq-sidebar{position:sticky;top:120px;align-self:start;}
+.faq-sidebar-label{font-family:var(--font-head);font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-muted);margin:0 0 12px 16px;}
+.cat-grid{display:flex;flex-direction:column;gap:2px;}
+.cat-card{background:transparent;border:1px solid transparent;border-radius:12px;padding:11px 16px;cursor:pointer;text-align:left;transition:background .18s ease,border-color .18s ease,color .18s ease;}
+.cat-card:hover{background:rgba(53,168,71,.07);}
+.cat-card.active{background:var(--green-light);border-color:rgba(53,168,71,.28);}
+.cat-name{display:block;font-family:var(--font-head);font-size:14px;font-weight:600;color:var(--ink-mid);line-height:1.4;transition:color .18s ease;}
+.cat-card:hover .cat-name{color:var(--ink);}
+.cat-card.active .cat-name{color:var(--green-deep);font-weight:700;}
+.cat-count{display:block;font-family:var(--font-head);font-size:11px;color:var(--ink-muted);margin-top:2px;}
+.cat-card.active .cat-count{color:var(--green);}
+
+/* Right: answers panel */
+.faq-content{min-width:0;background:rgba(255,255,255,.72);border:1px solid var(--border);border-radius:20px;padding:14px 36px 26px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);}
+.faq-panel{display:none;}
+.faq-panel.active{display:block;animation:fade .3s ease both;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+.faq-panel h2{font-family:var(--font-head);font-size:clamp(20px,2.4vw,26px);font-weight:900;letter-spacing:-.03em;color:var(--ink);margin:22px 0 4px;}
+
+/* ── ACCORDION ── */
+.acc-item{border-bottom:1px solid var(--border);}
+.acc-trigger{width:100%;background:none;border:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:16px 0;text-align:left;font-family:var(--font-head);}
+.acc-q{font-size:15px;font-weight:500;color:var(--ink);line-height:1.45;flex:1;transition:color .2s ease;}
+.acc-trigger:hover .acc-q{color:var(--green);}
+.acc-chevron{width:9px;height:9px;border-right:2px solid var(--ink-muted);border-bottom:2px solid var(--ink-muted);transform:rotate(45deg);margin-top:-4px;flex-shrink:0;transition:transform .22s ease,border-color .2s ease;}
+.acc-item.open .acc-chevron{transform:rotate(225deg);margin-top:2px;border-color:var(--green);}
+.acc-body{overflow:hidden;max-height:0;transition:max-height .3s ease;}
+.acc-item.open .acc-body{max-height:600px;}
+.acc-content{padding:0 0 18px;font-family:var(--font-body);font-size:14.5px;line-height:1.75;color:var(--ink-mid);}
+.acc-content a{color:var(--green);text-decoration:none;}
+.acc-content a:hover{text-decoration:underline;}
+
+/* ── CONTACT FORM ── */
+.contact-form-wrap{margin-top:64px;padding-top:48px;border-top:1px solid var(--border);}
+.cf-title{font-family:var(--font-head);font-size:clamp(22px,3vw,30px);font-weight:900;letter-spacing:-.03em;color:var(--ink);margin-bottom:8px;text-align:center;}
+.cf-sub{font-family:var(--font-body);font-size:16px;color:var(--ink-mid);text-align:center;max-width:540px;margin:0 auto 32px;line-height:1.6;}
+.contact-form{max-width:720px;margin:0 auto;background:rgba(255,255,255,.72);border:1px solid var(--border);border-radius:20px;padding:30px 32px 28px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:grid;grid-template-columns:1fr 1fr;gap:18px 20px;}
+.cf-field{display:flex;flex-direction:column;gap:7px;min-width:0;}
+.cf-field.full{grid-column:1 / -1;}
+.cf-label{font-family:var(--font-head);font-size:12px;font-weight:700;letter-spacing:.03em;color:var(--ink-mid);}
+.cf-input,.cf-select,.cf-textarea{font-family:var(--font-body);font-size:14px;color:var(--ink);background:rgba(255,255,255,.9);border:1px solid var(--border);border-radius:10px;padding:11px 14px;width:100%;transition:border-color .2s,box-shadow .2s;}
+.cf-input:focus,.cf-select:focus,.cf-textarea:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px rgba(53,168,71,.12);}
+.cf-input::placeholder,.cf-textarea::placeholder{color:var(--ink-muted);}
+.cf-textarea{resize:vertical;min-height:120px;line-height:1.6;}
+.cf-select{cursor:pointer;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:38px;}
+.cf-consent{grid-column:1 / -1;display:flex;align-items:flex-start;gap:12px;background:rgba(53,168,71,.06);border:1px solid rgba(53,168,71,.16);border-radius:12px;padding:14px 16px;}
+.cf-consent input{margin:2px 0 0;width:18px;height:18px;accent-color:var(--green);flex-shrink:0;cursor:pointer;}
+.cf-consent label{font-family:var(--font-body);font-size:13.5px;color:var(--ink-mid);line-height:1.55;cursor:pointer;}
+.cf-submit{grid-column:1 / -1;justify-self:start;background:var(--orange);color:#fff;font-family:var(--font-head);font-size:14px;font-weight:700;padding:13px 34px;border-radius:999px;border:none;cursor:pointer;transition:background .2s,transform .2s;}
+.cf-submit:hover{background:#d96f10;transform:translateY(-1px);}
+.cf-success{grid-column:1 / -1;display:none;background:var(--green-light);border:1px solid rgba(53,168,71,.3);border-radius:12px;padding:20px;font-family:var(--font-head);font-size:15px;font-weight:600;color:var(--green-deep);text-align:center;line-height:1.5;}
+.contact-form.sent .cf-field,.contact-form.sent .cf-consent,.contact-form.sent .cf-submit{display:none;}
+.contact-form.sent .cf-success{display:block;}
+
+/* ── DIRECT CONTACT (email/telefoon onder het formulier) ── */
+.contact-direct{margin-top:56px;}
+.contact-row{display:flex;gap:14px;flex-wrap:wrap;margin-top:20px;}
+.contact-card{flex:1;min-width:190px;border:1px solid var(--border);border-radius:14px;padding:22px 20px;background:rgba(255,255,255,.85);display:flex;gap:16px;align-items:flex-start;backdrop-filter:blur(8px);}
+.contact-icon{width:38px;height:38px;border-radius:10px;background:var(--green-light);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.contact-icon svg{width:17px;height:17px;stroke:var(--green);fill:none;stroke-width:2;}
+.contact-label{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:4px;}
+.contact-val{font-size:14px;font-weight:600;color:var(--ink);}
+.contact-val a{color:var(--green);text-decoration:none;}
+.contact-val a:hover{text-decoration:underline;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  nav{padding:16px 24px;}
+  .nav-links{display:none;}
+  .faq-wrap{padding:0 20px 60px;}
+  .faq-layout{grid-template-columns:1fr;gap:22px;}
+  .faq-sidebar{position:static;}
+  .faq-sidebar-label{margin-left:4px;}
+  .cat-grid{flex-direction:row;flex-wrap:wrap;gap:8px;}
+  .cat-card{flex:1 1 calc(50% - 4px);border:1px solid var(--border);background:rgba(255,255,255,.7);}
+  .cat-card.active{background:var(--green-light);border-color:rgba(53,168,71,.28);}
+  .cat-count{display:none;}
+  .faq-content{padding:8px 20px 18px;}
+  .contact-form{grid-template-columns:1fr;padding:24px 20px;}
+}
+@media(max-width:480px){.cat-card{flex-basis:100%;}}
+</style>
+</head>
+<body>
+
+<!-- Scroll progress -->
+<div id="scroll-progress"></div>
+
+<!-- Blob background -->
+<div id="gc">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+</div>
+
+<!-- Installer bar -->
+<div id="installer-bar">
+  <a href="installatie.html">Installateurspagina</a>
+</div>
+
+<!-- Nav -->
+<nav id="nav">
+  <a href="index.html" class="nav-logo"><img src="midia/solyx-logo.png" alt="Solyx Energy" style="display:block;height:32px;width:auto;mix-blend-mode:multiply;"></a>
+  <ul class="nav-links">
+    <li><a href="hoe-werkt-het.html">Hoe werkt het</a></li>
+    <li><a href="besparen.html">Besparen</a></li>
+    <li><a href="how-to-get-it.html">Aan de slag</a></li>
+    <li><a href="faq.html" class="active">FAQs</a></li>
+    <li><a href="shop.html">Shop</a></li>
+  </ul>
+  <a class="btn-orange" href="besparen.html">Bereken</a>
+</nav>
+
+<!-- Page -->
+<div class="page">
+  <div class="faq-wrap">
+
+    <!-- Header -->
+    <div class="faq-header">
+      <h1 class="faq-title">Veelgestelde <span class="hl">vragen</span></h1>
+      <p class="faq-desc">Vind direct antwoorden over de WaterAccu, Nymo, installatie en meer. Kies een categorie om de vragen te bekijken.</p>
+    </div>
+
+    <!-- Master/detail: categorie­lijst links + antwoorden rechts -->
+    <div class="faq-layout">
+      <aside class="faq-sidebar">
+        <div class="faq-sidebar-label">Categorieën</div>
+        <div class="cat-grid" id="catGrid"></div>
+      </aside>
+      <section class="faq-content" id="faqContent"></section>
+    </div>
+
+    <!-- Contactformulier -->
+    <section class="contact-form-wrap">
+      <h2 class="cf-title">Heb je een vraag, of wil je advies?</h2>
+      <p class="cf-sub">Laat je gegevens achter en we helpen je graag persoonlijk verder.</p>
+      <form class="contact-form" id="contactForm" novalidate>
+        <div class="cf-field"><label class="cf-label" for="cf-naam">Naam</label><input class="cf-input" type="text" id="cf-naam" name="naam" required></div>
+        <div class="cf-field"><label class="cf-label" for="cf-email">E-mail</label><input class="cf-input" type="email" id="cf-email" name="email" required></div>
+        <div class="cf-field"><label class="cf-label" for="cf-woonplaats">Woonplaats</label><input class="cf-input" type="text" id="cf-woonplaats" name="woonplaats" required></div>
+        <div class="cf-field"><label class="cf-label" for="cf-tel">Telefoonnummer</label><input class="cf-input" type="tel" id="cf-tel" name="telefoon" required></div>
+        <div class="cf-field"><label class="cf-label" for="cf-personen">Aantal personen in huishouden</label><input class="cf-input" type="number" min="1" id="cf-personen" name="personen" required></div>
+        <div class="cf-field"><label class="cf-label" for="cf-panelen">Aantal zonnepanelen</label><input class="cf-input" type="number" min="0" id="cf-panelen" name="zonnepanelen" required></div>
+        <div class="cf-field full"><label class="cf-label" for="cf-tapwater">Huidige manier van tapwaterverwarming</label><select class="cf-select" id="cf-tapwater" name="tapwater" required><option value="" disabled selected>Maak een keuze…</option><option>CV-combiketel</option><option>Elektrische boiler</option></select></div>
+        <div class="cf-field full"><label class="cf-label" for="cf-bericht">Bericht</label><textarea class="cf-textarea" id="cf-bericht" name="bericht" required></textarea></div>
+        <div class="cf-consent"><input type="checkbox" id="cf-consent" name="marketing" checked><label for="cf-consent">Houd me op de hoogte van ontwikkelingen van Solyx. Wij mailen alleen de écht coole dingen.</label></div>
+        <button type="submit" class="cf-submit">Verstuur bericht</button>
+        <div class="cf-success">Bedankt voor je bericht! 🌱 We nemen zo snel mogelijk persoonlijk contact met je op.</div>
+      </form>
+    </section>
+
+    <!-- Direct contact -->
+    <section class="contact-direct">
+      <h2 class="cf-title">Liever direct contact?</h2>
+      <div class="contact-row">
+      <div class="contact-card">
+        <div class="contact-icon">
+          <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg>
+        </div>
+        <div>
+          <div class="contact-label">Email</div>
+          <div class="contact-val"><a href="mailto:info@solyxenergy.nl">info@solyxenergy.nl</a></div>
+        </div>
+      </div>
+      <div class="contact-card">
+        <div class="contact-icon">
+          <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.36 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        </div>
+        <div>
+          <div class="contact-label">Telefoon</div>
+          <div class="contact-val"><a href="tel:0332087460">033 208 7460</a></div>
+        </div>
+      </div>
+      <div class="contact-card">
+        <div class="contact-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div>
+          <div class="contact-label">Support</div>
+          <div class="contact-val">Persoonlijk contact</div>
+        </div>
+      </div>
+    </div>
+    </section>
+
+  </div>
+</div>
+
+<footer>
+  <div class="fg">
+    <div>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 44" height="34" fill="none"><circle cx="22" cy="22" r="20" fill="#fff"/><line x1="18" y1="31" x2="26" y2="13" stroke="#1C1C1C" stroke-width="3" stroke-linecap="round"/><text x="52" y="29" font-family="Inter,system-ui,sans-serif" font-size="18" font-weight="200" letter-spacing="5" fill="#fff">SOLYX ENERGY</text></svg>
+      <p class="fbt">Slimme energieopslag voor huishoudens met zonnepanelen. Simpel, betaalbaar, direct resultaat.</p>
+    </div>
+    <div>
+      <div class="fct">Product</div>
+      <ul class="flinks">
+        <li><a href="#">WaterAccu</a></li>
+        <li><a href="#">Nymo controller</a></li>
+        <li><a href="#">Shop</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="fct">Installatie</div>
+      <ul class="flinks">
+        <li><a href="#">Hoe werkt het</a></li>
+        <li><a href="klantverhalen.html">Klantverhalen</a></li>
+        <li><a href="#">FAQ</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="fct">Bedrijf</div>
+      <ul class="flinks">
+        <li><a href="over-ons.html">Over Solyx</a></li>
+        <li><a href="#">Werken bij</a></li>
+        <li><a href="#">Blog &amp; Nieuws</a></li>
+        <li><a href="#">Partners</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="fbottom">
+    <div class="fcopy">© 2025 Solyx Energy BV · Alle rechten voorbehouden</div>
+    <div style="display:flex;gap:20px">
+      <a href="#" style="font-family:var(--font-head);font-size:12px;color:rgba(255,255,255,.2);text-decoration:none">Privacy</a>
+      <a href="#" style="font-family:var(--font-head);font-size:12px;color:rgba(255,255,255,.2);text-decoration:none">Voorwaarden</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+var CATEGORIES=[
+  {name:"Algemene vragen",items:[
+    ["Wat is een WaterAccu? En waarom wil ik er een?","De WaterAccu is geen 'echte' batterij, maar onze term voor het opslaan van energie als warm water. Hij bestaat uit de Nymo en een standaard elektrische boiler, waarmee huishoudens hun zonne-energie beter benutten en besparen op gas. Hij produceert geen elektriciteit maar warm water — en gemiddeld gaat 20–25% van je energierekening naar het verwarmen van water."],
+    ["Is een zonneboiler hetzelfde als een WaterAccu?","Ja! De WaterAccu is simpelweg de term die Solyx Energy gebruikt om de opslag van zonne-energie te benadrukken. Maar het is precies hetzelfde als een zonneboiler. 😊"],
+    ["Waarom zou ik mijn eigen zonne-energie meer willen gebruiken?","Om kosten te besparen én omdat het duurzaam is. Gemiddeld wordt maar 31% van de opgewekte zonne-energie door het huishouden zelf gebruikt — 69% gaat terug naar het net. De meeste huishoudens verwarmen water nog met gas, dus je overschot aan zonne-energie daarvoor inzetten is een slimmere keuze. De besparing groeit bovendien naarmate de salderingsregeling wordt afgebouwd."],
+    ["Hoeveel kan ik besparen met de WaterAccu?","Je besparing hangt af van het aantal personen in je huishouden en je aantal zonnepanelen. Gemiddeld besparen klanten €338 per jaar. Vul je situatie in op onze website voor een persoonlijke schatting."],
+    ["Hoe zit het met de salderingsregeling en terugleverkosten?","De salderingsregeling wordt in 2027 afgeschaft. Tot die tijd worden verbruik en opwek jaarlijks met elkaar verrekend. Vanaf 2027 levert teruglevering veel minder op. Terugleverkosten worden nu al bovenop het salderen in rekening gebracht — genoeg redenen om je eigen zonne-energie meer te gebruiken!"]
+  ]},
+  {name:"Werking van de WaterAccu",items:[
+    ["Hoe werkt de WaterAccu?","De Nymo leest continu je slimme meter uit om te detecteren hoeveel zonne-energie er aan het net wordt teruggeleverd. Vervolgens stuurt hij de elektrische boiler precies aan met exact dat overschot — zo verwarm je water met energie die anders verloren zou gaan."],
+    ["Hoeveel energie kan de WaterAccu opslaan?","Dat hangt af van de boilergrootte: een boiler van 100 L slaat ~7 kWh op, 150 L ~10 kWh en 200 L ~14 kWh. Ter vergelijking: gemiddelde thuisbatterijen slaan slechts 4–6 kWh op."],
+    ["Wat gebeurt er als er onvoldoende zonne-energie is?","Over het algemeen wordt 70% van het warme water met zonne-energie verwarmd. In de zomer kan dat 100% zijn. In de winter zijn er twee aanvullingsopties: (1) sluit de uitgang van de boiler aan op je cv-combiketel zodat die met gas bijverwarmt, of (2) gebruik extra elektrische verwarming vanuit het net, programmeerbaar op de Nymo."],
+    ["Wat is het voordeel van de Nymo ten opzichte van een slimme schakelaar?","Een slimme schakelaar staat alleen aan of uit. Als je 1600 W opwekt maar je boiler 2400 W nodig heeft, neem je alsnog 800 W van het net af. De Nymo moduleert het vermogen precies op het overschot — 1600 W overschot betekent exact 1600 W naar de boiler. Dit verdubbelt de jaarlijkse besparing ruimschoots ten opzichte van een slimme schakelaar."],
+    ["Hoe voorkomt de Nymo legionella?","De Nymo heeft automatische legionellabeveiliging. Hij houdt bij hoe lang geleden de boiler voor het laatst de maximale temperatuur bereikte. Verstrijken er 7 dagen zonder dat die temperatuur is bereikt, dan verwarmt de Nymo de boiler tot het maximum. Zodra dat is bereikt, wordt de teller gereset — zo wordt onnodig energieverbruik voorkomen."]
+  ]},
+  {name:"Inpassen van de Nymo",items:[
+    ["Past de Nymo in mijn situatie thuis?","Waarschijnlijk wel — de Nymo werkt onafhankelijk van het merk zonnepanelen, de omvormer, de cv-ketel en de elektrische boiler. Hij werkt prima samen met een hybride warmtepomp. Combinatie met een warmtepompboiler (geïntegreerde warmtepomp) is niet mogelijk."],
+    ["Hoe controleer ik of de Nymo bij mijn situatie past?","Drie checks: (1) Je hebt een slimme meter met P1-poort die dsmr 5.0 of 4.2 ondersteunt. (2) Je cv-combiketel is jonger dan 15 jaar en heeft NZ-certificering. (3) Je hebt geen slimme elektrische boiler — een standaardboiler zonder elektronica werkt perfect."],
+    ["Is de Nymo eenfasig of driefasig?","De Nymo werkt met eenfasige en driefasige huisaansluitingen of zonne-omvormers. De Nymo zelf stuurt een eenfasige elektrische boiler aan (de meeste huishoudboilers zijn eenfasig). De Sensor meet de netto teruglevering over alle drie de fasen en telt deze op tot één nettowaarde."],
+    ["Wat is het verschil tussen de Nymo en de Solar iBoost?","De Nymo is het nieuwe, verbeterde product dat werkt met zowel eenfasige als driefasige zonnesystemen en verbinding maakt met de slimme meter, waardoor installeren veel eenvoudiger is. De Solar iBoost is het oorspronkelijke product, alleen geschikt voor eenfasige systemen."],
+    ["Ik heb geen zonnepanelen. Heeft de Nymo dan meerwaarde?","Nee — de Nymo stuurt de boiler alleen aan met energie die anders aan het net zou worden teruggeleverd. Zonder opwek van duurzame energie (zon of wind) heeft de Nymo geen meerwaarde."]
+  ]},
+  {name:"De WaterAccu aanschaffen",items:[
+    ["Wat levert Solyx Energy precies?","Solyx Energy levert de Nymo (€649 incl. btw) en, indien gewenst, een elektrische boiler. Levering kan rechtstreeks naar jou of via een installateur. Solyx Energy levert geen zonnepanelen."],
+    ["Hoe kan ik aanschaffen en wat kost het?","Bestel de Nymo rechtstreeks in onze webshop. De Nymo kost €649 inclusief btw. Met een gemiddelde besparing van €338/jaar verdient de investering zich in ongeveer 5 jaar terug. Een thuisbatterij met vergelijkbare opslagcapaciteit kost ~€5.500 exclusief installatie."],
+    ["Kan mijn installateur de producten kopen?","Zeker! Solyx Energy levert rechtstreeks aan klanten of via installateurs. Installateurs kunnen zakelijk inkopen door te mailen naar <a href='mailto:info@solyxenergy.nl'>info@solyxenergy.nl</a>."],
+    ["Kan ik subsidie aanvragen op de Nymo?","Helaas valt de WaterAccu in Nederland in meerdere categorieën en komt hij niet in aanmerking voor subsidie. Toch is de Nymo nog steeds een lagere investering dan de gesubsidieerde alternatieven. In België biedt de SEW-premie 50% terug (max €400) via Fluvius."],
+    ["Wat is de gemiddelde jaarlijkse besparing?","Gemiddeld besparen klanten €338 per jaar. Met een Nymo van €649 is de gebruikelijke terugverdientijd ongeveer 5 jaar. De besparing neemt in de loop van de tijd toe naarmate de salderingsregeling wordt afgebouwd en de teruglevertarieven dalen."]
+  ]},
+  {name:"Nymo x Homey",items:[
+    ["Wat is Nymo x Homey?","Nymo x Homey is een samenwerking tussen Solyx Energy en Homey waarmee je de WaterAccu slimmer aanstuurt via de Homey-app. De Solyx Sensor wordt vervangen door een Homey Pro (2023) of Homey Bridge, wat connectiviteit, bediening op afstand en automatisering toevoegt."],
+    ["Welke extra functionaliteiten biedt de Nymo via Homey?","Met Homey kun je de Nymo aansturen op basis van dynamische energieprijzen, integreren met laadpalen en thuisbatterijen, en de Nymo op afstand bedienen (aan/uit, geplande verwarming). Een slimme stekker is nodig voor energiemeting en monitoring."],
+    ["Hoe werkt Nymo x Homey en wat heb ik nodig?","Je hebt een Homey Pro (2023) of Homey Bridge nodig, en een compatibele P1-dongle. De P1-dongle leest je slimme meter uit en stuurt de data naar Homey, die via 433 MHz met de Nymo communiceert. Je kunt automatiseringen instellen, zoals verwarmen bij lage dynamische prijzen of pauzeren wanneer je thuisbatterij teruglevert."],
+    ["Welke Homey-producten zijn compatibel?","De Nymo werkt met de Homey Pro (2023) en de Homey Bridge. Oudere generaties van de Pro en de cloudversie zijn niet compatibel. De Nymo moet softwareversie 3.01 of hoger hebben."],
+    ["Ik heb al een Nymo. Kan ik Homey toevoegen?","Je Nymo heeft waarschijnlijk een software-upgrade nodig om Homey-integratie te ondersteunen. Stuur een e-mail naar <a href='mailto:info@solyxenergy.nl'>info@solyxenergy.nl</a> en je ontvangt een offerte voor de upgrade."]
+  ]},
+  {name:"Boilerkeuze",items:[
+    ["Welke boilergrootte past bij mijn huis?","Aanbevolen maten: 1 persoon → 50 L (3,5 kWh), 2 personen → 100 L (7 kWh), 3–4 personen → 150 L (10,5 kWh), 5 personen → 200 L (14 kWh). Bij twijfel kan Solyx Energy adviseren via het contactformulier."],
+    ["Is mijn huidige boiler geschikt voor de Nymo?","Als je elektrische boiler geen slimme functies, display of elektronica heeft, dan is hij geschikt. Het verwarmingselement moet eenfasig zijn (standaard bij alle huishoudboilers tot 200 L). De installatie duurt slechts 20 minuten."],
+    ["Waarom raadt Solyx Energy Tesy Modeco-boilers aan?","Tesy Modeco-boilers zijn energiezuinig (uitstekende isolatie), hoeven maar eens per 5 jaar onderhoud (in plaats van elke 2), bieden een goede prijs-kwaliteitverhouding, hebben anti-kalkelementen, komen met 3 jaar garantie en zijn zelf te installeren."],
+    ["Ik wil een nieuwe boiler kopen — heb je tips?","Als er geen ruimte is voor een verticale boiler, zijn er ook horizontale opties via partner Boilergarant. Andere boilers die goed met de Nymo werken: Bosch Tronic, Stiebel Eltron Classic en Itho Daalderop Mono."],
+    ["Kan ik twee boilers op één Nymo aansluiten?","Ja! De Nymo heeft twee uitgaande aansluitingen (Boiler 1 en Boiler 2). Boiler 1 heeft voorrang — zodra die op temperatuur is, schakelt de Nymo automatisch over naar Boiler 2. Let op: Boiler 2 heeft geen legionellabeveiliging, en beide boilers moeten binnen 3 m van de Nymo staan."]
+  ]},
+  {name:"Combineren met andere systemen",items:[
+    ["Kan ik de WaterAccu combineren met een thuisbatterij?","Zeker! Beide systemen gebruiken de P1-poort om teruglevering te detecteren en hun prioriteit wordt ingesteld met drempelwaarden. Geef over het algemeen voorrang aan de thuisbatterij (laagste drempel). Levert de batterij terug bij dynamische prijzen, gebruik dan een slimme stekker om de Nymo tijdelijk te pauzeren."],
+    ["Ik heb ook een laadpaal — hoe werkt dit?","Geen probleem. De Nymo begint al bij 100 W overschot zonne-energie te gebruiken, terwijl laadpalen meestal ~1300 W overschot nodig hebben om te activeren. De Nymo heeft dus automatisch voorrang en ze functioneren zonder conflict naast elkaar."],
+    ["Ik heb een warmtepomp. Wat zijn mijn opties?","Hybride warmtepomp: installeer de Nymo voor tapwater ernaast — werkt perfect, de combiketel blijft back-up voor beide. Volledig elektrische warmtepomp: installeer de Nymo op een extra verwarmingselement in het buffervat. Zie configuratie 2 en 3 op de opstellingenpagina van Solyx."],
+    ["Ik heb stadsverwarming. Wat zijn de opties?","Je kunt de Nymo zeker in combinatie met stadsverwarming gebruiken. Zie optie 4 op de configuratiepagina van Solyx voor gedetailleerde installatie-instructies."],
+    ["Ik heb een dynamisch energiecontract — hoe werkt dit?","De Nymo zorgt dat de boiler puur op ongebruikte zonne-energie draait, wat over het algemeen voordelig is, ook bij dynamische tarieven (meer zonne-opwek = lagere energieprijzen). Directe aansturing op basis van dynamische prijzen is beschikbaar via de Nymo x Homey-integratie."]
+  ]},
+  {name:"Installatie",items:[
+    ["Hoe wordt de Nymo geïnstalleerd? Kan ik dat zelf?","De meeste klanten installeren de Nymo zelf in ongeveer 20 minuten met de installatiehandleiding. Er is geen specialistische kennis nodig. Liever niet zelf? Dan brengt Solyx Energy je in contact met een gecertificeerde installateur."],
+    ["De P1-poort op mijn slimme meter is al bezet. Wat nu?","Geen probleem — je kunt een P1-splitter (€16) aanschaffen om twee apparaten op de poort aan te sluiten. Zorg dat het een actieve splitter is die ook voeding levert aan de aangesloten apparaten. Je kunt hem toevoegen aan je Nymo-bestelling."],
+    ["Is het bereik tussen de Sensor en de Nymo voldoende?","De Sensor heeft een bereik van 30 meter — voldoende voor de meeste woningen. Probeer het eerst, want meestal werkt het prima. Is het signaal zwak, schaf dan een verlengde P1-kabel aan om de Sensor dichter bij de Nymo te brengen."],
+    ["De Nymo lijkt na installatie niet te werken. Wat nu?","Neem contact op met Solyx Energy! Bel 033 208 7460 of mail naar <a href='mailto:info@solyxenergy.nl'>info@solyxenergy.nl</a> met een duidelijke omschrijving van het probleem. Ze komen zo snel mogelijk bij je terug om het op te lossen."],
+    ["Kan ik ook andere apparaten op de Nymo aansluiten?","De Nymo is een vermogensregelaar (dimmer) en mag alleen worden aangesloten op verwarmingselementen of ohmse weerstanden. Gewone apparaten met elektronica werken op één vast vermogen en kunnen niet worden aangesloten. Thuisbatterijen en laadpalen moeten apart worden aangesloten."]
+  ]}
+];
+
+var catGrid=document.getElementById('catGrid');
+var faqContent=document.getElementById('faqContent');
+
+CATEGORIES.forEach(function(cat,ci){
+  var card=document.createElement('button');
+  card.type='button';
+  card.className='cat-card'+(ci===0?' active':'');
+  card.setAttribute('aria-selected',ci===0?'true':'false');
+  card.innerHTML='<span class="cat-name">'+cat.name+'</span><span class="cat-count">'+cat.items.length+' vragen</span>';
+
+  var panel=document.createElement('div');
+  panel.className='faq-panel'+(ci===0?' active':'');
+  var html='<h2>'+cat.name+'</h2>';
+  cat.items.forEach(function(qa,qi){
+    var open=(ci===0&&qi===0)?' open':'';
+    html+='<div class="acc-item'+open+'">'+
+            '<button type="button" class="acc-trigger" aria-expanded="'+(open?'true':'false')+'">'+
+              '<span class="acc-q">'+qa[0]+'</span><span class="acc-chevron"></span>'+
+            '</button>'+
+            '<div class="acc-body"><div class="acc-content">'+qa[1]+'</div></div>'+
+          '</div>';
+  });
+  panel.innerHTML=html;
+
+  card.addEventListener('click',function(){
+    document.querySelectorAll('.cat-card').forEach(function(c,i){
+      c.classList.toggle('active',i===ci);
+      c.setAttribute('aria-selected',i===ci?'true':'false');
+    });
+    document.querySelectorAll('.faq-panel').forEach(function(p,i){p.classList.toggle('active',i===ci);});
+    if(window.matchMedia('(max-width:900px)').matches){faqContent.scrollIntoView({behavior:'smooth',block:'start'});}
+  });
+
+  catGrid.appendChild(card);
+  faqContent.appendChild(panel);
+});
+
+faqContent.addEventListener('click',function(e){
+  var trigger=e.target.closest('.acc-trigger');
+  if(!trigger)return;
+  var item=trigger.closest('.acc-item');
+  var isOpen=item.classList.toggle('open');
+  trigger.setAttribute('aria-expanded',isOpen?'true':'false');
+});
+
+window.addEventListener('scroll',function(){
+  var h=document.body.scrollHeight-window.innerHeight;
+  var pct=h>0?(window.scrollY/h)*100:0;
+  document.getElementById('scroll-progress').style.width=pct+'%';
+  var n=document.getElementById('nav');if(n)n.classList.toggle('scrolled',window.scrollY>60);
+},{passive:true});
+
+/* Contactformulier — toon bevestiging na verzenden */
+var contactForm=document.getElementById('contactForm');
+if(contactForm){
+  contactForm.addEventListener('submit',function(e){
+    e.preventDefault();
+    if(!contactForm.checkValidity()){contactForm.reportValidity();return;}
+    contactForm.classList.add('sent');
+    contactForm.scrollIntoView({behavior:'smooth',block:'center'});
+  });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,412 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - link [ref=e3] [cursor=pointer]:
+      - /url: home.html
+      - img [ref=e4]:
+        - generic [ref=e7]: SOLYX ENERGY
+    - list [ref=e8]:
+      - listitem [ref=e9]:
+        - link "Hoe werkt het" [ref=e10] [cursor=pointer]:
+          - /url: hoe-werkt-het.html
+      - listitem [ref=e11]:
+        - link "Aan de slag" [ref=e12] [cursor=pointer]:
+          - /url: how-to-get-it.html
+      - listitem [ref=e13]:
+        - link "FAQs" [ref=e14] [cursor=pointer]:
+          - /url: faq.html
+      - listitem [ref=e15]:
+        - link "Shop" [ref=e16] [cursor=pointer]:
+          - /url: shop.html
+    - link "Bereken" [ref=e17] [cursor=pointer]:
+      - /url: "#"
+  - generic [ref=e18]:
+    - generic [ref=e19] [cursor=pointer]:
+      - generic: Intro
+    - generic [ref=e21] [cursor=pointer]:
+      - generic: Modulatie
+    - generic [ref=e23] [cursor=pointer]:
+      - generic: Werkt
+    - generic [ref=e25] [cursor=pointer]:
+      - generic: Componenten
+    - generic [ref=e27] [cursor=pointer]:
+      - generic: De Nymo
+    - generic [ref=e29] [cursor=pointer]:
+      - generic: Geschikt?
+    - generic [ref=e31] [cursor=pointer]:
+      - generic: Kosten
+    - generic [ref=e33] [cursor=pointer]:
+      - generic: Klanten
+    - generic [ref=e35] [cursor=pointer]:
+      - generic: Bestel
+  - generic [ref=e37]:
+    - generic [ref=e39]:
+      - generic [ref=e40]:
+        - generic [ref=e41]: Welkom op onze vernieuwde website
+        - 'heading "De WaterAccu: Nymo + boiler." [level=1] [ref=e43]':
+          - text: "De WaterAccu:"
+          - generic [ref=e44]: Nymo + boiler.
+        - paragraph [ref=e45]:
+          - text: 2 onderdelen, eenvoudig in te passen bij jou thuis.
+          - text: Scroll door deze pagina om uit te vinden hoe de WaterAccu werkt.
+      - generic [ref=e46]: Scroll om verder te lezen
+    - generic [ref=e48]:
+      - generic [ref=e49]:
+        - generic [ref=e50]: 01 / 07
+        - generic [ref=e51]:
+          - text: De waarde
+          - text: van de
+          - text: WaterAccu
+      - generic [ref=e55]:
+        - heading "70% van de opwek wordt teruggeleverd" [level=2] [ref=e56]:
+          - text: 70% van de opwek wordt
+          - emphasis [ref=e57]: teruggeleverd
+        - paragraph [ref=e58]: Verbruik vindt vooral plaats 's ochtends en 's avonds. Overdag, als de panelen op volle kracht draaien, is er weinig verbruik. Die onbenutte energie gaat terug het net op. Bewolking en verbruik zorgen voor pieken en dalen in het overschot. Dat kan beter, met de WaterAccu!
+        - generic [ref=e59]:
+          - generic [ref=e60]:
+            - generic [ref=e61]:
+              - generic [ref=e62]: Zonder WaterAccu
+              - img "Zonder WaterAccu — 70% van de zonne-energie blijft onbenut" [ref=e64]
+            - generic [ref=e65]:
+              - generic [ref=e66]: Met WaterAccu
+              - img "Met WaterAccu — energie wordt opgeslagen in warm water" [ref=e68]
+          - generic [ref=e69]:
+            - generic [ref=e72]: Opwek zonne-energie
+            - generic [ref=e75]: Verbruik van energie
+            - generic [ref=e78]: Eigen gebruik zonne-energie
+            - generic [ref=e81]: Opslag zonne-energie in warm water
+          - generic [ref=e82]: Dit is een gesimplificeerde weergave
+    - generic [ref=e84]:
+      - generic [ref=e85]:
+        - generic [ref=e86]: 02 / 07
+        - generic [ref=e87]:
+          - text: Zo werkt
+          - text: de Nymo.
+      - generic [ref=e89]:
+        - heading "De Nymo stuurt precies je overschot naar de boiler, zodat je teruglevering naar nul gaat." [level=2] [ref=e90]
+        - paragraph [ref=e91]: Dagelijkse opwek én verbruik zijn grillig, door wolken en door het verbruik van huishoudelijke apparaten. De Nymo varieert het vermogen naar de boiler precies zo dat de teruglevering naar nul gaat. Druk op play of versleep de groene bol handmatig over de tijdlijn.
+        - generic [ref=e92]:
+          - img "Zonneproductie en verbruik animatie Een geanimeerde tijdlijn loopt over een dag en toont opwek, verbruik en het overschot dat naar de boiler gaat." [ref=e93]:
+            - generic [ref=e94]:
+              - generic [ref=e95]: Opwek
+              - generic [ref=e96]: 0 W
+              - generic [ref=e97]: Verbruik
+              - generic [ref=e98]: 0 W
+              - generic [ref=e99]: Nymo
+              - generic [ref=e100]: 0 W
+            - generic [ref=e101]:
+              - generic [ref=e102]: Nymo naar boiler
+              - generic [ref=e103]: 0 W
+              - generic [ref=e104]: Opgeslagen
+              - generic [ref=e105]: 0.0 kWh
+            - img [ref=e106]
+            - generic [ref=e133]: boiler
+            - generic [ref=e145]:
+              - generic [ref=e146]: Ochtend
+              - generic [ref=e147]: Middag
+              - generic [ref=e148]: Avond
+          - slider "Tijd" [ref=e150] [cursor=pointer]: "0"
+          - generic [ref=e151]:
+            - button "Afspelen / pauzeren" [ref=e152] [cursor=pointer]:
+              - generic [ref=e153]: ▶ Afspelen
+            - generic [ref=e154]: 06:00
+            - generic [ref=e155]: Versleep de groene bol zelf
+    - generic [ref=e157]:
+      - generic [ref=e158]:
+        - generic [ref=e159]: 03 / 07
+        - generic [ref=e160]:
+          - text: De
+          - text: Componenten
+      - generic [ref=e162]:
+        - heading "Hieruit bestaat de WaterAccu. That's it." [level=2] [ref=e163]:
+          - text: Hieruit bestaat de WaterAccu.
+          - emphasis [ref=e164]: That's it.
+        - paragraph [ref=e165]: De zonnepanelen wekken stroom op. De sensor in de meterkast meet het huidige overschot. De Nymo ontvangt deze meting draadloos, en stuurt de boiler aan met exact het gemeten overschot.
+        - generic [ref=e166]:
+          - generic [ref=e168] [cursor=pointer]:
+            - generic [ref=e169]:
+              - img [ref=e171]
+              - generic [ref=e183]:
+                - generic [ref=e184]: Al aanwezig
+                - generic [ref=e186]: Zonnepanelen
+            - generic [ref=e187]:
+              - paragraph [ref=e188]: Werkt met alle types omvormers — enkelfase én driefase. Geen vervanging nodig.
+              - button "Meer info" [ref=e189]
+              - generic [ref=e190]: hover = draaien
+          - generic [ref=e192] [cursor=pointer]:
+            - generic [ref=e193]:
+              - img [ref=e195]
+              - generic [ref=e201]:
+                - generic [ref=e202]: meegeleverd bij Nymo
+                - generic [ref=e204]: Sensor
+            - generic [ref=e205]:
+              - paragraph [ref=e206]: Leest de slimme meter via P1-poort. Stuurt overschot draadloos (433 MHz) naar de Nymo.
+              - button "Meer info" [ref=e207]
+              - generic [ref=e208]: hover = draaien
+          - generic [ref=e210] [cursor=pointer]:
+            - generic [ref=e211]:
+              - img [ref=e213]
+              - generic [ref=e233]:
+                - generic [ref=e234]: ontwikkeld door Solyx Energy
+                - generic [ref=e236]: Nymo
+            - generic [ref=e237]:
+              - paragraph [ref=e238]: Moduleert 100–3.000W op het beschikbare overschot. Automatische legionellabescherming.
+              - button "Meer info" [ref=e239]
+              - generic [ref=e240]: hover = draaien
+          - generic [ref=e242] [cursor=pointer]:
+            - generic [ref=e243]:
+              - img [ref=e245]
+              - generic [ref=e251]:
+                - generic [ref=e252]: kies een geschikte boiler
+                - generic [ref=e254]: Elektrische boiler
+            - generic [ref=e255]:
+              - paragraph [ref=e256]: "Geen smart-display. Al aanwezig? Perfect. Zo niet: wij leveren de juiste maat (100–200L)."
+              - button "Meer info" [ref=e257]
+              - generic [ref=e258]: hover = draaien
+        - generic [ref=e259]: Benieuwd hoe dit ingepast wordt?
+        - link "Bekijk de installatie →" [ref=e260] [cursor=pointer]:
+          - /url: installatie.html
+    - generic [ref=e262]:
+      - generic [ref=e263]:
+        - generic [ref=e264]: 04 / 07
+        - generic [ref=e265]:
+          - text: De
+          - text: Nymo
+        - generic [ref=e267]:
+          - button "Nymo" [ref=e268] [cursor=pointer]: Nymo
+          - button "Nymo voor Homey gebruikers" [ref=e271] [cursor=pointer]: Nymo voor Homey gebruikers
+      - generic [ref=e275]:
+        - img "Nymo" [ref=e278]
+        - generic [ref=e280]: Standalone · Plug & play
+    - generic [ref=e283]:
+      - generic [ref=e284]:
+        - generic [ref=e285]: 05 / 07
+        - generic [ref=e286]:
+          - text: Is mijn
+          - text: huis
+          - text: geschikt?
+      - generic [ref=e288]:
+        - heading "Drie checks. Tien seconden." [level=2] [ref=e289]:
+          - text: Drie checks.
+          - emphasis [ref=e290]: Tien seconden.
+        - generic [ref=e291]:
+          - generic [ref=e292]:
+            - generic [ref=e293] [cursor=pointer]:
+              - img [ref=e296]
+              - generic [ref=e298]:
+                - heading "Slimme meter met P1-poort" [level=3] [ref=e299]
+                - paragraph [ref=e300]:
+                  - text: "Ondersteunt DSMR 5.0 en 4.2, ook in België. Bij 4.2 moet de Sensor apart worden gevoed via USB-C. Let op: Kamstrup-meters en meters met jaartal 2014 of ouder werken niet."
+                  - generic [ref=e301]:
+                    - text: Weet je het niet zeker?
+                    - link "Stuur ons een foto van jouw slimme meter." [ref=e302]:
+                      - /url: mailto:info@solyxenergy.nl
+              - generic [ref=e303]:
+                - img [ref=e304]
+                - text: klik om aan te vinken
+            - generic [ref=e306] [cursor=pointer]:
+              - img [ref=e309]
+              - generic [ref=e311]:
+                - heading "CV-combiketel niet ouder dan 15 jaar" [level=3] [ref=e312]
+                - paragraph [ref=e313]:
+                  - text: De ketel heeft een NZ-keur nodig. Check de gaskeur-sticker op jouw ketel voor de letters
+                  - strong [ref=e314]: "'NZ'"
+                  - text: .
+                  - text: Als je de WaterAccu standalone installeert (zonder naverwarming van de CV-combiketel), is deze check niet relevant. Zie hieronder de link naar alternatieve opstellingen.
+            - generic [ref=e315] [cursor=pointer]:
+              - img [ref=e318]
+              - generic [ref=e320]:
+                - heading "Ik heb nog geen boiler, of ik heb een boiler zonder smart functies" [level=3] [ref=e321]
+                - paragraph [ref=e322]:
+                  - text: Nog geen boiler?
+                  - link "Bekijk onze complete set" [ref=e323]:
+                    - /url: shop.html
+                  - text: ", of kies zelf een boiler. Let op: kies een ‘domme’, niet-smart boiler zonder display."
+                  - text: Heb je al een boiler? Check dan of er geen smartfuncties, display of andere elektronica op zit. De boiler dient enkelfase te zijn, en max 3000W qua vermogen. Warmtepompboilers en smartboilers werken niet.
+                  - generic [ref=e324]:
+                    - text: Weet je het niet zeker?
+                    - link "Stuur ons een mailtje!" [ref=e325]:
+                      - /url: mailto:info@solyxenergy.nl
+            - generic [ref=e326]:
+              - link "Bekijk de installatie →" [ref=e327] [cursor=pointer]:
+                - /url: installatie.html
+              - link "Alternatieve opstellingen →" [ref=e328] [cursor=pointer]:
+                - /url: installatie.html#Opstellingen
+          - generic [ref=e330]:
+            - img "Slimme meter" [ref=e331]
+            - generic [ref=e332]:
+              - text: Slimme meter
+              - text: met P1-poort
+    - generic [ref=e334]:
+      - generic [ref=e335]:
+        - generic [ref=e336]: 06 / 07
+        - generic [ref=e337]:
+          - text: Wat kost
+          - text: een
+          - text: WaterAccu?
+      - generic [ref=e339]:
+        - generic [ref=e340]: Bereken jouw investering
+        - heading "Transparante kosten, snelle terugverdientijd." [level=2] [ref=e341]:
+          - text: Transparante kosten,
+          - emphasis [ref=e342]: snelle terugverdientijd.
+        - generic [ref=e343]:
+          - generic [ref=e344]:
+            - generic [ref=e345]: Elektrische boiler
+            - combobox [ref=e346] [cursor=pointer]:
+              - option "Al aanwezig — €0" [selected]
+              - option "100L boiler (1–2 personen) — €540"
+              - option "150L boiler (3–4 personen) — €680"
+              - option "200L boiler (4+ personen) — €1119 (RVS OSO)"
+          - generic [ref=e347]:
+            - generic [ref=e348]: Installatie
+            - combobox [ref=e349] [cursor=pointer]:
+              - option "Zelf installeren — €0 (aanbevolen)" [selected]
+              - option "Via Solyx Energy — ±€400"
+          - generic [ref=e350]:
+            - generic [ref=e351]:
+              - generic [ref=e352]: Nymo (incl. Sensor)
+              - generic [ref=e353]: €649
+            - generic [ref=e354]:
+              - generic [ref=e355]: Elektrische boiler
+              - generic [ref=e356]: Al aanwezig
+            - generic [ref=e357]:
+              - generic [ref=e358]: Installatie
+              - generic [ref=e359]: Zelf doen
+            - generic [ref=e360]:
+              - generic [ref=e361]: Totaal investering
+              - generic [ref=e362]: €649
+          - generic [ref=e363]:
+            - generic [ref=e364]:
+              - generic [ref=e365]: Gem. jaarlijkse besparing
+              - generic [ref=e366]: €350
+            - generic [ref=e367]:
+              - generic [ref=e368]: Terugverdientijd
+              - generic [ref=e369]: ~1.9 jaar
+        - paragraph [ref=e370]: De exacte installatiekosten zijn afhankelijk van jouw situatie.
+        - generic [ref=e371]:
+          - link "Bestel direct" [ref=e372] [cursor=pointer]:
+            - /url: shop.html
+          - link "Installatie via Solyx" [ref=e373] [cursor=pointer]:
+            - /url: how-to-get-it.html
+    - generic [ref=e375]:
+      - generic [ref=e376]:
+        - generic [ref=e377]: 07 / 07
+        - generic [ref=e378]:
+          - text: Klanten
+          - text: aan het
+          - text: woord
+      - generic [ref=e380]:
+        - heading "Bekijk de ervaring van onze klanten" [level=2] [ref=e381]:
+          - emphasis [ref=e382]: Bekijk de ervaring van onze klanten
+        - generic [ref=e383]:
+          - generic [ref=e385] [cursor=pointer]:
+            - generic [ref=e386]: ▶
+            - generic [ref=e387]:
+              - text: Lonneke (Amersfoort)
+              - generic [ref=e388]: over de WaterAccu
+            - generic [ref=e389]: Video komt binnenkort beschikbaar
+          - generic [ref=e391] [cursor=pointer]:
+            - generic [ref=e392]: ▶
+            - generic [ref=e393]:
+              - text: Theo (Soest)
+              - generic [ref=e394]: over de WaterAccu
+            - generic [ref=e395]: Video komt binnenkort beschikbaar
+        - generic [ref=e396]:
+          - button "Vorige video" [ref=e397] [cursor=pointer]: ←
+          - button "Volgende video" [ref=e398] [cursor=pointer]: →
+    - generic [ref=e400]:
+      - generic [ref=e402]:
+        - text: Start
+        - text: vandaag.
+      - generic [ref=e404]:
+        - heading "Sla jouw onbenutte zonne-energie op in de WaterAccu." [level=3] [ref=e405]
+        - paragraph [ref=e406]: Haal meer voordeel uit jouw zonnepanelen én bespaar gas. Verwarm tapwater met onbenutte zonne-energie en bespaar direct. Plug & play, terugverdient in minder dan 3 jaar.
+        - generic [ref=e407]:
+          - generic [ref=e408] [cursor=pointer]:
+            - generic [ref=e409]: Nymo
+            - generic [ref=e410]: €649
+            - generic [ref=e411]: Voor wie al een geschikte boiler heeft, of er zelf een uitkiest. De Nymo is eenvoudig zelf te installeren.
+            - img [ref=e415]
+          - generic [ref=e435] [cursor=pointer]:
+            - generic [ref=e436]: Nymo + Boiler
+            - generic [ref=e437]: vanaf €1.189
+            - generic [ref=e438]: Voor wie nog geen boiler heeft. Complete WaterAccu inclusief geschikte boiler, zonder installatie.
+            - generic [ref=e439]:
+              - img [ref=e442]
+              - generic [ref=e462]: +
+              - img [ref=e465]
+          - generic [ref=e474] [cursor=pointer]:
+            - generic [ref=e475]: Complete Installatie
+            - generic [ref=e476]: vanaf €1.725
+            - generic [ref=e477]: Volledige ontzorging. Boiler + Nymo, inclusief installatie aan huis, door installatie-partner van Solyx Energy.
+            - generic [ref=e478]:
+              - img [ref=e481]
+              - generic [ref=e501]: +
+              - img [ref=e504]
+              - generic [ref=e513]: +
+              - img [ref=e516]
+        - generic [ref=e518]:
+          - text: Installateur?
+          - link "Klik hier." [ref=e519] [cursor=pointer]:
+            - /url: installatie.html
+    - contentinfo [ref=e521]:
+      - generic [ref=e522]:
+        - generic [ref=e523]:
+          - img [ref=e524]:
+            - generic [ref=e527]: SOLYX ENERGY
+          - paragraph [ref=e528]: Slimme energieopslag voor huishoudens met zonnepanelen. Simpel, betaalbaar, direct resultaat. Made in Holland.
+        - generic [ref=e529]:
+          - generic [ref=e530]: Product
+          - list [ref=e531]:
+            - listitem [ref=e532]:
+              - link "WaterAccu" [ref=e533] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e534]:
+              - link "De Nymo" [ref=e535] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e536]:
+              - link "Nymo × Homey" [ref=e537] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e538]:
+              - link "Shop" [ref=e539] [cursor=pointer]:
+                - /url: "#"
+        - generic [ref=e540]:
+          - generic [ref=e541]: Installatie
+          - list [ref=e542]:
+            - listitem [ref=e543]:
+              - link "Installatie" [ref=e544] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e545]:
+              - link "Klantverhalen" [ref=e546] [cursor=pointer]:
+                - /url: klantverhalen.html
+            - listitem [ref=e547]:
+              - link "FAQ" [ref=e548] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e549]:
+              - link "Contact" [ref=e550] [cursor=pointer]:
+                - /url: "#"
+        - generic [ref=e551]:
+          - generic [ref=e552]: Bedrijf
+          - list [ref=e553]:
+            - listitem [ref=e554]:
+              - link "Over Solyx" [ref=e555] [cursor=pointer]:
+                - /url: over-ons.html
+            - listitem [ref=e556]:
+              - link "Besparen" [ref=e557] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e558]:
+              - link "Blog & Nieuws" [ref=e559] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e560]:
+              - link "Voor installateurs" [ref=e561] [cursor=pointer]:
+                - /url: "#"
+      - generic [ref=e562]:
+        - generic [ref=e563]: © 2025 Solyx Energy BV · Smitspol 15M · 3861 RS Nijkerk · KvK 85751391
+        - generic [ref=e564]:
+          - link "Voorwaarden" [ref=e565] [cursor=pointer]:
+            - /url: "#"
+          - link "Privacy" [ref=e566] [cursor=pointer]:
+            - /url: "#"
+  - generic [ref=e568]:
+    - generic [ref=e569]: Component
+    - button [ref=e570] [cursor=pointer]:
+      - img [ref=e571]

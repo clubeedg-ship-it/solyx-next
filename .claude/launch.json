@@ -1,0 +1,40 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "solyx-next-static",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": [
+        "-I",
+        "-c",
+        "import os;os.chdir('/Users/ottogen/Downloads/solyx-next');import http.server as h,socketserver as s;C=type('C',(h.SimpleHTTPRequestHandler,),{'end_headers':lambda self:(self.send_header('Cache-Control','no-store, no-cache, must-revalidate, max-age=0'),self.send_header('Pragma','no-cache'),h.SimpleHTTPRequestHandler.end_headers(self))});s.TCPServer.allow_reuse_address=True;s.TCPServer(('127.0.0.1',4599),C).serve_forever()"
+      ],
+      "port": 4599,
+      "autoPort": false
+    },
+    {
+      "name": "live-server",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "live-server",
+        "--port=8080",
+        "--no-browser",
+        "--quiet",
+        "/Users/ottogen/Downloads/Solyx Edited Pages"
+      ],
+      "port": 8080
+    },
+    {
+      "name": "python-http",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8000",
+        "--directory",
+        "/Users/ottogen/Downloads/Solyx Edited Pages"
+      ],
+      "port": 8000
+    }
+  ]
+}

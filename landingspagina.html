@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <link rel="icon" type="image/png" sizes="64x64" href="midia/favicon.png">
+  <link rel="apple-touch-icon" href="midia/apple-touch-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WaterAccu — Solyx Energy</title>
+<meta name="description" content="What is a WaterAccu? With the WaterAccu, you can get more out of your solar panels. Save money and make your home even more sustainable.">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+<link href="https://fonts.cdnfonts.com/css/alliance-no-2" rel="stylesheet">
+<style>
+:root{
+  --green:#35A847;--green-deep:#1E7A30;--green-light:#EBF8ED;
+  --orange:#F4831F;--ink:#3D3D3D;--ink-mid:#5A5A5A;--ink-muted:#888888;
+  --white:#FFFFFF;--off-white:#F7F9F7;--border:rgba(60,60,60,.1);
+  --font-head:'Inter',sans-serif;
+  --font-body:'Alliance No.2','DM Sans',Georgia,sans-serif;
+  --nav-h:80px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;overflow:hidden;background:var(--white);}
+
+/* ── SCROLL CONTAINER ── */
+#scroll-container{height:100%;overflow-y:scroll;scroll-snap-type:y mandatory;scroll-behavior:smooth;scrollbar-width:none;-ms-overflow-style:none;}
+#scroll-container::-webkit-scrollbar{display:none;}
+.snap-page{scroll-snap-align:start;scroll-snap-stop:always;}
+
+/* ── BLOB CANVAS ── */
+#gc{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+.blob{position:absolute;border-radius:50%;filter:blur(90px);mix-blend-mode:multiply;will-change:transform;}
+.blob-1{width:900px;height:900px;background:radial-gradient(circle,rgba(57,171,72,.42) 0%,rgba(57,171,72,.14) 45%,transparent 70%);top:-200px;left:-200px;animation:bl1 14s ease-in-out infinite;}
+@keyframes bl1{0%{transform:translate(0,0)}25%{transform:translate(55vw,80px)}50%{transform:translate(60vw,-60px)}75%{transform:translate(25vw,100px)}100%{transform:translate(0,0)}}
+.blob-2{width:1000px;height:1000px;background:radial-gradient(circle,rgba(57,171,72,.36) 0%,rgba(30,122,48,.12) 45%,transparent 70%);bottom:-250px;right:-250px;animation:bl2 18s ease-in-out infinite;animation-delay:-7s;}
+@keyframes bl2{0%{transform:translate(0,0)}33%{transform:translate(-60vw,-80px)}66%{transform:translate(-30vw,60px)}100%{transform:translate(0,0)}}
+.blob-3{width:800px;height:800px;background:radial-gradient(circle,rgba(57,171,72,.28) 0%,rgba(57,171,72,.1) 50%,transparent 70%);top:30vh;left:20vw;animation:bl3 22s ease-in-out infinite;animation-delay:-4s;}
+@keyframes bl3{0%{transform:translate(0,0)}25%{transform:translate(40vw,-15vh)}50%{transform:translate(20vw,20vh)}75%{transform:translate(-10vw,10vh)}100%{transform:translate(0,0)}}
+.blob-4{width:700px;height:700px;background:radial-gradient(circle,rgba(57,171,72,.30) 0%,rgba(57,171,72,.11) 45%,transparent 70%);top:-150px;right:-100px;animation:bl4 16s ease-in-out infinite;animation-delay:-11s;}
+@keyframes bl4{0%{transform:translate(0,0)}50%{transform:translate(-65vw,10vh)}100%{transform:translate(0,0)}}
+.blob-5{width:750px;height:750px;background:radial-gradient(circle,rgba(57,171,72,.25) 0%,rgba(30,122,48,.09) 45%,transparent 70%);bottom:-100px;left:10vw;animation:bl5 26s ease-in-out infinite;animation-delay:-15s;}
+@keyframes bl5{0%{transform:translate(0,0)}33%{transform:translate(50vw,-10vh)}66%{transform:translate(25vw,5vh)}100%{transform:translate(0,0)}}
+
+/* ── SCROLL PROGRESS ── */
+#scroll-progress{position:fixed;top:0;left:0;height:2px;background:var(--green);z-index:700;width:0%;transition:width .3s ease;}
+
+/* ── INSTALLER BAR + NAV ── */
+#installer-bar{position:fixed;top:0;left:0;right:0;z-index:601;display:none;align-items:center;justify-content:flex-start;padding:6px 48px;pointer-events:none;}
+#installer-bar a{pointer-events:all;font-family:var(--font-head);font-size:12px;font-weight:500;color:var(--ink-mid);text-decoration:none;transition:color .2s;letter-spacing:.01em;}
+#installer-bar a:hover{color:var(--ink);}
+nav{position:fixed;top:0;left:0;right:0;z-index:600;display:flex;align-items:center;justify-content:space-between;padding:16px 48px;background:linear-gradient(180deg,rgba(255,255,255,.7),rgba(255,255,255,.5));backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border-bottom:1px solid rgba(255,255,255,.55);box-shadow:0 8px 30px rgba(28,36,34,.1),inset 0 1px 0 rgba(255,255,255,.7);transition:box-shadow .4s;}
+nav.scrolled{background:linear-gradient(180deg,rgba(255,255,255,.7),rgba(255,255,255,.5));backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border-bottom:1px solid rgba(255,255,255,.55);box-shadow:0 8px 30px rgba(28,36,34,.1),inset 0 1px 0 rgba(255,255,255,.7);}
+.nav-logo{display:flex;align-items:center;text-decoration:none;}
+.nav-logo-img{display:block;height:32px;width:auto;mix-blend-mode:multiply;}
+.nav-links{display:flex;gap:32px;list-style:none;}
+.nav-links a{font-family:var(--font-head);font-size:13px;font-weight:500;color:var(--ink-mid);text-decoration:none;transition:color .2s;}
+.nav-links a:hover{color:var(--ink);}
+.btn-orange{background:#F4831F;color:#fff;font-family:var(--font-head);font-size:13px;font-weight:700;padding:10px 22px;border-radius:999px;border:none;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;transition:background .2s,transform .2s;}
+.btn-orange:hover{background:#d96f10;transform:translateY(-1px);}
+
+/* ── BULLET NAV ── */
+#sn{position:fixed;right:28px;top:50%;transform:translateY(-50%);z-index:601;display:flex;flex-direction:column;gap:14px;}
+.snw{display:flex;align-items:center;gap:10px;justify-content:flex-end;cursor:pointer;}
+.ndl{font-family:var(--font-head);font-size:11px;font-weight:700;letter-spacing:.04em;color:var(--ink);opacity:0;transform:translateX(6px);transition:opacity .3s,transform .3s,color .3s;white-space:nowrap;pointer-events:none;text-shadow:0 1px 4px rgba(255,255,255,.8);}
+.snw:hover .ndl{opacity:1;transform:translateX(0);color:var(--green);}
+.snw.active .ndl{opacity:1;transform:translateX(0);color:var(--green);}
+.snw.active.label-hide .ndl{opacity:0;transform:translateX(6px);}
+.ndot{width:8px;height:8px;border-radius:50%;background:rgba(28,36,34,.2);border:1.5px solid rgba(28,36,34,.3);transition:all .3s;flex-shrink:0;}
+.snw:hover .ndot{background:rgba(53,168,71,.4);border-color:rgba(53,168,71,.6);}
+.snw.active .ndot{background:var(--green);border-color:var(--green);transform:scale(1.4);}
+
+/* ── GREEN HIGHLIGHT ── */
+.green-highlight{display:inline;background:var(--green);color:#fff!important;padding:2px 10px 4px;border-radius:4px;box-decoration-break:clone;-webkit-box-decoration-break:clone;line-height:1.3;}
+
+/* ── HERO ── */
+.hero{min-height:100vh;height:100vh;position:relative;display:grid;grid-template-columns:1.1fr 1fr;align-items:center;gap:60px;padding:120px 80px 60px;overflow:hidden;}
+.hero::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 55%,rgba(255,255,255,.55) 100%);pointer-events:none;}
+.hero-inner{position:relative;z-index:2;max-width:620px;}
+.hero-tag{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-head);font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--green);margin-bottom:28px;padding:6px 16px;border:1px solid rgba(53,168,71,.3);border-radius:999px;background:rgba(53,168,71,.08);}
+.hero-tag-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+.hero-h1{font-family:var(--font-head);font-size:clamp(38px,5.5vw,68px);font-weight:900;letter-spacing:-.03em;line-height:1.0;margin-bottom:32px;animation:fadeUp .9s ease .1s both;color:var(--ink);}
+.hero-bullets{list-style:none;display:flex;flex-direction:column;gap:14px;margin-bottom:36px;animation:fadeUp .9s ease .25s both;}
+.hero-bullets li{display:flex;align-items:flex-start;gap:12px;font-family:var(--font-body);font-size:16px;color:var(--ink-mid);line-height:1.55;}
+.hero-check{width:22px;height:22px;border-radius:50%;background:var(--green-light);display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;}
+.hero-check svg{width:12px;height:12px;color:var(--green);}
+.hero-actions{display:flex;gap:14px;align-items:center;animation:fadeUp .9s ease .4s both;flex-wrap:wrap;}
+.btn-hero{font-family:var(--font-head);font-size:15px;font-weight:700;padding:15px 32px;border-radius:999px;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:all .2s;text-decoration:none;}
+.btn-hero-primary{background:var(--green);color:#fff;}
+.btn-hero-primary:hover{background:#2d9040;transform:translateY(-1px);}
+.btn-hero-secondary{background:#fff;color:var(--green);border:2px solid var(--green);}
+.btn-hero-secondary:hover{background:var(--green);color:#fff;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+
+/* Hero product visual */
+.hero-visual{position:relative;z-index:2;display:flex;align-items:center;justify-content:center;animation:fadeUp 1s ease .35s both;}
+.hero-product-card{width:100%;max-width:520px;aspect-ratio:1/1;background:linear-gradient(135deg,#f3faf4 0%,#ffffff 60%,#ecf6ee 100%);border-radius:36px;border:1px solid var(--border);position:relative;overflow:hidden;box-shadow:0 30px 80px rgba(53,168,71,.18),0 0 0 1px rgba(255,255,255,.6) inset;}
+.hero-product-glow{position:absolute;top:50%;left:50%;width:75%;height:75%;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(53,168,71,.22) 0%,rgba(53,168,71,.06) 45%,transparent 70%);filter:blur(20px);animation:heroGlow 6s ease-in-out infinite;}
+@keyframes heroGlow{0%,100%{transform:translate(-50%,-50%) scale(1);opacity:.85}50%{transform:translate(-50%,-50%) scale(1.08);opacity:1}}
+.hero-product-img{position:relative;z-index:2;width:78%;height:78%;object-fit:contain;margin:auto;display:block;filter:drop-shadow(0 24px 48px rgba(0,0,0,.18));animation:floatY 6s ease-in-out infinite;}
+@keyframes floatY{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.hero-product-floater{position:absolute;background:rgba(255,255,255,.92);backdrop-filter:blur(12px);border:1px solid var(--border);border-radius:14px;padding:12px 16px;box-shadow:0 12px 30px rgba(30,122,48,.12);z-index:3;animation:floatY 6s ease-in-out infinite;}
+.hero-floater-1{top:18%;left:-12px;animation-delay:-2s;}
+.hero-floater-2{bottom:18%;right:-8px;animation-delay:-4s;display:flex;align-items:center;gap:10px;}
+.hpf-num{font-family:var(--font-head);font-size:22px;font-weight:900;letter-spacing:-.02em;color:var(--green);line-height:1;}
+.hpf-lbl{font-family:var(--font-head);font-size:10px;font-weight:600;color:var(--ink-mid);letter-spacing:.04em;margin-top:4px;max-width:120px;line-height:1.3;}
+.hpf-icon{font-size:18px;}
+.hero-floater-2 .hpf-lbl{margin-top:0;}
+.illus-tag{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);font-family:var(--font-head);font-size:10px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--green-deep);background:rgba(255,255,255,.85);padding:6px 14px;border-radius:999px;backdrop-filter:blur(8px);z-index:3;white-space:nowrap;}
+
+/* ── TWO-COL SNAP SECTION ── */
+.two-col{min-height:100vh;display:grid;grid-template-columns:280px 1fr;}
+.col-l{position:sticky;top:0;height:100vh;display:flex;flex-direction:column;justify-content:flex-start;padding:120px 48px 80px 64px;border-right:none;background:transparent;z-index:2;}
+.col-r{padding:160px 80px 60px 120px;display:flex;flex-direction:column;justify-content:center;position:relative;z-index:1;}
+.sec-num{font-family:var(--font-head);font-size:11px;letter-spacing:4px;color:var(--ink-muted);text-transform:uppercase;margin-bottom:16px;}
+.sec-lbl{font-family:var(--font-head);font-size:clamp(28px,3vw,40px);font-weight:900;letter-spacing:-.03em;line-height:1.05;color:var(--ink);}
+.sec-lbl .hl{color:var(--green);}
+.sec-dot{color:var(--green);}
+.sec-line{width:40px;height:3px;background:var(--green);margin-top:20px;}
+.section-tag{font-family:var(--font-head);font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--green);margin-bottom:16px;display:block;}
+
+/* ── WHAT IS section — flow diagram + KPI strip ── */
+.explain-h2{font-family:var(--font-head);font-size:clamp(26px,3vw,40px);font-weight:900;letter-spacing:-.025em;color:var(--ink);margin-bottom:18px;line-height:1.1;max-width:680px;}
+.explain-lead{font-family:var(--font-body);font-size:16px;color:var(--ink-mid);line-height:1.7;max-width:640px;margin-bottom:38px;}
+
+.flow{display:flex;align-items:stretch;gap:12px;max-width:820px;margin-bottom:36px;}
+.flow-step{flex:1;background:rgba(255,255,255,.78);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:18px;padding:22px 18px 20px;display:flex;flex-direction:column;align-items:center;text-align:center;position:relative;transition:transform .25s,box-shadow .25s,border-color .25s;min-width:0;}
+.flow-step:hover{transform:translateY(-3px);box-shadow:0 14px 32px rgba(53,168,71,.12);border-color:rgba(53,168,71,.4);}
+.flow-step-hl{background:linear-gradient(180deg,#ffffff 0%,#f5fbf6 100%);border:1.5px solid rgba(53,168,71,.45);box-shadow:0 12px 32px rgba(53,168,71,.12);}
+.flow-img-wrap{width:78px;height:78px;border-radius:50%;background:var(--green-light);display:flex;align-items:center;justify-content:center;margin-bottom:14px;overflow:hidden;}
+.flow-step-hl .flow-img-wrap{background:#fff;border:1px solid rgba(53,168,71,.2);}
+.flow-svg{width:48px;height:48px;}
+.flow-img{width:90%;height:90%;object-fit:contain;filter:drop-shadow(0 4px 8px rgba(0,0,0,.12));}
+.flow-num{font-family:var(--font-head);font-size:10px;font-weight:800;letter-spacing:.16em;color:var(--green);margin-bottom:6px;}
+.flow-title{font-family:var(--font-head);font-size:16px;font-weight:900;letter-spacing:-.015em;color:var(--ink);margin-bottom:6px;}
+.flow-sub{font-family:var(--font-body);font-size:12.5px;color:var(--ink-muted);line-height:1.5;}
+.flow-arrow{display:flex;align-items:center;justify-content:center;flex-shrink:0;width:32px;opacity:.6;}
+.flow-arrow svg{width:32px;height:auto;}
+
+.kpi-strip{display:flex;align-items:center;gap:24px;padding:20px 28px;background:rgba(255,255,255,.6);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:16px;max-width:820px;}
+.kpi{flex:1;text-align:center;}
+.kpi-num{font-family:var(--font-head);font-size:clamp(22px,2.2vw,30px);font-weight:900;letter-spacing:-.02em;color:var(--green);line-height:1;margin-bottom:6px;}
+.kpi-lbl{font-family:var(--font-head);font-size:11px;font-weight:600;color:var(--ink-muted);letter-spacing:.04em;text-transform:uppercase;}
+.kpi-div{width:1px;height:36px;background:var(--border);flex-shrink:0;}
+
+/* ── BENEFITS — 3 flip cards larger ── */
+.ben-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;width:100%;max-width:920px;}
+.ben-wrap{perspective:1200px;cursor:pointer;min-width:0;}
+.ben-inner{position:relative;width:100%;height:340px;transform-style:preserve-3d;transition:transform .7s cubic-bezier(.22,1,.36,1);}
+.ben-wrap:hover .ben-inner{transform:rotateY(180deg);}
+.ben-face{position:absolute;inset:0;border-radius:22px;backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden;}
+.ben-front{background:#fff;border:1px solid var(--border);display:flex;flex-direction:column;padding:32px 28px;}
+.ben-back{background:var(--ink);transform:rotateY(180deg);display:flex;flex-direction:column;justify-content:center;padding:32px 26px;}
+.ben-icon{width:64px;height:64px;border-radius:16px;background:var(--green-light);display:flex;align-items:center;justify-content:center;margin-bottom:24px;}
+.ben-icon svg{width:32px;height:32px;color:var(--green);}
+.ben-title{font-family:var(--font-head);font-size:22px;font-weight:900;color:var(--ink);letter-spacing:-.025em;margin-bottom:10px;}
+.ben-front-desc{font-family:var(--font-body);font-size:14px;color:var(--ink-mid);line-height:1.65;margin-bottom:22px;flex:1;}
+.ben-hint{font-family:var(--font-head);font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--green);display:flex;align-items:center;gap:8px;}
+.ben-back-tag{font-family:var(--font-head);font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--green);margin-bottom:14px;}
+.ben-back ul{list-style:none;display:flex;flex-direction:column;gap:12px;}
+.ben-back ul li{font-family:var(--font-body);font-size:13.5px;color:rgba(255,255,255,.85);line-height:1.55;display:flex;gap:10px;align-items:flex-start;}
+.ben-back ul li::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--green);margin-top:8px;flex-shrink:0;}
+
+/* ── REVIEWS — 3-col scrolling ── */
+.tcols-wrap{display:flex;gap:16px;padding:24px 48px 0;height:100vh;overflow:hidden;align-items:flex-start;}
+.tcol{flex:1;overflow:hidden;}
+.tcol-track{display:flex;flex-direction:column;gap:16px;padding-bottom:16px;animation:scroll-up linear infinite;}
+.tcol:hover .tcol-track{animation-play-state:paused;}
+@keyframes scroll-up{0%{transform:translateY(0)}100%{transform:translateY(-50%)}}
+.tc-card{background:rgba(255,255,255,.82);border:1px solid var(--border);border-radius:20px;padding:28px 24px;box-shadow:0 4px 24px rgba(53,168,71,.06);backdrop-filter:blur(8px);transition:border-color .3s,box-shadow .3s,transform .2s;}
+.tc-card:hover{border-color:rgba(53,168,71,.35);box-shadow:0 8px 32px rgba(53,168,71,.12);transform:translateY(-2px);}
+
+/* Photo cards — replace some review text cards with real installation/product imagery */
+.tc-photo{position:relative;border-radius:20px;overflow:hidden;border:1px solid var(--border);background:#fff;height:280px;box-shadow:0 4px 24px rgba(53,168,71,.06);transition:border-color .3s,box-shadow .3s,transform .2s;}
+.tc-photo:hover{border-color:rgba(53,168,71,.35);box-shadow:0 8px 32px rgba(53,168,71,.12);transform:translateY(-2px);}
+.tc-photo img{width:100%;height:100%;object-fit:cover;display:block;}
+.tc-photo-overlay{position:absolute;inset:auto 0 0 0;padding:20px 22px 18px;background:linear-gradient(180deg,transparent 0%,rgba(0,0,0,.7) 60%,rgba(0,0,0,.85) 100%);color:#fff;}
+.tc-photo-tag{font-family:var(--font-head);font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#fff;opacity:.85;margin-bottom:6px;}
+.tc-photo-caption{font-family:var(--font-head);font-size:14px;font-weight:700;letter-spacing:-.01em;line-height:1.3;color:#fff;}
+.tc-photo-tall{height:340px;}
+.tc-stars{color:var(--green);font-size:13px;letter-spacing:2px;margin-bottom:12px;}
+.tc-text{font-family:var(--font-body);font-size:14px;line-height:1.75;color:var(--ink-mid);margin-bottom:18px;}
+.tc-author{display:flex;align-items:center;gap:10px;}
+.tc-name{font-family:var(--font-head);font-size:13px;font-weight:700;color:var(--ink);line-height:1.3;}
+.rev-rating{display:flex;align-items:center;gap:14px;}
+.rrn{font-family:var(--font-head);font-size:54px;font-weight:900;letter-spacing:-.03em;color:var(--ink);line-height:1;}
+.rrs{color:var(--green);font-size:15px;letter-spacing:3px;}
+.rrsr{font-family:var(--font-head);font-size:11px;color:var(--ink-muted);text-transform:uppercase;letter-spacing:.1em;margin-top:4px;}
+
+/* ── PRESS — masthead style cards ── */
+.press-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;max-width:880px;}
+.press-card{border:1px solid var(--border);border-radius:18px;background:#fff;text-decoration:none;color:var(--ink);transition:border-color .25s,transform .25s,box-shadow .25s;display:flex;flex-direction:column;overflow:hidden;}
+.press-card:hover{border-color:var(--brand,rgba(53,168,71,.45));transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,0,0,.08);}
+.press-masthead{padding:14px 18px;display:flex;align-items:center;justify-content:space-between;}
+.press-brand{font-family:var(--font-head);font-size:18px;font-weight:900;letter-spacing:-.01em;}
+.press-format{font-family:var(--font-head);font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;opacity:.85;}
+.press-body{padding:18px 20px 20px;display:flex;flex-direction:column;flex:1;gap:14px;}
+.press-title{font-family:var(--font-head);font-size:15px;font-weight:700;color:var(--ink);letter-spacing:-.01em;line-height:1.35;}
+.press-link{font-family:var(--font-head);font-size:12px;font-weight:600;color:var(--brand,var(--green));margin-top:auto;display:inline-flex;align-items:center;gap:6px;}
+
+/* Video card */
+.press-card-video .press-video-thumb{position:relative;aspect-ratio:16/9;overflow:hidden;background:#000;}
+.press-card-video .press-video-thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s;}
+.press-card-video:hover .press-video-thumb img{transform:scale(1.05);}
+.press-play{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:54px;height:54px;border-radius:50%;background:rgba(255,0,0,.9);display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(0,0,0,.5);}
+.press-brand-small{font-family:var(--font-head);font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#FF0000;}
+
+/* ── CTA ── */
+.cta-col .col-l{background:var(--green);border-right:none;}
+.cta-col .col-r{background:var(--green);}
+.cta-col .col-l .sec-num{color:rgba(255,255,255,.5);}
+.cta-col .col-l .sec-lbl{color:#fff;}
+.cta-col .col-l .sec-lbl .hl{color:#fff;}
+.cta-col .col-l .sec-dot{color:#fff;}
+.cta-col .col-l .sec-line{background:#fff;}
+.cta-hl{font-family:var(--font-head);font-size:clamp(28px,3.5vw,44px);font-weight:800;letter-spacing:-.025em;color:#fff;line-height:1.15;margin-bottom:20px;}
+.ctabody{font-family:var(--font-body);font-size:17px;color:rgba(255,255,255,.82);line-height:1.8;margin-bottom:32px;max-width:520px;}
+.cta-btns{display:flex;flex-direction:column;gap:12px;max-width:320px;}
+.btn-white{background:#fff;color:var(--green);font-family:var(--font-head);font-weight:700;font-size:14px;padding:15px 28px;border-radius:999px;text-decoration:none;text-align:center;transition:background .2s;display:block;}
+.btn-white:hover{background:rgba(255,255,255,.9);}
+.btn-outline-w{border:1px solid rgba(255,255,255,.4);color:#fff;font-family:var(--font-head);font-weight:600;font-size:13px;padding:13px 28px;border-radius:999px;text-decoration:none;text-align:center;transition:border-color .2s;display:block;}
+.btn-outline-w:hover{border-color:#fff;}
+
+/* ── FOOTER ── */
+footer{background:#080c0a;padding:60px 48px 40px;}
+.fg{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px;}
+.fbt{font-family:var(--font-body);font-size:14px;color:var(--ink-muted);line-height:1.65;margin-top:16px;}
+.fct{font-family:var(--font-head);font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:16px;}
+.flinks{list-style:none;display:flex;flex-direction:column;gap:10px;}
+.flinks a{font-family:var(--font-head);font-size:13px;color:rgba(255,255,255,.5);text-decoration:none;transition:color .2s;}
+.flinks a:hover{color:#fff;}
+.fbottom{max-width:1100px;margin:0 auto;border-top:1px solid rgba(255,255,255,.05);padding-top:24px;display:flex;justify-content:space-between;align-items:center;}
+.fcopy{font-family:var(--font-head);font-size:12px;color:rgba(255,255,255,.2);}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1100px){
+  .hero{grid-template-columns:1fr;text-align:center;padding:140px 32px 60px;}
+  .hero-inner{max-width:100%;margin:0 auto;}
+  .hero-bullets li{justify-content:flex-start;text-align:left;}
+  .hero-actions{justify-content:center;}
+  .hero-visual{display:none;}
+  .two-col{grid-template-columns:1fr;}
+  .col-l{position:relative;height:auto;padding:80px 32px 24px;}
+  .col-r{padding:24px 32px 80px;}
+  .flow{flex-direction:column;gap:12px;}
+  .flow-arrow{transform:rotate(90deg);width:auto;height:24px;}
+  .kpi-strip{flex-direction:column;gap:16px;padding:20px;}
+  .kpi-div{width:36px;height:1px;}
+  .ben-strip,.press-grid{grid-template-columns:1fr;}
+  .ben-inner{height:auto;min-height:280px;}
+  .ben-wrap:hover .ben-inner{transform:none;}
+  .ben-back{display:none;}
+  .fg{grid-template-columns:1fr 1fr;gap:32px;}
+  .nav-links{display:none;}
+  nav{padding:16px 24px;}
+}
+@media(max-width:600px){
+  .hero-h1{font-size:34px;}
+  .tcols-wrap{padding:0 20px;}
+  .tcol:nth-child(3){display:none;}
+  .fg{grid-template-columns:1fr;}
+  .fbottom{flex-direction:column;gap:12px;text-align:center;}
+}
+
+/* ── BESTEL-BLOKKEN (overgenomen van 'Aan de slag') ── */
+.hero-options{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;width:100%;max-width:1080px;margin-top:8px;}
+.hero-opt{background:#fff;padding:36px 32px 30px;cursor:pointer;display:flex;flex-direction:column;position:relative;overflow:hidden;border-radius:20px;box-shadow:0 14px 44px rgba(0,0,0,.16);transition:background .3s ease;}
+.hero-opt::before{content:'';position:absolute;inset:0;background:var(--orange);transform:translateY(100%);transition:transform .45s cubic-bezier(.22,1,.36,1);z-index:0;border-radius:20px;}
+.hero-opt:hover::before{transform:translateY(0);}
+.hero-opt>*{position:relative;z-index:1;}
+.hero-opt-title{font-family:var(--font-head);font-size:clamp(24px,2.5vw,34px);font-weight:900;letter-spacing:-.03em;line-height:1.05;color:var(--ink);margin-bottom:12px;min-height:2.1em;transition:color .3s;}
+.hero-opt:hover .hero-opt-title{color:#fff;}
+.hero-opt-price{font-family:var(--font-head);font-size:clamp(22px,2.2vw,30px);font-weight:900;letter-spacing:-.03em;color:var(--green);margin-bottom:16px;transition:color .3s;}
+.hero-opt-price .vanaf{font-family:var(--font-head);font-size:12px;font-weight:600;letter-spacing:.02em;opacity:.7;margin-right:5px;}
+.hero-opt:hover .hero-opt-price{color:#fff;}
+.hero-opt-sub{font-family:var(--font-body);font-size:14px;color:var(--ink-muted);line-height:1.6;flex:1;transition:color .3s;}
+.hero-opt:hover .hero-opt-sub{color:rgba(255,255,255,.85);}
+.hero-opt-icons{display:flex;align-items:center;gap:8px;margin-top:auto;padding-top:28px;}
+.hoi-item{display:flex;align-items:center;justify-content:center;}
+.hoi-icon{width:56px;height:56px;border-radius:14px;background:rgba(53,168,71,.1);display:flex;align-items:center;justify-content:center;color:var(--green);transition:background .3s,color .3s;padding:4px;}
+.hero-opt:hover .hoi-icon{background:rgba(255,255,255,.2);color:#fff;}
+.hoi-icon svg{width:32px;height:32px;}
+.hoi-plus{font-family:var(--font-head);font-size:18px;font-weight:700;color:var(--ink-muted);display:flex;align-items:center;transition:color .3s;}
+.hero-opt:hover .hoi-plus{color:rgba(255,255,255,.6);}
+.hero-installer{margin-top:22px;font-family:var(--font-body);font-size:14px;color:rgba(255,255,255,.85);}
+.hero-installer a{color:#fff;font-weight:600;text-decoration:underline;}
+</style>
+</head>
+<body>
+
+<!-- BLOB CANVAS -->
+<div id="gc">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="blob blob-4"></div>
+  <div class="blob blob-5"></div>
+</div>
+
+<!-- SCROLL PROGRESS -->
+<div id="scroll-progress"></div>
+
+<!-- INSTALLER BAR -->
+<div id="installer-bar">
+  <a href="#">NEW: Nymo x Homey — now also switching to dynamic prices!</a>
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nav-logo">
+    <img src="midia/solyx-logo.png" alt="Solyx Energy" style="display:block;height:32px;width:auto;mix-blend-mode:multiply;">
+  </a>
+  <ul class="nav-links">
+    <li><a href="#" onclick="goto('s1');return false">How does it work?</a></li>
+    <li><a href="#" onclick="goto('s2');return false">Benefits</a></li>
+    <li><a href="#" onclick="goto('s3');return false">Reviews</a></li>
+    <li><a href="#">FAQs</a></li>
+    <li><a href="#">Contact</a></li>
+  </ul>
+  <a href="#" onclick="goto('s5');return false" class="btn-orange">Order now</a>
+</nav>
+
+<!-- BULLET NAV -->
+<div id="sn">
+  <div class="snw" data-id="snap-hero"><span class="ndl">Intro</span><div class="ndot"></div></div>
+  <div class="snw" data-id="s1"><span class="ndl">What is it</span><div class="ndot"></div></div>
+  <div class="snw" data-id="s2"><span class="ndl">Benefits</span><div class="ndot"></div></div>
+  <div class="snw" data-id="s3"><span class="ndl">Reviews</span><div class="ndot"></div></div>
+  <div class="snw" data-id="s4"><span class="ndl">In the press</span><div class="ndot"></div></div>
+  <div class="snw" data-id="s5"><span class="ndl">Order</span><div class="ndot"></div></div>
+</div>
+
+<div id="scroll-container">
+
+<!-- ═══ HERO ═══ -->
+<div class="snap-page" id="snap-hero">
+  <div class="hero">
+    <div class="hero-inner">
+      <h1 class="hero-h1">Store your unused solar energy in the <span class="green-highlight" style="font-size:1.0em;line-height:1.1;display:inline-block">WaterAccu.</span></h1>
+      <ul class="hero-bullets">
+        <li>
+          <span class="hero-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+          Save more than <strong style="color:var(--ink)">€300 per year</strong> (on average)
+        </li>
+        <li>
+          <span class="hero-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+          Shower using <strong style="color:var(--ink)">unused solar energy</strong> instead of gas
+        </li>
+        <li>
+          <span class="hero-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+          <strong style="color:var(--ink)">Plug &amp; play installation</strong> and hot water guarantee
+        </li>
+      </ul>
+      <div class="hero-actions">
+        <a href="#" onclick="goto('s5');return false" class="btn-hero btn-hero-primary">Order now →</a>
+        <a href="#" onclick="goto('s1');return false" class="btn-hero btn-hero-secondary">Learn more</a>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="hero-product-card">
+        <div class="hero-product-glow"></div>
+        <img src="https://www.solyxenergy.nl/wp-content/uploads/2024/09/Solyx_Energy_WaterAccu_Nymo_Productfoto_Webshop-min.png"
+             alt="Nymo WaterAccu — controller" class="hero-product-img" loading="eager">
+        <div class="hero-product-floater hero-floater-1">
+          <div class="hpf-num">€338</div>
+          <div class="hpf-lbl">average savings / year</div>
+        </div>
+        <div class="hero-product-floater hero-floater-2">
+          <div class="hpf-icon">⚡</div>
+          <div class="hpf-lbl">Plug &amp; play in 20 min</div>
+        </div>
+        <div class="illus-tag">The Nymo — WaterAccu controller</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ WHAT IS THE WATERACCU ═══ -->
+<div class="snap-page" id="s1">
+  <div class="two-col">
+    <div class="col-l">
+      <div class="sec-num">01 / 05</div>
+      <div class="sec-lbl">What is a<br><span class="hl">WaterAccu?</span></div>
+      <div class="sec-line"></div>
+    </div>
+    <div class="col-r">
+      <span class="section-tag">How it works</span>
+      <h2 class="explain-h2">
+        Your <span class="green-highlight">surplus solar power</span>, stored as hot water.
+      </h2>
+      <p class="explain-lead">
+        Households use only ~30% of the solar power they generate. The WaterAccu — a Nymo controller paired with an electric boiler — captures the rest and turns it into hot water for your shower, kitchen and bath.
+      </p>
+
+      <!-- 3-step visual flow -->
+      <div class="flow">
+        <div class="flow-step">
+          <div class="flow-img-wrap">
+            <svg class="flow-svg" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="40" cy="40" r="13" fill="#FDC830"/>
+              <g stroke="#F4831F" stroke-width="2.6" stroke-linecap="round">
+                <line x1="40" y1="12" x2="40" y2="18"/>
+                <line x1="40" y1="62" x2="40" y2="68"/>
+                <line x1="12" y1="40" x2="18" y2="40"/>
+                <line x1="62" y1="40" x2="68" y2="40"/>
+                <line x1="20" y1="20" x2="24.5" y2="24.5"/>
+                <line x1="55.5" y1="55.5" x2="60" y2="60"/>
+                <line x1="20" y1="60" x2="24.5" y2="55.5"/>
+                <line x1="55.5" y1="24.5" x2="60" y2="20"/>
+              </g>
+            </svg>
+          </div>
+          <div class="flow-num">01</div>
+          <div class="flow-title">Solar panels</div>
+          <div class="flow-sub">generate surplus power that you'd normally feed back to the grid</div>
+        </div>
+
+        <div class="flow-arrow">
+          <svg viewBox="0 0 40 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2 8 H32 M26 2 L32 8 L26 14" stroke="#35A847" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+
+        <div class="flow-step flow-step-hl">
+          <div class="flow-img-wrap">
+            <img src="https://www.solyxenergy.nl/wp-content/uploads/2024/09/Solyx_Energy_WaterAccu_Nymo_Productfoto_Webshop-min.png" alt="Nymo WaterAccu" class="flow-img">
+          </div>
+          <div class="flow-num">02</div>
+          <div class="flow-title">The WaterAccu</div>
+          <div class="flow-sub">Nymo modulates surplus into your electric boiler — exact watt-for-watt</div>
+        </div>
+
+        <div class="flow-arrow">
+          <svg viewBox="0 0 40 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2 8 H32 M26 2 L32 8 L26 14" stroke="#35A847" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+
+        <div class="flow-step">
+          <div class="flow-img-wrap">
+            <svg class="flow-svg" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M30 14 h20 a4 4 0 0 1 4 4 v6 h-28 v-6 a4 4 0 0 1 4 -4 Z" fill="#35A847"/>
+              <rect x="38" y="24" width="4" height="20" fill="#35A847"/>
+              <g stroke="#35A847" stroke-width="2.4" stroke-linecap="round" fill="none">
+                <path d="M28 52 q4 -6 8 0 t8 0 t8 0"/>
+                <path d="M28 60 q4 -6 8 0 t8 0 t8 0"/>
+                <path d="M28 68 q4 -6 8 0 t8 0 t8 0"/>
+              </g>
+            </svg>
+          </div>
+          <div class="flow-num">03</div>
+          <div class="flow-title">Hot water on tap</div>
+          <div class="flow-sub">shower, wash and rinse using stored solar energy — instead of gas</div>
+        </div>
+      </div>
+
+      <!-- Inline KPI strip -->
+      <div class="kpi-strip">
+        <div class="kpi"><div class="kpi-num">€338</div><div class="kpi-lbl">avg. savings / yr</div></div>
+        <div class="kpi-div"></div>
+        <div class="kpi"><div class="kpi-num">31 → 70%</div><div class="kpi-lbl">solar self-use</div></div>
+        <div class="kpi-div"></div>
+        <div class="kpi"><div class="kpi-num">&lt; 10 yrs</div><div class="kpi-lbl">payback period</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ BENEFITS ═══ -->
+<div class="snap-page" id="s2">
+  <div class="two-col">
+    <div class="col-l">
+      <div class="sec-num">02 / 05</div>
+      <div class="sec-lbl">Three reasons<br>thousands of homes<br><span class="hl">already switched.</span></div>
+      <div class="sec-line"></div>
+    </div>
+    <div class="col-r" style="justify-content:center;">
+
+      <div class="ben-strip">
+
+        <!-- 1. Durable -->
+        <div class="ben-wrap">
+          <div class="ben-inner">
+            <div class="ben-face ben-front">
+              <div class="ben-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v6"/><path d="M12 16v6"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="M2 12h6"/><path d="M16 12h6"/><path d="m4.93 19.07 4.24-4.24"/><path d="m14.83 9.17 4.24-4.24"/></svg>
+              </div>
+              <div class="ben-title">Durable</div>
+              <p class="ben-front-desc">Better use of your solar energy. Save gas. Reduce grid pressure.</p>
+              <div class="ben-hint">Hover for details →</div>
+            </div>
+            <div class="ben-face ben-back">
+              <div class="ben-back-tag">Durable</div>
+              <ul>
+                <li>Use more solar energy: from <strong style="color:#fff;font-weight:700">31% to 70%</strong> of your generation</li>
+                <li>Gas consumption for hot water reduced by <strong style="color:#fff;font-weight:700">70-100%</strong></li>
+                <li>Less grid congestion in your neighbourhood</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Cost-saving -->
+        <div class="ben-wrap">
+          <div class="ben-inner">
+            <div class="ben-face ben-front">
+              <div class="ben-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/></svg>
+              </div>
+              <div class="ben-title">Cost-saving</div>
+              <p class="ben-front-desc">Save up to €338 per year, without a high upfront investment.</p>
+              <div class="ben-hint">Hover for details →</div>
+            </div>
+            <div class="ben-face ben-back">
+              <div class="ben-back-tag">Cost-saving</div>
+              <ul>
+                <li>Average savings of <strong style="color:#fff;font-weight:700">€338 per year</strong></li>
+                <li>Investment is much lower than alternatives like a home battery or solar boiler</li>
+                <li>Payback in under 10 years — often closer to 3</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Self-sufficient -->
+        <div class="ben-wrap">
+          <div class="ben-inner">
+            <div class="ben-face ben-front">
+              <div class="ben-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.91 8.84 8.56 21.18a4.2 4.2 0 0 1-5.94-5.94L14.97 2.9c.93-.93 2.44-.93 3.37 0l2.57 2.57c.92.92.92 2.43 0 3.37Z"/><path d="m16 7 4 4"/></svg>
+              </div>
+              <div class="ben-title">Self-sufficient</div>
+              <p class="ben-front-desc">Take charge of your energy and shower even cleaner now.</p>
+              <div class="ben-hint">Hover for details →</div>
+            </div>
+            <div class="ben-face ben-back">
+              <div class="ben-back-tag">Self-sufficient</div>
+              <ul>
+                <li>Reduce dependence on <strong style="color:#fff;font-weight:700">return delivery costs</strong></li>
+                <li>Stay ahead of the <strong style="color:#fff;font-weight:700">end of netting</strong> in 2027</li>
+                <li>No more <strong style="color:#fff;font-weight:700">inverter shutdowns</strong> on sunny days</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══ REVIEWS ═══ -->
+<div class="snap-page" id="s3">
+  <div class="two-col">
+    <div class="col-l">
+      <div class="sec-num">03 / 05</div>
+      <div class="sec-lbl">Proud<br><span class="hl">owners.</span></div>
+      <div class="sec-line"></div>
+      <div class="rev-rating" style="margin-top:28px">
+        <div class="rrn">4.7</div>
+        <div>
+          <div class="rrs">★★★★★</div>
+          <div class="rrsr">Google Reviews</div>
+        </div>
+      </div>
+      <p style="font-family:var(--font-body);font-size:14px;color:var(--ink-muted);line-height:1.7;margin-top:22px;max-width:240px;">Real installations. Real savings. Real testimonials from homes across NL & BE.</p>
+    </div>
+
+    <div class="col-r" style="padding:0;overflow:hidden;position:relative;">
+      <div style="position:absolute;inset:0;z-index:2;pointer-events:none;background:linear-gradient(to bottom,rgba(255,255,255,.95) 0%,transparent 18%,transparent 82%,rgba(255,255,255,.95) 100%);"></div>
+
+      <div class="tcols-wrap">
+
+        <!-- Column 1 -->
+        <div class="tcol">
+          <div class="tcol-track" style="animation-duration:18s">
+            <div class="tc-card">
+              <div class="tc-stars">★★★★★</div>
+              <p class="tc-text">"Clear instructions. Important addition to our home: store all remaining energy in water."</p>
+              <div class="tc-author"><div class="tc-name">Theo</div></div>
+            </div>
+            <div class="tc-card">
+              <div class="tc-stars">★★★★★</div>
+              <p class="tc-text">"Awesome! Within a minute of installation, the Nymo started powering my boiler with solar energy."</p>
+              <div class="tc-author"><div class="tc-name">Onno</div></div>
+            </div>
+            <div class="tc-photo">
+              <img src="https://www.solyxenergy.nl/wp-content/uploads/2024/07/Nymo_final_smaller-scaled-e1762254108273.jpg" alt="Nymo WaterAccu installed">
+              <div class="tc-photo-overlay">
+                <div class="tc-photo-tag">Installed at home</div>
+                <div class="tc-photo-caption">Wall-mounted Nymo controller — typical install</div>
+              </div>
+            </div>
+            <div class="tc-card">
+              <div class="tc-stars">★★★★★</div>
+              <p class="tc-text">"My own use of solar energy has doubled! See the red area in the graph before and after installation."</p>
+              <div class="tc-author"><div class="tc-name">Serge</div></div>
+            </div>
+            <!-- duplicate set for loop -->
+            <div class="tc-card">
+              <div class="tc-stars">★★★★★</div>
+              <p class="tc-text">"Clear instructions. Important addition to our home: store all remaining energy in water."</p>
+              <div class="tc-author"><div class="tc-name">Theo</div></div>
+            </div>
+            <div class="tc-card">
+              <div class="tc-stars">★★★★★</div>
+              <p class="tc-text">"Awesome! Within a minute of installation, the Nymo started powering my boiler with solar energy."</p>
+              <div class="tc-author"><div class="tc-name">Onno</div></div>
+            </div>
+            <div class="tc-photo">
+              <img src="https://www.solyxenergy.nl/wp-content/uploads/2024/07/Nymo_final_smaller-scaled-e1762254108273.jpg" alt="Nymo WaterAccu installed">
+              <div class="tc-photo-overlay">
+                <div class="tc-photo-tag">Installed at home</div>
+                <div class="tc-photo-caption">Wall-mounted Nymo controller — typical install</div>
+              </div>
+            </div>
+            <div class="tc-card">
+              <div class="tc-stars">★★★★★</div>
+              <p class="tc-text">"My own use of solar energy has doubled! See the red area in the graph before and after installation."</p>
+              <div class="tc-author"><div class="tc-name">Serge</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Column 2 -->
+        <div class="tcol">
+          <div class="tcol-track" style="animation-duration:22s">
+            <div class="tc-card">
+              <div class="tc-stars">★★★★★</div>
+              <p class="tc-text">"We enjoy bathing and showering with leftover solar energy! The Nymo solar water heater works well."</p>
+              <div class="tc-author"><div class="tc-name">Ben</div></div>
+            </div>
+            <div class="tc-photo tc-photo-tall">
+              <img src="https://www.solyxenergy.nl/wp-content/uploads/2025/08/Solyx_def-55.jpg" alt="WaterAccu unboxing">
+              <div class="tc-photo-overlay">
+                <div class="tc-photo-tag">Unboxing</div>
+                <div class="tc-photo-caption">Everything you need in the box</div>
+              </div>
+            </div>
+            <div class="tc-card">
+              <div class="tc-stars">★★★★★</div>
+              <p class="tc-text">"The concept is fantastic! I'm very happy with Nymo, which supplies a 150L boiler with surplus solar power."</p>
+              <div class="tc-author"><div class="tc-name">Robert</div></div>
+            </div>
+            <div class="tc-card">
+              <div class="tc-stars">★★★★★</div>
+              <p class="tc-text">"After some searching, I found Nymo. What a fantastic idea and very affordable."</p>
+              <div class="tc-author"><div class="tc-name">Rol</div></div>
+            </div>
+            <!-- duplicate -->
+            <div class="tc-card">
+              <div class="tc-stars">★★★★★</div>
+              <p class="tc-text">"We enjoy bathing and showering with leftover solar energy! The Nymo solar water heater works well."</p>
+              <div class="tc-author"><div class="tc-name">Ben</div></div>
+            </div>
+            <div class="tc-photo tc-photo-tall">
+              <img src="https://www.solyxenergy.nl/wp-content/uploads/2025/08/Solyx_def-55.jpg" alt="WaterAccu unboxing">
+              <div class="tc-photo-overlay">
+                <div class="tc-photo-tag">Unboxing</div>
+                <div class="tc-photo-caption">Everything you need in the box</div>
+              </div>
+            </div>
+            <div class="tc-card">
+              <div class="tc-stars">★★★★★</div>
+              <p class="tc-text">"The concept is fantastic! I'm very happy with Nymo, which supplies a 150L boiler with surplus solar power."</p>
+              <div class="tc-author"><div class="tc-name">Robert</div></div>
+            </div>
+            <div class="tc-card">
+              <div class="tc-stars">★★★★★</div>
+              <p class="tc-text">"After some searching, I found Nymo. What a fantastic idea and very affordable."</p>
+              <div class="tc-author"><div class="tc-name">Rol</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Column 3 -->
+        <div class="tcol">
+          <div class="tcol-track" style="animation-duration:20s">
+            <div class="tc-card">
+              <div class="tc-stars">★★★★★</div>
+              <p class="tc-text">"Service when I had questions was excellent: I received prompt answers, including about delivery options."</p>
+              <div class="tc-author"><div class="tc-name">Onno</div></div>
+            </div>
+            <div class="tc-photo">
+              <img src="https://www.solyxenergy.nl/wp-content/uploads/2025/10/ChIJcyq3wvs5xkcRnP8L6y4eZrM_img_02552ed1713b9dacebf21c555ec8b90e.jpg" alt="Customer installation by Jos R.">
+              <div class="tc-photo-overlay">
+                <div class="tc-photo-tag">Customer install — Jos R.</div>
+                <div class="tc-photo-caption">"200 kWh of solar energy used in 2 months"</div>
+              </div>
+            </div>
+            <div class="tc-card">
+              <div class="tc-stars">★★★★★</div>
+              <p class="tc-text">"Happy with the option to connect two boilers and the additional heating function."</p>
+              <div class="tc-author"><div class="tc-name">Robert</div></div>
+            </div>
+            <div class="tc-card">
+              <div class="tc-stars">★★★★★</div>
+              <p class="tc-text">"Happy with the solar water heater. Easy to install, and great for saving gas."</p>
+              <div class="tc-author"><div class="tc-name">Bram</div></div>
+            </div>
+            <!-- duplicate -->
+            <div class="tc-card">
+              <div class="tc-stars">★★★★★</div>
+              <p class="tc-text">"Service when I had questions was excellent: I received prompt answers, including about delivery options."</p>
+              <div class="tc-author"><div class="tc-name">Onno</div></div>
+            </div>
+            <div class="tc-photo">
+              <img src="https://www.solyxenergy.nl/wp-content/uploads/2025/10/ChIJcyq3wvs5xkcRnP8L6y4eZrM_img_02552ed1713b9dacebf21c555ec8b90e.jpg" alt="Customer installation by Jos R.">
+              <div class="tc-photo-overlay">
+                <div class="tc-photo-tag">Customer install — Jos R.</div>
+                <div class="tc-photo-caption">"200 kWh of solar energy used in 2 months"</div>
+              </div>
+            </div>
+            <div class="tc-card">
+              <div class="tc-stars">★★★★★</div>
+              <p class="tc-text">"Happy with the option to connect two boilers and the additional heating function."</p>
+              <div class="tc-author"><div class="tc-name">Robert</div></div>
+            </div>
+            <div class="tc-card">
+              <div class="tc-stars">★★★★★</div>
+              <p class="tc-text">"Happy with the solar water heater. Easy to install, and great for saving gas."</p>
+              <div class="tc-author"><div class="tc-name">Bram</div></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PRESS ═══ -->
+<div class="snap-page" id="s4">
+  <div class="two-col">
+    <div class="col-l">
+      <div class="sec-num">04 / 05</div>
+      <div class="sec-lbl">In the<br><span class="hl">press.</span></div>
+      <div class="sec-line"></div>
+      <p style="font-family:var(--font-body);font-size:14px;color:var(--ink-muted);line-height:1.7;margin-top:22px;max-width:240px;">Featured in leading Dutch innovation and sustainability media.</p>
+    </div>
+    <div class="col-r">
+      <span class="section-tag">As featured in</span>
+      <h2 style="font-family:var(--font-head);font-size:clamp(24px,2.6vw,34px);font-weight:900;letter-spacing:-.025em;color:var(--ink);margin-bottom:32px;line-height:1.15;max-width:560px;">
+        A simple boiler. <span class="green-highlight">A smart battery.</span>
+      </h2>
+
+      <div class="press-grid">
+        <a href="https://www.bnr.nl/podcast/baanbrekende-businessmodellen/10557502/hoe-breng-je-een-nieuw-apparaat-naar-de-markt" class="press-card" target="_blank" rel="noopener" style="--brand:#E20613;">
+          <div class="press-masthead" style="background:#E20613;color:#fff;">
+            <span class="press-brand">BNR</span>
+            <span class="press-format">▶ Podcast</span>
+          </div>
+          <div class="press-body">
+            <div class="press-title">How do you bring a new device to market?</div>
+            <div class="press-link">Listen on BNR →</div>
+          </div>
+        </a>
+
+        <a href="https://mtsprout.nl/tech-innovatie/nymo-wateraccu-solyx-energy" class="press-card" target="_blank" rel="noopener" style="--brand:#FFB400;">
+          <div class="press-masthead" style="background:#1A1A1A;color:#FFB400;">
+            <span class="press-brand" style="font-style:italic;">MT/Sprout</span>
+            <span class="press-format">Article</span>
+          </div>
+          <div class="press-body">
+            <div class="press-title">Nymo WaterAccu by Solyx Energy</div>
+            <div class="press-link">Read article →</div>
+          </div>
+        </a>
+
+        <a href="https://www.gawalo.nl/15114/hoe-een-simpele-boiler-een-slimme-batterij-wordt" class="press-card" target="_blank" rel="noopener" style="--brand:#0066B3;">
+          <div class="press-masthead" style="background:#0066B3;color:#fff;">
+            <span class="press-brand">Gawalo</span>
+            <span class="press-format">Industry</span>
+          </div>
+          <div class="press-body">
+            <div class="press-title">How a simple boiler becomes a smart battery</div>
+            <div class="press-link">Read article →</div>
+          </div>
+        </a>
+
+        <a href="https://www.change.inc/energie/vader-en-dochter-runnen-start-up-goedkoop-zonnestroom-opslaan-met-wateraccu-40336" class="press-card" target="_blank" rel="noopener" style="--brand:#00C389;">
+          <div class="press-masthead" style="background:#00C389;color:#fff;">
+            <span class="press-brand">change<span style="opacity:.7">.inc</span></span>
+            <span class="press-format">Sustainability</span>
+          </div>
+          <div class="press-body">
+            <div class="press-title">Father &amp; daughter run start-up storing solar power affordably</div>
+            <div class="press-link">Read article →</div>
+          </div>
+        </a>
+
+        <a href="https://www.duurzaam-ondernemen.nl/solyx-energy-lanceert-de-nymo-waarmee-je-van-een-boiler-een-slimme-wateraccu-maakt/" class="press-card" target="_blank" rel="noopener" style="--brand:#2E8540;">
+          <div class="press-masthead" style="background:#2E8540;color:#fff;">
+            <span class="press-brand">Duurzaam Ondernemen</span>
+            <span class="press-format">Business</span>
+          </div>
+          <div class="press-body">
+            <div class="press-title">Solyx launches Nymo — turn any boiler into a smart WaterAccu</div>
+            <div class="press-link">Read article →</div>
+          </div>
+        </a>
+
+        <a href="https://youtu.be/bhyq5ALXljQ" class="press-card press-card-video" target="_blank" rel="noopener" style="--brand:#FF0000;">
+          <div class="press-video-thumb">
+            <img src="https://img.youtube.com/vi/bhyq5ALXljQ/hqdefault.jpg" alt="See the WaterAccu in action">
+            <div class="press-play">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+          </div>
+          <div class="press-body">
+            <div class="press-brand-small">▶ YouTube</div>
+            <div class="press-title">See the WaterAccu in action</div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CTA ═══ -->
+<div class="snap-page cta-col" id="s5">
+  <div class="two-col">
+    <div class="col-l">
+      <div class="sec-num">Ready?</div>
+      <div class="sec-lbl">Start<br>today.</div>
+      <div class="sec-line"></div>
+    </div>
+    <div class="col-r" style="justify-content:center;">
+      <h3 class="cta-hl">Store your surplus solar power in the WaterAccu.</h3>
+      <p class="ctabody">Get the most out of your solar panels and save on gas. Heat water with surplus solar energy and save immediately. Plug &amp; play, payback in under 10 years.</p>
+      <div class="hero-options">
+      <div class="hero-opt" onclick="window.location.href='wateraccu.html'">
+        <div class="hero-opt-title">Nymo</div>
+        <div class="hero-opt-price">€649</div>
+        <div class="hero-opt-sub">Voor wie al een geschikte boiler heeft, of er zelf een uitkiest. De Nymo is eenvoudig zelf te installeren.</div>
+        <div class="hero-opt-icons">
+          <div class="hoi-item">
+            <div class="hoi-icon"><svg width="22" height="22" viewBox="0 0 103 175" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M94.7992 36.5024H8.20141C3.78786 36.5024 0.209961 40.0774 0.209961 44.4873V166.432C0.209961 170.842 3.78786 174.417 8.20141 174.417H94.7992C99.2128 174.417 102.791 170.842 102.791 166.432V44.4873C102.791 40.0774 99.2128 36.5024 94.7992 36.5024Z" fill="currentColor"/><ellipse cx="51.3905" cy="123.255" rx="10.1025" ry="10.1231" fill="white"/><rect width="1.75672" height="7.31296" rx="0.878359" transform="matrix(0.88002 0.474937 -0.49476 0.86903 52.3838 116.887)" fill="#021809"/><rect width="1.75672" height="7.31296" rx="0.878359" transform="matrix(0.88002 0.474937 -0.49476 0.86903 52.7754 122.242)" fill="#021809"/><path d="M80.3758 62.0281H22.6201C19.4593 62.0281 16.897 64.5883 16.897 67.7465V98.1485C16.897 101.307 19.4593 103.867 22.6201 103.867H80.3758C83.5366 103.867 86.0989 101.307 86.0989 98.1485V67.7465C86.0989 64.5883 83.5366 62.0281 80.3758 62.0281Z" stroke="white" stroke-miterlimit="10"/><path d="M71.5125 69.3928H31.4882C30.9208 69.3928 30.4609 69.8523 30.4609 70.4192V78.4376C30.4609 79.0044 30.9208 79.464 31.4882 79.464H71.5125C72.0798 79.464 72.5397 79.0044 72.5397 78.4376V70.4192C72.5397 69.8523 72.0798 69.3928 71.5125 69.3928Z" fill="white"/><path d="M77.5972 1.84383C77.6306 0.815965 78.4735 0 79.5019 0C80.5303 0 81.3732 0.815964 81.4066 1.84383L82.5095 35.7865C82.5462 36.916 81.6406 37.8515 80.5105 37.8515H78.4933C77.3633 37.8515 76.4576 36.916 76.4943 35.7865L77.5972 1.84383Z" fill="currentColor"/></svg></div>
+          </div>
+        </div>
+      </div>
+      <div class="hero-opt hero-opt-mid" onclick="window.location.href='shop.html'">
+        <div class="hero-opt-title">Nymo + Boiler</div>
+        <div class="hero-opt-price"><span class="vanaf">vanaf</span> €1.189</div>
+        <div class="hero-opt-sub">Voor wie nog geen boiler heeft. Complete WaterAccu inclusief geschikte boiler, zonder installatie.</div>
+        <div class="hero-opt-icons">
+          <div class="hoi-item">
+            <div class="hoi-icon"><svg width="22" height="22" viewBox="0 0 103 175" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M94.7992 36.5024H8.20141C3.78786 36.5024 0.209961 40.0774 0.209961 44.4873V166.432C0.209961 170.842 3.78786 174.417 8.20141 174.417H94.7992C99.2128 174.417 102.791 170.842 102.791 166.432V44.4873C102.791 40.0774 99.2128 36.5024 94.7992 36.5024Z" fill="currentColor"/><ellipse cx="51.3905" cy="123.255" rx="10.1025" ry="10.1231" fill="white"/><rect width="1.75672" height="7.31296" rx="0.878359" transform="matrix(0.88002 0.474937 -0.49476 0.86903 52.3838 116.887)" fill="#021809"/><rect width="1.75672" height="7.31296" rx="0.878359" transform="matrix(0.88002 0.474937 -0.49476 0.86903 52.7754 122.242)" fill="#021809"/><path d="M80.3758 62.0281H22.6201C19.4593 62.0281 16.897 64.5883 16.897 67.7465V98.1485C16.897 101.307 19.4593 103.867 22.6201 103.867H80.3758C83.5366 103.867 86.0989 101.307 86.0989 98.1485V67.7465C86.0989 64.5883 83.5366 62.0281 80.3758 62.0281Z" stroke="white" stroke-miterlimit="10"/><path d="M71.5125 69.3928H31.4882C30.9208 69.3928 30.4609 69.8523 30.4609 70.4192V78.4376C30.4609 79.0044 30.9208 79.464 31.4882 79.464H71.5125C72.0798 79.464 72.5397 79.0044 72.5397 78.4376V70.4192C72.5397 69.8523 72.0798 69.3928 71.5125 69.3928Z" fill="white"/><path d="M77.5972 1.84383C77.6306 0.815965 78.4735 0 79.5019 0C80.5303 0 81.3732 0.815964 81.4066 1.84383L82.5095 35.7865C82.5462 36.916 81.6406 37.8515 80.5105 37.8515H78.4933C77.3633 37.8515 76.4576 36.916 76.4943 35.7865L77.5972 1.84383Z" fill="currentColor"/></svg></div>
+          </div>
+          <span class="hoi-plus">+</span>
+          <div class="hoi-item">
+            <div class="hoi-icon"><svg width="22" height="22" viewBox="0 0 230 392" preserveAspectRatio="xMidYMid meet"><g transform="translate(0,392) scale(0.1,-0.1)" fill="currentColor" stroke="currentColor" stroke-width="70" stroke-linejoin="round" stroke-linecap="round"><path d="M1020 3794 c-390 -28 -663 -110 -730 -218 -20 -33 -20 -42 -20 -1422 l0 -1388 48 -46 c30 -29 72 -56 113 -72 l64 -26 5 -118 c3 -69 10 -128 18 -141 22 -40 63 -53 162 -53 l90 0 0 -35 c0 -28 -4 -35 -20 -35 -18 0 -20 -7 -20 -80 l0 -81 143 3 142 3 0 75 c0 70 -1 75 -22 78 -19 3 -23 10 -23 38 l0 34 205 0 205 0 0 -34 c0 -28 -4 -35 -22 -38 -22 -3 -23 -8 -23 -78 l0 -75 145 0 145 0 0 75 c0 70 -1 75 -22 78 -19 3 -23 10 -23 37 l0 33 106 4 c105 3 106 3 135 36 29 32 29 34 29 150 l0 118 78 36 c50 24 92 52 115 78 l37 40 0 1391 0 1391 -21 30 c-85 118 -407 202 -817 212 -92 2 -192 2 -222 0z m410 -54 c289 -26 534 -101 591 -181 19 -26 19 -61 19 -1397 l0 -1370 -26 -31 c-75 -90 -355 -164 -679 -180 -438 -22 -885 56 -997 176 l-23 25 -3 1361 c-1 749 0 1373 3 1385 16 67 157 136 360 178 196 40 519 55 755 34z m-750 -3165 c275 -54 692 -56 970 -4 170 32 155 38 158 -60 3 -97 -8 -135 -46 -150 -18 -6 -225 -9 -598 -8 -547 2 -573 3 -593 21 -19 17 -21 30 -21 123 0 56 1 103 3 103 1 0 58 -11 127 -25z m250 -300 l0 -36 -57 3 c-57 3 -58 3 -61 36 l-3 32 60 0 61 0 0 -35z m608 3 c-3 -33 -3 -33 -57 -33 -45 0 -55 3 -57 19 -5 37 6 46 63 46 l54 0 -3 -32z m-568 -123 l0 -35 -100 0 -100 0 0 35 0 35 100 0 100 0 0 -35z m608 3 l-3 -33 -95 0 -95 0 -3 33 -3 32 101 0 101 0 -3 -32z"/><path d="M1098 3070 c-34 -10 -86 -46 -116 -80 -41 -47 -56 -91 -56 -166 1 -83 28 -141 90 -192 38 -32 119 -62 165 -62 91 0 198 79 234 173 48 125 -24 277 -152 323 -42 15 -123 17 -165 4z m184 -63 c74 -41 122 -150 100 -224 -18 -59 -47 -100 -93 -130 -37 -24 -53 -28 -115 -28 -64 0 -77 3 -116 31 -116 82 -119 246 -6 337 63 51 154 57 230 14z"/><path d="M1156 2975 c-3 -9 -3 -28 0 -42 5 -17 0 -34 -15 -53 -38 -52 -19 -110 35 -110 26 0 64 32 64 54 0 7 -9 24 -19 38 -12 15 -21 44 -23 74 -2 35 -7 50 -19 52 -9 2 -19 -4 -23 -13z m34 -145 c0 -5 -7 -10 -15 -10 -8 0 -15 5 -15 10 0 6 7 10 15 10 8 0 15 -4 15 -10z"/><path d="M1550 518 c-27 -30 -26 -73 5 -103 43 -44 109 -23 121 40 13 70 -77 115 -126 63z m75 -48 c0 -16 -6 -26 -19 -28 -24 -5 -37 17 -25 41 14 26 44 17 44 -13z"/></g></svg></div>
+          </div>
+        </div>
+      </div>
+      <div class="hero-opt" onclick="window.location.href='how-to-get-it.html'">
+        <div class="hero-opt-title">Complete Installatie</div>
+        <div class="hero-opt-price"><span class="vanaf">vanaf</span> €1.725</div>
+        <div class="hero-opt-sub">Volledige ontzorging. Boiler + Nymo, inclusief installatie aan huis, door installatie-partner van Solyx Energy.</div>
+        <div class="hero-opt-icons">
+          <div class="hoi-item">
+            <div class="hoi-icon"><svg width="22" height="22" viewBox="0 0 103 175" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M94.7992 36.5024H8.20141C3.78786 36.5024 0.209961 40.0774 0.209961 44.4873V166.432C0.209961 170.842 3.78786 174.417 8.20141 174.417H94.7992C99.2128 174.417 102.791 170.842 102.791 166.432V44.4873C102.791 40.0774 99.2128 36.5024 94.7992 36.5024Z" fill="currentColor"/><ellipse cx="51.3905" cy="123.255" rx="10.1025" ry="10.1231" fill="white"/><rect width="1.75672" height="7.31296" rx="0.878359" transform="matrix(0.88002 0.474937 -0.49476 0.86903 52.3838 116.887)" fill="#021809"/><rect width="1.75672" height="7.31296" rx="0.878359" transform="matrix(0.88002 0.474937 -0.49476 0.86903 52.7754 122.242)" fill="#021809"/><path d="M80.3758 62.0281H22.6201C19.4593 62.0281 16.897 64.5883 16.897 67.7465V98.1485C16.897 101.307 19.4593 103.867 22.6201 103.867H80.3758C83.5366 103.867 86.0989 101.307 86.0989 98.1485V67.7465C86.0989 64.5883 83.5366 62.0281 80.3758 62.0281Z" stroke="white" stroke-miterlimit="10"/><path d="M71.5125 69.3928H31.4882C30.9208 69.3928 30.4609 69.8523 30.4609 70.4192V78.4376C30.4609 79.0044 30.9208 79.464 31.4882 79.464H71.5125C72.0798 79.464 72.5397 79.0044 72.5397 78.4376V70.4192C72.5397 69.8523 72.0798 69.3928 71.5125 69.3928Z" fill="white"/><path d="M77.5972 1.84383C77.6306 0.815965 78.4735 0 79.5019 0C80.5303 0 81.3732 0.815964 81.4066 1.84383L82.5095 35.7865C82.5462 36.916 81.6406 37.8515 80.5105 37.8515H78.4933C77.3633 37.8515 76.4576 36.916 76.4943 35.7865L77.5972 1.84383Z" fill="currentColor"/></svg></div>
+          </div>
+          <span class="hoi-plus">+</span>
+          <div class="hoi-item">
+            <div class="hoi-icon"><svg width="22" height="22" viewBox="0 0 230 392" preserveAspectRatio="xMidYMid meet"><g transform="translate(0,392) scale(0.1,-0.1)" fill="currentColor" stroke="currentColor" stroke-width="70" stroke-linejoin="round" stroke-linecap="round"><path d="M1020 3794 c-390 -28 -663 -110 -730 -218 -20 -33 -20 -42 -20 -1422 l0 -1388 48 -46 c30 -29 72 -56 113 -72 l64 -26 5 -118 c3 -69 10 -128 18 -141 22 -40 63 -53 162 -53 l90 0 0 -35 c0 -28 -4 -35 -20 -35 -18 0 -20 -7 -20 -80 l0 -81 143 3 142 3 0 75 c0 70 -1 75 -22 78 -19 3 -23 10 -23 38 l0 34 205 0 205 0 0 -34 c0 -28 -4 -35 -22 -38 -22 -3 -23 -8 -23 -78 l0 -75 145 0 145 0 0 75 c0 70 -1 75 -22 78 -19 3 -23 10 -23 37 l0 33 106 4 c105 3 106 3 135 36 29 32 29 34 29 150 l0 118 78 36 c50 24 92 52 115 78 l37 40 0 1391 0 1391 -21 30 c-85 118 -407 202 -817 212 -92 2 -192 2 -222 0z m410 -54 c289 -26 534 -101 591 -181 19 -26 19 -61 19 -1397 l0 -1370 -26 -31 c-75 -90 -355 -164 -679 -180 -438 -22 -885 56 -997 176 l-23 25 -3 1361 c-1 749 0 1373 3 1385 16 67 157 136 360 178 196 40 519 55 755 34z m-750 -3165 c275 -54 692 -56 970 -4 170 32 155 38 158 -60 3 -97 -8 -135 -46 -150 -18 -6 -225 -9 -598 -8 -547 2 -573 3 -593 21 -19 17 -21 30 -21 123 0 56 1 103 3 103 1 0 58 -11 127 -25z m250 -300 l0 -36 -57 3 c-57 3 -58 3 -61 36 l-3 32 60 0 61 0 0 -35z m608 3 c-3 -33 -3 -33 -57 -33 -45 0 -55 3 -57 19 -5 37 6 46 63 46 l54 0 -3 -32z m-568 -123 l0 -35 -100 0 -100 0 0 35 0 35 100 0 100 0 0 -35z m608 3 l-3 -33 -95 0 -95 0 -3 33 -3 32 101 0 101 0 -3 -32z"/><path d="M1098 3070 c-34 -10 -86 -46 -116 -80 -41 -47 -56 -91 -56 -166 1 -83 28 -141 90 -192 38 -32 119 -62 165 -62 91 0 198 79 234 173 48 125 -24 277 -152 323 -42 15 -123 17 -165 4z m184 -63 c74 -41 122 -150 100 -224 -18 -59 -47 -100 -93 -130 -37 -24 -53 -28 -115 -28 -64 0 -77 3 -116 31 -116 82 -119 246 -6 337 63 51 154 57 230 14z"/><path d="M1156 2975 c-3 -9 -3 -28 0 -42 5 -17 0 -34 -15 -53 -38 -52 -19 -110 35 -110 26 0 64 32 64 54 0 7 -9 24 -19 38 -12 15 -21 44 -23 74 -2 35 -7 50 -19 52 -9 2 -19 -4 -23 -13z m34 -145 c0 -5 -7 -10 -15 -10 -8 0 -15 5 -15 10 0 6 7 10 15 10 8 0 15 -4 15 -10z"/><path d="M1550 518 c-27 -30 -26 -73 5 -103 43 -44 109 -23 121 40 13 70 -77 115 -126 63z m75 -48 c0 -16 -6 -26 -19 -28 -24 -5 -37 17 -25 41 14 26 44 17 44 -13z"/></g></svg></div>
+          </div>
+          <span class="hoi-plus">+</span>
+          <div class="hoi-item">
+            <div class="hoi-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-installer">Installateur? <a href="installatie.html">Klik hier.</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<div class="snap-page" style="scroll-snap-align:start;">
+  <footer>
+    <div class="fg">
+      <div>
+        <img src="data:image/jpeg;base64,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4sDqO+RsDIL9bC2CvjAHRrnlpbKwfayBwHXl5T1UwZyaw9lXr7g01RX6b1Vtzy0scTGynkFJcGs/jwynkJ/AkcT9qPBTBVXMdKNT9PZ5KbOtPMjsD4/a+iNsmgbt8oc9oBHvB2UHlUHOtNjvd/qhQ2Kz11yqXeENJTvmef5LQSgnzTHs/uKjU+eF1NppV45QSkc1dkZ+h8cYPmYnjv3D8GMq4L68PfZa6S6aT0uSas1/0/XyEiRtJJD3VqgeOv7SSXT7HzkPKR4xq4LsU1NT0dPFSUkEcEEDGxxRRtDWMYBsGtA6AAdAAqPogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIP4QCCCAQehBQdPPhmH1UomqcUs80gO4fJQxOcD98tQdlSUNFb4u4oKOCmj335IYwxu/wB4IPugICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg/9k=" alt="Solyx Energy" style="height:34px;width:auto;filter:invert(1) brightness(2);display:block;">
+        <p class="fbt">Store your surplus solar power in the WaterAccu. Simple, affordable, immediate results.</p>
+      </div>
+      <div>
+        <div class="fct">Product</div>
+        <ul class="flinks">
+          <li><a href="#">WaterAccu</a></li>
+          <li><a href="#">Nymo controller</a></li>
+          <li><a href="#">Nymo x Homey</a></li>
+          <li><a href="#">Shop</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="fct">Installation</div>
+        <ul class="flinks">
+          <li><a href="#">How does it work?</a></li>
+          <li><a href="#">Customer stories</a></li>
+          <li><a href="#">FAQs</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="fct">Company</div>
+        <ul class="flinks">
+          <li><a href="#">About Solyx</a></li>
+          <li><a href="#">Press</a></li>
+          <li><a href="#">Partners</a></li>
+          <li><a href="#">LinkedIn</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="fbottom">
+      <div class="fcopy">© 2026 Solyx Energy BV · All rights reserved · Smitspol 15M · 3861 RS Nijkerk</div>
+      <div style="display:flex;gap:20px">
+        <a href="#" style="font-family:var(--font-head);font-size:12px;color:rgba(255,255,255,.2);text-decoration:none">Privacy</a>
+        <a href="#" style="font-family:var(--font-head);font-size:12px;color:rgba(255,255,255,.2);text-decoration:none">Terms</a>
+      </div>
+    </div>
+  </footer>
+</div>
+
+</div><!-- /scroll-container -->
+
+<script>
+var W = document.getElementById('scroll-container');
+
+function goto(id){
+  var el = document.getElementById(id);
+  if(el) W.scrollTo({top: el.offsetTop, behavior: 'smooth'});
+}
+window.goto = goto;
+
+// Nav + progress
+W.addEventListener('scroll', function(){
+  document.getElementById('nav').classList.toggle('scrolled', W.scrollTop > 60);
+  document.getElementById('scroll-progress').style.width = (W.scrollTop / (W.scrollHeight - W.clientHeight) * 100) + '%';
+}, {passive: true});
+
+// Snap dot tracking
+var snws = document.querySelectorAll('.snw');
+function updateDots(){
+  var st = W.scrollTop;
+  snws.forEach(function(snw){
+    var id = snw.getAttribute('data-id');
+    var el = document.getElementById(id);
+    if(!el) return;
+    var wasActive = snw.classList.contains('active');
+    var isActive = Math.abs(st - el.offsetTop) < W.clientHeight * .5;
+    snw.classList.toggle('active', isActive);
+    if(isActive && !wasActive){
+      snw.classList.remove('label-hide');
+      clearTimeout(snw._lt);
+      snw._lt = setTimeout(function(){ snw.classList.add('label-hide'); }, 2000);
+    }
+  });
+}
+W.addEventListener('scroll', updateDots, {passive: true});
+window.addEventListener('load', function(){
+  updateDots();
+  if(snws[0] && !document.querySelector('.snw.active')){
+    snws[0].classList.add('active');
+    snws[0]._lt = setTimeout(function(){ snws[0].classList.add('label-hide'); }, 2000);
+  }
+});
+setTimeout(updateDots, 100);
+snws.forEach(function(d){
+  d.addEventListener('click', function(){ goto(d.getAttribute('data-id')); });
+});
+</script>
+
+</body>
+</html>

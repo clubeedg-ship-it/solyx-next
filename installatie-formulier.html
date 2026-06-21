@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+  <link rel="icon" type="image/png" sizes="64x64" href="midia/favicon.png">
+  <link rel="apple-touch-icon" href="midia/apple-touch-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Installatie Formulier — Solyx Energy</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+<link href="https://fonts.cdnfonts.com/css/alliance-no-2" rel="stylesheet">
+<style>
+:root{
+  --green:#35A847;--green-deep:#1E7A30;--green-light:#EBF8ED;
+  --orange:#F4831F;--ink:#3D3D3D;--ink-mid:#5A5A5A;--ink-muted:#888888;
+  --white:#FFFFFF;--off-white:#F7F9F7;--border:rgba(60,60,60,.1);
+  --font-head:'Inter',sans-serif;
+  --font-body:'Alliance No.2','DM Sans',Georgia,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;font-family:var(--font-body);color:var(--ink);background:var(--white);overflow-x:hidden;}
+
+/* ── BLOB CANVAS ── */
+#gc{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+.blob{position:absolute;border-radius:50%;filter:blur(90px);mix-blend-mode:multiply;will-change:transform;}
+.blob-1{width:900px;height:900px;background:radial-gradient(circle,rgba(57,171,72,.42) 0%,rgba(57,171,72,.14) 45%,transparent 70%);top:-200px;left:-200px;animation:bl1 14s ease-in-out infinite;}
+@keyframes bl1{0%{transform:translate(0,0)}25%{transform:translate(55vw,80px)}50%{transform:translate(60vw,-60px)}75%{transform:translate(25vw,100px)}100%{transform:translate(0,0)}}
+.blob-2{width:1000px;height:1000px;background:radial-gradient(circle,rgba(57,171,72,.36) 0%,rgba(30,122,48,.12) 45%,transparent 70%);bottom:-250px;right:-250px;animation:bl2 18s ease-in-out infinite;animation-delay:-7s;}
+@keyframes bl2{0%{transform:translate(0,0)}33%{transform:translate(-60vw,-80px)}66%{transform:translate(-30vw,60px)}100%{transform:translate(0,0)}}
+.blob-3{width:800px;height:800px;background:radial-gradient(circle,rgba(57,171,72,.28) 0%,rgba(57,171,72,.1) 50%,transparent 70%);top:30vh;left:20vw;animation:bl3 22s ease-in-out infinite;animation-delay:-4s;}
+@keyframes bl3{0%{transform:translate(0,0)}25%{transform:translate(40vw,-15vh)}50%{transform:translate(20vw,20vh)}75%{transform:translate(-10vw,10vh)}100%{transform:translate(0,0)}}
+
+/* ── PROGRESS BAR ── */
+/* ── PROGRESS BAR ── */
+
+/* ── HEADER ── */
+.form-header{position:fixed;top:0;left:0;right:0;z-index:600;padding:24px 48px;display:flex;align-items:center;justify-content:space-between;pointer-events:none;}
+.form-header > *{pointer-events:auto;}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.brand img{height:28px;mix-blend-mode:multiply;}
+.step-counter{font-family:var(--font-head);display:flex;flex-direction:column;gap:6px;flex:1;min-width:160px;padding:0 16px;}
+.step-counter-label{font-size:10px;font-weight:700;color:var(--ink-mid);letter-spacing:.08em;text-transform:uppercase;display:flex;justify-content:space-between;align-items:center;}
+.step-counter-label .count{color:var(--green);font-weight:900;font-size:12px;}
+.step-counter-track{height:6px;background:rgba(60,60,60,.12);border-radius:999px;overflow:hidden;}
+.step-counter-fill{height:100%;background:linear-gradient(90deg,var(--green),#4cc25e);border-radius:999px;width:0%;transition:width .5s cubic-bezier(.22,1,.36,1);box-shadow:0 0 8px rgba(53,168,71,.4);}
+@media(max-width:600px){
+  .step-counter{order:-1;flex-basis:100%;padding:0 4px 8px;min-width:0;}
+}
+
+/* ── STAGE ── */
+.stage{position:relative;z-index:1;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:120px 24px 120px;}
+.stage-inner{width:100%;max-width:640px;}
+
+/* ── STEP ── */
+.step{display:none;animation:fadeUp .6s cubic-bezier(.22,1,.36,1) both;}
+.step.active{display:block;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+
+.step-tag{display:none;}
+.step-tag-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+
+.q-label{font-family:var(--font-head);font-size:clamp(28px,4vw,40px);font-weight:800;letter-spacing:-.02em;line-height:1.15;color:var(--ink);margin-bottom:14px;}
+.q-required{color:var(--orange);font-weight:700;font-size:.6em;vertical-align:super;margin-left:6px;}
+.q-help{font-family:var(--font-body);font-size:16px;line-height:1.6;color:var(--ink-mid);margin-bottom:32px;max-width:520px;}
+
+/* ── FIELDS ── */
+.field-row{display:flex;flex-direction:column;gap:20px;margin-bottom:8px;}
+.field-row.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+@media(max-width:540px){.field-row.two-col{grid-template-columns:1fr;}}
+
+.field-label{display:block;font-family:var(--font-head);font-size:12px;font-weight:600;color:var(--ink-mid);letter-spacing:.02em;margin-bottom:8px;text-transform:uppercase;}
+
+.input,.textarea,.select{
+  width:100%;font-family:var(--font-body);font-size:17px;color:var(--ink);
+  background:rgba(255,255,255,.7);backdrop-filter:blur(8px);
+  border:1.5px solid var(--border);border-radius:14px;
+  padding:16px 18px;transition:all .25s;outline:none;
+}
+.input:focus,.textarea:focus,.select:focus{border-color:var(--green);background:#fff;box-shadow:0 0 0 4px rgba(53,168,71,.12);}
+.input::placeholder,.textarea::placeholder{color:var(--ink-muted);}
+.textarea{min-height:140px;resize:vertical;font-family:var(--font-body);line-height:1.5;}
+.select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%233D3D3D' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 18px center;padding-right:48px;cursor:pointer;}
+
+/* ── RADIO / CHECKBOX OPTIONS ── */
+.options{display:flex;flex-direction:column;gap:10px;}
+.opt{
+  display:flex;align-items:flex-start;gap:14px;padding:16px 20px;
+  background:rgba(255,255,255,.7);backdrop-filter:blur(8px);
+  border:1.5px solid var(--border);border-radius:14px;cursor:pointer;
+  transition:all .25s;font-family:var(--font-body);font-size:16px;line-height:1.45;color:var(--ink);
+}
+.opt:hover{border-color:rgba(53,168,71,.5);background:#fff;transform:translateY(-1px);}
+.opt input{position:absolute;opacity:0;pointer-events:none;}
+.opt-dot{flex-shrink:0;width:22px;height:22px;border-radius:50%;border:1.5px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;transition:all .25s;margin-top:1px;}
+.opt-dot::after{content:'';width:10px;height:10px;border-radius:50%;background:var(--green);transform:scale(0);transition:transform .25s;}
+.opt input:checked ~ .opt-dot{border-color:var(--green);}
+.opt input:checked ~ .opt-dot::after{transform:scale(1);}
+.opt:has(input:checked){border-color:var(--green);background:rgba(53,168,71,.06);}
+.opt-text strong{display:block;font-weight:600;color:var(--ink);}
+.opt-text small{display:block;font-size:13px;color:var(--ink-muted);margin-top:2px;}
+
+/* checkbox variant */
+.opt.check .opt-dot{border-radius:6px;}
+.opt.check .opt-dot::after{border-radius:0;width:13px;height:13px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='13' height='13' viewBox='0 0 12 12' fill='none'%3E%3Cpath d='M2 6L5 9L10 3' stroke='%2335A847' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;background-color:transparent;}
+.boiler-other{display:none;margin-top:16px;}
+.step:has(input[name="boilerType"][value="anders"]:checked) .boiler-other{display:block;}
+
+/* ── FILE UPLOAD ── */
+.upload{
+  position:relative;border:2px dashed rgba(53,168,71,.35);
+  background:rgba(53,168,71,.04);border-radius:18px;padding:36px 24px;text-align:center;
+  cursor:pointer;transition:all .25s;display:block;
+}
+.upload:hover{border-color:var(--green);background:rgba(53,168,71,.08);}
+.upload.dragover{border-color:var(--green);background:rgba(53,168,71,.12);transform:scale(1.01);}
+.upload input{position:absolute;inset:0;opacity:0;cursor:pointer;}
+.upload-icon{width:48px;height:48px;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;background:var(--green);border-radius:14px;color:#fff;}
+.upload-title{font-family:var(--font-head);font-size:16px;font-weight:700;color:var(--ink);margin-bottom:6px;}
+.upload-sub{font-family:var(--font-body);font-size:13px;color:var(--ink-muted);}
+.upload-list{margin-top:14px;display:flex;flex-direction:column;gap:8px;}
+.upload-item{display:flex;align-items:center;gap:10px;padding:10px 14px;background:#fff;border:1px solid var(--border);border-radius:10px;font-family:var(--font-body);font-size:14px;color:var(--ink);text-align:left;}
+.upload-item .name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.upload-item .size{color:var(--ink-muted);font-size:12px;}
+.upload-item .remove{background:none;border:none;color:var(--ink-muted);cursor:pointer;font-size:18px;padding:0 4px;}
+.upload-item .remove:hover{color:var(--orange);}
+
+/* ── NAVIGATION ── */
+.nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:48px;gap:12px;flex-wrap:wrap;}
+.btn{font-family:var(--font-head);font-size:15px;font-weight:700;padding:15px 32px;border-radius:999px;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:10px;transition:all .2s;text-decoration:none;}
+.btn-primary{background:var(--green);color:#fff;}
+.btn-primary:hover:not(:disabled){background:#2d9040;transform:translateY(-1px);box-shadow:0 8px 24px rgba(53,168,71,.28);}
+.btn-primary:disabled{opacity:.35;cursor:not-allowed;}
+.btn-ghost{background:transparent;color:var(--ink-mid);padding:15px 22px;}
+.btn-ghost:hover{color:var(--ink);}
+.btn-orange{background:var(--orange);color:#fff;}
+.btn-orange:hover{background:#d96f10;transform:translateY(-1px);box-shadow:0 8px 24px rgba(244,131,31,.28);}
+.btn svg{width:16px;height:16px;}
+
+/* ── INTRO STEP ── */
+.intro-icon{width:78px;height:78px;margin:0 auto 18px;display:flex;align-items:center;justify-content:center;color:var(--ink);animation:floaty 3s ease-in-out infinite;}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.form-title{font-family:var(--font-head);font-size:clamp(30px,5vw,50px);font-weight:900;letter-spacing:-.02em;line-height:1.06;color:var(--ink);text-align:center;max-width:640px;margin:0 auto 30px;}
+.form-title .ft-2{display:block;color:var(--green);}
+.intro-h{font-family:var(--font-body);font-size:clamp(15px,1.7vw,19px);font-weight:400;line-height:1.5;color:var(--ink-mid);margin-bottom:30px;text-align:center;max-width:480px;margin-left:auto;margin-right:auto;}
+.intro-h .hl{display:inline;background:var(--green);color:#fff;padding:1px 6px;border-radius:5px;box-decoration-break:clone;-webkit-box-decoration-break:clone;}
+.intro-p{font-family:var(--font-body);font-size:18px;line-height:1.55;color:var(--ink-mid);max-width:480px;margin:0 auto 36px;text-align:center;}
+.intro-cta{display:flex;justify-content:center;}
+.intro-info{max-width:480px;margin:0 auto 32px;display:flex;justify-content:center;gap:32px;flex-wrap:wrap;}
+.info-item{display:flex;align-items:center;gap:10px;text-align:left;}
+.info-item .ii-icon{flex-shrink:0;width:32px;height:32px;border-radius:10px;background:rgba(53,168,71,.12);color:var(--green);display:flex;align-items:center;justify-content:center;}
+.info-item .ii-text{font-family:var(--font-body);font-size:13px;line-height:1.4;color:var(--ink-mid);}
+.info-item .ii-text strong{display:block;font-family:var(--font-head);font-size:14px;font-weight:700;color:var(--ink);}
+
+/* ── DONE ── */
+.done-icon{width:96px;height:96px;margin:0 auto 28px;background:var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;animation:popIn .6s cubic-bezier(.22,1.6,.36,1) both;}
+@keyframes popIn{0%{transform:scale(0)}100%{transform:scale(1)}}
+.done-h{font-family:var(--font-head);font-size:clamp(30px,4vw,42px);font-weight:900;letter-spacing:-.02em;color:var(--ink);margin-bottom:14px;text-align:center;}
+.done-p{font-family:var(--font-body);font-size:17px;line-height:1.55;color:var(--ink-mid);max-width:460px;margin:0 auto;text-align:center;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:600px){
+  .form-header{padding:18px 20px;}
+  .stage{padding:100px 18px 100px;}
+  .q-label{font-size:26px;}
+  .nav-row{margin-top:36px;}
+  .btn{padding:13px 24px;font-size:14px;}
+}
+</style>
+</head>
+<body>
+
+<!-- Progress -->
+
+
+<!-- Animated background blobs -->
+<div id="gc">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+</div>
+
+<!-- Header -->
+<header class="form-header">
+  <a href="home.html" class="brand">
+    <img src="https://www.solyxenergy.nl/wp-content/uploads/2022/06/Wordpress_Primair_Logo_Solyx_Energy.svg" alt="Solyx Energy">
+  </a>
+  <div></div>
+</header>
+
+<!-- Stage -->
+<main class="stage">
+  <div class="stage-inner">
+    <form id="installForm" autocomplete="on" novalidate>
+
+      <!-- STEP 0 : INTRO -->
+      <section class="step active" data-step="0">
+        <div class="intro-icon">
+          <svg width="56" height="56" viewBox="0 0 32 32" fill="#fff" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="7" y="3" width="15" height="24" rx="3.5"/>
+            <line x1="13" y1="6.5" x2="16" y2="6.5"/>
+            <circle cx="14.5" cy="23" r="1.2" fill="currentColor" stroke="none"/>
+            <rect x="17" y="14" width="11" height="9" rx="1.8" fill="#fff" stroke="currentColor" stroke-width="1.5"/>
+            <circle cx="22.5" cy="18.5" r="2.2" fill="none" stroke="currentColor" stroke-width="1.4"/>
+            <circle cx="26" cy="15.8" r="0.55" fill="currentColor" stroke="none"/>
+          </svg>
+        </div>
+        <h1 class="form-title">WaterAccu Installatieformulier</h1>
+        <p class="intro-h">Vul dit formulier in op je <span class="hl">telefoon</span>, dan kun je direct foto's toevoegen.</p>
+        <div class="intro-info">
+          <div class="info-item">
+            <div class="ii-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+            <div class="ii-text"><strong>± 15 minuten</strong></div>
+          </div>
+          <div class="info-item">
+            <div class="ii-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
+            </div>
+            <div class="ii-text"><strong>Foto's nodig</strong></div>
+          </div>
+        </div>
+        <div class="intro-cta">
+          <button type="button" class="btn btn-primary" data-next>
+            Start het formulier
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
+        </div>
+      </section>
+
+      <!-- STEP 1 : NAAM -->
+      <section class="step" data-step="1">
+        <div class="step-tag"><span class="step-tag-dot"></span>Contactgegevens</div>
+        <h2 class="q-label">Wat is je naam?<span class="q-required">*</span></h2>
+        <p class="q-help">Vul je voor- en achternaam in.</p>
+        <div class="field-row two-col">
+          <div>
+            <label class="field-label" for="firstName">Voornaam</label>
+            <input class="input" type="text" id="firstName" name="firstName" required>
+          </div>
+          <div>
+            <label class="field-label" for="lastName">Achternaam</label>
+            <input class="input" type="text" id="lastName" name="lastName" required>
+          </div>
+        </div>
+      </section>
+
+      <!-- STEP 2 : EMAIL -->
+      <section class="step" data-step="2">
+        <div class="step-tag"><span class="step-tag-dot"></span>Contactgegevens</div>
+        <h2 class="q-label">Wat is je e-mailadres?<span class="q-required">*</span></h2>
+        <p class="q-help">We sturen de offerte en bevestiging naar dit adres.</p>
+        <input class="input" type="email" id="email" name="email" placeholder="naam@voorbeeld.nl" required>
+      </section>
+
+      <!-- STEP 3 : PHONE -->
+      <section class="step" data-step="3">
+        <div class="step-tag"><span class="step-tag-dot"></span>Contactgegevens</div>
+        <h2 class="q-label">Wat is je telefoonnummer?<span class="q-required">*</span></h2>
+        <p class="q-help">Contact gaat meestal per mail. Je telefoonnummer wordt alleen gebruikt bij eventuele vragen.</p>
+        <input class="input" type="tel" id="phone" name="phone" placeholder="06 12345678" required>
+      </section>
+
+      <!-- STEP 4 : ADRES -->
+      <section class="step" data-step="4">
+        <div class="step-tag"><span class="step-tag-dot"></span>Adresgegevens</div>
+        <h2 class="q-label">Wat is het installatieadres?<span class="q-required">*</span></h2>
+        <p class="q-help">Het adres waar de WaterAccu geïnstalleerd moet worden.</p>
+        <div class="field-row">
+          <div>
+            <label class="field-label" for="address">Straat + huisnummer</label>
+            <input class="input" type="text" id="address" name="address" required>
+          </div>
+          <div>
+            <label class="field-label" for="city">Woonplaats</label>
+            <input class="input" type="text" id="city" name="city" required>
+          </div>
+        </div>
+      </section>
+
+      <!-- STEP 5 : INSTALLATIE VAN -->
+      <section class="step" data-step="5">
+        <div class="step-tag"><span class="step-tag-dot"></span>Installatie</div>
+        <h2 class="q-label">Installatie van:<span class="q-required">*</span></h2>
+        <p class="q-help">Selecteer wat er geïnstalleerd moet worden.</p>
+        <div class="options">
+          <label class="opt check">
+            <input type="checkbox" name="installation" value="nymo">
+            <span class="opt-dot"></span>
+            <span class="opt-text"><strong>Nymo</strong><small>Slimme sturing voor de boiler</small></span>
+          </label>
+          <label class="opt check">
+            <input type="checkbox" name="installation" value="boiler">
+            <span class="opt-dot"></span>
+            <span class="opt-text"><strong>Elektrische boiler</strong><small>Specificeer hieronder welk model</small></span>
+          </label>
+        </div>
+      </section>
+
+      <!-- STEP 6 : P1 SPLITTER -->
+      <!-- STEP 6 : BOILER TYPE -->
+      <section class="step" data-step="6">
+        <div class="step-tag"><span class="step-tag-dot"></span>Boiler</div>
+        <h2 class="q-label">Welke boiler wordt geïnstalleerd?</h2>
+        <p class="q-help">Kies de capaciteit die het beste bij je huishouden past.</p>
+        <div class="options">
+          <label class="opt">
+            <input type="radio" name="boilerType" value="100L">
+            <span class="opt-dot"></span>
+            <span class="opt-text"><strong>100L boiler</strong><small>Voor 2 personen</small></span>
+          </label>
+          <label class="opt">
+            <input type="radio" name="boilerType" value="150L">
+            <span class="opt-dot"></span>
+            <span class="opt-text"><strong>150L boiler</strong><small>Voor 3 — 4 personen</small></span>
+          </label>
+          <label class="opt">
+            <input type="radio" name="boilerType" value="anders">
+            <span class="opt-dot"></span>
+            <span class="opt-text"><strong>Anders</strong><small>Licht hieronder toe</small></span>
+          </label>
+        </div>
+        <div class="boiler-other">
+          <label class="field-label" for="boilerOther">Welke boiler of capaciteit heb je in gedachten?</label>
+          <input class="input" type="text" id="boilerOther" name="boilerOther" placeholder="Bijv. 200L, of een specifiek merk/model">
+        </div>
+      </section>
+
+      <!-- STEP 7 : P1 SPLITTER -->
+      <section class="step" data-step="7">
+        <div class="step-tag"><span class="step-tag-dot"></span>Slimme meter</div>
+        <h2 class="q-label">Is er een P1-poort splitter nodig?</h2>
+        <p class="q-help">Als de P1-poort al bezet is, kunnen wij een splitter meenemen.</p>
+        <div class="options">
+          <label class="opt">
+            <input type="radio" name="splitter" value="ja">
+            <span class="opt-dot"></span>
+            <span class="opt-text"><strong>Ja</strong></span>
+          </label>
+          <label class="opt">
+            <input type="radio" name="splitter" value="nee">
+            <span class="opt-dot"></span>
+            <span class="opt-text"><strong>Nee</strong></span>
+          </label>
+          <label class="opt">
+            <input type="radio" name="splitter" value="onbekend">
+            <span class="opt-dot"></span>
+            <span class="opt-text"><strong>Weet ik niet</strong><small>Neem voor de zekerheid maar mee</small></span>
+          </label>
+        </div>
+      </section>
+
+      <!-- STEP 8 : FOTO METERKAST -->
+      <section class="step" data-step="8">
+        <div class="step-tag"><span class="step-tag-dot"></span>Foto's</div>
+        <h2 class="q-label">Foto van de gehele meterkast<span class="q-required">*</span></h2>
+        <p class="q-help">Zorg ervoor dat de slimme meter duidelijk zichtbaar is. Max. 2 bestanden, 256 MB per stuk.</p>
+        <label class="upload" data-upload>
+          <input type="file" name="meterkast" accept="image/*" capture="environment" multiple data-max="2">
+          <div class="upload-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
+          </div>
+          <div class="upload-title">Foto maken of selecteren</div>
+          <div class="upload-sub">Tik om te kiezen, of sleep bestanden hierheen</div>
+          <div class="upload-list"></div>
+        </label>
+      </section>
+
+      <!-- STEP 9 : APARTE GROEP -->
+      <section class="step" data-step="9">
+        <div class="step-tag"><span class="step-tag-dot"></span>Elektra</div>
+        <h2 class="q-label">Aparte elektrische groep aanwezig?</h2>
+        <p class="q-help">Is er een aparte groep voor de elektrische boiler? Of een groep met genoeg vrije capaciteit?</p>
+        <div class="options">
+          <label class="opt">
+            <input type="radio" name="separateGroup" value="ja">
+            <span class="opt-dot"></span>
+            <span class="opt-text"><strong>Ja</strong></span>
+          </label>
+          <label class="opt">
+            <input type="radio" name="separateGroup" value="nee">
+            <span class="opt-dot"></span>
+            <span class="opt-text"><strong>Nee</strong></span>
+          </label>
+          <label class="opt">
+            <input type="radio" name="separateGroup" value="anders">
+            <span class="opt-dot"></span>
+            <span class="opt-text"><strong>Anders / weet ik niet</strong></span>
+          </label>
+        </div>
+      </section>
+
+      <!-- STEP 10 : CV-KETEL -->
+      <section class="step" data-step="10">
+        <div class="step-tag"><span class="step-tag-dot"></span>CV-combiketel</div>
+        <h2 class="q-label">Wordt de boiler aangesloten op de CV-combiketel?<span class="q-required">*</span></h2>
+        <p class="q-help">Bij te weinig zonne-energie kan worden na-verwarmd op gas door de CV-combiketel.</p>
+        <div class="options">
+          <label class="opt">
+            <input type="radio" name="cvConnection" value="ja" data-branch="continue">
+            <span class="opt-dot"></span>
+            <span class="opt-text"><strong>Ja</strong></span>
+          </label>
+          <label class="opt">
+            <input type="radio" name="cvConnection" value="nee" data-branch="skip">
+            <span class="opt-dot"></span>
+            <span class="opt-text"><strong>Nee</strong></span>
+          </label>
+          <label class="opt">
+            <input type="radio" name="cvConnection" value="al-geinstalleerd" data-branch="finish">
+            <span class="opt-dot"></span>
+            <span class="opt-text"><strong>Er is al een elektrische boiler geïnstalleerd</strong></span>
+          </label>
+        </div>
+      </section>
+
+      <!-- STEP 11 : FOTO CV SPECS -->
+      <section class="step" data-step="11" data-conditional="cv">
+        <div class="step-tag"><span class="step-tag-dot"></span>Foto's</div>
+        <h2 class="q-label">Foto van de CV-combiketel specificaties</h2>
+        <p class="q-help">Hiermee controleren we of de CV-combiketel geschikt is. Max. 2 bestanden.</p>
+        <label class="upload" data-upload>
+          <input type="file" name="cvSpecs" accept="image/*" capture="environment" multiple data-max="2">
+          <div class="upload-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
+          </div>
+          <div class="upload-title">Foto maken of selecteren</div>
+          <div class="upload-sub">Tik om te kiezen, of sleep bestanden hierheen</div>
+          <div class="upload-list"></div>
+        </label>
+      </section>
+
+      <!-- STEP 12 : RUIMTE NAAST KETEL -->
+      <section class="step" data-step="12" data-conditional="cv">
+        <div class="step-tag"><span class="step-tag-dot"></span>Ruimte</div>
+        <h2 class="q-label">Genoeg ruimte naast de CV-combiketel?</h2>
+        <p class="q-help">Bij naverwarming moet de elektrische boiler dichtbij (liefst direct naast) de CV-combiketel staan.</p>
+        <div class="options">
+          <label class="opt">
+            <input type="radio" name="spaceNextToCV" value="ja">
+            <span class="opt-dot"></span>
+            <span class="opt-text"><strong>Ja, er is genoeg ruimte</strong></span>
+          </label>
+          <label class="opt">
+            <input type="radio" name="spaceNextToCV" value="nee">
+            <span class="opt-dot"></span>
+            <span class="opt-text"><strong>Nee / misschien niet</strong></span>
+          </label>
+        </div>
+      </section>
+
+      <!-- STEP 13 : FOTO ONDERKANT CV -->
+      <section class="step" data-step="13" data-conditional="cv">
+        <div class="step-tag"><span class="step-tag-dot"></span>Foto's</div>
+        <h2 class="q-label">Foto's van de onderkant van de CV-ketel</h2>
+        <p class="q-help">Hierop moeten leidingen en aansluitingen zichtbaar zijn. Max. 2 bestanden.</p>
+        <label class="upload" data-upload>
+          <input type="file" name="cvBottom" accept="image/*" capture="environment" multiple data-max="2">
+          <div class="upload-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
+          </div>
+          <div class="upload-title">Foto maken of selecteren</div>
+          <div class="upload-sub">Tik om te kiezen, of sleep bestanden hierheen</div>
+          <div class="upload-list"></div>
+        </label>
+      </section>
+
+      <!-- STEP 14 : FOTO INSTALLATIERUIMTE -->
+      <section class="step" data-step="14">
+        <div class="step-tag"><span class="step-tag-dot"></span>Foto's</div>
+        <h2 class="q-label">Foto's van de installatieruimte</h2>
+        <p class="q-help">De ruimte waar de elektrische boiler geïnstalleerd moet worden. Max. 2 bestanden.</p>
+        <label class="upload" data-upload>
+          <input type="file" name="installSpace" accept="image/*" capture="environment" multiple data-max="2">
+          <div class="upload-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
+          </div>
+          <div class="upload-title">Foto maken of selecteren</div>
+          <div class="upload-sub">Tik om te kiezen, of sleep bestanden hierheen</div>
+          <div class="upload-list"></div>
+        </label>
+      </section>
+
+      <!-- STEP 15 : OPMERKINGEN -->
+      <section class="step" data-step="15">
+        <div class="step-tag"><span class="step-tag-dot"></span>Bijna klaar</div>
+        <h2 class="q-label">Nog iets toe te voegen?</h2>
+        <p class="q-help">Optioneel: laat hier eventuele opmerkingen, vragen of toevoegingen achter.</p>
+        <textarea class="textarea" name="notes" placeholder="Bijvoorbeeld bijzondere wensen, vragen over de installatie, etc."></textarea>
+      </section>
+
+      <!-- STEP 16 : AKKOORD & MARKETING -->
+      <section class="step" data-step="16">
+        <div class="step-tag"><span class="step-tag-dot"></span>Bijna klaar</div>
+        <h2 class="q-label">Toestemming<span class="q-required">*</span></h2>
+        <p class="q-help">Nog een laatste stap voordat we je gegevens kunnen verwerken.</p>
+        <div class="options">
+          <label class="opt check">
+            <input type="checkbox" name="installerShare" value="ja" required>
+            <span class="opt-dot"></span>
+            <span class="opt-text"><strong>Ik ga ermee akkoord dat dit formulier gedeeld wordt met de installateur in mijn regio<span style="color:var(--orange);"> *</span></strong><small>Zij nemen vervolgens contact met je op voor een afspraak (zie <a href="https://www.solyxenergy.nl/wp-content/uploads/2022/05/Privacy-Verklaring-Solyx-Energy.pdf" target="_blank" rel="noopener" style="color:var(--green);text-decoration:underline;">privacybeleid</a>).</small></span>
+          </label>
+          <label class="opt check">
+            <input type="checkbox" name="marketingOptIn" value="ja">
+            <span class="opt-dot"></span>
+            <span class="opt-text"><strong>Ja, houd mij op de hoogte van nieuwe producten en acties</strong><small>Optioneel — afmelden kan op elk moment (zie <a href="https://www.solyxenergy.nl/wp-content/uploads/2022/05/Privacy-Verklaring-Solyx-Energy.pdf" target="_blank" rel="noopener" style="color:var(--green);text-decoration:underline;">privacybeleid</a>).</small></span>
+          </label>
+        </div>
+      </section>
+
+      <!-- STEP 17 : DONE -->
+      <section class="step" data-step="17">
+        <div class="done-icon">
+          <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <h2 class="done-h">Bedankt!</h2>
+        <p class="done-p">We hebben je gegevens ontvangen. Onze installateur neemt zo spoedig mogelijk contact met je op voor een offerte.</p>
+      </section>
+
+      <!-- NAVIGATION -->
+      <div class="nav-row" id="navRow" style="display:none;">
+        <button type="button" class="btn btn-ghost" data-prev>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>
+          Terug
+        </button>
+        <div class="step-counter" id="stepCounter" style="display:none;">
+          <div class="step-counter-label">
+            <span>Voortgang</span>
+            <span class="count"><span id="cur-step">0</span> / <span id="tot-step">15</span></span>
+          </div>
+          <div class="step-counter-track">
+            <div class="step-counter-fill" id="step-counter-fill"></div>
+          </div>
+        </div>
+        <button type="button" class="btn btn-primary" data-next>
+          Volgende
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+        <button type="submit" class="btn btn-orange" id="submitBtn" style="display:none;">
+          Verzenden
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+        </button>
+      </div>
+
+    </form>
+  </div>
+</main>
+
+<script>
+(function(){
+  const form    = document.getElementById('installForm');
+  const steps   = [...form.querySelectorAll('.step')];
+  const navRow  = document.getElementById('navRow');
+  const submitBtn = document.getElementById('submitBtn');
+  const nextBtns  = form.querySelectorAll('[data-next]');
+  const prevBtn   = form.querySelector('[data-prev]');
+  const curStepEl = document.getElementById('cur-step');
+  const totStepEl = document.getElementById('tot-step');
+  const progress  = { style:{}, classList:{ add(){}, remove(){}, toggle(){} } };
+  const stepCounter = document.getElementById('stepCounter');
+  const counterFill = document.getElementById('step-counter-fill');
+
+  // Visible (non-intro, non-done) count for the counter — counts only Q steps
+  const qSteps = steps.filter(s=>{
+    const i = +s.dataset.step;
+    return i >= 1 && i <= 16;
+  });
+  totStepEl.textContent = qSteps.length;
+
+  let idx = 0; // current step in the steps array
+  let cvBranch = 'continue'; // 'continue' | 'skip' | 'finish'
+
+  function visibleSteps(){
+    return steps.filter(s=>{
+      if(s.dataset.conditional === 'cv' && cvBranch !== 'continue') return false;
+      return true;
+    });
+  }
+
+  function render(){
+    const vis = visibleSteps();
+    // clamp idx
+    if(idx < 0) idx = 0;
+    if(idx >= vis.length) idx = vis.length - 1;
+    steps.forEach(s=>s.classList.remove('active'));
+    const current = vis[idx];
+    current.classList.add('active');
+
+    const stepNum = +current.dataset.step;
+
+    // Show / hide nav based on step type
+    if(stepNum === 0){
+      navRow.style.display = 'none';
+    } else if(stepNum === 17){
+      navRow.style.display = 'none';
+    } else {
+      navRow.style.display = 'flex';
+      // prev disabled on first Q (step 1)
+      prevBtn.style.visibility = (stepNum === 1) ? 'hidden' : 'visible';
+      // submit on last Q before done
+      const isLast = (idx === vis.length - 2); // last Q step (step 16: marketing)
+      submitBtn.style.display = isLast ? 'inline-flex' : 'none';
+      nextBtns[1] ? (nextBtns[1].style.display = isLast ? 'none' : 'inline-flex') : null;
+    }
+
+    // Update counter & progress
+    if(stepNum >= 1 && stepNum <= 16){
+      const visibleQList = qSteps.filter(s=>visibleSteps().includes(s));
+      const idxInQ = visibleQList.indexOf(current) + 1;
+      const visibleQs = visibleQList.length;
+      curStepEl.textContent = idxInQ;
+      totStepEl.textContent = visibleQs;
+      const pct = idxInQ / visibleQs * 100;
+      progress.style.width = pct + '%';
+      progress.classList.toggle('has-progress', pct > 0);
+      stepCounter.style.display = 'flex';
+      counterFill.style.width = pct + '%';
+    } else if(stepNum === 17){
+      progress.style.width = '100%';
+      progress.classList.add('has-progress');
+      stepCounter.style.display = 'none';
+    } else {
+      curStepEl.textContent = 0;
+      progress.style.width = '0%';
+      progress.classList.remove('has-progress');
+      stepCounter.style.display = 'none';
+      counterFill.style.width = '0%';
+    }
+
+    // Scroll to top of stage on step change
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  function validateCurrent(){
+    const vis = visibleSteps();
+    const current = vis[idx];
+    const required = current.querySelectorAll('[required]');
+    for(const el of required){
+      if(el.type === 'checkbox'){
+        if(!el.checked){
+          const opt = el.closest('.opt');
+          if(opt){
+            opt.style.borderColor = 'var(--orange)';
+            setTimeout(()=>opt.style.borderColor = '', 2000);
+          }
+          return false;
+        }
+      } else if(!el.value.trim()){
+        el.focus();
+        el.style.borderColor = 'var(--orange)';
+        setTimeout(()=>el.style.borderColor = '', 2000);
+        return false;
+      }
+    }
+    return true;
+  }
+
+  function handleBranch(){
+    const vis = visibleSteps();
+    const current = vis[idx];
+    if(current.dataset.step === '10'){
+      const checked = current.querySelector('input[name="cvConnection"]:checked');
+      if(checked){
+        cvBranch = checked.dataset.branch || 'continue';
+        if(cvBranch === 'finish'){
+          // jump to last Q (step 15)
+          idx = visibleSteps().findIndex(s => s.dataset.step === '16');
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  // Next
+  form.addEventListener('click', e=>{
+    const btn = e.target.closest('[data-next]');
+    if(!btn) return;
+    e.preventDefault();
+    if(!validateCurrent()) return;
+    if(handleBranch()){
+      render();
+      return;
+    }
+    idx++;
+    render();
+  });
+
+  // Prev
+  prevBtn.addEventListener('click', e=>{
+    e.preventDefault();
+    if(idx > 0) idx--;
+    render();
+  });
+
+  // Enter key advances (but not in textarea)
+  form.addEventListener('keydown', e=>{
+    if(e.key === 'Enter' && e.target.tagName !== 'TEXTAREA'){
+      e.preventDefault();
+      const vis = visibleSteps();
+      const stepNum = +vis[idx].dataset.step;
+      if(stepNum >= 1 && stepNum <= 15){
+        if(!validateCurrent()) return;
+        if(handleBranch()){ render(); return; }
+        idx++; render();
+      }
+    }
+  });
+
+  // Submit
+  form.addEventListener('submit', e=>{
+    e.preventDefault();
+    if(!validateCurrent()) return;
+    // Move to done step
+    idx = visibleSteps().findIndex(s => s.dataset.step === '17');
+    render();
+    // Here you'd POST the FormData to your backend
+    // const data = new FormData(form);
+    // fetch('/your-endpoint', { method:'POST', body:data });
+  });
+
+  // File upload UX
+  form.querySelectorAll('[data-upload]').forEach(zone=>{
+    const input = zone.querySelector('input[type="file"]');
+    const list  = zone.querySelector('.upload-list');
+    const max   = parseInt(input.dataset.max || '10', 10);
+    let files   = [];
+
+    function renderList(){
+      list.innerHTML = '';
+      files.forEach((f, i)=>{
+        const item = document.createElement('div');
+        item.className = 'upload-item';
+        item.innerHTML = `
+          <span class="name">${f.name}</span>
+          <span class="size">${(f.size/1024/1024).toFixed(2)} MB</span>
+          <button type="button" class="remove" aria-label="Verwijder">×</button>
+        `;
+        item.querySelector('.remove').addEventListener('click', ev=>{
+          ev.preventDefault();
+          ev.stopPropagation();
+          files.splice(i,1);
+          syncInput();
+          renderList();
+        });
+        list.appendChild(item);
+      });
+    }
+
+    function syncInput(){
+      const dt = new DataTransfer();
+      files.forEach(f=>dt.items.add(f));
+      input.files = dt.files;
+    }
+
+    input.addEventListener('change', ()=>{
+      [...input.files].forEach(f=>{
+        if(files.length < max) files.push(f);
+      });
+      syncInput();
+      renderList();
+    });
+
+    // drag & drop
+    ;['dragenter','dragover'].forEach(ev=>{
+      zone.addEventListener(ev, e=>{e.preventDefault();zone.classList.add('dragover');});
+    });
+    ;['dragleave','drop'].forEach(ev=>{
+      zone.addEventListener(ev, e=>{e.preventDefault();zone.classList.remove('dragover');});
+    });
+    zone.addEventListener('drop', e=>{
+      const dropped = [...(e.dataTransfer?.files || [])];
+      dropped.forEach(f=>{
+        if(files.length < max) files.push(f);
+      });
+      syncInput();
+      renderList();
+    });
+  });
+
+  render();
+})();
+</script>
+
+</body>
+</html>

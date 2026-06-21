@@ -1,0 +1,441 @@
+- generic [active] [ref=e1]:
+  - 'link "NEW: Nymo x Homey — now also switching to dynamic prices!" [ref=e2] [cursor=pointer]':
+    - /url: "#"
+  - navigation [ref=e3]:
+    - link "Solyx Energy" [ref=e4] [cursor=pointer]:
+      - /url: "#"
+      - img "Solyx Energy" [ref=e5]
+    - list [ref=e6]:
+      - listitem [ref=e7]:
+        - link "How does it work?" [ref=e8] [cursor=pointer]:
+          - /url: "#"
+      - listitem [ref=e9]:
+        - link "Benefits" [ref=e10] [cursor=pointer]:
+          - /url: "#"
+      - listitem [ref=e11]:
+        - link "Reviews" [ref=e12] [cursor=pointer]:
+          - /url: "#"
+      - listitem [ref=e13]:
+        - link "FAQs" [ref=e14] [cursor=pointer]:
+          - /url: "#"
+      - listitem [ref=e15]:
+        - link "Contact" [ref=e16] [cursor=pointer]:
+          - /url: "#"
+    - link "Order now" [ref=e17] [cursor=pointer]:
+      - /url: "#"
+  - generic [ref=e18]:
+    - generic [ref=e19] [cursor=pointer]:
+      - generic: Intro
+    - generic [ref=e21] [cursor=pointer]:
+      - generic: What is it
+    - generic [ref=e23] [cursor=pointer]:
+      - generic: Benefits
+    - generic [ref=e25] [cursor=pointer]:
+      - generic: Reviews
+    - generic [ref=e27] [cursor=pointer]:
+      - generic: In the press
+    - generic [ref=e29] [cursor=pointer]:
+      - generic: Order
+  - generic [ref=e31]:
+    - generic [ref=e33]:
+      - generic [ref=e34]:
+        - heading "Store your unused solar energy in the WaterAccu." [level=1] [ref=e35]:
+          - text: Store your unused solar energy in the
+          - generic [ref=e36]: WaterAccu.
+        - list [ref=e37]:
+          - listitem [ref=e38]:
+            - img [ref=e40]
+            - text: Save more than
+            - strong [ref=e42]: €300 per year
+            - text: (on average)
+          - listitem [ref=e43]:
+            - img [ref=e45]
+            - text: Shower using
+            - strong [ref=e47]: unused solar energy
+            - text: instead of gas
+          - listitem [ref=e48]:
+            - img [ref=e50]
+            - strong [ref=e52]: Plug & play installation
+            - text: and hot water guarantee
+        - generic [ref=e53]:
+          - link "Order now →" [ref=e54] [cursor=pointer]:
+            - /url: "#"
+          - link "Learn more" [ref=e55] [cursor=pointer]:
+            - /url: "#"
+      - generic [ref=e57]:
+        - img "Nymo WaterAccu — controller" [ref=e59]
+        - generic [ref=e60]:
+          - generic [ref=e61]: €338
+          - generic [ref=e62]: average savings / year
+        - generic [ref=e63]:
+          - generic [ref=e64]: ⚡
+          - generic [ref=e65]: Plug & play in 20 min
+        - generic [ref=e66]: The Nymo — WaterAccu controller
+    - generic [ref=e68]:
+      - generic [ref=e69]:
+        - generic [ref=e70]: 01 / 05
+        - generic [ref=e71]:
+          - text: What is a
+          - text: WaterAccu?
+      - generic [ref=e73]:
+        - generic [ref=e74]: How it works
+        - heading "Your surplus solar power, stored as hot water." [level=2] [ref=e75]
+        - paragraph [ref=e76]: Households use only ~30% of the solar power they generate. The WaterAccu — a Nymo controller paired with an electric boiler — captures the rest and turns it into hot water for your shower, kitchen and bath.
+        - generic [ref=e77]:
+          - generic [ref=e78]:
+            - img [ref=e80]
+            - generic [ref=e87]: "01"
+            - generic [ref=e88]: Solar panels
+            - generic [ref=e89]: generate surplus power that you'd normally feed back to the grid
+          - img [ref=e91]
+          - generic [ref=e93]:
+            - img "Nymo WaterAccu" [ref=e95]
+            - generic [ref=e96]: "02"
+            - generic [ref=e97]: The WaterAccu
+            - generic [ref=e98]: Nymo modulates surplus into your electric boiler — exact watt-for-watt
+          - img [ref=e100]
+          - generic [ref=e102]:
+            - img [ref=e104]
+            - generic [ref=e111]: "03"
+            - generic [ref=e112]: Hot water on tap
+            - generic [ref=e113]: shower, wash and rinse using stored solar energy — instead of gas
+        - generic [ref=e114]:
+          - generic [ref=e115]:
+            - generic [ref=e116]: €338
+            - generic [ref=e117]: avg. savings / yr
+          - generic [ref=e119]:
+            - generic [ref=e120]: 31 → 70%
+            - generic [ref=e121]: solar self-use
+          - generic [ref=e123]:
+            - generic [ref=e124]: < 10 yrs
+            - generic [ref=e125]: payback period
+    - generic [ref=e127]:
+      - generic [ref=e128]:
+        - generic [ref=e129]: 02 / 05
+        - generic [ref=e130]:
+          - text: Three reasons
+          - text: thousands of homes
+          - text: already switched.
+      - generic [ref=e133]:
+        - generic [ref=e135] [cursor=pointer]:
+          - generic [ref=e136]:
+            - img [ref=e138]
+            - generic [ref=e143]: Durable
+            - paragraph [ref=e144]: Better use of your solar energy. Save gas. Reduce grid pressure.
+            - generic [ref=e145]: Hover for details →
+          - generic [ref=e146]:
+            - generic [ref=e147]: Durable
+            - list [ref=e148]:
+              - listitem [ref=e149]:
+                - text: "Use more solar energy: from"
+                - strong [ref=e150]: 31% to 70%
+                - text: of your generation
+              - listitem [ref=e151]:
+                - text: Gas consumption for hot water reduced by
+                - strong [ref=e152]: 70-100%
+              - listitem [ref=e153]: Less grid congestion in your neighbourhood
+        - generic [ref=e155] [cursor=pointer]:
+          - generic [ref=e156]:
+            - img [ref=e158]
+            - generic [ref=e161]: Cost-saving
+            - paragraph [ref=e162]: Save up to €338 per year, without a high upfront investment.
+            - generic [ref=e163]: Hover for details →
+          - generic [ref=e164]:
+            - generic [ref=e165]: Cost-saving
+            - list [ref=e166]:
+              - listitem [ref=e167]:
+                - text: Average savings of
+                - strong [ref=e168]: €338 per year
+              - listitem [ref=e169]: Investment is much lower than alternatives like a home battery or solar boiler
+              - listitem [ref=e170]: Payback in under 10 years — often closer to 3
+        - generic [ref=e172] [cursor=pointer]:
+          - generic [ref=e173]:
+            - img [ref=e175]
+            - generic [ref=e178]: Self-sufficient
+            - paragraph [ref=e179]: Take charge of your energy and shower even cleaner now.
+            - generic [ref=e180]: Hover for details →
+          - generic [ref=e181]:
+            - generic [ref=e182]: Self-sufficient
+            - list [ref=e183]:
+              - listitem [ref=e184]:
+                - text: Reduce dependence on
+                - strong [ref=e185]: return delivery costs
+              - listitem [ref=e186]:
+                - text: Stay ahead of the
+                - strong [ref=e187]: end of netting
+                - text: in 2027
+              - listitem [ref=e188]:
+                - text: No more
+                - strong [ref=e189]: inverter shutdowns
+                - text: on sunny days
+    - generic [ref=e191]:
+      - generic [ref=e192]:
+        - generic [ref=e193]: 03 / 05
+        - generic [ref=e194]:
+          - text: Proud
+          - text: owners.
+        - generic [ref=e196]:
+          - generic [ref=e197]: "4.7"
+          - generic [ref=e198]:
+            - generic [ref=e199]: ★★★★★
+            - generic [ref=e200]: Google Reviews
+        - paragraph [ref=e201]: Real installations. Real savings. Real testimonials from homes across NL & BE.
+      - generic [ref=e203]:
+        - generic [ref=e205]:
+          - generic [ref=e206]:
+            - generic [ref=e207]: ★★★★★
+            - paragraph [ref=e208]: "\"Clear instructions. Important addition to our home: store all remaining energy in water.\""
+            - generic [ref=e210]: Theo
+          - generic [ref=e211]:
+            - generic [ref=e212]: ★★★★★
+            - paragraph [ref=e213]: "\"Awesome! Within a minute of installation, the Nymo started powering my boiler with solar energy.\""
+            - generic [ref=e215]: Onno
+          - generic [ref=e216]:
+            - img "Nymo WaterAccu installed" [ref=e217]
+            - generic [ref=e218]:
+              - generic [ref=e219]: Installed at home
+              - generic [ref=e220]: Wall-mounted Nymo controller — typical install
+          - generic [ref=e221]:
+            - generic [ref=e222]: ★★★★★
+            - paragraph [ref=e223]: "\"My own use of solar energy has doubled! See the red area in the graph before and after installation.\""
+            - generic [ref=e225]: Serge
+          - generic [ref=e226]:
+            - generic [ref=e227]: ★★★★★
+            - paragraph [ref=e228]: "\"Clear instructions. Important addition to our home: store all remaining energy in water.\""
+            - generic [ref=e230]: Theo
+          - generic [ref=e231]:
+            - generic [ref=e232]: ★★★★★
+            - paragraph [ref=e233]: "\"Awesome! Within a minute of installation, the Nymo started powering my boiler with solar energy.\""
+            - generic [ref=e235]: Onno
+          - generic [ref=e236]:
+            - img "Nymo WaterAccu installed" [ref=e237]
+            - generic [ref=e238]:
+              - generic [ref=e239]: Installed at home
+              - generic [ref=e240]: Wall-mounted Nymo controller — typical install
+          - generic [ref=e241]:
+            - generic [ref=e242]: ★★★★★
+            - paragraph [ref=e243]: "\"My own use of solar energy has doubled! See the red area in the graph before and after installation.\""
+            - generic [ref=e245]: Serge
+        - generic [ref=e247]:
+          - generic [ref=e248]:
+            - generic [ref=e249]: ★★★★★
+            - paragraph [ref=e250]: "\"We enjoy bathing and showering with leftover solar energy! The Nymo solar water heater works well.\""
+            - generic [ref=e252]: Ben
+          - generic [ref=e253]:
+            - img "WaterAccu unboxing" [ref=e254]
+            - generic [ref=e255]:
+              - generic [ref=e256]: Unboxing
+              - generic [ref=e257]: Everything you need in the box
+          - generic [ref=e258]:
+            - generic [ref=e259]: ★★★★★
+            - paragraph [ref=e260]: "\"The concept is fantastic! I'm very happy with Nymo, which supplies a 150L boiler with surplus solar power.\""
+            - generic [ref=e262]: Robert
+          - generic [ref=e263]:
+            - generic [ref=e264]: ★★★★★
+            - paragraph [ref=e265]: "\"After some searching, I found Nymo. What a fantastic idea and very affordable.\""
+            - generic [ref=e267]: Rol
+          - generic [ref=e268]:
+            - generic [ref=e269]: ★★★★★
+            - paragraph [ref=e270]: "\"We enjoy bathing and showering with leftover solar energy! The Nymo solar water heater works well.\""
+            - generic [ref=e272]: Ben
+          - generic [ref=e273]:
+            - img "WaterAccu unboxing" [ref=e274]
+            - generic [ref=e275]:
+              - generic [ref=e276]: Unboxing
+              - generic [ref=e277]: Everything you need in the box
+          - generic [ref=e278]:
+            - generic [ref=e279]: ★★★★★
+            - paragraph [ref=e280]: "\"The concept is fantastic! I'm very happy with Nymo, which supplies a 150L boiler with surplus solar power.\""
+            - generic [ref=e282]: Robert
+          - generic [ref=e283]:
+            - generic [ref=e284]: ★★★★★
+            - paragraph [ref=e285]: "\"After some searching, I found Nymo. What a fantastic idea and very affordable.\""
+            - generic [ref=e287]: Rol
+        - generic [ref=e289]:
+          - generic [ref=e290]:
+            - generic [ref=e291]: ★★★★★
+            - paragraph [ref=e292]: "\"Service when I had questions was excellent: I received prompt answers, including about delivery options.\""
+            - generic [ref=e294]: Onno
+          - generic [ref=e295]:
+            - img "Customer installation by Jos R." [ref=e296]
+            - generic [ref=e297]:
+              - generic [ref=e298]: Customer install — Jos R.
+              - generic [ref=e299]: "\"200 kWh of solar energy used in 2 months\""
+          - generic [ref=e300]:
+            - generic [ref=e301]: ★★★★★
+            - paragraph [ref=e302]: "\"Happy with the option to connect two boilers and the additional heating function.\""
+            - generic [ref=e304]: Robert
+          - generic [ref=e305]:
+            - generic [ref=e306]: ★★★★★
+            - paragraph [ref=e307]: "\"Happy with the solar water heater. Easy to install, and great for saving gas.\""
+            - generic [ref=e309]: Bram
+          - generic [ref=e310]:
+            - generic [ref=e311]: ★★★★★
+            - paragraph [ref=e312]: "\"Service when I had questions was excellent: I received prompt answers, including about delivery options.\""
+            - generic [ref=e314]: Onno
+          - generic [ref=e315]:
+            - img "Customer installation by Jos R." [ref=e316]
+            - generic [ref=e317]:
+              - generic [ref=e318]: Customer install — Jos R.
+              - generic [ref=e319]: "\"200 kWh of solar energy used in 2 months\""
+          - generic [ref=e320]:
+            - generic [ref=e321]: ★★★★★
+            - paragraph [ref=e322]: "\"Happy with the option to connect two boilers and the additional heating function.\""
+            - generic [ref=e324]: Robert
+          - generic [ref=e325]:
+            - generic [ref=e326]: ★★★★★
+            - paragraph [ref=e327]: "\"Happy with the solar water heater. Easy to install, and great for saving gas.\""
+            - generic [ref=e329]: Bram
+    - generic [ref=e331]:
+      - generic [ref=e332]:
+        - generic [ref=e333]: 04 / 05
+        - generic [ref=e334]:
+          - text: In the
+          - text: press.
+        - paragraph [ref=e336]: Featured in leading Dutch innovation and sustainability media.
+      - generic [ref=e337]:
+        - generic [ref=e338]: As featured in
+        - heading "A simple boiler. A smart battery." [level=2] [ref=e339]
+        - generic [ref=e340]:
+          - link "BNR ▶ Podcast How do you bring a new device to market? Listen on BNR →" [ref=e341] [cursor=pointer]:
+            - /url: https://www.bnr.nl/podcast/baanbrekende-businessmodellen/10557502/hoe-breng-je-een-nieuw-apparaat-naar-de-markt
+            - generic [ref=e342]:
+              - generic [ref=e343]: BNR
+              - generic [ref=e344]: ▶ Podcast
+            - generic [ref=e345]:
+              - generic [ref=e346]: How do you bring a new device to market?
+              - generic [ref=e347]: Listen on BNR →
+          - link "MT/Sprout Article Nymo WaterAccu by Solyx Energy Read article →" [ref=e348] [cursor=pointer]:
+            - /url: https://mtsprout.nl/tech-innovatie/nymo-wateraccu-solyx-energy
+            - generic [ref=e349]:
+              - generic [ref=e350]: MT/Sprout
+              - generic [ref=e351]: Article
+            - generic [ref=e352]:
+              - generic [ref=e353]: Nymo WaterAccu by Solyx Energy
+              - generic [ref=e354]: Read article →
+          - link "Gawalo Industry How a simple boiler becomes a smart battery Read article →" [ref=e355] [cursor=pointer]:
+            - /url: https://www.gawalo.nl/15114/hoe-een-simpele-boiler-een-slimme-batterij-wordt
+            - generic [ref=e356]:
+              - generic [ref=e357]: Gawalo
+              - generic [ref=e358]: Industry
+            - generic [ref=e359]:
+              - generic [ref=e360]: How a simple boiler becomes a smart battery
+              - generic [ref=e361]: Read article →
+          - link "change.inc Sustainability Father & daughter run start-up storing solar power affordably Read article →" [ref=e362] [cursor=pointer]:
+            - /url: https://www.change.inc/energie/vader-en-dochter-runnen-start-up-goedkoop-zonnestroom-opslaan-met-wateraccu-40336
+            - generic [ref=e363]:
+              - generic [ref=e364]: change.inc
+              - generic [ref=e365]: Sustainability
+            - generic [ref=e366]:
+              - generic [ref=e367]: Father & daughter run start-up storing solar power affordably
+              - generic [ref=e368]: Read article →
+          - link "Duurzaam Ondernemen Business Solyx launches Nymo — turn any boiler into a smart WaterAccu Read article →" [ref=e369] [cursor=pointer]:
+            - /url: https://www.duurzaam-ondernemen.nl/solyx-energy-lanceert-de-nymo-waarmee-je-van-een-boiler-een-slimme-wateraccu-maakt/
+            - generic [ref=e370]:
+              - generic [ref=e371]: Duurzaam Ondernemen
+              - generic [ref=e372]: Business
+            - generic [ref=e373]:
+              - generic [ref=e374]: Solyx launches Nymo — turn any boiler into a smart WaterAccu
+              - generic [ref=e375]: Read article →
+          - link "See the WaterAccu in action ▶ YouTube See the WaterAccu in action" [ref=e376] [cursor=pointer]:
+            - /url: https://youtu.be/bhyq5ALXljQ
+            - generic [ref=e377]:
+              - img "See the WaterAccu in action" [ref=e378]
+              - img [ref=e380]
+            - generic [ref=e382]:
+              - generic [ref=e383]: ▶ YouTube
+              - generic [ref=e384]: See the WaterAccu in action
+    - generic [ref=e386]:
+      - generic [ref=e387]:
+        - generic [ref=e388]: Ready?
+        - generic [ref=e389]:
+          - text: Start
+          - text: today.
+      - generic [ref=e391]:
+        - heading "Store your surplus solar power in the WaterAccu." [level=3] [ref=e392]
+        - paragraph [ref=e393]: Get the most out of your solar panels and save on gas. Heat water with surplus solar energy and save immediately. Plug & play, payback in under 10 years.
+        - generic [ref=e394]:
+          - generic [ref=e395] [cursor=pointer]:
+            - generic [ref=e396]: Nymo
+            - generic [ref=e397]: €649
+            - generic [ref=e398]: Voor wie al een geschikte boiler heeft, of er zelf een uitkiest. De Nymo is eenvoudig zelf te installeren.
+            - img [ref=e402]
+          - generic [ref=e410] [cursor=pointer]:
+            - generic [ref=e411]: Nymo + Boiler
+            - generic [ref=e412]: vanaf €1.189
+            - generic [ref=e413]: Voor wie nog geen boiler heeft. Complete WaterAccu inclusief geschikte boiler, zonder installatie.
+            - generic [ref=e414]:
+              - img [ref=e417]
+              - generic [ref=e425]: +
+              - img [ref=e428]
+          - generic [ref=e437] [cursor=pointer]:
+            - generic [ref=e438]: Complete Installatie
+            - generic [ref=e439]: vanaf €1.725
+            - generic [ref=e440]: Volledige ontzorging. Boiler + Nymo, inclusief installatie aan huis, door installatie-partner van Solyx Energy.
+            - generic [ref=e441]:
+              - img [ref=e444]
+              - generic [ref=e452]: +
+              - img [ref=e455]
+              - generic [ref=e464]: +
+              - img [ref=e467]
+        - generic [ref=e469]:
+          - text: Installateur?
+          - link "Klik hier." [ref=e470] [cursor=pointer]:
+            - /url: installateurs.html
+    - contentinfo [ref=e472]:
+      - generic [ref=e473]:
+        - generic [ref=e474]:
+          - img "Solyx Energy" [ref=e475]
+          - paragraph [ref=e476]: Store your surplus solar power in the WaterAccu. Simple, affordable, immediate results.
+        - generic [ref=e477]:
+          - generic [ref=e478]: Product
+          - list [ref=e479]:
+            - listitem [ref=e480]:
+              - link "WaterAccu" [ref=e481] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e482]:
+              - link "Nymo controller" [ref=e483] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e484]:
+              - link "Nymo x Homey" [ref=e485] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e486]:
+              - link "Shop" [ref=e487] [cursor=pointer]:
+                - /url: "#"
+        - generic [ref=e488]:
+          - generic [ref=e489]: Installation
+          - list [ref=e490]:
+            - listitem [ref=e491]:
+              - link "How does it work?" [ref=e492] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e493]:
+              - link "Customer stories" [ref=e494] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e495]:
+              - link "FAQs" [ref=e496] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e497]:
+              - link "Contact" [ref=e498] [cursor=pointer]:
+                - /url: "#"
+        - generic [ref=e499]:
+          - generic [ref=e500]: Company
+          - list [ref=e501]:
+            - listitem [ref=e502]:
+              - link "About Solyx" [ref=e503] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e504]:
+              - link "Press" [ref=e505] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e506]:
+              - link "Partners" [ref=e507] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e508]:
+              - link "LinkedIn" [ref=e509] [cursor=pointer]:
+                - /url: "#"
+      - generic [ref=e510]:
+        - generic [ref=e511]: © 2026 Solyx Energy BV · All rights reserved · Smitspol 15M · 3861 RS Nijkerk
+        - generic [ref=e512]:
+          - link "Privacy" [ref=e513] [cursor=pointer]:
+            - /url: "#"
+          - link "Terms" [ref=e514] [cursor=pointer]:
+            - /url: "#"

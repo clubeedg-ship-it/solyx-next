@@ -1,0 +1,148 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - link [ref=e3] [cursor=pointer]:
+      - /url: home.html
+      - img [ref=e4]:
+        - generic [ref=e7]: SOLYX ENERGY
+    - list [ref=e8]:
+      - listitem [ref=e9]:
+        - link "Hoe werkt het" [ref=e10] [cursor=pointer]:
+          - /url: hoe-werkt-het.html
+      - listitem [ref=e11]:
+        - link "Aan de slag" [ref=e12] [cursor=pointer]:
+          - /url: how-to-get-it.html
+      - listitem [ref=e13]:
+        - link "FAQs" [ref=e14] [cursor=pointer]:
+          - /url: faq.html
+      - listitem [ref=e15]:
+        - link "Shop" [ref=e16] [cursor=pointer]:
+          - /url: shop.html
+    - link "Bestel" [ref=e18] [cursor=pointer]:
+      - /url: how-to-get-it.html
+  - generic [ref=e19]:
+    - generic [ref=e20]:
+      - link "Home" [ref=e21] [cursor=pointer]:
+        - /url: home.html
+      - generic [ref=e22]: ›
+      - link "Winkel" [ref=e23] [cursor=pointer]:
+        - /url: shop.html
+      - generic [ref=e24]: ›
+      - generic [ref=e25]: Nymo WaterAccu Controller
+    - generic [ref=e26]:
+      - generic [ref=e27]:
+        - generic [ref=e28]:
+          - generic [ref=e29]: Nymo
+          - img "Nymo WaterAccu Controller" [ref=e30]
+        - generic [ref=e34]:
+          - img [ref=e35]
+          - generic [ref=e37]: Nymo WaterAccu controller — slimme aansturing van je boiler op basis van zonne-energie.
+      - generic [ref=e38]:
+        - heading "Nymo WaterAccu Controller" [level=1] [ref=e39]
+        - generic [ref=e40]:
+          - text: Vanaf
+          - strong [ref=e41]: €625,00
+          - text: inclusief 21% btw
+        - generic [ref=e42]:
+          - generic [ref=e43]: Kies je versie
+          - generic [ref=e44]:
+            - button "Nymo Standaard €649,00" [ref=e45] [cursor=pointer]:
+              - generic [ref=e46]: Nymo
+              - generic [ref=e47]: Standaard
+              - generic [ref=e48]: €649,00
+            - button "Nymo × Homey Smart home integratie €625,00" [ref=e49] [cursor=pointer]:
+              - generic [ref=e50]: Nymo × Homey
+              - generic [ref=e51]: Smart home integratie
+              - generic [ref=e52]: €625,00
+          - generic [ref=e53]:
+            - strong [ref=e54]: Nymo
+            - text: — De standaard WaterAccu controller. Stuurt automatisch je boiler aan op basis van jouw zonne-opwek. Eenvoudig zelf te installeren via de P1-poort.
+        - separator [ref=e55]
+        - generic [ref=e56]:
+          - generic [ref=e57]:
+            - img [ref=e58]
+            - text: Optioneel toevoegen
+          - generic [ref=e60] [cursor=pointer]:
+            - generic [ref=e62]: Cables versie
+            - generic [ref=e63]: +€24,95
+          - generic [ref=e64] [cursor=pointer]:
+            - generic [ref=e66]: P1-splitter
+            - generic [ref=e67]: +€16,00
+          - generic [ref=e68]: De cables versie bevat alle benodigde kabels voor een eenvoudige installatie. De P1-splitter is handig als je meerdere apparaten tegelijk op de P1-poort wilt aansluiten.
+        - generic [ref=e69]:
+          - generic [ref=e70]:
+            - generic [ref=e71]: Nymo WaterAccu controller
+            - generic [ref=e72]: €625,00
+          - generic [ref=e74]: Totaal incl. 21% btw
+          - generic [ref=e75]: €649,00
+          - generic [ref=e76]: Gratis verzending · Binnen 3 werkdagen in huis
+          - button "Toevoegen aan winkelwagen" [ref=e77] [cursor=pointer]:
+            - img [ref=e78]
+            - text: Toevoegen aan winkelwagen
+          - generic [ref=e82]:
+            - generic [ref=e83]:
+              - img [ref=e84]
+              - text: Gratis verzending
+            - generic [ref=e86]:
+              - img [ref=e87]
+              - text: 2 jaar garantie
+            - generic [ref=e89]:
+              - img [ref=e90]
+              - text: 15 min installatie
+  - contentinfo [ref=e93]:
+    - generic [ref=e94]:
+      - generic [ref=e95]:
+        - img [ref=e96]:
+          - generic [ref=e99]: SOLYX ENERGY
+        - paragraph [ref=e100]: Slimme energieopslag voor huishoudens met zonnepanelen. Simpel, betaalbaar, direct resultaat. Made in Holland.
+      - generic [ref=e101]:
+        - generic [ref=e102]: Product
+        - list [ref=e103]:
+          - listitem [ref=e104]:
+            - link "WaterAccu" [ref=e105] [cursor=pointer]:
+              - /url: wateraccu.html
+          - listitem [ref=e106]:
+            - link "De Nymo" [ref=e107] [cursor=pointer]:
+              - /url: wateraccu.html
+          - listitem [ref=e108]:
+            - link "Nymo × Homey" [ref=e109] [cursor=pointer]:
+              - /url: wateraccu.html
+          - listitem [ref=e110]:
+            - link "Shop" [ref=e111] [cursor=pointer]:
+              - /url: shop.html
+      - generic [ref=e112]:
+        - generic [ref=e113]: Installatie
+        - list [ref=e114]:
+          - listitem [ref=e115]:
+            - link "Installatie" [ref=e116] [cursor=pointer]:
+              - /url: installatie.html
+          - listitem [ref=e117]:
+            - link "Klantverhalen" [ref=e118] [cursor=pointer]:
+              - /url: "#"
+          - listitem [ref=e119]:
+            - link "FAQ" [ref=e120] [cursor=pointer]:
+              - /url: faq.html
+          - listitem [ref=e121]:
+            - link "Contact" [ref=e122] [cursor=pointer]:
+              - /url: "#"
+      - generic [ref=e123]:
+        - generic [ref=e124]: Bedrijf
+        - list [ref=e125]:
+          - listitem [ref=e126]:
+            - link "Over Solyx" [ref=e127] [cursor=pointer]:
+              - /url: "#"
+          - listitem [ref=e128]:
+            - link "Besparen" [ref=e129] [cursor=pointer]:
+              - /url: besparen.html
+          - listitem [ref=e130]:
+            - link "Blog & Nieuws" [ref=e131] [cursor=pointer]:
+              - /url: "#"
+          - listitem [ref=e132]:
+            - link "Voor installateurs" [ref=e133] [cursor=pointer]:
+              - /url: "#"
+    - generic [ref=e134]:
+      - generic [ref=e135]: © 2025 Solyx Energy BV · Smitspol 15M · 3861 RS Nijkerk · KvK 85751391
+      - generic [ref=e136]:
+        - link "Voorwaarden" [ref=e137] [cursor=pointer]:
+          - /url: "#"
+        - link "Privacy" [ref=e138] [cursor=pointer]:
+          - /url: "#"

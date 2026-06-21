@@ -1,0 +1,405 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - link "Solyx Energy" [ref=e4] [cursor=pointer]:
+      - /url: "#"
+      - img "Solyx Energy" [ref=e5]
+    - link:
+      - /url: "#"
+    - list [ref=e6]:
+      - link [ref=e7] [cursor=pointer]:
+        - /url: "#"
+      - listitem [ref=e8]:
+        - link [ref=e9] [cursor=pointer]:
+          - /url: "#"
+        - link "Hoe werkt het" [ref=e10] [cursor=pointer]:
+          - /url: hoe-werkt-het.html
+      - listitem [ref=e11]:
+        - link "Besparen" [ref=e12] [cursor=pointer]:
+          - /url: besparen.html
+      - listitem [ref=e13]:
+        - link "Aan de slag" [ref=e14] [cursor=pointer]:
+          - /url: how-to-get-it.html
+      - listitem [ref=e15]:
+        - link "FAQs" [ref=e16] [cursor=pointer]:
+          - /url: faq.html
+      - listitem [ref=e17]:
+        - link "Shop" [ref=e18] [cursor=pointer]:
+          - /url: shop.html
+    - link "Bestel" [ref=e20] [cursor=pointer]:
+      - /url: how-to-get-it.html
+  - generic [ref=e21]:
+    - generic [ref=e22] [cursor=pointer]:
+      - generic: Probleem
+    - generic [ref=e24] [cursor=pointer]:
+      - generic: WaterAccu
+    - generic [ref=e26] [cursor=pointer]:
+      - generic: Besparing
+    - generic [ref=e28] [cursor=pointer]:
+      - generic: Reviews
+    - generic [ref=e30] [cursor=pointer]:
+      - generic: Vergelijking
+    - generic [ref=e32] [cursor=pointer]:
+      - generic: Bestel
+  - generic [ref=e34]:
+    - generic [ref=e36]:
+      - generic [ref=e37]:
+        - generic [ref=e38]: Welkom op onze vernieuwde website
+        - heading "Stop met het verspillen van jouw zonne-energie." [level=1] [ref=e40]:
+          - text: Stop met het verspillen van
+          - generic [ref=e41]: jouw zonne-energie.
+        - generic [ref=e42]:
+          - link "Bereken mijn besparing" [ref=e43] [cursor=pointer]:
+            - /url: "#"
+          - link "Bekijk waarom" [ref=e44] [cursor=pointer]:
+            - /url: "#"
+      - generic [ref=e45]: Scroll om verder te lezen
+    - generic [ref=e47]:
+      - generic [ref=e48]:
+        - generic [ref=e49]: 01 / 06
+        - generic [ref=e50]:
+          - text: Het
+          - generic [ref=e51]: Probleem.
+      - generic [ref=e54]:
+        - generic [ref=e55]:
+          - text: Het gemiddelde Nederlandse huishouden
+          - text: met zonnepanelen.
+        - generic [ref=e56]: Drie problemen. Eén oplossing.
+        - generic [ref=e57]:
+          - generic [ref=e58]:
+            - generic [ref=e59]: "1"
+            - generic [ref=e60]:
+              - text: Levert
+              - emphasis [ref=e61]: 70%
+              - text: van de zonne-energie terug aan het net.
+            - generic [ref=e62]: Het grootste deel van wat je panelen opwekken verlaat je huis — voor bijna niets terug.
+          - generic [ref=e63]:
+            - generic [ref=e64]: "2"
+            - generic [ref=e65]:
+              - text: Verwarmt water nog steeds
+              - emphasis [ref=e66]: op gas
+              - text: ", goed voor 25–35% van de energierekening."
+            - generic [ref=e67]: Terwijl de panelen overproduceren, blijft de ketel draaien op fossiele brandstof.
+          - generic [ref=e68]:
+            - generic [ref=e69]: "3"
+            - generic [ref=e70]:
+              - text: Verliest vanaf
+              - emphasis [ref=e71]: "2027"
+              - text: de
+              - emphasis [ref=e72]: saldering
+              - text: volledig.
+            - generic [ref=e73]: Als de salderingsregeling stopt, wordt elke teruggeleverde kWh een direct financieel verlies.
+    - generic [ref=e75]:
+      - generic [ref=e76]:
+        - generic [ref=e77]: 02 / 06
+        - generic [ref=e78]:
+          - text: Waarom een
+          - text: WaterAccu?
+      - generic [ref=e80]:
+        - generic [ref=e81]:
+          - generic [ref=e83] [cursor=pointer]:
+            - generic [ref=e84]:
+              - generic [ref=e85]:
+                - generic [ref=e86]: €338
+                - generic [ref=e87]: per jaar
+              - generic [ref=e89]: Besparing
+            - paragraph [ref=e92]: Gemiddelde jaarlijkse besparing op energie- én gasrekening. Daarna pure winst.
+          - generic [ref=e94] [cursor=pointer]:
+            - generic [ref=e95]:
+              - generic [ref=e96]:
+                - generic [ref=e97]: <3jr
+                - generic [ref=e98]: terugverdientijd
+              - generic [ref=e100]: Terugverdientijd
+            - paragraph [ref=e103]: Gemiddelde terugverdientijd op basis van huidige energie- en gastarieven.
+          - generic [ref=e105] [cursor=pointer]:
+            - generic [ref=e106]:
+              - generic [ref=e107]:
+                - generic [ref=e108]: 70%
+                - generic [ref=e109]: minder gas
+              - generic [ref=e111]: Gas
+            - paragraph [ref=e114]: Minder gasverbruik voor warm water — met name zichtbaar in de zomermaanden.
+          - generic [ref=e116] [cursor=pointer]:
+            - generic [ref=e117]:
+              - generic [ref=e118]:
+                - generic [ref=e119]: 30→70%
+                - generic [ref=e120]: eigen gebruik
+              - generic [ref=e122]: Eigen gebruik
+            - paragraph [ref=e125]: Eigen gebruik van zonne-energie stijgt van 30% naar 70% — onafhankelijk van saldering.
+        - link "Explainer video" [ref=e127] [cursor=pointer]:
+          - /url: "#"
+          - img [ref=e128]
+          - text: Explainer video
+    - generic [ref=e132]:
+      - generic [ref=e133]:
+        - generic [ref=e134]: 03 / 06
+        - generic [ref=e135]:
+          - text: Jouw
+          - generic [ref=e136]: Besparing.
+      - generic [ref=e138]:
+        - generic [ref=e139]:
+          - generic [ref=e140]: Bereken direct
+          - heading "Wat levert het jou op?" [level=2] [ref=e141]
+          - paragraph [ref=e142]: Stel jouw situatie in en zie direct je besparing.
+          - generic [ref=e143]:
+            - generic [ref=e144]:
+              - text: Zonnepanelen
+              - generic [ref=e145]: 8 panelen
+            - slider [ref=e146] [cursor=pointer]: "8"
+          - generic [ref=e147]:
+            - generic [ref=e148]:
+              - text: Personen
+              - generic [ref=e149]: 3 personen
+            - slider [ref=e150] [cursor=pointer]: "3"
+          - link "Hoe wordt dit berekend? →" [ref=e151] [cursor=pointer]:
+            - /url: "#"
+          - link "Ontvang de uitgebreide calculator op maat →" [ref=e152] [cursor=pointer]:
+            - /url: "#"
+        - generic [ref=e153]:
+          - generic [ref=e154]: Jaarlijkse besparing
+          - generic [ref=e155]: € 130
+          - generic [ref=e156]:
+            - text: per jaar op gas-
+            - text: én stroomkosten
+    - generic [ref=e158]:
+      - generic [ref=e159]:
+        - generic [ref=e160]: 06 / 06
+        - generic [ref=e161]:
+          - text: Wat zeggen
+          - text: klanten?
+        - generic [ref=e163]:
+          - generic [ref=e164]: "4.7"
+          - generic [ref=e165]:
+            - generic [ref=e166]: ★★★★★
+            - generic [ref=e167]: Google Reviews
+      - generic [ref=e169]:
+        - generic [ref=e171]:
+          - generic [ref=e172]:
+            - paragraph [ref=e173]: "\"Geweldig! Binnen 1 minuut na installatie begon de Nymo mijn boiler van zonne-energie te voorzien. Echt plug & play.\""
+            - generic [ref=e175]: Onno
+          - generic [ref=e176]:
+            - paragraph [ref=e177]: "\"Mijn eigen gebruik van zonne-energie is verdubbeld! Zie het verschil voor en na installatie.\""
+            - generic [ref=e179]: Serge
+          - generic [ref=e180]:
+            - paragraph [ref=e181]: "\"We badderen en douchen heerlijk op overgebleven zonne-energie! Nymo werkt uitstekend.\""
+            - generic [ref=e183]: Ben
+          - generic [ref=e184]:
+            - paragraph [ref=e185]: "\"Geweldig! Binnen 1 minuut na installatie begon de Nymo mijn boiler van zonne-energie te voorzien. Echt plug & play.\""
+            - generic [ref=e187]: Onno
+          - generic [ref=e188]:
+            - paragraph [ref=e189]: "\"Mijn eigen gebruik van zonne-energie is verdubbeld! Zie het verschil voor en na installatie.\""
+            - generic [ref=e191]: Serge
+          - generic [ref=e192]:
+            - paragraph [ref=e193]: "\"We badderen en douchen heerlijk op overgebleven zonne-energie! Nymo werkt uitstekend.\""
+            - generic [ref=e195]: Ben
+        - generic [ref=e197]:
+          - generic [ref=e198]:
+            - paragraph [ref=e199]: "\"Installatie was verrassend eenvoudig: plug & play. En zelfs in februari hebben we er al profijt van.\""
+            - generic [ref=e201]: Kok
+          - generic [ref=e202]:
+            - paragraph [ref=e203]: "\"Na enig zoeken uit bij de Nymo gekomen. Wat een fantastisch idee en goed betaalbaar. Echt aanrader!\""
+            - generic [ref=e205]: Klaas
+          - generic [ref=e206]:
+            - paragraph [ref=e207]: "\"Concept is top! Voorziet een 150L boiler van overtollig zonnestroom. Eenvoudig te installeren.\""
+            - generic [ref=e209]: Robert
+          - generic [ref=e210]:
+            - paragraph [ref=e211]: "\"Installatie was verrassend eenvoudig: plug & play. En zelfs in februari hebben we er al profijt van.\""
+            - generic [ref=e213]: Kok
+          - generic [ref=e214]:
+            - paragraph [ref=e215]: "\"Na enig zoeken uit bij de Nymo gekomen. Wat een fantastisch idee en goed betaalbaar. Echt aanrader!\""
+            - generic [ref=e217]: Klaas
+          - generic [ref=e218]:
+            - paragraph [ref=e219]: "\"Concept is top! Voorziet een 150L boiler van overtollig zonnestroom. Eenvoudig te installeren.\""
+            - generic [ref=e221]: Robert
+        - generic [ref=e223]:
+          - generic [ref=e224]:
+            - paragraph [ref=e225]: "\"Binnen 2 weken na installatie merkten we echt het verschil op onze energierekening. Super tevreden!\""
+            - generic [ref=e227]: Lisa
+          - generic [ref=e228]:
+            - paragraph [ref=e229]: "\"Eindelijk een slim en betaalbaar alternatief voor een thuisbatterij. De WaterAccu is precies wat ik zocht.\""
+            - generic [ref=e231]: Peter
+          - generic [ref=e232]:
+            - paragraph [ref=e233]: "\"Samen met mijn installateur in een ochtend klaar. Nu loopt alles volledig automatisch — geen omkijken naar.\""
+            - generic [ref=e235]: Anneke
+          - generic [ref=e236]:
+            - paragraph [ref=e237]: "\"Binnen 2 weken na installatie merkten we echt het verschil op onze energierekening. Super tevreden!\""
+            - generic [ref=e239]: Lisa
+          - generic [ref=e240]:
+            - paragraph [ref=e241]: "\"Eindelijk een slim en betaalbaar alternatief voor een thuisbatterij. De WaterAccu is precies wat ik zocht.\""
+            - generic [ref=e243]: Peter
+          - generic [ref=e244]:
+            - paragraph [ref=e245]: "\"Samen met mijn installateur in een ochtend klaar. Nu loopt alles volledig automatisch — geen omkijken naar.\""
+            - generic [ref=e247]: Anneke
+    - generic [ref=e249]:
+      - generic [ref=e250]:
+        - generic [ref=e251]: 06 / 06
+        - generic [ref=e252]:
+          - text: De
+          - generic [ref=e253]: Vergelijking.
+      - generic [ref=e256]:
+        - generic [ref=e257]:
+          - button "WATERACCU" [ref=e260] [cursor=pointer]:
+            - generic [ref=e261]: WATERACCU
+          - button "THUISBATTERIJ" [ref=e263] [cursor=pointer]:
+            - generic [ref=e264]: THUISBATTERIJ
+          - button "NIETS DOEN" [ref=e266] [cursor=pointer]:
+            - generic [ref=e267]: NIETS DOEN
+        - generic [ref=e268]:
+          - generic [ref=e269]: Kosten installatie
+          - generic [ref=e270]: € 500 – 900
+          - generic [ref=e271]: € 5.000 – 12.000
+          - generic [ref=e272]: € 0
+        - generic [ref=e273]:
+          - generic [ref=e274]: Terugverdientijd
+          - generic [ref=e275]: ~3 jaar
+          - generic [ref=e276]: 8–12 jaar
+          - generic [ref=e277]: Nooit
+        - generic [ref=e278]:
+          - generic [ref=e279]: Solar optimaal benut
+          - generic [ref=e280]: ✓ Ja, 70%+
+          - generic [ref=e281]: ✓ Ja
+          - generic [ref=e282]: ✗ Nee
+        - generic [ref=e283]:
+          - generic [ref=e284]: Warm water gratis
+          - generic [ref=e285]: ✓ Ja
+          - generic [ref=e286]: ✗ Nee
+          - generic [ref=e287]: ✗ Nee
+        - generic [ref=e288]:
+          - generic [ref=e289]: Eenvoudige installatie
+          - generic [ref=e290]: ✓ Plug & play
+          - generic [ref=e291]: Elektricien
+          - generic [ref=e292]: —
+        - generic [ref=e293]:
+          - generic [ref=e294]: Jaarlijkse besparing
+          - generic [ref=e295]: € 280 – 480
+          - generic [ref=e296]: € 400 – 700
+          - generic [ref=e297]: € 0
+    - generic [ref=e299]:
+      - generic [ref=e301]:
+        - text: Start
+        - text: vandaag.
+      - generic [ref=e303]:
+        - heading "Stop met elke dag 70% van jouw energie kwijtraken." [level=3] [ref=e304]
+        - paragraph [ref=e305]:
+          - text: De WaterAccu is de slimste, meest betaalbare manier om meer uit jouw zonnepanelen te halen.
+          - text: Plug & play, terugverdient in minder dan 3 jaar.
+        - generic [ref=e306]:
+          - generic [ref=e307] [cursor=pointer]:
+            - generic [ref=e308]: Nymo
+            - generic [ref=e309]: €649
+            - generic [ref=e310]: Voor wie al een geschikte boiler heeft, of er zelf een uitkiest. De Nymo is eenvoudig zelf te installeren.
+            - img [ref=e314]
+          - generic [ref=e322] [cursor=pointer]:
+            - generic [ref=e323]: Nymo + Boiler
+            - generic [ref=e324]: vanaf €1.189
+            - generic [ref=e325]: Voor wie nog geen boiler heeft. Complete WaterAccu inclusief geschikte boiler, zonder installatie.
+            - generic [ref=e326]:
+              - img [ref=e329]
+              - generic [ref=e337]: +
+              - img [ref=e340]
+          - generic [ref=e349] [cursor=pointer]:
+            - generic [ref=e350]: Complete Installatie
+            - generic [ref=e351]: vanaf €1.725
+            - generic [ref=e352]: Volledige ontzorging. Boiler + Nymo, inclusief installatie aan huis, door installatie-partner van Solyx Energy.
+            - generic [ref=e353]:
+              - img [ref=e356]
+              - generic [ref=e364]: +
+              - img [ref=e367]
+              - generic [ref=e376]: +
+              - img [ref=e379]
+        - generic [ref=e381]:
+          - text: Installateur?
+          - link "Klik hier." [ref=e382] [cursor=pointer]:
+            - /url: installateurs.html
+    - contentinfo [ref=e384]:
+      - generic [ref=e385]:
+        - generic [ref=e386]:
+          - img [ref=e387]:
+            - generic [ref=e390]: SOLYX ENERGY
+          - paragraph [ref=e391]: Slimme energieopslag voor huishoudens met zonnepanelen. Simpel, betaalbaar, direct resultaat.
+        - generic [ref=e392]:
+          - generic [ref=e393]: Product
+          - list [ref=e394]:
+            - listitem [ref=e395]:
+              - link "WaterAccu" [ref=e396] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e397]:
+              - link "Nymo controller" [ref=e398] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e399]:
+              - link "Besparing berekenen" [ref=e400] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e401]:
+              - link "Shop" [ref=e402] [cursor=pointer]:
+                - /url: "#"
+        - generic [ref=e403]:
+          - generic [ref=e404]: Installatie
+          - list [ref=e405]:
+            - listitem [ref=e406]:
+              - link "Hoe werkt het" [ref=e407] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e408]:
+              - link "Klantverhalen" [ref=e409] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e410]:
+              - link "FAQ" [ref=e411] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e412]:
+              - link "Contact" [ref=e413] [cursor=pointer]:
+                - /url: "#"
+        - generic [ref=e414]:
+          - generic [ref=e415]: Bedrijf
+          - list [ref=e416]:
+            - listitem [ref=e417]:
+              - link "Over Solyx" [ref=e418] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e419]:
+              - link "Werken bij" [ref=e420] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e421]:
+              - link "Blog & Nieuws" [ref=e422] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e423]:
+              - link "Partners" [ref=e424] [cursor=pointer]:
+                - /url: "#"
+      - generic [ref=e425]:
+        - generic [ref=e426]: © 2025 Solyx Energy BV · Alle rechten voorbehouden
+        - generic [ref=e427]:
+          - link "Privacy" [ref=e428] [cursor=pointer]:
+            - /url: "#"
+          - link "Voorwaarden" [ref=e429] [cursor=pointer]:
+            - /url: "#"
+  - generic [ref=e430]:
+    - generic [ref=e431]:
+      - generic [ref=e432]: Jouw Zonne-energie
+      - button [ref=e433] [cursor=pointer]:
+        - img [ref=e434]
+    - generic [ref=e437]: Gemiddeld gaat 70% van jouw opwek verloren
+    - generic [ref=e438]:
+      - paragraph [ref=e439]:
+        - text: Verbruik vindt vooral plaats
+        - strong [ref=e440]: "'s ochtends en 's avonds"
+        - text: . Overdag, als de panelen op volle kracht draaien, is er weinig verbruik thuis. Die onbenutte energie gaat terug het net op — voor bijna niets. De WaterAccu vangt dat overschot op en slaat het op als warm water.
+      - img "Zonder vs Met WaterAccu — dagcurve zonne-energie" [ref=e442]
+  - generic [ref=e443]:
+    - generic [ref=e444]:
+      - generic [ref=e445]: Hoe berekenen we dit?
+      - button [ref=e446] [cursor=pointer]:
+        - img [ref=e447]
+    - paragraph [ref=e450]: "De berekening is een schatting op basis van drie factoren: jouw opwekvermogen, huishoudgrootte en de gemiddelde Nederlandse energieprijzen."
+    - generic [ref=e451]:
+      - generic [ref=e452]: Stap 1
+      - generic [ref=e453]: Omrekenen naar kWp
+      - generic [ref=e454]: Elk zonnepaneel levert gemiddeld 400 Wp. We rekenen jouw aantal panelen om naar het totale vermogen in kilowatt-peak (kWp).
+      - generic [ref=e455]: kWp = aantal panelen × 0,4
+    - generic [ref=e456]:
+      - generic [ref=e457]: Stap 2
+      - generic [ref=e458]: Schatting van het overschot
+      - generic [ref=e459]: Op basis van kWp en huishoudgrootte schatten we hoeveel zonne-energie jaarlijks onbenut teruggeleverd wordt. Meer panelen = meer overschot; meer personen = minder overschot.
+      - generic [ref=e460]: Opgeslagen kWh ≈ kWp × 50 − personen × 10
+    - generic [ref=e461]:
+      - generic [ref=e462]: Stap 3
+      - generic [ref=e463]: Besparing berekenen
+      - generic [ref=e464]: De WaterAccu zet dat overschot om in warm water. De besparing bestaat uit vermeden gaskosten plus de waarde van de zelf gebruikte stroom — gebaseerd op actuele tarieven.
+      - generic [ref=e465]: Besparing ≈ opgeslagen kWh × €0,28 (gas + stroom gecombineerd)
+    - paragraph [ref=e466]: Dit is een indicatieve schatting. Werkelijke besparing hangt af van jouw energietarief, verbruikspatroon en seizoen. Gemiddelde besparing op basis van Nederlandse huishoudens in 2024.
+  - button [ref=e470] [cursor=pointer]:
+    - img [ref=e471]

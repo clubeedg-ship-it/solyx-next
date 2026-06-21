@@ -1,0 +1,1323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <link rel="icon" type="image/png" sizes="64x64" href="midia/favicon.png">
+  <link rel="apple-touch-icon" href="midia/apple-touch-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aan de slag — NYMO</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+<link href="https://fonts.cdnfonts.com/css/alliance-no-2" rel="stylesheet">
+<style>
+:root{
+  --green:#35A847;--green-deep:#1E7A30;--green-light:#EBF8ED;
+  --orange:#F4831F;--ink:#3D3D3D;--ink-mid:#5A5A5A;--ink-muted:#888888;
+  --white:#FFFFFF;--off-white:#F7F9F7;--border:rgba(60,60,60,.1);
+  --font-head:'Inter',sans-serif;
+  --font-body:'Alliance No.2','DM Sans',Georgia,sans-serif;
+  --nav-h:80px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;overflow:hidden;}
+
+#scroll-container{height:100%;overflow-y:scroll;scroll-behavior:smooth;scrollbar-width:none;-ms-overflow-style:none;}
+#scroll-container::-webkit-scrollbar{display:none;}
+
+/* BLOBS */
+#gc{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+.blob{position:absolute;border-radius:50%;filter:blur(90px);mix-blend-mode:multiply;}
+.blob-1{width:900px;height:900px;background:radial-gradient(circle,rgba(57,171,72,.38) 0%,rgba(57,171,72,.12) 45%,transparent 70%);top:-200px;left:-200px;animation:bl1 14s ease-in-out infinite;}
+@keyframes bl1{0%{transform:translate(0,0)}25%{transform:translate(55vw,80px)}50%{transform:translate(60vw,-60px)}75%{transform:translate(25vw,100px)}100%{transform:translate(0,0)}}
+.blob-2{width:1000px;height:1000px;background:radial-gradient(circle,rgba(57,171,72,.28) 0%,rgba(30,122,48,.10) 45%,transparent 70%);bottom:-250px;right:-250px;animation:bl2 18s ease-in-out infinite;animation-delay:-7s;}
+@keyframes bl2{0%{transform:translate(0,0)}33%{transform:translate(-60vw,-80px)}66%{transform:translate(-30vw,60px)}100%{transform:translate(0,0)}}
+.blob-3{width:800px;height:800px;background:radial-gradient(circle,rgba(57,171,72,.20) 0%,rgba(57,171,72,.07) 50%,transparent 70%);top:30vh;left:20vw;animation:bl3 22s ease-in-out infinite;animation-delay:-4s;}
+@keyframes bl3{0%{transform:translate(0,0)}25%{transform:translate(40vw,-15vh)}50%{transform:translate(20vw,20vh)}75%{transform:translate(-10vw,10vh)}100%{transform:translate(0,0)}}
+
+#scroll-progress{position:fixed;top:0;left:0;height:3px;background:var(--green);z-index:700;width:0%;transition:width .25s ease;}
+
+/* NAV */
+#installer-bar{position:fixed;top:0;left:0;right:0;z-index:601;display:none;align-items:center;padding:6px 48px;pointer-events:none;}
+#installer-bar a{pointer-events:all;font-family:var(--font-head);font-size:12px;font-weight:500;color:var(--ink-mid);text-decoration:none;transition:color .2s;}
+#installer-bar a:hover{color:var(--ink);}
+nav{position:fixed;top:0;left:0;right:0;z-index:600;display:flex;align-items:center;justify-content:space-between;padding:16px 48px;background:linear-gradient(180deg,rgba(255,255,255,.7),rgba(255,255,255,.5));backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border-bottom:1px solid rgba(255,255,255,.55);box-shadow:0 8px 30px rgba(28,36,34,.1),inset 0 1px 0 rgba(255,255,255,.7);transition:box-shadow .4s;}
+nav.scrolled{background:linear-gradient(180deg,rgba(255,255,255,.7),rgba(255,255,255,.5));backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border-bottom:1px solid rgba(255,255,255,.55);box-shadow:0 8px 30px rgba(28,36,34,.1),inset 0 1px 0 rgba(255,255,255,.7);}
+.nav-logo{display:flex;align-items:center;text-decoration:none;}
+nav.scrolled{background:linear-gradient(180deg,rgba(255,255,255,.7),rgba(255,255,255,.5));backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border-bottom:1px solid rgba(255,255,255,.55);box-shadow:0 8px 30px rgba(28,36,34,.1),inset 0 1px 0 rgba(255,255,255,.7);}
+.nav-logo{font-family:var(--font-head);font-size:20px;font-weight:900;letter-spacing:-.02em;color:var(--ink);text-decoration:none;}
+.nav-logo span{color:var(--green);}
+.nav-links{display:flex;gap:32px;list-style:none;}
+.nav-links a{font-family:var(--font-head);font-size:13px;font-weight:500;color:var(--ink-mid);text-decoration:none;transition:color .2s;}
+.nav-links a:hover,.nav-links a.active{color:var(--green);font-weight:700;}
+.btn-orange{background:var(--orange);color:#fff;font-family:var(--font-head);font-size:13px;font-weight:700;padding:10px 22px;border-radius:999px;border:none;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;transition:background .2s,transform .2s;}
+.btn-orange:hover{background:#d96f10;transform:translateY(-1px);}
+
+/* SIDE DOTS */
+#sn{position:fixed;right:28px;top:50%;transform:translateY(-50%);z-index:601;display:flex;flex-direction:column;gap:14px;}
+.snw{display:flex;align-items:center;gap:10px;justify-content:flex-end;cursor:pointer;}
+.ndl{font-family:var(--font-head);font-size:11px;font-weight:600;letter-spacing:.04em;color:var(--ink-muted);opacity:0;transform:translateX(6px);transition:opacity .3s,transform .3s;white-space:nowrap;pointer-events:none;}
+.snw:hover .ndl{opacity:1;transform:translateX(0);}
+.ndot{width:8px;height:8px;border-radius:50%;background:rgba(28,36,34,.2);border:1.5px solid rgba(28,36,34,.3);transition:all .3s;flex-shrink:0;}
+.snw:hover .ndot{background:rgba(53,168,71,.4);border-color:rgba(53,168,71,.6);}
+.snw.active .ndot{background:var(--green);border-color:var(--green);transform:scale(1.4);}
+.snw.done .ndot{background:rgba(53,168,71,.4);border-color:var(--green);}
+
+/* HERO */
+#hero{height:100vh;position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 48px;}
+#hero::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 55%,rgba(255,255,255,.5) 100%);pointer-events:none;z-index:0;}
+.hero-inner{position:relative;z-index:1;max-width:720px;}
+.hero-h1{font-family:var(--font-head);font-size:clamp(48px,8vw,88px);font-weight:900;letter-spacing:-.04em;line-height:.95;margin-bottom:20px;color:var(--ink);animation:fadeUp .9s ease .1s both;}
+.hero-h1 .hl{color:var(--green);}
+.hero-sub{font-family:var(--font-body);font-size:clamp(16px,1.8vw,19px);line-height:1.7;color:var(--ink-mid);max-width:460px;margin:0 auto 40px;animation:fadeUp .9s ease .2s both;}
+.hero-cta{animation:fadeUp .9s ease .32s both;display:flex;flex-direction:column;align-items:center;gap:10px;}
+.start-btn{display:inline-flex;align-items:center;gap:10px;font-family:var(--font-head);font-size:15px;font-weight:700;color:#fff;background:var(--green);padding:15px 32px;border-radius:999px;border:none;cursor:pointer;transition:background .2s,transform .2s;}
+.start-btn:hover{background:var(--green-deep);transform:translateY(-2px);}
+.hero-hint{font-family:var(--font-head);font-size:11px;letter-spacing:.08em;color:var(--ink-muted);}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── QUESTION SECTION ──
+   Left col: sticky question header
+   Right col: two answer panels side by side, ALWAYS both visible in grid
+*/
+.q-section{
+  height:100vh;
+  display:grid;
+  grid-template-columns:300px 1fr;
+  position:relative;z-index:1;
+  border-top:1px solid rgba(53,168,71,.08);
+}
+.q-section.locked{display:none;}
+.q-section.unlocked{display:grid;animation:secReveal .5s ease both;}
+@keyframes secReveal{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+/* LEFT sticky header */
+.q-left{
+  position:sticky;top:0;height:100vh;
+  display:flex;flex-direction:column;justify-content:flex-start;
+  padding:calc(var(--nav-h) + 56px) 40px 80px 56px;
+  z-index:2;border-right:1px solid rgba(53,168,71,.1);
+}
+.q-num{font-family:var(--font-head);font-size:11px;letter-spacing:4px;color:var(--ink-muted);text-transform:uppercase;margin-bottom:20px;}
+.q-lbl{font-family:var(--font-head);font-size:clamp(28px,3vw,40px);font-weight:900;letter-spacing:-.03em;line-height:1.05;color:var(--ink);}
+.q-lbl .hl{color:var(--green);}
+.q-line{width:40px;height:3px;background:var(--green);margin-top:20px;}
+.q-sub-text{font-family:var(--font-body);font-size:14px;color:var(--ink-muted);line-height:1.7;margin-top:20px;max-width:220px;}
+
+/* RIGHT — always a fixed 50/50 grid, never collapses */
+.q-right{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  height:100vh;
+}
+
+/* ANSWER PANEL — base state (unanswered) */
+.ans-panel{
+  display:flex;flex-direction:column;justify-content:center;align-items:flex-start;
+  padding:64px 52px;
+  cursor:pointer;
+  border-left:1px solid rgba(53,168,71,.08);
+  position:relative;
+  overflow:hidden;
+}
+.ans-panel:first-child{border-left:none;}
+
+/* green slide-up on hover */
+.ans-panel::before{
+  content:'';position:absolute;inset:0;
+  background:var(--green);
+  transform:translateY(100%);
+  transition:transform .45s cubic-bezier(.22,1,.36,1);
+  z-index:0;
+}
+.ans-panel:hover::before{transform:translateY(0);}
+
+/* all text/content sits above the ::before overlay */
+.ans-inner{position:relative;z-index:1;}
+
+.ans-label{font-family:var(--font-head);font-size:clamp(22px,2.8vw,34px);font-weight:900;letter-spacing:-.03em;line-height:1.1;color:var(--ink);margin-bottom:12px;transition:color .3s;}
+.ans-panel:hover .ans-label{color:#fff;}
+
+.ans-sub{font-family:var(--font-body);font-size:15px;color:var(--ink-mid);line-height:1.65;max-width:280px;transition:color .3s;}
+.ans-panel:hover .ans-sub{color:rgba(255,255,255,.8);}
+
+.ans-arrow{margin-top:32px;width:44px;height:44px;border-radius:50%;background:rgba(53,168,71,.12);display:flex;align-items:center;justify-content:center;transition:background .3s,transform .3s;}
+.ans-panel:hover .ans-arrow{background:rgba(255,255,255,.2);transform:translateX(5px);}
+
+.ans-check{position:absolute;top:24px;right:24px;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.25);display:none;align-items:center;justify-content:center;z-index:1;}
+
+/* ── SELECTED: dark green, locked ── */
+.ans-panel.selected::before{transform:translateY(0);background:var(--green-deep);transition:none;}
+.ans-panel.selected{pointer-events:none;}
+.ans-panel.selected .ans-label{color:#fff;}
+.ans-panel.selected .ans-sub{color:rgba(255,255,255,.75);}
+.ans-panel.selected .ans-arrow{background:rgba(255,255,255,.2);}
+.ans-panel.selected .ans-check{display:flex;}
+
+/* ── REJECTED: invisible, but still occupies its 50% grid cell ──
+   On section hover it reappears as a lighter ghost so user can click to change */
+.ans-panel.rejected{
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .4s ease;
+}
+.q-section:hover .ans-panel.rejected{
+  opacity:1;
+  pointer-events:auto;
+}
+.q-section:hover .ans-panel.rejected::before{
+  transform:translateY(0);
+  background:rgba(53,168,71,.4);
+  transition:none;
+}
+.q-section:hover .ans-panel.rejected:hover::before{
+  background:var(--green);
+  transition:background .3s;
+}
+.q-section:hover .ans-panel.rejected .ans-label{color:rgba(255,255,255,.8);}
+.q-section:hover .ans-panel.rejected:hover .ans-label{color:#fff;}
+.q-section:hover .ans-panel.rejected .ans-sub{color:rgba(255,255,255,.55);}
+.q-section:hover .ans-panel.rejected:hover .ans-sub{color:rgba(255,255,255,.8);}
+/* make sure selected panel is not affected */
+.q-section:hover .ans-panel.selected::before{background:var(--green-deep);}
+
+/* RESULT SECTION */
+.result-section{min-height:100vh;display:grid;grid-template-columns:300px 1fr;position:relative;z-index:1;}
+.result-section.locked{display:none;}
+.result-section.unlocked{display:grid;animation:secReveal .5s ease both;}
+
+.res-left{position:sticky;top:0;height:100vh;display:flex;flex-direction:column;justify-content:flex-start;padding:calc(var(--nav-h) + 56px) 40px 80px 56px;z-index:2;}
+.res-num{font-family:var(--font-head);font-size:11px;letter-spacing:4px;color:var(--ink-muted);text-transform:uppercase;margin-bottom:20px;}
+.res-lbl{font-family:var(--font-head);font-size:clamp(28px,3vw,40px);font-weight:900;letter-spacing:-.03em;line-height:1.05;color:var(--ink);}
+.res-lbl .hl{color:var(--green);}
+.res-line{width:40px;height:3px;background:var(--green);margin-top:20px;}
+.restart-btn{display:inline-flex;align-items:center;gap:7px;font-family:var(--font-head);font-size:12px;font-weight:600;color:var(--ink-muted);background:none;border:none;cursor:pointer;padding:0;margin-top:28px;transition:color .2s;}
+.restart-btn:hover{color:var(--ink);}
+
+.res-right{padding:0;display:block;}
+.res-badge{display:inline-flex;align-items:center;gap:7px;font-family:var(--font-head);font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;padding:5px 14px;border-radius:999px;margin-bottom:24px;width:fit-content;}
+.badge-green{background:var(--green-light);color:var(--green-deep);border:1px solid rgba(53,168,71,.3);}
+.badge-orange{background:rgba(244,131,31,.1);color:#b85e00;border:1px solid rgba(244,131,31,.3);}
+.res-title{font-family:var(--font-head);font-size:clamp(32px,4vw,56px);font-weight:900;letter-spacing:-.04em;line-height:1;color:var(--ink);margin-bottom:18px;}
+.res-desc{font-family:var(--font-body);font-size:16px;color:var(--ink-mid);line-height:1.8;margin-bottom:32px;max-width:480px;}
+.res-price{display:inline-flex;align-items:baseline;gap:6px;background:var(--green-light);border:1px solid rgba(53,168,71,.2);border-radius:14px;padding:14px 22px;margin-bottom:32px;}
+.res-price-amt{font-family:var(--font-head);font-size:38px;font-weight:900;letter-spacing:-.03em;color:var(--green);}
+.res-price-lbl{font-family:var(--font-body);font-size:14px;color:var(--ink-mid);}
+.cta-col{display:flex;flex-direction:column;gap:12px;max-width:300px;}
+.btn-primary{display:flex;align-items:center;justify-content:center;gap:8px;background:var(--green);color:#fff;font-family:var(--font-head);font-size:14px;font-weight:700;padding:14px 28px;border-radius:999px;border:none;cursor:pointer;text-decoration:none;transition:background .2s,transform .2s;}
+.btn-primary:hover{background:var(--green-deep);transform:translateY(-1px);}
+.btn-secondary{display:flex;align-items:center;justify-content:center;gap:8px;background:transparent;color:var(--green);border:1.5px solid rgba(53,168,71,.35);font-family:var(--font-head);font-size:14px;font-weight:600;padding:13px 28px;border-radius:999px;cursor:pointer;text-decoration:none;transition:all .2s;}
+.btn-secondary:hover{background:var(--green-light);border-color:var(--green);}
+
+.guides-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:28px;max-width:520px;}
+.guide-card{background:rgba(255,255,255,.85);border:1.5px solid rgba(53,168,71,.15);border-radius:16px;padding:22px;text-decoration:none;display:block;transition:all .22s;}
+.guide-card:hover{border-color:var(--green);background:white;transform:translateY(-2px);box-shadow:0 8px 24px rgba(53,168,71,.12);}
+.g-icon{font-size:24px;margin-bottom:10px;display:block;}
+.g-title{font-family:var(--font-head);font-size:14px;font-weight:700;color:var(--ink);margin-bottom:4px;}
+.g-sub{font-family:var(--font-body);font-size:12px;color:var(--ink-muted);line-height:1.5;}
+.inline-div{display:flex;align-items:center;gap:12px;margin:24px 0;}
+.inline-div::before,.inline-div::after{content:'';flex:1;height:1px;background:rgba(53,168,71,.15);}
+.inline-div span{font-family:var(--font-head);font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(53,168,71,.55);white-space:nowrap;}
+.nymo-opts{display:flex;flex-direction:column;gap:11px;max-width:520px;}
+.nymo-opt{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:white;border:1.5px solid rgba(53,168,71,.15);border-radius:12px;cursor:pointer;text-decoration:none;transition:all .2s;}
+.nymo-opt:hover{border-color:var(--green);transform:translateY(-1px);box-shadow:0 4px 16px rgba(53,168,71,.1);}
+.nymo-opt-main{font-family:var(--font-head);font-size:14px;font-weight:700;color:var(--ink);display:block;}
+.nymo-opt-sub{font-family:var(--font-body);font-size:12px;color:var(--ink-muted);}
+.nymo-arr{width:28px;height:28px;border-radius:50%;background:rgba(53,168,71,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .2s;}
+.nymo-opt:hover .nymo-arr{background:var(--green);}
+
+@media(max-width:900px){
+  nav{padding:0 20px;} .nav-links,.btn-orange,#sn{display:none;}
+  .q-section,.result-section{grid-template-columns:1fr;height:auto;min-height:100vh;}
+  .q-left,.res-left{position:relative;height:auto;padding:calc(var(--nav-h) + 32px) 24px 28px;}
+  .q-right{height:60vh;}
+  .ans-panel{padding:32px 24px;}
+  .res-right{padding:32px 24px 64px;}
+  #hero{padding:0 24px;}
+}
+
+/* ── HOVER IMAGE REVEAL ── */
+.ans-img{
+  position:absolute;
+  inset:0;
+  z-index:2;
+  pointer-events:none;
+  overflow:hidden;
+}
+.ans-img img{
+  width:100%;height:100%;
+  object-fit:cover;
+  object-position:center;
+  opacity:0;
+  transform:translateX(60px) scale(1.04);
+  transition:opacity .5s cubic-bezier(.22,1,.36,1), transform .5s cubic-bezier(.22,1,.36,1);
+}
+.ans-panel:hover .ans-img img{
+  opacity:0.18;
+  transform:translateX(0) scale(1);
+}
+/* for selected panel keep image subtly visible */
+.ans-panel.selected .ans-img img{
+  opacity:0.12;
+  transform:translateX(0) scale(1);
+}
+
+/* ── FLOATING RESULT IMAGE ── */
+.res-float-img{
+  display:flex;align-items:center;justify-content:center;
+  padding:40px;
+}
+.res-float-img img{
+  max-width:380px;width:100%;
+  filter:drop-shadow(0 32px 48px rgba(0,0,0,.18));
+  animation:float 4s ease-in-out infinite;
+}
+@keyframes float{
+  0%,100%{transform:translateY(0px);}
+  50%{transform:translateY(-18px);}
+}
+
+.res-right-inner{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:0;min-height:100vh;background:transparent;}
+.res-right-text{padding:calc(var(--nav-h) + 56px) 48px 80px 72px;display:flex;flex-direction:column;justify-content:center;}
+.res-right-image{display:flex;align-items:center;justify-content:center;padding:40px;min-height:100vh;}
+.res-right-image img{max-width:340px;width:100%;filter:drop-shadow(0 32px 48px rgba(0,0,0,.15));animation:float 4s ease-in-out infinite;}
+
+/* ── COMPATIBILITY DRAWER ── */
+#compat-drawer{
+  position:fixed;top:0;right:0;height:100%;width:380px;max-width:95vw;
+  background:#fff;z-index:900;
+  box-shadow:-8px 0 40px rgba(0,0,0,.12);
+  transform:translateX(100%);
+  transition:transform .45s cubic-bezier(.22,1,.36,1);
+  display:flex;flex-direction:column;
+  overflow:hidden;
+}
+#compat-drawer.open{transform:translateX(0);}
+#drawer-overlay{
+  position:fixed;inset:0;z-index:899;
+  background:rgba(0,0,0,.25);
+  opacity:0;pointer-events:none;
+  transition:opacity .4s ease;
+}
+#drawer-overlay.open{opacity:1;pointer-events:auto;}
+
+.drawer-header{
+  padding:28px 24px 20px;
+  border-bottom:1px solid rgba(53,168,71,.12);
+  flex-shrink:0;
+}
+.drawer-title{
+  font-family:var(--font-head);font-size:13px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--ink);
+  margin-bottom:4px;
+}
+.drawer-close{
+  position:absolute;top:24px;right:20px;
+  width:32px;height:32px;border-radius:50%;
+  background:rgba(61,61,61,.07);border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .2s;
+}
+.drawer-close:hover{background:rgba(61,61,61,.14);}
+
+.drawer-banner{
+  background:var(--green-light);
+  border-top:2px solid var(--green);
+  padding:10px 24px;
+  font-family:var(--font-head);font-size:11px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--green-deep);
+  flex-shrink:0;
+}
+
+.drawer-body{
+  flex:1;overflow-y:auto;padding:24px;
+}
+.drawer-intro-title{
+  font-family:var(--font-head);font-size:26px;font-weight:900;
+  letter-spacing:-.02em;color:var(--ink);margin-bottom:4px;
+}
+.drawer-intro-sub{
+  font-family:var(--font-body);font-size:13px;color:var(--ink-muted);
+  margin-bottom:16px;
+}
+.drawer-intro-desc{
+  font-family:var(--font-body);font-size:14px;color:var(--ink-mid);
+  line-height:1.75;margin-bottom:28px;
+}
+.drawer-specs-label{
+  font-family:var(--font-head);font-size:10px;font-weight:700;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--ink-muted);
+  margin-bottom:12px;
+}
+.drawer-spec-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 0;border-bottom:1px solid rgba(53,168,71,.1);
+}
+.drawer-spec-row:last-child{border-bottom:none;}
+.drawer-spec-left{}
+.drawer-spec-name{
+  font-family:var(--font-head);font-size:13px;font-weight:700;color:var(--ink);
+  margin-bottom:2px;
+}
+.drawer-spec-val{
+  font-family:var(--font-body);font-size:13px;color:var(--ink-mid);
+}
+.drawer-spec-icon{
+  width:36px;height:36px;border-radius:10px;
+  background:var(--green-light);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.drawer-spec-icon svg{display:block;}
+
+.drawer-footer{
+  padding:16px 24px;border-top:1px solid var(--border);
+  display:flex;flex-direction:column;gap:10px;flex-shrink:0;
+}
+
+/* ── CHECK COMPAT LINK inside answer panel ── */
+.compat-link{
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:var(--font-head);font-size:12px;font-weight:600;
+  color:rgba(255,255,255,.75);
+  margin-top:16px;cursor:pointer;
+  background:none;border:none;padding:0;
+  text-decoration:underline;text-underline-offset:3px;
+  transition:color .2s;
+  position:relative;z-index:3;
+}
+.ans-panel:not(:hover):not(.selected) .compat-link{color:var(--green-deep);}
+.compat-link:hover{color:#fff;}
+
+/* ── HERO OPTIONS ── */
+.hero-inner{max-width:1100px;width:100%;}
+.hero-h1{margin-bottom:48px;}
+.hero-options{
+  display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;
+  width:100%;
+}
+.hero-opt{
+  background:rgba(255,255,255,.82);
+  backdrop-filter:blur(20px);
+  padding:40px 36px 36px;
+  cursor:pointer;
+  display:flex;flex-direction:column;
+  transition:background .3s ease;
+  position:relative;overflow:hidden;
+  border-radius:20px;
+  box-shadow:0 12px 40px rgba(0,0,0,.08);
+}
+.hero-opt::before{
+  content:'';position:absolute;inset:0;
+  background:var(--green);
+  transform:translateY(100%);
+  transition:transform .45s cubic-bezier(.22,1,.36,1);
+  z-index:0;
+}
+.hero-opt:hover::before{transform:translateY(0);}
+.hero-opt-mid{background:rgba(255,255,255,.92);}
+.hero-opt>*{position:relative;z-index:1;}
+.hero-opt-tag{
+  font-family:var(--font-head);font-size:10px;font-weight:700;
+  letter-spacing:.14em;text-transform:uppercase;
+  color:var(--green);margin-bottom:16px;
+  transition:color .3s;
+}
+.hero-opt:hover .hero-opt-tag{color:rgba(255,255,255,.7);}
+.hero-opt-title{
+  font-family:var(--font-head);font-size:clamp(28px,3.1vw,40px);
+  font-weight:900;letter-spacing:-.03em;line-height:1.05;
+  color:var(--ink);margin-bottom:12px;
+  min-height:2.1em;
+  transition:color .3s;
+}
+.hero-opt:hover .hero-opt-title{color:#fff;}
+.hero-opt-price{
+  font-family:var(--font-head);font-size:clamp(24px,2.4vw,32px);
+  font-weight:900;letter-spacing:-.03em;
+  color:var(--green);margin-bottom:16px;
+  transition:color .3s;
+}
+.hero-opt-price .vanaf{
+  font-family:var(--font-head);font-size:12px;font-weight:600;
+  letter-spacing:.02em;opacity:.7;margin-right:5px;
+}
+.hero-opt:hover .hero-opt-price{color:rgba(255,255,255,.9);}
+.hero-opt-sub{
+  font-family:var(--font-body);font-size:14px;
+  color:var(--ink-muted);line-height:1.6;flex:1;
+  transition:color .3s;
+}
+.hero-opt:hover .hero-opt-sub{color:rgba(255,255,255,.75);}
+.hero-opt-arrow{
+  margin-top:28px;
+  font-size:20px;color:var(--green);
+  transition:color .3s,transform .3s;
+  display:inline-block;
+}
+.hero-opt:hover .hero-opt-arrow{color:#fff;transform:translateX(5px);}
+
+/* ── FOOTER ── */
+footer{background:#080c0a;color:#fff;padding:64px 64px 32px;}
+.fg{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:48px;}
+.fbt{font-family:var(--font-body);font-size:13px;color:rgba(255,255,255,.35);line-height:1.7;margin-top:16px;max-width:280px;}
+.fct{font-family:var(--font-head);font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:16px;}
+.flinks{list-style:none;display:flex;flex-direction:column;gap:10px;}
+.flinks a{font-family:var(--font-head);font-size:13px;color:rgba(255,255,255,.55);text-decoration:none;transition:color .2s;}
+.flinks a:hover{color:#fff;}
+.fbottom{border-top:1px solid rgba(255,255,255,.07);padding-top:24px;display:flex;align-items:center;justify-content:space-between;}
+.fcopy{font-family:var(--font-head);font-size:12px;color:rgba(255,255,255,.2);}
+
+.hero-nudge{
+  display:inline-flex;align-items:center;gap:10px;
+  margin-top:28px;cursor:pointer;
+  font-family:var(--font-head);font-size:13px;font-weight:600;
+  color:var(--ink-muted);
+  padding:10px 20px;border-radius:999px;
+  border:1px solid var(--border);
+  background:rgba(255,255,255,.6);
+  backdrop-filter:blur(10px);
+  transition:all .2s;
+}
+.hero-nudge:hover{color:var(--green);border-color:rgba(53,168,71,.3);background:rgba(255,255,255,.9);}
+.hero-nudge svg{transition:transform .3s;}
+.hero-nudge:hover svg{transform:translateY(3px);stroke:var(--green);}
+
+/* ── HERO OPTION ICONS ── */
+.hero-opt-icons{
+  display:flex;align-items:center;gap:8px;
+  margin-top:auto;padding-top:24px;
+}
+.hoi-item{display:flex;align-items:center;justify-content:center;}
+.hoi-icon{
+  width:44px;height:44px;border-radius:12px;
+  background:rgba(53,168,71,.1);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--green);
+  transition:background .3s,color .3s;
+  padding:4px;
+}
+.ans-panel:hover .hoi-icon,
+.hero-opt:hover .hoi-icon{background:rgba(255,255,255,.2);color:#fff;}
+.hero-opt:hover .hoi-icon img{filter:brightness(0) invert(1) !important;}
+.hero-opt:hover .hoi-icon img[alt="installation"]{filter:brightness(0) invert(1) !important;}
+.hoi-label{
+  font-family:var(--font-head);font-size:10px;font-weight:600;
+  letter-spacing:.04em;color:var(--ink-muted);
+  transition:color .3s;
+}
+.hero-opt:hover .hoi-label{color:rgba(255,255,255,.7);}
+.hoi-plus{
+  font-family:var(--font-head);font-size:16px;font-weight:700;
+  color:var(--ink-muted);
+  display:flex;align-items:center;
+  transition:color .3s;
+}
+.hero-opt:hover .hoi-plus{color:rgba(255,255,255,.6);}
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style id="concept-style">
+  /* CONCEPT — titel omhoog + 1 regel, grotere blokken (makkelijk te verwijderen) */
+  #hero{justify-content:flex-start;padding-top:clamp(96px,13vh,190px);}
+  .hero-h1{white-space:nowrap;font-size:clamp(40px,6.4vw,76px);margin-bottom:clamp(96px,13vh,190px);}
+  .hero-nudge{margin-top:clamp(48px,9vh,140px);}
+  .hero-installer{text-align:center;margin-top:20px;font-family:var(--font-body);font-size:14px;color:var(--ink-muted);}
+  .hero-installer a{color:var(--green);font-weight:600;text-decoration:underline;}
+  .hero-inner{max-width:1180px;}
+  .hero-options{gap:22px;}
+  .hero-opt{padding:54px 46px 32px;}
+  .hero-opt-title{font-size:clamp(26px,2.9vw,38px);}
+  .hero-opt-price{font-size:clamp(26px,2.6vw,34px);}
+  .hero-opt-sub{font-size:15px;}
+  .hero-opt-icons{padding-top:32px;}
+  .hoi-icon{width:60px;height:60px;border-radius:14px;}
+  .hoi-icon svg{width:34px;height:34px;}
+  .hoi-plus{font-size:20px;}
+</style>
+</head>
+<body>
+
+<div id="gc"><div class="blob blob-1"></div><div class="blob blob-2"></div><div class="blob blob-3"></div></div>
+<div id="scroll-progress"></div>
+
+<div id="installer-bar">
+  <a href="#">Installer pagina</a>
+</div>
+<nav id="nav">
+  <div class="nav-logo">
+    <img src="midia/solyx-logo.png" alt="Solyx Energy" style="display:block;height:32px;width:auto;mix-blend-mode:multiply;">
+  </div>
+  <ul class="nav-links">
+    <li><a href="hoe-werkt-het.html">Hoe werkt het</a></li>
+    <li><a href="besparen.html">Besparen</a></li>
+    <li><a href="how-to-get-it.html" class="active">Aan de slag</a></li>
+    <li><a href="faq.html">FAQs</a></li>
+    <li><a href="shop.html">Shop</a></li>
+  </ul>
+  <a href="besparen.html" class="btn-orange">Bereken</a>
+</nav>
+
+</div>
+  <div class="snw" data-id="q1"><span class="ndl">Boiler?</span><div class="ndot"></div></div>
+  <div class="snw" data-id="q2b"><span class="ndl">Full set?</span><div class="ndot"></div></div>
+  <div class="snw" data-id="q2a"><span class="ndl">Homey?</span><div class="ndot"></div></div>
+  <div class="snw" data-id="q3loc"><span class="ndl">Location?</span><div class="ndot"></div></div>
+  <div class="snw" data-id="q3str"><span class="ndl">Strategy?</span><div class="ndot"></div></div>
+  <div class="snw" data-id="q4"><span class="ndl">Homey?</span><div class="ndot"></div></div>
+  <div class="snw" data-id="result"><span class="ndl">Result</span><div class="ndot"></div></div>
+</div>
+
+<div id="scroll-container">
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-inner">
+    <h1 class="hero-h1">Aan de <span class="hl">slag.</span></h1>
+    <div class="hero-options">
+      <div class="hero-opt" onclick="window.location.href='wateraccu.html'">
+        <div class="hero-opt-title">Nymo</div>
+        <div class="hero-opt-price">€649</div>
+        <div class="hero-opt-sub">Voor wie al een geschikte boiler heeft, of er zelf een uitkiest. De Nymo is eenvoudig zelf te installeren.</div>
+        <div class="hero-opt-icons">
+          <div class="hoi-item">
+            <div class="hoi-icon"><svg width="22" height="22" viewBox="0 0 103 175" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M94.7992 36.5024H8.20141C3.78786 36.5024 0.209961 40.0774 0.209961 44.4873V166.432C0.209961 170.842 3.78786 174.417 8.20141 174.417H94.7992C99.2128 174.417 102.791 170.842 102.791 166.432V44.4873C102.791 40.0774 99.2128 36.5024 94.7992 36.5024Z" fill="currentColor"/>
+<ellipse cx="51.3905" cy="123.255" rx="10.1025" ry="10.1231" fill="white"/>
+<rect width="1.75672" height="7.31296" rx="0.878359" transform="matrix(0.88002 0.474937 -0.49476 0.86903 52.3838 116.887)" fill="currentColor"/>
+<rect width="1.75672" height="7.31296" rx="0.878359" transform="matrix(0.88002 0.474937 -0.49476 0.86903 52.7754 122.242)" fill="currentColor"/>
+<path d="M80.3758 62.0281H22.6201C19.4593 62.0281 16.897 64.5883 16.897 67.7465V98.1485C16.897 101.307 19.4593 103.867 22.6201 103.867H80.3758C83.5366 103.867 86.0989 101.307 86.0989 98.1485V67.7465C86.0989 64.5883 83.5366 62.0281 80.3758 62.0281Z" stroke="#677E6F" stroke-miterlimit="10"/>
+<path d="M71.5125 69.3928H31.4882C30.9208 69.3928 30.4609 69.8523 30.4609 70.4192V78.4376C30.4609 79.0044 30.9208 79.464 31.4882 79.464H71.5125C72.0798 79.464 72.5397 79.0044 72.5397 78.4376V70.4192C72.5397 69.8523 72.0798 69.3928 71.5125 69.3928Z" fill="#677E6F"/>
+<path d="M80.7661 94.4285V95.2873L78.0198 96.9588H80.7661V97.8176H76.5942V96.9588L79.3447 95.2831H76.5942V94.4285H80.7661Z" fill="#677E6F"/>
+<path d="M79.5925 92.5768L77.6639 92.0029V91.1147L81.2445 92.359L81.408 92.426C81.8147 92.6103 82.016 92.9162 82.016 93.3435C82.016 93.465 81.9992 93.5865 81.9615 93.7121H81.3325V93.5864C81.3325 93.4314 81.3116 93.3141 81.2655 93.2345C81.2193 93.1591 81.1397 93.0963 81.0265 93.0544L80.7707 92.958L77.6597 94.0431V93.1508L79.5884 92.5768H79.5925Z" fill="#677E6F"/>
+<path d="M77.6634 90.0128L78.0114 89.9877C77.7431 89.7699 77.6089 89.4724 77.6089 89.0954C77.6089 88.6974 77.7682 88.4209 78.0827 88.2743C77.7682 88.0564 77.6089 87.7464 77.6089 87.3442C77.6089 87.0091 77.7053 86.7577 77.9024 86.5943C78.0994 86.431 78.3929 86.3472 78.7871 86.3472H80.7661V87.1767H78.7871C78.611 87.1767 78.481 87.2102 78.4013 87.2814C78.3217 87.3484 78.2797 87.4699 78.2797 87.6459C78.2797 87.893 78.3971 88.0648 78.6361 88.1611H80.7661V88.9864H78.7912C78.611 88.9864 78.481 89.02 78.4013 89.0912C78.3217 89.1624 78.2797 89.2839 78.2797 89.4515C78.2797 89.6861 78.3762 89.8578 78.5732 89.9626H80.7661V90.792H77.6634V90.017V90.0128Z" fill="#677E6F"/>
+<path d="M79.1854 85.8403C78.8793 85.8403 78.6026 85.7817 78.3636 85.6644C78.1246 85.5471 77.9359 85.3753 77.8059 85.1533C77.676 84.9312 77.6089 84.6715 77.6089 84.3782C77.6089 83.9593 77.7389 83.62 77.9946 83.356C78.2504 83.0921 78.5984 82.9455 79.0386 82.912H79.2525C79.7262 82.9078 80.1078 83.0376 80.3971 83.3058C80.6864 83.5697 80.8289 83.9258 80.8289 84.374C80.8289 84.8223 80.6864 85.1784 80.3971 85.4423C80.112 85.7062 79.7221 85.8403 79.2273 85.8403H79.1896H79.1854ZM79.2441 85.015C79.5376 85.015 79.764 84.9605 79.9191 84.8474C80.0742 84.7343 80.1539 84.5793 80.1539 84.374C80.1539 84.1688 80.0784 84.0179 79.9233 83.9048C79.7682 83.7917 79.5208 83.7373 79.1854 83.7373C78.8961 83.7373 78.6738 83.7917 78.5145 83.9048C78.3552 84.0179 78.2755 84.1771 78.2755 84.3782C78.2755 84.5793 78.3552 84.7385 78.5103 84.8474C78.6697 84.9564 78.9128 85.015 79.2441 85.015Z" fill="#677E6F"/>
+<path d="M24.3135 73.0082C25.0869 73.0082 25.7139 72.3817 25.7139 71.609C25.7139 70.8362 25.0869 70.2097 24.3135 70.2097C23.5401 70.2097 22.9131 70.8362 22.9131 71.609C22.9131 72.3817 23.5401 73.0082 24.3135 73.0082Z" fill="#677E6F"/>
+<path d="M24.3135 78.6471C25.0869 78.6471 25.7139 78.0206 25.7139 77.2479C25.7139 76.4751 25.0869 75.8486 24.3135 75.8486C23.5401 75.8486 22.9131 76.4751 22.9131 77.2479C22.9131 78.0206 23.5401 78.6471 24.3135 78.6471Z" fill="#677E6F"/>
+<path d="M47.1769 95.6229C48.6324 95.6229 49.8124 94.4406 49.8124 92.9821C49.8124 91.5236 48.6324 90.3413 47.1769 90.3413C45.7214 90.3413 44.5415 91.5236 44.5415 92.9821C44.5415 94.4406 45.7214 95.6229 47.1769 95.6229Z" fill="#677E6F"/>
+<path d="M38.3923 95.6229C39.8478 95.6229 41.0277 94.4406 41.0277 92.9821C41.0277 91.5236 39.8478 90.3413 38.3923 90.3413C36.9368 90.3413 35.7568 91.5236 35.7568 92.9821C35.7568 94.4406 36.9368 95.6229 38.3923 95.6229Z" fill="#677E6F"/>
+<path d="M55.9616 95.6229C57.4171 95.6229 58.597 94.4406 58.597 92.9821C58.597 91.5236 57.4171 90.3413 55.9616 90.3413C54.5061 90.3413 53.3262 91.5236 53.3262 92.9821C53.3262 94.4406 54.5061 95.6229 55.9616 95.6229Z" fill="#677E6F"/>
+<path d="M64.7463 95.6229C66.2018 95.6229 67.3817 94.4406 67.3817 92.9821C67.3817 91.5236 66.2018 90.3413 64.7463 90.3413C63.2908 90.3413 62.1108 91.5236 62.1108 92.9821C62.1108 94.4406 63.2908 95.6229 64.7463 95.6229Z" fill="#677E6F"/>
+<path d="M12.2988 173.87V148.192C12.2988 144.384 15.5239 141.301 19.5061 141.301H84.1543C88.1365 141.301 91.3616 144.384 91.3616 148.192V173.87" stroke="#677E6F" stroke-miterlimit="10"/>
+<path d="M12.2988 173.87V148.192C12.2988 144.384 15.5239 141.301 19.5061 141.301H84.1543C88.1365 141.301 91.3616 144.384 91.3616 148.192V173.87" stroke="#677E6F" stroke-miterlimit="10"/>
+<path d="M77.5972 1.84383C77.6306 0.815965 78.4735 0 79.5019 0C80.5303 0 81.3732 0.815964 81.4066 1.84383L82.5095 35.7865C82.5462 36.916 81.6406 37.8515 80.5105 37.8515H78.4933C77.3633 37.8515 76.4576 36.916 76.4943 35.7865L77.5972 1.84383Z" fill="currentColor"/>
+        </svg></div>
+          </div>
+        </div>
+      </div>
+      <div class="hero-opt hero-opt-mid" onclick="window.location.href='shop.html'">
+        <div class="hero-opt-title">Nymo + Boiler</div>
+        <div class="hero-opt-price"><span class="vanaf">vanaf</span> €1.189</div>
+        <div class="hero-opt-sub">Voor wie nog geen boiler heeft. Complete WaterAccu inclusief geschikte boiler, zonder installatie.</div>
+        <div class="hero-opt-icons">
+          <div class="hoi-item">
+            <div class="hoi-icon"><svg width="22" height="22" viewBox="0 0 103 175" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M94.7992 36.5024H8.20141C3.78786 36.5024 0.209961 40.0774 0.209961 44.4873V166.432C0.209961 170.842 3.78786 174.417 8.20141 174.417H94.7992C99.2128 174.417 102.791 170.842 102.791 166.432V44.4873C102.791 40.0774 99.2128 36.5024 94.7992 36.5024Z" fill="currentColor"/>
+<ellipse cx="51.3905" cy="123.255" rx="10.1025" ry="10.1231" fill="white"/>
+<rect width="1.75672" height="7.31296" rx="0.878359" transform="matrix(0.88002 0.474937 -0.49476 0.86903 52.3838 116.887)" fill="currentColor"/>
+<rect width="1.75672" height="7.31296" rx="0.878359" transform="matrix(0.88002 0.474937 -0.49476 0.86903 52.7754 122.242)" fill="currentColor"/>
+<path d="M80.3758 62.0281H22.6201C19.4593 62.0281 16.897 64.5883 16.897 67.7465V98.1485C16.897 101.307 19.4593 103.867 22.6201 103.867H80.3758C83.5366 103.867 86.0989 101.307 86.0989 98.1485V67.7465C86.0989 64.5883 83.5366 62.0281 80.3758 62.0281Z" stroke="#677E6F" stroke-miterlimit="10"/>
+<path d="M71.5125 69.3928H31.4882C30.9208 69.3928 30.4609 69.8523 30.4609 70.4192V78.4376C30.4609 79.0044 30.9208 79.464 31.4882 79.464H71.5125C72.0798 79.464 72.5397 79.0044 72.5397 78.4376V70.4192C72.5397 69.8523 72.0798 69.3928 71.5125 69.3928Z" fill="#677E6F"/>
+<path d="M80.7661 94.4285V95.2873L78.0198 96.9588H80.7661V97.8176H76.5942V96.9588L79.3447 95.2831H76.5942V94.4285H80.7661Z" fill="#677E6F"/>
+<path d="M79.5925 92.5768L77.6639 92.0029V91.1147L81.2445 92.359L81.408 92.426C81.8147 92.6103 82.016 92.9162 82.016 93.3435C82.016 93.465 81.9992 93.5865 81.9615 93.7121H81.3325V93.5864C81.3325 93.4314 81.3116 93.3141 81.2655 93.2345C81.2193 93.1591 81.1397 93.0963 81.0265 93.0544L80.7707 92.958L77.6597 94.0431V93.1508L79.5884 92.5768H79.5925Z" fill="#677E6F"/>
+<path d="M77.6634 90.0128L78.0114 89.9877C77.7431 89.7699 77.6089 89.4724 77.6089 89.0954C77.6089 88.6974 77.7682 88.4209 78.0827 88.2743C77.7682 88.0564 77.6089 87.7464 77.6089 87.3442C77.6089 87.0091 77.7053 86.7577 77.9024 86.5943C78.0994 86.431 78.3929 86.3472 78.7871 86.3472H80.7661V87.1767H78.7871C78.611 87.1767 78.481 87.2102 78.4013 87.2814C78.3217 87.3484 78.2797 87.4699 78.2797 87.6459C78.2797 87.893 78.3971 88.0648 78.6361 88.1611H80.7661V88.9864H78.7912C78.611 88.9864 78.481 89.02 78.4013 89.0912C78.3217 89.1624 78.2797 89.2839 78.2797 89.4515C78.2797 89.6861 78.3762 89.8578 78.5732 89.9626H80.7661V90.792H77.6634V90.017V90.0128Z" fill="#677E6F"/>
+<path d="M79.1854 85.8403C78.8793 85.8403 78.6026 85.7817 78.3636 85.6644C78.1246 85.5471 77.9359 85.3753 77.8059 85.1533C77.676 84.9312 77.6089 84.6715 77.6089 84.3782C77.6089 83.9593 77.7389 83.62 77.9946 83.356C78.2504 83.0921 78.5984 82.9455 79.0386 82.912H79.2525C79.7262 82.9078 80.1078 83.0376 80.3971 83.3058C80.6864 83.5697 80.8289 83.9258 80.8289 84.374C80.8289 84.8223 80.6864 85.1784 80.3971 85.4423C80.112 85.7062 79.7221 85.8403 79.2273 85.8403H79.1896H79.1854ZM79.2441 85.015C79.5376 85.015 79.764 84.9605 79.9191 84.8474C80.0742 84.7343 80.1539 84.5793 80.1539 84.374C80.1539 84.1688 80.0784 84.0179 79.9233 83.9048C79.7682 83.7917 79.5208 83.7373 79.1854 83.7373C78.8961 83.7373 78.6738 83.7917 78.5145 83.9048C78.3552 84.0179 78.2755 84.1771 78.2755 84.3782C78.2755 84.5793 78.3552 84.7385 78.5103 84.8474C78.6697 84.9564 78.9128 85.015 79.2441 85.015Z" fill="#677E6F"/>
+<path d="M24.3135 73.0082C25.0869 73.0082 25.7139 72.3817 25.7139 71.609C25.7139 70.8362 25.0869 70.2097 24.3135 70.2097C23.5401 70.2097 22.9131 70.8362 22.9131 71.609C22.9131 72.3817 23.5401 73.0082 24.3135 73.0082Z" fill="#677E6F"/>
+<path d="M24.3135 78.6471C25.0869 78.6471 25.7139 78.0206 25.7139 77.2479C25.7139 76.4751 25.0869 75.8486 24.3135 75.8486C23.5401 75.8486 22.9131 76.4751 22.9131 77.2479C22.9131 78.0206 23.5401 78.6471 24.3135 78.6471Z" fill="#677E6F"/>
+<path d="M47.1769 95.6229C48.6324 95.6229 49.8124 94.4406 49.8124 92.9821C49.8124 91.5236 48.6324 90.3413 47.1769 90.3413C45.7214 90.3413 44.5415 91.5236 44.5415 92.9821C44.5415 94.4406 45.7214 95.6229 47.1769 95.6229Z" fill="#677E6F"/>
+<path d="M38.3923 95.6229C39.8478 95.6229 41.0277 94.4406 41.0277 92.9821C41.0277 91.5236 39.8478 90.3413 38.3923 90.3413C36.9368 90.3413 35.7568 91.5236 35.7568 92.9821C35.7568 94.4406 36.9368 95.6229 38.3923 95.6229Z" fill="#677E6F"/>
+<path d="M55.9616 95.6229C57.4171 95.6229 58.597 94.4406 58.597 92.9821C58.597 91.5236 57.4171 90.3413 55.9616 90.3413C54.5061 90.3413 53.3262 91.5236 53.3262 92.9821C53.3262 94.4406 54.5061 95.6229 55.9616 95.6229Z" fill="#677E6F"/>
+<path d="M64.7463 95.6229C66.2018 95.6229 67.3817 94.4406 67.3817 92.9821C67.3817 91.5236 66.2018 90.3413 64.7463 90.3413C63.2908 90.3413 62.1108 91.5236 62.1108 92.9821C62.1108 94.4406 63.2908 95.6229 64.7463 95.6229Z" fill="#677E6F"/>
+<path d="M12.2988 173.87V148.192C12.2988 144.384 15.5239 141.301 19.5061 141.301H84.1543C88.1365 141.301 91.3616 144.384 91.3616 148.192V173.87" stroke="#677E6F" stroke-miterlimit="10"/>
+<path d="M12.2988 173.87V148.192C12.2988 144.384 15.5239 141.301 19.5061 141.301H84.1543C88.1365 141.301 91.3616 144.384 91.3616 148.192V173.87" stroke="#677E6F" stroke-miterlimit="10"/>
+<path d="M77.5972 1.84383C77.6306 0.815965 78.4735 0 79.5019 0C80.5303 0 81.3732 0.815964 81.4066 1.84383L82.5095 35.7865C82.5462 36.916 81.6406 37.8515 80.5105 37.8515H78.4933C77.3633 37.8515 76.4576 36.916 76.4943 35.7865L77.5972 1.84383Z" fill="currentColor"/>
+        </svg></div>
+          </div>
+          <span class="hoi-plus">+</span>
+          <div class="hoi-item">
+            <div class="hoi-icon"><svg width="22" height="22" viewBox="0 0 230 392" preserveAspectRatio="xMidYMid meet"><g transform="translate(0,392) scale(0.1,-0.1)" fill="currentColor" stroke="currentColor" stroke-width="70" stroke-linejoin="round" stroke-linecap="round"><path d="M1020 3794 c-390 -28 -663 -110 -730 -218 -20 -33 -20 -42 -20 -1422 l0 -1388 48 -46 c30 -29 72 -56 113 -72 l64 -26 5 -118 c3 -69 10 -128 18 -141 22 -40 63 -53 162 -53 l90 0 0 -35 c0 -28 -4 -35 -20 -35 -18 0 -20 -7 -20 -80 l0 -81 143 3 142 3 0 75 c0 70 -1 75 -22 78 -19 3 -23 10 -23 38 l0 34 205 0 205 0 0 -34 c0 -28 -4 -35 -22 -38 -22 -3 -23 -8 -23 -78 l0 -75 145 0 145 0 0 75 c0 70 -1 75 -22 78 -19 3 -23 10 -23 37 l0 33 106 4 c105 3 106 3 135 36 29 32 29 34 29 150 l0 118 78 36 c50 24 92 52 115 78 l37 40 0 1391 0 1391 -21 30 c-85 118 -407 202 -817 212 -92 2 -192 2 -222 0z m410 -54 c289 -26 534 -101 591 -181 19 -26 19 -61 19 -1397 l0 -1370 -26 -31 c-75 -90 -355 -164 -679 -180 -438 -22 -885 56 -997 176 l-23 25 -3 1361 c-1 749 0 1373 3 1385 16 67 157 136 360 178 196 40 519 55 755 34z m-750 -3165 c275 -54 692 -56 970 -4 170 32 155 38 158 -60 3 -97 -8 -135 -46 -150 -18 -6 -225 -9 -598 -8 -547 2 -573 3 -593 21 -19 17 -21 30 -21 123 0 56 1 103 3 103 1 0 58 -11 127 -25z m250 -300 l0 -36 -57 3 c-57 3 -58 3 -61 36 l-3 32 60 0 61 0 0 -35z m608 3 c-3 -33 -3 -33 -57 -33 -45 0 -55 3 -57 19 -5 37 6 46 63 46 l54 0 -3 -32z m-568 -123 l0 -35 -100 0 -100 0 0 35 0 35 100 0 100 0 0 -35z m608 3 l-3 -33 -95 0 -95 0 -3 33 -3 32 101 0 101 0 -3 -32z"/><path d="M1098 3070 c-34 -10 -86 -46 -116 -80 -41 -47 -56 -91 -56 -166 1 -83 28 -141 90 -192 38 -32 119 -62 165 -62 91 0 198 79 234 173 48 125 -24 277 -152 323 -42 15 -123 17 -165 4z m184 -63 c74 -41 122 -150 100 -224 -18 -59 -47 -100 -93 -130 -37 -24 -53 -28 -115 -28 -64 0 -77 3 -116 31 -116 82 -119 246 -6 337 63 51 154 57 230 14z"/><path d="M1156 2975 c-3 -9 -3 -28 0 -42 5 -17 0 -34 -15 -53 -38 -52 -19 -110 35 -110 26 0 64 32 64 54 0 7 -9 24 -19 38 -12 15 -21 44 -23 74 -2 35 -7 50 -19 52 -9 2 -19 -4 -23 -13z m34 -145 c0 -5 -7 -10 -15 -10 -8 0 -15 5 -15 10 0 6 7 10 15 10 8 0 15 -4 15 -10z"/><path d="M1550 518 c-27 -30 -26 -73 5 -103 43 -44 109 -23 121 40 13 70 -77 115 -126 63z m75 -48 c0 -16 -6 -26 -19 -28 -24 -5 -37 17 -25 41 14 26 44 17 44 -13z"/></g></svg></div>
+          </div>
+        </div>
+      </div>
+      <div class="hero-opt" onclick="goto('quiz-section')">
+        <div class="hero-opt-title">Complete Installatie</div>
+        <div class="hero-opt-price"><span class="vanaf">vanaf</span> €1.725</div>
+        <div class="hero-opt-sub">Volledige ontzorging. Boiler + Nymo, inclusief installatie aan huis, door installatie-partner van Solyx Energy.</div>
+        <div class="hero-opt-icons">
+          <div class="hoi-item">
+            <div class="hoi-icon"><svg width="22" height="22" viewBox="0 0 103 175" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M94.7992 36.5024H8.20141C3.78786 36.5024 0.209961 40.0774 0.209961 44.4873V166.432C0.209961 170.842 3.78786 174.417 8.20141 174.417H94.7992C99.2128 174.417 102.791 170.842 102.791 166.432V44.4873C102.791 40.0774 99.2128 36.5024 94.7992 36.5024Z" fill="currentColor"/>
+<ellipse cx="51.3905" cy="123.255" rx="10.1025" ry="10.1231" fill="white"/>
+<rect width="1.75672" height="7.31296" rx="0.878359" transform="matrix(0.88002 0.474937 -0.49476 0.86903 52.3838 116.887)" fill="currentColor"/>
+<rect width="1.75672" height="7.31296" rx="0.878359" transform="matrix(0.88002 0.474937 -0.49476 0.86903 52.7754 122.242)" fill="currentColor"/>
+<path d="M80.3758 62.0281H22.6201C19.4593 62.0281 16.897 64.5883 16.897 67.7465V98.1485C16.897 101.307 19.4593 103.867 22.6201 103.867H80.3758C83.5366 103.867 86.0989 101.307 86.0989 98.1485V67.7465C86.0989 64.5883 83.5366 62.0281 80.3758 62.0281Z" stroke="#677E6F" stroke-miterlimit="10"/>
+<path d="M71.5125 69.3928H31.4882C30.9208 69.3928 30.4609 69.8523 30.4609 70.4192V78.4376C30.4609 79.0044 30.9208 79.464 31.4882 79.464H71.5125C72.0798 79.464 72.5397 79.0044 72.5397 78.4376V70.4192C72.5397 69.8523 72.0798 69.3928 71.5125 69.3928Z" fill="#677E6F"/>
+<path d="M80.7661 94.4285V95.2873L78.0198 96.9588H80.7661V97.8176H76.5942V96.9588L79.3447 95.2831H76.5942V94.4285H80.7661Z" fill="#677E6F"/>
+<path d="M79.5925 92.5768L77.6639 92.0029V91.1147L81.2445 92.359L81.408 92.426C81.8147 92.6103 82.016 92.9162 82.016 93.3435C82.016 93.465 81.9992 93.5865 81.9615 93.7121H81.3325V93.5864C81.3325 93.4314 81.3116 93.3141 81.2655 93.2345C81.2193 93.1591 81.1397 93.0963 81.0265 93.0544L80.7707 92.958L77.6597 94.0431V93.1508L79.5884 92.5768H79.5925Z" fill="#677E6F"/>
+<path d="M77.6634 90.0128L78.0114 89.9877C77.7431 89.7699 77.6089 89.4724 77.6089 89.0954C77.6089 88.6974 77.7682 88.4209 78.0827 88.2743C77.7682 88.0564 77.6089 87.7464 77.6089 87.3442C77.6089 87.0091 77.7053 86.7577 77.9024 86.5943C78.0994 86.431 78.3929 86.3472 78.7871 86.3472H80.7661V87.1767H78.7871C78.611 87.1767 78.481 87.2102 78.4013 87.2814C78.3217 87.3484 78.2797 87.4699 78.2797 87.6459C78.2797 87.893 78.3971 88.0648 78.6361 88.1611H80.7661V88.9864H78.7912C78.611 88.9864 78.481 89.02 78.4013 89.0912C78.3217 89.1624 78.2797 89.2839 78.2797 89.4515C78.2797 89.6861 78.3762 89.8578 78.5732 89.9626H80.7661V90.792H77.6634V90.017V90.0128Z" fill="#677E6F"/>
+<path d="M79.1854 85.8403C78.8793 85.8403 78.6026 85.7817 78.3636 85.6644C78.1246 85.5471 77.9359 85.3753 77.8059 85.1533C77.676 84.9312 77.6089 84.6715 77.6089 84.3782C77.6089 83.9593 77.7389 83.62 77.9946 83.356C78.2504 83.0921 78.5984 82.9455 79.0386 82.912H79.2525C79.7262 82.9078 80.1078 83.0376 80.3971 83.3058C80.6864 83.5697 80.8289 83.9258 80.8289 84.374C80.8289 84.8223 80.6864 85.1784 80.3971 85.4423C80.112 85.7062 79.7221 85.8403 79.2273 85.8403H79.1896H79.1854ZM79.2441 85.015C79.5376 85.015 79.764 84.9605 79.9191 84.8474C80.0742 84.7343 80.1539 84.5793 80.1539 84.374C80.1539 84.1688 80.0784 84.0179 79.9233 83.9048C79.7682 83.7917 79.5208 83.7373 79.1854 83.7373C78.8961 83.7373 78.6738 83.7917 78.5145 83.9048C78.3552 84.0179 78.2755 84.1771 78.2755 84.3782C78.2755 84.5793 78.3552 84.7385 78.5103 84.8474C78.6697 84.9564 78.9128 85.015 79.2441 85.015Z" fill="#677E6F"/>
+<path d="M24.3135 73.0082C25.0869 73.0082 25.7139 72.3817 25.7139 71.609C25.7139 70.8362 25.0869 70.2097 24.3135 70.2097C23.5401 70.2097 22.9131 70.8362 22.9131 71.609C22.9131 72.3817 23.5401 73.0082 24.3135 73.0082Z" fill="#677E6F"/>
+<path d="M24.3135 78.6471C25.0869 78.6471 25.7139 78.0206 25.7139 77.2479C25.7139 76.4751 25.0869 75.8486 24.3135 75.8486C23.5401 75.8486 22.9131 76.4751 22.9131 77.2479C22.9131 78.0206 23.5401 78.6471 24.3135 78.6471Z" fill="#677E6F"/>
+<path d="M47.1769 95.6229C48.6324 95.6229 49.8124 94.4406 49.8124 92.9821C49.8124 91.5236 48.6324 90.3413 47.1769 90.3413C45.7214 90.3413 44.5415 91.5236 44.5415 92.9821C44.5415 94.4406 45.7214 95.6229 47.1769 95.6229Z" fill="#677E6F"/>
+<path d="M38.3923 95.6229C39.8478 95.6229 41.0277 94.4406 41.0277 92.9821C41.0277 91.5236 39.8478 90.3413 38.3923 90.3413C36.9368 90.3413 35.7568 91.5236 35.7568 92.9821C35.7568 94.4406 36.9368 95.6229 38.3923 95.6229Z" fill="#677E6F"/>
+<path d="M55.9616 95.6229C57.4171 95.6229 58.597 94.4406 58.597 92.9821C58.597 91.5236 57.4171 90.3413 55.9616 90.3413C54.5061 90.3413 53.3262 91.5236 53.3262 92.9821C53.3262 94.4406 54.5061 95.6229 55.9616 95.6229Z" fill="#677E6F"/>
+<path d="M64.7463 95.6229C66.2018 95.6229 67.3817 94.4406 67.3817 92.9821C67.3817 91.5236 66.2018 90.3413 64.7463 90.3413C63.2908 90.3413 62.1108 91.5236 62.1108 92.9821C62.1108 94.4406 63.2908 95.6229 64.7463 95.6229Z" fill="#677E6F"/>
+<path d="M12.2988 173.87V148.192C12.2988 144.384 15.5239 141.301 19.5061 141.301H84.1543C88.1365 141.301 91.3616 144.384 91.3616 148.192V173.87" stroke="#677E6F" stroke-miterlimit="10"/>
+<path d="M12.2988 173.87V148.192C12.2988 144.384 15.5239 141.301 19.5061 141.301H84.1543C88.1365 141.301 91.3616 144.384 91.3616 148.192V173.87" stroke="#677E6F" stroke-miterlimit="10"/>
+<path d="M77.5972 1.84383C77.6306 0.815965 78.4735 0 79.5019 0C80.5303 0 81.3732 0.815964 81.4066 1.84383L82.5095 35.7865C82.5462 36.916 81.6406 37.8515 80.5105 37.8515H78.4933C77.3633 37.8515 76.4576 36.916 76.4943 35.7865L77.5972 1.84383Z" fill="currentColor"/>
+        </svg></div>
+          </div>
+          <span class="hoi-plus">+</span>
+          <div class="hoi-item">
+            <div class="hoi-icon"><svg width="22" height="22" viewBox="0 0 230 392" preserveAspectRatio="xMidYMid meet"><g transform="translate(0,392) scale(0.1,-0.1)" fill="currentColor" stroke="currentColor" stroke-width="70" stroke-linejoin="round" stroke-linecap="round"><path d="M1020 3794 c-390 -28 -663 -110 -730 -218 -20 -33 -20 -42 -20 -1422 l0 -1388 48 -46 c30 -29 72 -56 113 -72 l64 -26 5 -118 c3 -69 10 -128 18 -141 22 -40 63 -53 162 -53 l90 0 0 -35 c0 -28 -4 -35 -20 -35 -18 0 -20 -7 -20 -80 l0 -81 143 3 142 3 0 75 c0 70 -1 75 -22 78 -19 3 -23 10 -23 38 l0 34 205 0 205 0 0 -34 c0 -28 -4 -35 -22 -38 -22 -3 -23 -8 -23 -78 l0 -75 145 0 145 0 0 75 c0 70 -1 75 -22 78 -19 3 -23 10 -23 37 l0 33 106 4 c105 3 106 3 135 36 29 32 29 34 29 150 l0 118 78 36 c50 24 92 52 115 78 l37 40 0 1391 0 1391 -21 30 c-85 118 -407 202 -817 212 -92 2 -192 2 -222 0z m410 -54 c289 -26 534 -101 591 -181 19 -26 19 -61 19 -1397 l0 -1370 -26 -31 c-75 -90 -355 -164 -679 -180 -438 -22 -885 56 -997 176 l-23 25 -3 1361 c-1 749 0 1373 3 1385 16 67 157 136 360 178 196 40 519 55 755 34z m-750 -3165 c275 -54 692 -56 970 -4 170 32 155 38 158 -60 3 -97 -8 -135 -46 -150 -18 -6 -225 -9 -598 -8 -547 2 -573 3 -593 21 -19 17 -21 30 -21 123 0 56 1 103 3 103 1 0 58 -11 127 -25z m250 -300 l0 -36 -57 3 c-57 3 -58 3 -61 36 l-3 32 60 0 61 0 0 -35z m608 3 c-3 -33 -3 -33 -57 -33 -45 0 -55 3 -57 19 -5 37 6 46 63 46 l54 0 -3 -32z m-568 -123 l0 -35 -100 0 -100 0 0 35 0 35 100 0 100 0 0 -35z m608 3 l-3 -33 -95 0 -95 0 -3 33 -3 32 101 0 101 0 -3 -32z"/><path d="M1098 3070 c-34 -10 -86 -46 -116 -80 -41 -47 -56 -91 -56 -166 1 -83 28 -141 90 -192 38 -32 119 -62 165 -62 91 0 198 79 234 173 48 125 -24 277 -152 323 -42 15 -123 17 -165 4z m184 -63 c74 -41 122 -150 100 -224 -18 -59 -47 -100 -93 -130 -37 -24 -53 -28 -115 -28 -64 0 -77 3 -116 31 -116 82 -119 246 -6 337 63 51 154 57 230 14z"/><path d="M1156 2975 c-3 -9 -3 -28 0 -42 5 -17 0 -34 -15 -53 -38 -52 -19 -110 35 -110 26 0 64 32 64 54 0 7 -9 24 -19 38 -12 15 -21 44 -23 74 -2 35 -7 50 -19 52 -9 2 -19 -4 -23 -13z m34 -145 c0 -5 -7 -10 -15 -10 -8 0 -15 5 -15 10 0 6 7 10 15 10 8 0 15 -4 15 -10z"/><path d="M1550 518 c-27 -30 -26 -73 5 -103 43 -44 109 -23 121 40 13 70 -77 115 -126 63z m75 -48 c0 -16 -6 -26 -19 -28 -24 -5 -37 17 -25 41 14 26 44 17 44 -13z"/></g></svg></div>
+          </div>
+          <span class="hoi-plus">+</span>
+          <div class="hoi-item">
+            <div class="hoi-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-installer">Installateur? <a href="installatie.html">Klik hier.</a></div>
+    <div class="hero-nudge" onclick="document.getElementById('quiz-section').scrollIntoView({behavior:'smooth'})">
+      <span>Twijfel je nog?</span>
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 2v10M2 7l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Scroll naar beneden en we helpen je kiezen</span>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+<!-- QUIZ SECTION -->
+<section id="quiz-section" style="min-height:100vh;position:relative;z-index:1;border-top:1px solid rgba(53,168,71,.08);">
+
+  <!-- quiz header -->
+  <div style="text-align:center;padding:80px 48px 40px;">
+    <h2 style="font-family:var(--font-head);font-size:clamp(40px,6vw,72px);font-weight:900;letter-spacing:-.035em;line-height:1;color:var(--ink);">Vind jouw <span style="color:var(--green);">match.</span></h2>
+  </div>
+
+  <!-- Q1 -->
+  <div class="qz-section unlocked" id="qz-q1" data-qid="qz-q1">
+    <div class="qz-left">
+      <div class="q-num">01 / Vraag</div>
+      <div class="q-lbl">Heb je al een<br><span class="hl">boiler</span><br>thuis?</div>
+      <div class="q-line"></div>
+      <p class="q-sub-text">De Nymo sluit aan op je bestaande boiler en maakt deze slim.</p>
+    </div>
+    <div class="qz-right" id="qz-q1-right">
+      <div class="qz-panel" data-q="qz-q1" data-val="yes" data-label="Ja, ik heb een boiler" data-next="qz-q2a" onclick="qzChoose(this)">
+        <div class="ans-check"><svg width="10" height="10" viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/></svg></div>
+        <div class="ans-inner">
+          <div class="ans-label">Ja, ik heb<br>een boiler</div>
+          <div class="ans-sub">Ik heb al een boiler die klaar is om aan te sluiten.</div>
+          <div class="ans-arrow"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+      </div>
+      <div class="qz-panel" data-q="qz-q1" data-val="no" data-label="Geen boiler" data-next="qz-q2b" onclick="qzChoose(this)">
+        <div class="ans-check"><svg width="10" height="10" viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/></svg></div>
+        <div class="ans-inner">
+          <div class="ans-label">Nee, ik heb<br>er geen</div>
+          <div class="ans-sub">Ik heb een complete oplossing nodig.</div>
+          <div class="ans-arrow"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q2A: has boiler → Homey? -->
+  <div class="qz-section locked" id="qz-q2a" data-qid="qz-q2a">
+    <div class="qz-left">
+      <div class="q-num">02 / Vraag</div>
+      <div class="q-lbl">Heb je een<br><span class="hl">Homey</span><br>hub?</div>
+      <div class="q-line"></div>
+      <p class="q-sub-text">Met Homey krijg je diepere integratie en slimme automatiseringen met de Nymo.</p>
+    </div>
+    <div class="qz-right" id="qz-q2a-right">
+      <div class="qz-panel" data-q="qz-q2a" data-val="yes" data-label="Ja, ik heb Homey" data-next="qz-result" data-result="nymo-homey" onclick="qzChoose(this)">
+        <div class="ans-check"><svg width="10" height="10" viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/></svg></div>
+        <div class="ans-inner">
+          <div class="ans-label">Ja, ik heb<br>Homey</div>
+          <div class="ans-sub">Ik gebruik Homey en wil volledige integratie.</div>
+          <div class="ans-arrow"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+      </div>
+      <div class="qz-panel" data-q="qz-q2a" data-val="no" data-label="Geen Homey" data-next="qz-result" data-result="nymo-only" onclick="qzChoose(this)">
+        <div class="ans-check"><svg width="10" height="10" viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/></svg></div>
+        <div class="ans-inner">
+          <div class="ans-label">Nee, ik heb<br>geen Homey</div>
+          <div class="ans-sub">Ik bedien de Nymo via de Nymo-app.</div>
+          <div class="ans-arrow"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q2B: no boiler → full package? -->
+  <div class="qz-section locked" id="qz-q2b" data-qid="qz-q2b">
+    <div class="qz-left">
+      <div class="q-num">02 / Vraag</div>
+      <div class="q-lbl">Wil je een<br><span class="hl">compleet</span><br>pakket?</div>
+      <div class="q-line"></div>
+      <p class="q-sub-text">Wij leveren boiler + Nymo + professionele installatie voor één vaste prijs.</p>
+    </div>
+    <div class="qz-right" id="qz-q2b-right">
+      <div class="qz-panel" data-q="qz-q2b" data-val="yes" data-label="Ja, alles-in-één" data-next="qz-q3loc" onclick="qzChoose(this)">
+        <div class="ans-check"><svg width="10" height="10" viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/></svg></div>
+        <div class="ans-inner">
+          <div class="ans-label">Ja,<br>alles-in-één</div>
+          <div class="ans-sub">Boiler + Nymo + professionele installatie in één keer.</div>
+          <div class="ans-arrow"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+      </div>
+      <div class="qz-panel" data-q="qz-q2b" data-val="no" data-label="Ik regel het zelf" data-next="qz-q3str" onclick="qzChoose(this)">
+        <div class="ans-check"><svg width="10" height="10" viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/></svg></div>
+        <div class="ans-inner">
+          <div class="ans-label">Ik regel het<br>zelf</div>
+          <div class="ans-sub">Ik installeer zelf of regel het op mijn eigen manier.</div>
+          <div class="ans-arrow"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q3-LOC -->
+  <div class="qz-section locked" id="qz-q3loc" data-qid="qz-q3loc">
+    <div class="qz-left">
+      <div class="q-num">03 / Vraag</div>
+      <div class="q-lbl">Waar in<br><span class="hl">Nederland</span><br>woon je?</div>
+      <div class="q-line"></div>
+      <p class="q-sub-text">Ons Boilergarant-pakket is nu beschikbaar in midden-Nederland.</p>
+    </div>
+    <div class="qz-right" id="qz-q3loc-right">
+      <div class="qz-panel" data-q="qz-q3loc" data-val="center" data-label="Midden-Nederland" data-next="qz-result" data-result="boilergarant" onclick="qzChoose(this)">
+        <div class="ans-check"><svg width="10" height="10" viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/></svg></div>
+        <div class="ans-inner">
+          <div class="ans-label">Midden-<br>Nederland</div>
+          <div class="ans-sub">Utrecht, Randstad en omgeving.</div>
+          <div class="ans-arrow"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+      </div>
+      <div class="qz-panel" data-q="qz-q3loc" data-val="other" data-label="Ergens anders" data-next="qz-result" data-result="installer-quote" onclick="qzChoose(this)">
+        <div class="ans-check"><svg width="10" height="10" viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/></svg></div>
+        <div class="ans-inner">
+          <div class="ans-label">Ergens anders<br>in Nederland</div>
+          <div class="ans-sub">We koppelen je aan een gecertificeerde installateur bij jou in de buurt.</div>
+          <div class="ans-arrow"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q3-STR -->
+  <div class="qz-section locked" id="qz-q3str" data-qid="qz-q3str">
+    <div class="qz-left">
+      <div class="q-num">03 / Vraag</div>
+      <div class="q-lbl">Wat heeft<br>jouw <span class="hl">voorkeur</span>?</div>
+      <div class="q-line"></div>
+      <p class="q-sub-text">Je installeert de Nymo zelf in ±30 minuten, of je koopt alleen het apparaat.</p>
+    </div>
+    <div class="qz-right" id="qz-q3str-right">
+      <div class="qz-panel" data-q="qz-q3str" data-val="diy" data-label="Bekijk onze boilers" data-next="qz-result" data-result="guides" onclick="qzChoose(this)">
+        <div class="ans-check"><svg width="10" height="10" viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/></svg></div>
+        <div class="ans-inner">
+          <div class="ans-label">Bekijk onze<br>boilers</div>
+          <div class="ans-sub">Bekijk onze aanbevolen boilers en vind de juiste maat.</div>
+          <div class="ans-arrow"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+      </div>
+      <div class="qz-panel" data-q="qz-q3str" data-val="buy" data-label="Ik koop de boiler elders" data-next="qz-q4" onclick="qzChoose(this)">
+        <div class="ans-check"><svg width="10" height="10" viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/></svg></div>
+        <div class="ans-inner">
+          <div class="ans-label">Ik koop de<br>boiler elders</div>
+          <div class="ans-sub">Ik regel de boiler zelf en wil alleen de Nymo.</div>
+          <div class="ans-arrow"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="qz-section locked" id="qz-q4" data-qid="qz-q4">
+    <div class="qz-left">
+      <div class="q-num">04 / Vraag</div>
+      <div class="q-lbl">Heb je een<br><span class="hl">Homey</span><br>hub?</div>
+      <div class="q-line"></div>
+      <p class="q-sub-text">Met Homey krijg je diepere integratie en slimme automatiseringen met de Nymo.</p>
+    </div>
+    <div class="qz-right" id="qz-q4-right">
+      <div class="qz-panel" data-q="qz-q4" data-val="yes" data-label="Ja, ik heb Homey" data-next="qz-result" data-result="nymo-homey" onclick="qzChoose(this)">
+        <div class="ans-check"><svg width="10" height="10" viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/></svg></div>
+        <div class="ans-inner">
+          <div class="ans-label">Ja, ik heb<br>Homey</div>
+          <div class="ans-sub">I want full NYMO × Homey integration.</div>
+          <div class="ans-arrow"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+      </div>
+      <div class="qz-panel" data-q="qz-q4" data-val="no" data-label="Geen Homey" data-next="qz-result" data-result="nymo-only" onclick="qzChoose(this)">
+        <div class="ans-check"><svg width="10" height="10" viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/></svg></div>
+        <div class="ans-inner">
+          <div class="ans-label">Nee, ik heb<br>geen Homey</div>
+          <div class="ans-sub">I'll use the standalone NYMO app.</div>
+          <div class="ans-arrow"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULT -->
+  <div class="qz-section locked" id="qz-result" style="grid-template-columns:300px 1fr;">
+    <div class="qz-left">
+      <div class="q-num">Resultaat</div>
+      <div class="q-lbl">Jouw<br><span class="hl">perfecte</span><br>match.</div>
+      <div class="q-line"></div>
+      <button class="restart-btn" onclick="qzRestart()" style="margin-top:28px;">↺ Opnieuw</button>
+    </div>
+    <div class="res-right" id="qz-res-right">
+
+      <div id="qzr-nymo-homey" style="display:none">
+        <div class="res-right-inner">
+          <div class="res-right-text">
+            <div class="res-title">Nymo voor Homey gebruikers</div>
+            <p class="res-desc">De Nymo samen met Homey voor de ultieme slimme verwarming.</p>
+            <div class="cta-col"><a href="#" class="btn-primary">Bekijk in de shop →</a><a href="#" class="btn-secondary">Meer info</a></div>
+          </div>
+          <div class="res-right-image"><img src="midia/nymo-homey.jpg" alt="NYMO x Homey"></div>
+        </div>
+      </div>
+
+      <div id="qzr-nymo-only" style="display:none">
+        <div class="res-right-inner">
+          <div class="res-right-text">
+            <div class="res-title">Koop de Nymo</div>
+            <p class="res-desc">De Nymo werkt perfect als standalone. Volledige controle vanaf je smartphone.</p>
+            <div class="cta-col"><a href="#" class="btn-primary">Bekijk in de shop →</a><a href="#" class="btn-secondary">Bekijk kenmerken</a></div>
+          </div>
+          <div class="res-right-image"><img src="midia/nymo-sensor.jpg" alt="NYMO device"></div>
+        </div>
+      </div>
+
+      <div id="qzr-boilergarant" style="display:none">
+        <div class="res-right-inner">
+          <div class="res-right-text">
+            <div class="res-title">Boilergarant-pakket</div>
+            <p class="res-desc">De alles-in-één oplossing. Boiler + Nymo + professionele installatie voor één vaste prijs.</p>
+            <div class="res-price"><span class="res-price-amt">€1.725</span><span class="res-price-lbl">alles-in-één</span></div>
+            <div class="cta-col"><a href="#" class="btn-primary">Vraag Boilergarant aan →</a><a href="#" class="btn-secondary">Wat zit erin?</a></div>
+          </div>
+          <div class="res-right-image"><img src="midia/nymo-sensor.jpg" alt="NYMO device"></div>
+        </div>
+      </div>
+
+      <div id="qzr-installer-quote" style="display:none">
+        <div class="res-right-inner">
+          <div class="res-right-text">
+            <div class="res-title">Vraag een installatie-offerte aan</div>
+            <p class="res-desc">We koppelen je aan een gecertificeerde installateur bij jou in de buurt.</p>
+            <div class="cta-col"><a href="#" class="btn-primary">Vul het formulier in →</a><a href="#" class="btn-secondary">Meer info</a></div>
+          </div>
+          <div class="res-right-image"><img src="midia/nymo-sensor.jpg" alt="NYMO device"></div>
+        </div>
+      </div>
+
+      <div id="qzr-guides" style="display:none">
+        <div class="res-right-inner">
+          <div class="res-right-text">
+            <div class="res-title">Boiler-gids</div>
+            <p class="res-desc">Alles om de Nymo zelf te installeren. Meestal in minder dan 30 minuten gepiept.</p>
+            <div class="cta-col"><a href="#" class="btn-primary">Bekijk de gidsen →</a><a href="#" class="btn-secondary">FAQ</a></div>
+          </div>
+          <div class="res-right-image"><img src="midia/nymo-homey.jpg" alt="NYMO x Homey"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="qz-back-wrap">
+    <button class="qz-back" onclick="qzBack()" aria-label="Vorige vraag">↑ Vorige vraag</button>
+  </div>
+
+</section>
+
+<style>
+/* QUIZ SECTION STYLES — reuse existing ans-panel look with qz- prefix */
+.qz-section{
+  height:100vh;display:grid;grid-template-columns:300px 1fr;
+  position:relative;z-index:1;border-top:1px solid rgba(53,168,71,.08);
+}
+.qz-section.locked{display:none;}
+.qz-section.unlocked{display:grid;animation:secReveal .5s ease both;}
+.qz-left{
+  position:sticky;top:0;height:100vh;
+  display:flex;flex-direction:column;justify-content:flex-start;
+  padding:calc(var(--nav-h) + 56px) 40px 80px 56px;
+  z-index:2;border-right:1px solid rgba(53,168,71,.1);
+}
+.qz-right{
+  display:grid;grid-template-columns:1fr 1fr;height:100vh;
+}
+.qz-panel{
+  display:flex;flex-direction:column;justify-content:center;align-items:flex-start;
+  padding:64px 52px;cursor:pointer;
+  border-left:1px solid rgba(53,168,71,.08);
+  position:relative;overflow:hidden;
+  transition:background .3s ease;
+}
+.qz-panel:first-child{border-left:none;}
+.qz-panel::before{
+  content:'';position:absolute;inset:0;background:var(--green);
+  transform:translateY(100%);transition:transform .45s cubic-bezier(.22,1,.36,1);z-index:0;
+}
+.qz-panel:hover::before{transform:translateY(0);}
+.qz-panel.selected::before{transform:translateY(0);background:var(--green-deep);transition:none;}
+.qz-panel.selected{pointer-events:none;}
+.qz-panel.selected .ans-label,.qz-panel:hover .ans-label{color:#fff;}
+.qz-panel.selected .ans-sub,.qz-panel:hover .ans-sub{color:rgba(255,255,255,.75);}
+.qz-panel.selected .ans-arrow,.qz-panel:hover .ans-arrow{background:rgba(255,255,255,.2);}
+.qz-panel.rejected{opacity:0;pointer-events:none;transition:opacity .4s ease;}
+.qz-section:hover .qz-panel.rejected{opacity:1;pointer-events:auto;}
+.qz-section:hover .qz-panel.rejected::before{transform:translateY(0);background:rgba(53,168,71,.4);transition:none;}
+.qz-section:hover .qz-panel.rejected:hover::before{background:var(--green);transition:background .3s;}
+.qz-section:hover .qz-panel.rejected .ans-label{color:rgba(255,255,255,.8);}
+.qz-section:hover .qz-panel.rejected:hover .ans-label{color:#fff;}
+.qz-section:hover .qz-panel.rejected .ans-sub{color:rgba(255,255,255,.55);}
+.qz-section:hover .qz-panel.selected::before{background:var(--green-deep);}
+
+/* ── COMPACTE QUIZ — vraag links, blok-keuzes rechts, 1 vraag tegelijk ── */
+.qz-section{height:auto;min-height:0;display:grid;grid-template-columns:300px 1fr;gap:48px;align-items:center;max-width:1040px;margin:0 auto;padding:72px 48px;border-top:none;}
+.qz-section.locked{display:none;}
+.qz-section.unlocked{display:grid;}
+.qz-left{position:static;height:auto;padding:0;border-right:none;text-align:left;}
+.q-num{margin-bottom:10px;}
+.q-lbl{font-size:clamp(24px,2.6vw,34px);text-align:left;}
+.q-line{display:none;}
+.q-sub-text{max-width:none;margin:14px 0 0;text-align:left;}
+.qz-right{height:auto;grid-template-columns:1fr 1fr;gap:18px;max-width:none;margin:0;}
+.qz-panel{padding:28px 24px 22px;justify-content:flex-start;border:1px solid var(--border);border-radius:20px;background:rgba(255,255,255,.9);box-shadow:0 12px 40px rgba(0,0,0,.06);}
+.qz-panel:first-child{border-left:1px solid var(--border);}
+.qz-panel::before{border-radius:20px;}
+.ans-label{font-size:clamp(17px,1.7vw,22px);margin-bottom:8px;}
+.ans-sub{font-size:13px;line-height:1.55;max-width:none;}
+.ans-arrow{margin-top:16px;width:34px;height:34px;}
+.ans-check{top:16px;right:16px;width:24px;height:24px;}
+#qz-back-wrap{display:none;justify-content:center;padding:0 0 64px;}
+.qz-back{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--border);border-radius:999px;padding:10px 20px;font-family:var(--font-head);font-size:13px;font-weight:600;color:var(--ink-muted);cursor:pointer;transition:color .2s,border-color .2s;}
+.qz-back:hover{color:var(--green);border-color:var(--green);}
+</style>
+
+<script>
+(function(){
+  var qzAnswers = {};
+  var path = ['qz-q1'];   // bezochte vragen; laatste = huidige
+
+  function hideResults(){
+    ['nymo-homey','nymo-only','boilergarant','installer-quote','guides'].forEach(function(k){
+      var el=document.getElementById('qzr-'+k); if(el) el.style.display='none';
+    });
+  }
+  function lockAll(){
+    document.querySelectorAll('#quiz-section .qz-section').forEach(function(s){
+      s.classList.remove('unlocked'); s.classList.add('locked');
+    });
+  }
+  function updateBack(){
+    var w=document.getElementById('qz-back-wrap');
+    if(w) w.style.display = (path.length>1) ? 'flex' : 'none';
+  }
+  function clearPanels(id){
+    var el=document.getElementById(id);
+    if(el) el.querySelectorAll('.qz-panel').forEach(function(p){ p.classList.remove('selected','rejected'); });
+  }
+  function show(id){
+    lockAll();
+    var el=document.getElementById(id);
+    if(el){ el.classList.remove('locked'); el.classList.add('unlocked'); }
+    updateBack();
+    setTimeout(function(){ if(el) el.scrollIntoView({behavior:'smooth',block:'center'}); }, 60);
+  }
+  function showResult(key){
+    hideResults();
+    var el=document.getElementById('qzr-'+key); if(el) el.style.display='block';
+    show('qz-result');
+  }
+
+  window.qzChoose = function(panel){
+    var qId   = panel.getAttribute('data-q');
+    var val   = panel.getAttribute('data-val');
+    var next  = panel.getAttribute('data-next');
+    var result= panel.getAttribute('data-result');
+    qzAnswers[qId] = val;
+
+    var panels = panel.parentElement.querySelectorAll('.qz-panel');
+    panels.forEach(function(p){ p.classList.remove('selected','rejected'); });
+    panel.classList.add('selected');
+    panels.forEach(function(p){ if(p!==panel) p.classList.add('rejected'); });
+
+    // pad afkappen tot huidige vraag, dan volgende toevoegen
+    var ci = path.indexOf(qId);
+    if(ci>=0) path = path.slice(0, ci+1);
+
+    if(next==='qz-result'){ path.push('qz-result'); showResult(result); }
+    else { path.push(next); show(next); }
+  };
+
+  window.qzBack = function(){
+    if(path.length<=1) return;
+    path.pop();
+    var prev = path[path.length-1];
+    hideResults();
+    clearPanels(prev);
+    show(prev);
+  };
+
+  window.qzRestart = function(){
+    qzAnswers = {};
+    path = ['qz-q1'];
+    document.querySelectorAll('#quiz-section .qz-panel').forEach(function(p){ p.classList.remove('selected','rejected'); });
+    hideResults();
+    show('qz-q1');
+  };
+
+  // init: alleen vraag 1 tonen, zonder te scrollen
+  hideResults();
+  lockAll();
+  var first=document.getElementById('qz-q1');
+  if(first){ first.classList.remove('locked'); first.classList.add('unlocked'); }
+  updateBack();
+})();
+</script>
+
+<!-- FOOTER -->
+<div style="scroll-snap-align:start;">
+  <footer>
+    <div class="fg">
+      <div>
+        <img src="midia/solyx-logo.png" alt="Solyx Energy" style="height:28px;filter:brightness(0) invert(1);opacity:.8;">
+        <p class="fbt">Slimme energieopslag voor huishoudens met zonnepanelen. Simpel, betaalbaar, direct resultaat.</p>
+      </div>
+      <div><div class="fct">Product</div><ul class="flinks"><li><a href="#">WaterAccu</a></li><li><a href="#">Nymo controller</a></li><li><a href="#">Besparing berekenen</a></li><li><a href="#">Shop</a></li></ul></div>
+      <div><div class="fct">Installatie</div><ul class="flinks"><li><a href="#">Hoe werkt het</a></li><li><a href="klantverhalen.html">Klantverhalen</a></li><li><a href="#">FAQ</a></li><li><a href="#">Contact</a></li></ul></div>
+      <div><div class="fct">Bedrijf</div><ul class="flinks"><li><a href="over-ons.html">Over Solyx</a></li><li><a href="#">Werken bij</a></li><li><a href="#">Blog & Nieuws</a></li><li><a href="#">Partners</a></li></ul></div>
+    </div>
+    <div class="fbottom">
+      <div class="fcopy">© 2025 Solyx Energy BV · Alle rechten voorbehouden</div>
+      <div style="display:flex;gap:20px">
+        <a href="#" style="font-family:var(--font-head);font-size:12px;color:rgba(255,255,255,.2);text-decoration:none">Privacy</a>
+        <a href="#" style="font-family:var(--font-head);font-size:12px;color:rgba(255,255,255,.2);text-decoration:none">Voorwaarden</a>
+      </div>
+    </div>
+  </footer>
+</div>
+</div><!-- /scroll-container -->
+
+<script>
+var SC  = document.getElementById('scroll-container');
+var VH  = window.innerHeight;
+var answers = {};
+var activePath = ['q1'];
+
+function goto(id) {
+  var el = document.getElementById(id);
+  if (el) SC.scrollTo({ top: el.offsetTop, behavior: 'smooth' });
+}
+window.goto = goto;
+
+SC.addEventListener('scroll', function(){
+  document.getElementById('nav').classList.toggle('scrolled', SC.scrollTop > 60);
+  document.getElementById('scroll-progress').style.width =
+    (SC.scrollTop / (SC.scrollHeight - SC.clientHeight) * 100) + '%';
+}, { passive: true });
+
+var snws = document.querySelectorAll('.snw');
+SC.addEventListener('scroll', function(){
+  var st = SC.scrollTop;
+  snws.forEach(function(d){
+    var el = document.getElementById(d.getAttribute('data-id'));
+    if (!el) return;
+    d.classList.toggle('active', Math.abs(st - el.offsetTop) < VH * .5);
+  });
+}, { passive: true });
+snws.forEach(function(d){
+  d.addEventListener('click', function(){ goto(d.getAttribute('data-id')); });
+});
+
+function choose(panel) {
+  var qId   = panel.getAttribute('data-q');
+  var val   = panel.getAttribute('data-val');
+  var next  = panel.getAttribute('data-next');
+  var result= panel.getAttribute('data-result');
+  var prevVal = answers[qId];
+  answers[qId] = val;
+
+  // update active path
+  var qIdx = activePath.indexOf(qId);
+  if (qIdx > -1) activePath = activePath.slice(0, qIdx + 1);
+  else activePath.push(qId);
+  if (next !== 'result') activePath.push(next);
+
+  // mark selected, mark sibling rejected
+  var panels = panel.parentElement.querySelectorAll('.ans-panel');
+  panels.forEach(function(p){ p.classList.remove('selected','rejected'); });
+  panel.classList.add('selected');
+  panels.forEach(function(p){ if (p !== panel) p.classList.add('rejected'); });
+
+  // reset downstream if answer changed
+  if (prevVal && prevVal !== val) resetDownstream(qId);
+
+  // unlock next
+  if (next === 'result') {
+    showResult(result);
+    unlock('result');
+    setTimeout(function(){ goto('result'); }, 350);
+  } else {
+    unlock(next);
+    setTimeout(function(){ goto(next); }, 350);
+  }
+
+  snws.forEach(function(d){ if (d.getAttribute('data-id') === qId) d.classList.add('done'); });
+}
+window.choose = choose;
+
+function unlock(id) {
+  var el = document.getElementById(id);
+  if (el) { el.classList.remove('locked'); el.classList.add('unlocked'); }
+}
+
+var order = ['q1','q2b','q3loc','q3str','q4','q2a','result'];
+
+function resetDownstream(fromId) {
+  var apIdx = activePath.indexOf(fromId);
+  if (apIdx > -1) activePath = activePath.slice(0, apIdx + 1);
+  var idx = order.indexOf(fromId);
+  if (idx < 0) return;
+  for (var i = idx + 1; i < order.length; i++) {
+    var el = document.getElementById(order[i]);
+    if (!el) continue;
+    el.classList.remove('unlocked'); el.classList.add('locked');
+    el.querySelectorAll('.ans-panel').forEach(function(p){
+      p.classList.remove('selected','rejected');
+    });
+    var qid = el.getAttribute('data-qid');
+    if (qid) delete answers[qid];
+    snws.forEach(function(d){ if (d.getAttribute('data-id') === order[i]) d.classList.remove('done'); });
+  }
+  hideAllResults();
+}
+
+var resultKeys = ['nymo-homey','nymo-only','boilergarant','installer-quote','guides'];
+function showResult(key) {
+  hideAllResults();
+  var el = document.getElementById('r-' + key);
+  if (el) el.style.display = 'block';
+}
+function swapResult(key) { showResult(key); }
+window.swapResult = swapResult;
+function hideAllResults() {
+  resultKeys.forEach(function(k){
+    var el = document.getElementById('r-' + k);
+    if (el) el.style.display = 'none';
+  });
+}
+
+function restart() {
+  answers = {}; activePath = ['q1'];
+  order.slice(1).forEach(function(id){
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.classList.remove('unlocked'); el.classList.add('locked');
+    el.querySelectorAll('.ans-panel').forEach(function(p){ p.classList.remove('selected','rejected'); });
+  });
+  snws.forEach(function(d){ d.classList.remove('done'); });
+  hideAllResults();
+  goto('hero');
+}
+window.restart = restart;
+window.addEventListener('resize', function(){ VH = window.innerHeight; });
+</script>
+
+<!-- COMPATIBILITY DRAWER -->
+<div id="drawer-overlay" onclick="closeDrawer()"></div>
+<div id="compat-drawer">
+  <div class="drawer-header">
+    <div class="drawer-title">Boiler Compatibility</div>
+    <button class="drawer-close" onclick="closeDrawer()">
+      <svg width="12" height="12" viewBox="0 0 12 12"><line x1="1" y1="1" x2="11" y2="11" stroke="var(--ink)" stroke-width="2" stroke-linecap="round"/><line x1="11" y1="1" x2="1" y2="11" stroke="var(--ink)" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+  <div class="drawer-banner">Required boiler features — check before ordering</div>
+  <div class="drawer-body">
+    <div class="drawer-intro-title">Compatible<br>boilers</div>
+    <div class="drawer-intro-sub">for use with NYMO</div>
+    <p class="drawer-intro-desc">Your boiler needs to meet the following requirements to work with NYMO. Check the specs below and compare with your boiler's manual.</p>
+    <div class="drawer-specs-label">Requirements</div>
+    <div class="drawer-spec-row">
+      <div class="drawer-spec-left">
+        <div class="drawer-spec-name">Feature 1</div>
+        <div class="drawer-spec-val">Details to be added</div>
+      </div>
+      <div class="drawer-spec-icon"><svg width="16" height="16" viewBox="0 0 16 16"><rect x="2" y="2" width="12" height="12" rx="3" fill="none" stroke="var(--green)" stroke-width="1.5"/><circle cx="8" cy="8" r="2" fill="var(--green)"/></svg></div>
+    </div>
+    <div class="drawer-spec-row">
+      <div class="drawer-spec-left">
+        <div class="drawer-spec-name">Feature 2</div>
+        <div class="drawer-spec-val">Details to be added</div>
+      </div>
+      <div class="drawer-spec-icon"><svg width="16" height="16" viewBox="0 0 16 16"><rect x="2" y="2" width="12" height="12" rx="3" fill="none" stroke="var(--green)" stroke-width="1.5"/><circle cx="8" cy="8" r="2" fill="var(--green)"/></svg></div>
+    </div>
+    <div class="drawer-spec-row">
+      <div class="drawer-spec-left">
+        <div class="drawer-spec-name">Feature 3</div>
+        <div class="drawer-spec-val">Details to be added</div>
+      </div>
+      <div class="drawer-spec-icon"><svg width="16" height="16" viewBox="0 0 16 16"><rect x="2" y="2" width="12" height="12" rx="3" fill="none" stroke="var(--green)" stroke-width="1.5"/><circle cx="8" cy="8" r="2" fill="var(--green)"/></svg></div>
+    </div>
+    <div class="drawer-spec-row">
+      <div class="drawer-spec-left">
+        <div class="drawer-spec-name">Feature 4</div>
+        <div class="drawer-spec-val">Details to be added</div>
+      </div>
+      <div class="drawer-spec-icon"><svg width="16" height="16" viewBox="0 0 16 16"><rect x="2" y="2" width="12" height="12" rx="3" fill="none" stroke="var(--green)" stroke-width="1.5"/><circle cx="8" cy="8" r="2" fill="var(--green)"/></svg></div>
+    </div>
+    <div class="drawer-spec-row">
+      <div class="drawer-spec-left">
+        <div class="drawer-spec-name">Compatible brands</div>
+        <div class="drawer-spec-val">Names to be added</div>
+      </div>
+      <div class="drawer-spec-icon"><svg width="16" height="16" viewBox="0 0 16 16"><rect x="2" y="2" width="12" height="12" rx="3" fill="none" stroke="var(--green)" stroke-width="1.5"/><circle cx="8" cy="8" r="2" fill="var(--green)"/></svg></div>
+    </div>
+  </div>
+  <div class="drawer-footer">
+    <a href="#" class="btn-primary" style="text-align:center;">Order NYMO</a>
+    <a href="#" class="btn-secondary" style="text-align:center;">Installation manual</a>
+  </div>
+</div>
+
+<script>
+function openDrawer(){
+  document.getElementById('compat-drawer').classList.add('open');
+  document.getElementById('drawer-overlay').classList.add('open');
+}
+function closeDrawer(){
+  document.getElementById('compat-drawer').classList.remove('open');
+  document.getElementById('drawer-overlay').classList.remove('open');
+}
+window.openDrawer = openDrawer;
+window.closeDrawer = closeDrawer;
+</script>
+</body>
+</</div>
+        <div class="res-right-image"><img src="midia/nymo-homey.jpg" alt="NYMO x Homey"></div>
+      </div>
+    </div>
+        <div class="res-right-image"><img src="midia/nymo-sensor.jpg" alt="NYMO device"></div>
+      </div>
+    </div>
+        <div class="res-right-image"><img src="midia/nymo-sensor.jpg" alt="NYMO device"></div>
+      </div>
+    </div>
+        <div class="res-right-image"><img src="midia/nymo-sensor.jpg" alt="NYMO device"></div>
+      </div>
+    </div>
+        <div class="res-right-image"><img src="midia/nymo-homey.jpg" alt="NYMO x Homey"></div>
+      </div>
+    </div>

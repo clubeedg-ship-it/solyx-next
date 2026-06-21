@@ -1,0 +1,176 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - link [ref=e3] [cursor=pointer]:
+      - /url: home.html
+      - img [ref=e4]:
+        - generic [ref=e7]: SOLYX ENERGY
+    - list [ref=e8]:
+      - listitem [ref=e9]:
+        - link "Hoe werkt het" [ref=e10] [cursor=pointer]:
+          - /url: hoe-werkt-het.html
+      - listitem [ref=e11]:
+        - link "Aan de slag" [ref=e12] [cursor=pointer]:
+          - /url: how-to-get-it.html
+      - listitem [ref=e13]:
+        - link "FAQs" [ref=e14] [cursor=pointer]:
+          - /url: faq.html
+      - listitem [ref=e15]:
+        - link "Shop" [ref=e16] [cursor=pointer]:
+          - /url: shop.html
+    - link "Bestel" [ref=e18] [cursor=pointer]:
+      - /url: how-to-get-it.html
+  - generic [ref=e19]:
+    - generic [ref=e20]:
+      - link "Home" [ref=e21] [cursor=pointer]:
+        - /url: home.html
+      - generic [ref=e22]: ›
+      - link "Winkel" [ref=e23] [cursor=pointer]:
+        - /url: shop.html
+      - generic [ref=e24]: ›
+      - generic [ref=e25]: WaterAccu – Complete set
+    - generic [ref=e26]:
+      - generic [ref=e27]:
+        - generic [ref=e28]:
+          - generic [ref=e29]: Verticaal · Steel · 100L
+          - img "WaterAccu Complete set" [ref=e30]
+        - generic [ref=e36]:
+          - img [ref=e37]
+          - generic [ref=e39]: Steel verticale boiler — compact wandmodel, energiezuinig en eenvoudig zelf te installeren.
+      - generic [ref=e40]:
+        - heading "WaterAccu – Complete set" [level=1] [ref=e41]
+        - generic [ref=e42]:
+          - text: Vanaf
+          - strong [ref=e43]: €1.165,00
+          - text: inclusief 21% btw
+        - generic [ref=e44]:
+          - generic [ref=e45]: Kies het merk boiler
+          - generic [ref=e46]: Voor materiaal- en kwaliteitskeuze
+          - generic [ref=e47]:
+            - button "Steel vanaf €540" [ref=e48] [cursor=pointer]:
+              - generic [ref=e49]: Steel
+              - generic [ref=e50]: vanaf €540
+            - button "RVS vanaf €885" [ref=e51] [cursor=pointer]:
+              - generic [ref=e52]: RVS
+              - generic [ref=e53]: vanaf €885
+          - generic [ref=e54]:
+            - strong [ref=e55]: Steel
+            - text: — Uitstekende prijs-kwaliteit, energiezuinig en eenvoudig zelf te installeren. Beschikbaar verticaal (100L, 150L) en horizontaal (120L).
+        - separator [ref=e56]
+        - generic [ref=e57]:
+          - generic [ref=e58]: Kies je type boiler
+          - generic [ref=e59]:
+            - button "Verticaal" [ref=e60] [cursor=pointer]:
+              - img [ref=e61]
+              - text: Verticaal
+            - button "Horizontaal" [ref=e63] [cursor=pointer]:
+              - img [ref=e64]
+              - text: Horizontaal
+        - separator [ref=e66]
+        - generic [ref=e67]:
+          - generic [ref=e68]: Kies het formaat
+          - generic [ref=e69]: "Steel verticaal: beschikbaar in 100L en 150L"
+          - generic [ref=e70]:
+            - button "100L €540 1–2 pers." [ref=e71] [cursor=pointer]:
+              - generic [ref=e72]: 100L
+              - generic [ref=e73]: €540
+              - generic [ref=e74]: 1–2 pers.
+            - button "150L €680 3–4 pers." [ref=e75] [cursor=pointer]:
+              - generic [ref=e76]: 150L
+              - generic [ref=e77]: €680
+              - generic [ref=e78]: 3–4 pers.
+        - separator [ref=e79]
+        - generic [ref=e80]:
+          - generic [ref=e81]:
+            - img [ref=e82]
+            - text: Optioneel meeleveren — alleen voor Steel boilers
+          - generic [ref=e84] [cursor=pointer]:
+            - generic [ref=e86]: Steel Ophangbeugel
+            - generic [ref=e87]: +€19,50
+          - generic [ref=e88] [cursor=pointer]:
+            - generic [ref=e90]: Steel Complete installatieset (incl. ophangbeugel)
+            - generic [ref=e91]: +€75,00
+          - generic [ref=e92] [cursor=pointer]:
+            - generic [ref=e94]: (Actieve) P1-splitter
+            - generic [ref=e95]: +€16,00
+          - generic [ref=e96]: "Om installatie te vergemakkelijken kan een ophangbeugel of volledige installatieset worden meegeleverd. LET OP: Alleen voor Steel boilers (100L en 150L)."
+        - generic [ref=e97]:
+          - generic [ref=e98]:
+            - generic [ref=e99]: Nymo WaterAccu controller
+            - generic [ref=e100]: €625,00
+          - generic [ref=e101]:
+            - generic [ref=e102]: Steel boiler (100L verticaal)
+            - generic [ref=e103]: €540,00
+          - generic [ref=e105]: Totaal incl. 21% btw
+          - generic [ref=e106]: €1.165,00
+          - generic [ref=e107]: Gratis verzending · Binnen 3 werkdagen in huis
+          - button "Toevoegen aan winkelwagen" [ref=e108] [cursor=pointer]:
+            - img [ref=e109]
+            - text: Toevoegen aan winkelwagen
+          - generic [ref=e113]:
+            - generic [ref=e114]:
+              - img [ref=e115]
+              - text: Gratis verzending
+            - generic [ref=e117]:
+              - img [ref=e118]
+              - text: 2 jaar garantie
+            - generic [ref=e120]:
+              - img [ref=e121]
+              - text: 15 min installatie
+  - contentinfo [ref=e124]:
+    - generic [ref=e125]:
+      - generic [ref=e126]:
+        - img [ref=e127]:
+          - generic [ref=e130]: SOLYX ENERGY
+        - paragraph [ref=e131]: Slimme energieopslag voor huishoudens met zonnepanelen. Simpel, betaalbaar, direct resultaat. Made in Holland.
+      - generic [ref=e132]:
+        - generic [ref=e133]: Product
+        - list [ref=e134]:
+          - listitem [ref=e135]:
+            - link "WaterAccu" [ref=e136] [cursor=pointer]:
+              - /url: wateraccu.html
+          - listitem [ref=e137]:
+            - link "De Nymo" [ref=e138] [cursor=pointer]:
+              - /url: wateraccu.html
+          - listitem [ref=e139]:
+            - link "Nymo × Homey" [ref=e140] [cursor=pointer]:
+              - /url: "#"
+          - listitem [ref=e141]:
+            - link "Shop" [ref=e142] [cursor=pointer]:
+              - /url: shop.html
+      - generic [ref=e143]:
+        - generic [ref=e144]: Installatie
+        - list [ref=e145]:
+          - listitem [ref=e146]:
+            - link "Installatie" [ref=e147] [cursor=pointer]:
+              - /url: installatie.html
+          - listitem [ref=e148]:
+            - link "Klantverhalen" [ref=e149] [cursor=pointer]:
+              - /url: "#"
+          - listitem [ref=e150]:
+            - link "FAQ" [ref=e151] [cursor=pointer]:
+              - /url: faq.html
+          - listitem [ref=e152]:
+            - link "Contact" [ref=e153] [cursor=pointer]:
+              - /url: "#"
+      - generic [ref=e154]:
+        - generic [ref=e155]: Bedrijf
+        - list [ref=e156]:
+          - listitem [ref=e157]:
+            - link "Over Solyx" [ref=e158] [cursor=pointer]:
+              - /url: "#"
+          - listitem [ref=e159]:
+            - link "Besparen" [ref=e160] [cursor=pointer]:
+              - /url: besparen.html
+          - listitem [ref=e161]:
+            - link "Blog & Nieuws" [ref=e162] [cursor=pointer]:
+              - /url: "#"
+          - listitem [ref=e163]:
+            - link "Voor installateurs" [ref=e164] [cursor=pointer]:
+              - /url: "#"
+    - generic [ref=e165]:
+      - generic [ref=e166]: © 2025 Solyx Energy BV · Smitspol 15M · 3861 RS Nijkerk · KvK 85751391
+      - generic [ref=e167]:
+        - link "Voorwaarden" [ref=e168] [cursor=pointer]:
+          - /url: "#"
+        - link "Privacy" [ref=e169] [cursor=pointer]:
+          - /url: "#"

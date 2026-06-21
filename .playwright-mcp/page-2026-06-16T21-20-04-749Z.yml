@@ -1,0 +1,182 @@
+- generic [active] [ref=e1]:
+  - link "Installer pagina" [ref=e2] [cursor=pointer]:
+    - /url: "#"
+  - navigation [ref=e3]:
+    - img "Solyx Energy" [ref=e5]
+  - generic [ref=e6] [cursor=pointer]:
+    - generic: Boiler?
+  - generic [ref=e8] [cursor=pointer]:
+    - generic: Full set?
+  - generic [ref=e10] [cursor=pointer]:
+    - generic: Homey?
+  - generic [ref=e12] [cursor=pointer]:
+    - generic: Location?
+  - generic [ref=e14] [cursor=pointer]:
+    - generic: Strategy?
+  - generic [ref=e16] [cursor=pointer]:
+    - generic: Homey?
+  - generic [ref=e18] [cursor=pointer]:
+    - generic: Result
+  - generic [ref=e20]:
+    - generic [ref=e22]:
+      - heading "Aan de slag." [level=1] [ref=e23]
+      - generic [ref=e24]:
+        - generic [ref=e25] [cursor=pointer]:
+          - generic [ref=e26]: Nymo
+          - generic [ref=e27]: €649
+          - generic [ref=e28]: Voor wie al een geschikte boiler heeft, of er zelf een uitkiest. De Nymo is eenvoudig zelf te installeren.
+          - img [ref=e32]
+        - generic [ref=e52] [cursor=pointer]:
+          - generic [ref=e53]: Nymo + Boiler
+          - generic [ref=e54]: vanaf €1.189
+          - generic [ref=e55]: Voor wie nog geen boiler heeft. Complete WaterAccu inclusief geschikte boiler, zonder installatie.
+          - generic [ref=e56]:
+            - img [ref=e59]
+            - generic [ref=e79]: +
+            - img [ref=e82]
+        - generic [ref=e91] [cursor=pointer]:
+          - generic [ref=e92]: Complete Installatie
+          - generic [ref=e93]: vanaf €1.725
+          - generic [ref=e94]: Volledige ontzorging. Boiler + Nymo, inclusief installatie aan huis, door installatie-partner van Solyx Energy.
+          - generic [ref=e95]:
+            - img [ref=e98]
+            - generic [ref=e118]: +
+            - img [ref=e121]
+            - generic [ref=e130]: +
+            - img [ref=e133]
+      - generic [ref=e135]:
+        - text: Installateur?
+        - link "Klik hier." [ref=e136] [cursor=pointer]:
+          - /url: installatie.html
+      - generic [ref=e137] [cursor=pointer]:
+        - generic [ref=e138]: Twijfel je nog?
+        - img [ref=e139]
+        - generic [ref=e141]: Scroll naar beneden en we helpen je kiezen
+    - generic [ref=e142]:
+      - heading "Vind jouw match." [level=2] [ref=e144]
+      - generic [ref=e145]:
+        - generic [ref=e146]:
+          - generic [ref=e147]: 01 / Vraag
+          - generic [ref=e148]:
+            - text: Heb je al een
+            - text: boiler
+            - text: thuis?
+          - paragraph [ref=e149]: De Nymo sluit aan op je bestaande boiler en maakt deze slim.
+        - generic [ref=e150]:
+          - generic [ref=e152] [cursor=pointer]:
+            - generic [ref=e153]:
+              - text: Ja, ik heb
+              - text: een boiler
+            - generic [ref=e154]: Ik heb al een boiler die klaar is om aan te sluiten.
+            - img [ref=e156]
+          - generic [ref=e159] [cursor=pointer]:
+            - generic [ref=e160]:
+              - text: Nee, ik heb
+              - text: er geen
+            - generic [ref=e161]: Ik heb een complete oplossing nodig.
+            - img [ref=e163]
+    - contentinfo [ref=e166]:
+      - generic [ref=e167]:
+        - generic [ref=e168]:
+          - img "Solyx Energy" [ref=e169]
+          - paragraph [ref=e170]: Slimme energieopslag voor huishoudens met zonnepanelen. Simpel, betaalbaar, direct resultaat.
+        - generic [ref=e171]:
+          - generic [ref=e172]: Product
+          - list [ref=e173]:
+            - listitem [ref=e174]:
+              - link "WaterAccu" [ref=e175] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e176]:
+              - link "Nymo controller" [ref=e177] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e178]:
+              - link "Besparing berekenen" [ref=e179] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e180]:
+              - link "Shop" [ref=e181] [cursor=pointer]:
+                - /url: "#"
+        - generic [ref=e182]:
+          - generic [ref=e183]: Installatie
+          - list [ref=e184]:
+            - listitem [ref=e185]:
+              - link "Hoe werkt het" [ref=e186] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e187]:
+              - link "Klantverhalen" [ref=e188] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e189]:
+              - link "FAQ" [ref=e190] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e191]:
+              - link "Contact" [ref=e192] [cursor=pointer]:
+                - /url: "#"
+        - generic [ref=e193]:
+          - generic [ref=e194]: Bedrijf
+          - list [ref=e195]:
+            - listitem [ref=e196]:
+              - link "Over Solyx" [ref=e197] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e198]:
+              - link "Werken bij" [ref=e199] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e200]:
+              - link "Blog & Nieuws" [ref=e201] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e202]:
+              - link "Partners" [ref=e203] [cursor=pointer]:
+                - /url: "#"
+      - generic [ref=e204]:
+        - generic [ref=e205]: © 2025 Solyx Energy BV · Alle rechten voorbehouden
+        - generic [ref=e206]:
+          - link "Privacy" [ref=e207] [cursor=pointer]:
+            - /url: "#"
+          - link "Voorwaarden" [ref=e208] [cursor=pointer]:
+            - /url: "#"
+  - generic [ref=e209]:
+    - generic [ref=e210]:
+      - generic [ref=e211]: Boiler Compatibility
+      - button [ref=e212] [cursor=pointer]:
+        - img [ref=e213]
+    - generic [ref=e216]: Required boiler features — check before ordering
+    - generic [ref=e217]:
+      - generic [ref=e218]:
+        - text: Compatible
+        - text: boilers
+      - generic [ref=e219]: for use with NYMO
+      - paragraph [ref=e220]: Your boiler needs to meet the following requirements to work with NYMO. Check the specs below and compare with your boiler's manual.
+      - generic [ref=e221]: Requirements
+      - generic [ref=e222]:
+        - generic [ref=e223]:
+          - generic [ref=e224]: Feature 1
+          - generic [ref=e225]: Details to be added
+        - img [ref=e227]
+      - generic [ref=e230]:
+        - generic [ref=e231]:
+          - generic [ref=e232]: Feature 2
+          - generic [ref=e233]: Details to be added
+        - img [ref=e235]
+      - generic [ref=e238]:
+        - generic [ref=e239]:
+          - generic [ref=e240]: Feature 3
+          - generic [ref=e241]: Details to be added
+        - img [ref=e243]
+      - generic [ref=e246]:
+        - generic [ref=e247]:
+          - generic [ref=e248]: Feature 4
+          - generic [ref=e249]: Details to be added
+        - img [ref=e251]
+      - generic [ref=e254]:
+        - generic [ref=e255]:
+          - generic [ref=e256]: Compatible brands
+          - generic [ref=e257]: Names to be added
+        - img [ref=e259]
+    - generic [ref=e262]:
+      - link "Order NYMO" [ref=e263] [cursor=pointer]:
+        - /url: "#"
+      - link "Installation manual" [ref=e264] [cursor=pointer]:
+        - /url: "#"
+  - img "NYMO x Homey" [ref=e266]
+  - img "NYMO device" [ref=e268]
+  - img "NYMO device" [ref=e270]
+  - img "NYMO device" [ref=e272]
+  - img "NYMO x Homey" [ref=e274]

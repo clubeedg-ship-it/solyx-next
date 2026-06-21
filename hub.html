@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <link rel="icon" type="image/png" sizes="64x64" href="midia/favicon.png">
+  <link rel="apple-touch-icon" href="midia/apple-touch-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solyx Energy — Website (static HTML)</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:Inter,system-ui,-apple-system,sans-serif;background:#f6f8f7;color:#1c2422;padding:40px 24px 80px;}
+  .wrap{max-width:1080px;margin:0 auto;}
+  .brand{display:flex;align-items:center;gap:12px;margin-bottom:6px;}
+  .dot{width:14px;height:14px;border-radius:50%;background:#35A847;}
+  h1{font-size:30px;font-weight:900;letter-spacing:-.02em;}
+  .sub{color:#5b6661;font-size:15px;margin:10px 0 28px;line-height:1.55;max-width:680px;}
+  .note{background:#fff;border:1px solid #e3e8e6;border-left:4px solid #35A847;border-radius:10px;padding:16px 18px;margin-bottom:40px;font-size:14px;line-height:1.6;color:#33403b;}
+  .note b{color:#1c2422;}
+  .note code{background:#eef3f1;padding:1px 6px;border-radius:5px;font-size:13px;}
+  .section{margin-bottom:44px;}
+  .section h2{font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:#1E7A30;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid #d7e6da;}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;}
+  .card{background:#fff;border:1px solid #e3e8e6;border-radius:12px;overflow:hidden;transition:border-color .15s,transform .15s,box-shadow .15s;}
+  .card:hover{border-color:#35A847;transform:translateY(-2px);box-shadow:0 8px 24px rgba(53,168,71,.10);}
+  .card a{text-decoration:none;color:inherit;display:block;padding:18px 18px 16px;}
+  .card h3{font-size:16px;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:8px;}
+  .card .file{font-size:12px;color:#9aa5a0;margin-bottom:9px;font-family:ui-monospace,monospace;}
+  .card .desc{font-size:13px;color:#5b6661;line-height:1.5;}
+  .badge{display:inline-block;font-size:10px;font-weight:800;padding:2px 8px;border-radius:99px;text-transform:uppercase;letter-spacing:.05em;}
+  .b-new{background:#e8f5e9;color:#1E7A30;}
+  .b-form{background:#ede7f6;color:#5E35B1;}
+  footer{margin-top:48px;font-size:13px;color:#9aa5a0;text-align:center;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="brand"><span class="dot"></span><h1>Solyx Energy — Website</h1></div>
+  <p class="sub">Every page below is a plain, standalone HTML file. This is the working copy of the site where the content gets finished before it goes live.</p>
+
+  <div class="note">
+    <b>How to edit:</b> there is no build step. Open any <code>.html</code> file directly in a browser to preview it, and open the same file in an editor to change the text, images and links. Save the file and refresh the browser to see the change.<br>
+    <b>Working with the assistant:</b> just name the page and what you want changed (e.g. <i>"on <code>besparen.html</code>, change the hero heading and the three bullet points"</i>) and the assistant edits the HTML for you.
+  </div>
+
+  <div class="section">
+    <h2>Main pages</h2>
+    <div class="grid">
+      <div class="card"><a href="home.html">
+        <h3>Home</h3>
+        <div class="file">home.html</div>
+        <div class="desc">Homepage — hero, stats, calculator, reviews, comparison.</div>
+      </a></div>
+      <div class="card"><a href="hoe-werkt-het.html">
+        <h3>Hoe werkt het</h3>
+        <div class="file">hoe-werkt-het.html</div>
+        <div class="desc">Full product explainer with snap-scroll sections.</div>
+      </a></div>
+      <div class="card"><a href="besparen.html">
+        <h3>Besparen</h3>
+        <div class="file">besparen.html</div>
+        <div class="desc">Savings calculator with charts and the dimmer animation.</div>
+      </a></div>
+      <div class="card"><a href="how-to-get-it.html">
+        <h3>Aan de slag</h3>
+        <div class="file">how-to-get-it.html</div>
+        <div class="desc">Product quiz wizard, result cards, step navigation.</div>
+      </a></div>
+      <div class="card"><a href="shop.html">
+        <h3>Winkel / Shop</h3>
+        <div class="file">shop.html</div>
+        <div class="desc">Product configurator — brand and capacity selector.</div>
+      </a></div>
+      <div class="card"><a href="wateraccu.html">
+        <h3>Nymo WaterAccu</h3>
+        <div class="file">wateraccu.html</div>
+        <div class="desc">Product page with version tabs and add-on selector.</div>
+      </a></div>
+      <div class="card"><a href="faq.html">
+        <h3>FAQ</h3>
+        <div class="file">faq.html</div>
+        <div class="desc">Category cards with Q&amp;A accordion groups.</div>
+      </a></div>
+      <div class="card"><a href="faq.html">
+        <h3>Handleidingen</h3>
+        <div class="file">faq.html</div>
+        <div class="desc">Manual / PDF download hub with language pills.</div>
+      </a></div>
+      <div class="card"><a href="home.html">
+        <h3>Blog &amp; Nieuws</h3>
+        <div class="file">home.html</div>
+        <div class="desc">Blog and news card grid.</div>
+      </a></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>New pages</h2>
+    <div class="grid">
+      <div class="card"><a href="landingspagina.html">
+        <h3>Landingspagina <span class="badge b-new">New</span></h3>
+        <div class="file">landingspagina.html</div>
+        <div class="desc">Campaign landing page — hero, features, social proof, CTA.</div>
+      </a></div>
+      <div class="card"><a href="home.html">
+        <h3>Over ons <span class="badge b-new">New</span></h3>
+        <div class="file">home.html</div>
+        <div class="desc">Company story, team, mission and values.</div>
+      </a></div>
+      <div class="card"><a href="home.html">
+        <h3>Klantverhalen <span class="badge b-new">New</span></h3>
+        <div class="file">home.html</div>
+        <div class="desc">Customer stories and case studies with real installations.</div>
+      </a></div>
+      <div class="card"><a href="installatie.html">
+        <h3>Installatie <span class="badge b-new">New</span></h3>
+        <div class="file">installatie.html</div>
+        <div class="desc">Installation info — how it works, what to expect, requirements.</div>
+      </a></div>
+      <div class="card"><a href="installatie.html">
+        <h3>Installateurs <span class="badge b-new">New</span></h3>
+        <div class="file">installatie.html</div>
+        <div class="desc">Installer / partner network — find an installer nearby.</div>
+      </a></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Forms</h2>
+    <div class="grid">
+      <div class="card"><a href="how-to-get-it.html">
+        <h3>Installatie-formulier <span class="badge b-form">Form</span></h3>
+        <div class="file">how-to-get-it.html</div>
+        <div class="desc">Installation request form — multi-step scheduling wizard.</div>
+      </a></div>
+      <div class="card"><a href="how-to-get-it.html">
+        <h3>Installatie-formulier (Boilergarant) <span class="badge b-form">Form</span></h3>
+        <div class="file">how-to-get-it.html</div>
+        <div class="desc">Boilergarant-specific variant of the installation form.</div>
+      </a></div>
+    </div>
+  </div>
+
+  <footer>16 pages · plain HTML · no build step — open any file in a browser to preview, edit the file to change content.</footer>
+
+</div>
+</body>
+</html>

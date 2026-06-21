@@ -1,0 +1,178 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - img [ref=e4]:
+      - generic [ref=e7]: SOLYX ENERGY
+    - link "Bestel" [ref=e8] [cursor=pointer]:
+      - /url: how-to-get-it.html
+    - button "Menu" [ref=e9] [cursor=pointer]:
+      - img [ref=e10]
+  - generic [ref=e11]:
+    - generic [ref=e13]:
+      - generic [ref=e14]: Welkom op onze vernieuwde website
+      - heading "Jouw besparing." [level=1] [ref=e16]
+      - generic [ref=e17]:
+        - generic [ref=e18]:
+          - generic [ref=e19]:
+            - paragraph [ref=e20]: Vul hier jouw situatie in
+            - generic [ref=e21]:
+              - generic [ref=e22]:
+                - generic [ref=e23]: Aantal personen in huishouden
+                - generic [ref=e24]:
+                  - generic: "3"
+                  - slider [ref=e25] [cursor=pointer]: "3"
+              - generic [ref=e26]:
+                - generic [ref=e27]: Aantal zonnepanelen
+                - generic [ref=e28]:
+                  - generic: "8"
+                  - slider [ref=e29] [cursor=pointer]: "8"
+            - paragraph [ref=e30]: Verschuif het oranje bolletje en bekijk direct jouw geschatte besparing!
+            - link "Hoe is dit berekend? →" [ref=e31] [cursor=pointer]:
+              - /url: "#"
+          - button "Scroll voor meer ↓" [ref=e32] [cursor=pointer]
+        - generic [ref=e35]:
+          - generic [ref=e37]:
+            - generic [ref=e39]: "Jouw besparing is gemiddeld:"
+            - generic [ref=e41]:
+              - generic [ref=e42]: € 342
+              - generic [ref=e43]:
+                - text: per
+                - text: jaar
+            - generic [ref=e45]:
+              - generic [ref=e46]:
+                - generic [ref=e47]: CO₂-besparing
+                - generic [ref=e48]: 526 kg CO₂/jaar
+              - generic [ref=e49]:
+                - generic [ref=e50]: Terugverdientijd
+                - generic [ref=e51]:
+                  - generic [ref=e52]: 2 jaar
+                  - text: bij Nymo only
+                - generic [ref=e53]:
+                  - generic [ref=e54]: 4 jaar
+                  - text: bij Nymo + boiler + installatie
+          - generic [ref=e55]:
+            - generic [ref=e56]: Gebruik zonne-energie
+            - generic [ref=e57]:
+              - generic [ref=e58]:
+                - generic [ref=e59]:
+                  - text: zonder
+                  - strong [ref=e60]: WaterAccu
+                - img "Verdeling zonne-energie zonder WaterAccu" [ref=e62]
+                - generic [ref=e63]:
+                  - generic [ref=e64]:
+                    - text: Eigen verbruik [kWh]
+                    - generic [ref=e66]: "843"
+                  - generic [ref=e67]:
+                    - text: Teruglevering [kWh]
+                    - generic [ref=e69]: "1.877"
+              - generic [ref=e70]:
+                - generic [ref=e71]:
+                  - text: met
+                  - strong [ref=e72]: WaterAccu
+                - img "Verdeling zonne-energie met WaterAccu" [ref=e74]
+                - generic [ref=e75]:
+                  - generic [ref=e76]:
+                    - text: Eigen verbruik [kWh]
+                    - generic [ref=e78]: "2.157"
+                  - generic [ref=e79]:
+                    - text: Teruglevering [kWh]
+                    - generic [ref=e81]: "563"
+          - generic [ref=e82]:
+            - generic [ref=e83]: Cumulatieve besparing
+            - paragraph [ref=e84]: Zo loopt jouw besparing op — extra impact vanaf 2027 door de afschaffing van de salderingsregeling.
+            - img "Cumulatieve besparing over de jaren" [ref=e86]
+            - generic [ref=e87]:
+              - generic [ref=e88]:
+                - generic [ref=e89]: Na 5 jaar
+                - generic [ref=e90]: € 2.472
+              - generic [ref=e91]:
+                - generic [ref=e92]: Na 10 jaar
+                - generic [ref=e93]: € 5.448
+              - generic [ref=e94]:
+                - generic [ref=e95]: Levensduur (15 jaar)
+                - generic [ref=e96]: € 8.816
+    - generic [ref=e98]:
+      - paragraph [ref=e100]:
+        - text: De Nymo
+        - text: werkt als een
+        - text: dimmer.
+      - generic [ref=e101]:
+        - generic [ref=e102]: Schakelaar vs. dimmer
+        - heading "Sleep de balk en zie het verschil" [level=2] [ref=e103]
+        - generic [ref=e104]:
+          - generic [ref=e105]:
+            - generic [ref=e106]:
+              - generic [ref=e107]: Gewone boilerschakelaar
+              - img [ref=e108]:
+                - generic [ref=e116]: 0 W
+                - generic [ref=e117]: UIT
+              - generic [ref=e118]:
+                - generic [ref=e119]: UIT
+                - generic [ref=e120]: AAN
+              - generic [ref=e121]:
+                - text: 0 W of 3.000 W
+                - text: niets ertussenin
+            - generic [ref=e122]:
+              - generic [ref=e123]: Nymo — moduleert continu
+              - img [ref=e124]:
+                - generic [ref=e132]: 0 W
+                - generic [ref=e133]: 0%
+              - generic [ref=e135]: 0% — uit
+              - generic [ref=e136]:
+                - text: 100 W → 3.000 W
+                - text: volgt het overschot precies
+          - generic [ref=e137]:
+            - generic [ref=e138]:
+              - generic [ref=e139]:
+                - generic [ref=e140]: Zonne-overschot
+                - generic [ref=e141]: Sleep om het overschot in te stellen
+              - generic [ref=e142]: 0 W
+            - slider [ref=e144] [cursor=pointer]: "0"
+            - generic [ref=e145]:
+              - generic [ref=e146]:
+                - generic [ref=e147]: UIT
+                - generic [ref=e149]: 0 W
+              - generic [ref=e150]: 750 W
+              - generic [ref=e151]: 1.500 W
+              - generic [ref=e152]: 2.250 W
+              - generic [ref=e153]:
+                - generic [ref=e154]: AAN
+                - generic [ref=e156]: 3.000 W
+            - generic [ref=e157]: Geen overschot — beide staan uit. Het element blijft koud.
+        - paragraph [ref=e158]: Niet aan of uit — maar precies het juiste vermogen. Zoals een dimmer licht regelt, regelt de Nymo het verwarmingselement.
+  - generic [ref=e159]:
+    - generic [ref=e160]:
+      - generic [ref=e161]: Hoe berekenen we dit?
+      - button [ref=e162] [cursor=pointer]:
+        - img [ref=e163]
+    - paragraph [ref=e166]: "De berekening is een schatting op basis van drie factoren: jouw opwekvermogen, huishoudgrootte en de gemiddelde Nederlandse energieprijzen."
+    - generic [ref=e167]:
+      - generic [ref=e168]: Stap 1
+      - generic [ref=e169]: Omrekenen naar kWp
+      - generic [ref=e170]: Elk zonnepaneel levert gemiddeld 400 Wp. We rekenen jouw aantal panelen om naar het totale vermogen in kilowatt-peak (kWp).
+      - generic [ref=e171]: kWp = aantal panelen × 0,4
+    - generic [ref=e172]:
+      - generic [ref=e173]: Stap 2
+      - generic [ref=e174]: Schatting van het overschot
+      - generic [ref=e175]: Op basis van kWp en huishoudgrootte schatten we hoeveel zonne-energie jaarlijks onbenut teruggeleverd wordt. Meer panelen = meer overschot; meer personen = minder overschot.
+      - generic [ref=e176]: Opgeslagen kWh ≈ kWp × 50 − personen × 10
+    - generic [ref=e177]:
+      - generic [ref=e178]: Stap 3
+      - generic [ref=e179]: Besparing berekenen
+      - generic [ref=e180]: De WaterAccu zet dat overschot om in warm water. De besparing bestaat uit vermeden gaskosten plus de waarde van de zelf gebruikte stroom — gebaseerd op actuele tarieven.
+      - generic [ref=e181]: Besparing ≈ opgeslagen kWh × €0,28 (gas + stroom gecombineerd)
+    - paragraph [ref=e182]: Dit is een indicatieve schatting. Werkelijke besparing hangt af van jouw energietarief, verbruikspatroon en seizoen. Gemiddelde besparing op basis van Nederlandse huishoudens in 2024.
+  - generic [ref=e183]:
+    - generic [ref=e184]:
+      - generic [ref=e185]: Meer info
+      - button [ref=e186] [cursor=pointer]:
+        - img [ref=e187]
+    - paragraph [ref=e190]: De calculatie is gebaseerd op
+    - generic [ref=e191]:
+      - generic [ref=e192]: Punt 1
+      - generic [ref=e193]: Besparing ten opzichte van het verwarmen van tapwater met een CV-combiketel.
+    - generic [ref=e194]:
+      - generic [ref=e195]: Punt 2
+      - generic [ref=e196]: Huidige gemiddelde tarieven, en afschaffing van de salderingsregeling vanaf 2027.
+    - generic [ref=e197]:
+      - generic [ref=e198]: Punt 3
+      - generic [ref=e199]: Gemiddelde waarden voor jaarverbruik van huishoudens en jaarlijkse opwek van zonnepanelen uit 2024.
