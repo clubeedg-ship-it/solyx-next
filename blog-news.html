@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blog & Nieuws — Solyx Energy</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+<link href="https://fonts.cdnfonts.com/css/alliance-no-2" rel="stylesheet">
+<style>
+:root{
+  --green:#35A847;--green-deep:#1E7A30;--green-light:#EBF8ED;
+  --orange:#F4831F;--ink:#3D3D3D;--ink-mid:#5A5A5A;--ink-muted:#888888;
+  --white:#FFFFFF;--off-white:#F7F9F7;--border:rgba(60,60,60,.1);
+  --font-head:'Inter',sans-serif;
+  --font-body:'Alliance No.2','DM Sans',Georgia,sans-serif;
+  --nav-h:80px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{min-height:100%;background:#fff;color:var(--ink);font-family:var(--font-body);-webkit-font-smoothing:antialiased;}
+
+/* ── BLOB CANVAS (same as main page) ── */
+#gc{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+.blob{position:absolute;border-radius:50%;filter:blur(90px);mix-blend-mode:multiply;will-change:transform;}
+.blob-1{width:900px;height:900px;background:radial-gradient(circle,rgba(57,171,72,.42) 0%,rgba(57,171,72,.14) 45%,transparent 70%);top:-200px;left:-200px;animation:bl1 14s ease-in-out infinite;}
+@keyframes bl1{0%{transform:translate(0,0)}25%{transform:translate(55vw,80px)}50%{transform:translate(60vw,-60px)}75%{transform:translate(25vw,100px)}100%{transform:translate(0,0)}}
+.blob-2{width:1000px;height:1000px;background:radial-gradient(circle,rgba(57,171,72,.36) 0%,rgba(30,122,48,.12) 45%,transparent 70%);bottom:-250px;right:-250px;animation:bl2 18s ease-in-out infinite;animation-delay:-7s;}
+@keyframes bl2{0%{transform:translate(0,0)}33%{transform:translate(-60vw,-80px)}66%{transform:translate(-30vw,60px)}100%{transform:translate(0,0)}}
+.blob-3{width:800px;height:800px;background:radial-gradient(circle,rgba(57,171,72,.28) 0%,rgba(57,171,72,.1) 50%,transparent 70%);top:30vh;left:20vw;animation:bl3 22s ease-in-out infinite;animation-delay:-4s;}
+@keyframes bl3{0%{transform:translate(0,0)}25%{transform:translate(40vw,-15vh)}50%{transform:translate(20vw,20vh)}75%{transform:translate(-10vw,10vh)}100%{transform:translate(0,0)}}
+
+/* ── INSTALLER BAR + NAV (identical to main) ── */
+#installer-bar{position:fixed;top:0;left:0;right:0;z-index:601;display:flex;align-items:center;justify-content:flex-start;padding:6px 48px;pointer-events:none;}
+#installer-bar a{pointer-events:all;font-family:var(--font-head);font-size:12px;font-weight:500;color:var(--ink-mid);text-decoration:none;transition:color .2s;letter-spacing:.01em;}
+#installer-bar a:hover{color:var(--ink);}
+
+nav{position:fixed;top:30px;left:0;right:0;z-index:600;display:flex;align-items:center;justify-content:space-between;padding:16px 48px;transition:background .4s,backdrop-filter .4s,box-shadow .4s;}
+nav.scrolled{background:rgba(255,255,255,.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--border);box-shadow:0 4px 24px rgba(0,0,0,.04);top:0;}
+nav.scrolled ~ #installer-bar, #installer-bar.hide{opacity:0;pointer-events:none;}
+.nav-logo{display:flex;align-items:center;text-decoration:none;}
+.nav-logo img{display:block;height:32px;mix-blend-mode:multiply;}
+.nav-links{display:flex;gap:32px;list-style:none;}
+.nav-links a{font-family:var(--font-head);font-size:13px;font-weight:500;color:var(--ink-mid);text-decoration:none;transition:color .2s;}
+.nav-links a:hover,.nav-links a.active{color:var(--green);}
+.btn-orange{background:#F4831F;color:#fff;font-family:var(--font-head);font-size:13px;font-weight:700;padding:10px 22px;border-radius:999px;border:none;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;transition:background .2s,transform .2s;}
+.btn-orange:hover{background:#d96f10;transform:translateY(-1px);}
+
+/* ── PAGE WRAP ── */
+main{position:relative;z-index:1;}
+
+/* ── HERO ── */
+.page-hero{padding:180px 48px 80px;text-align:center;position:relative;}
+.hero-tag{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-head);font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--green);margin-bottom:24px;padding:6px 16px;border:1px solid rgba(53,168,71,.3);border-radius:999px;background:rgba(53,168,71,.08);}
+.hero-tag-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+.page-hero h1{font-family:var(--font-head);font-size:clamp(44px,7vw,80px);font-weight:900;letter-spacing:-.03em;line-height:1.0;margin-bottom:20px;color:var(--ink);}
+.page-hero h1 .hl{background:var(--green);color:#fff;padding:2px 14px 4px;border-radius:6px;display:inline-block;}
+.page-hero p{font-family:var(--font-body);font-size:clamp(16px,1.6vw,19px);line-height:1.65;color:var(--ink-mid);max-width:640px;margin:0 auto;}
+
+/* ── FILTER TABS ── */
+.filter-bar{display:flex;justify-content:center;gap:10px;padding:0 48px 40px;flex-wrap:wrap;position:relative;z-index:2;}
+.fbtn{background:rgba(255,255,255,.7);border:1.5px solid var(--border);color:var(--ink-mid);font-family:var(--font-head);font-size:13px;font-weight:600;padding:10px 22px;border-radius:999px;cursor:pointer;transition:all .25s;backdrop-filter:blur(8px);}
+.fbtn:hover{border-color:rgba(53,168,71,.4);color:var(--ink);}
+.fbtn.active{background:var(--green);border-color:var(--green);color:#fff;box-shadow:0 6px 20px rgba(53,168,71,.25);}
+.feed-search{position:relative;display:flex;align-items:center;}
+.feed-search svg{position:absolute;left:15px;width:16px;height:16px;color:var(--ink-muted);pointer-events:none;}
+.feed-search input{font-family:var(--font-body);font-size:14px;color:var(--ink);background:rgba(255,255,255,.7);border:1.5px solid var(--border);border-radius:999px;padding:10px 18px 10px 40px;outline:none;min-width:250px;transition:border-color .2s,box-shadow .2s;backdrop-filter:blur(8px);}
+.feed-search input:focus{border-color:var(--green);box-shadow:0 0 0 4px rgba(53,168,71,.12);}
+.feed-empty{display:none;text-align:center;color:var(--ink-muted);font-family:var(--font-body);font-size:15px;padding:30px 24px 70px;position:relative;z-index:1;}
+
+/* ── SECTION HEADERS ── */
+.section-wrap{max-width:1280px;margin:0 auto;padding:20px 48px 60px;position:relative;z-index:1;}
+.section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:36px;flex-wrap:wrap;}
+.section-head-left{max-width:640px;}
+.section-lbl{font-family:var(--font-head);font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--green);margin-bottom:10px;}
+.section-head h2{font-family:var(--font-head);font-size:clamp(28px,3.2vw,40px);font-weight:900;letter-spacing:-.025em;line-height:1.05;color:var(--ink);margin-bottom:10px;}
+.section-head p{font-family:var(--font-body);font-size:15px;color:var(--ink-muted);line-height:1.55;}
+.section-count{font-family:var(--font-head);font-size:13px;color:var(--ink-muted);font-weight:500;white-space:nowrap;}
+.section-count span{color:var(--green);font-weight:800;}
+
+/* ── CARD GRID (Homey-style) ── */
+.card-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;}
+@media(max-width:1000px){.card-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:640px){.card-grid{grid-template-columns:1fr;gap:20px;}}
+
+.card{
+  position:relative;
+  background:#fff;
+  border-radius:20px;
+  overflow:hidden;
+  border:1px solid var(--border);
+  text-decoration:none;
+  color:inherit;
+  display:flex;flex-direction:column;
+  transition:transform .35s cubic-bezier(.22,1,.36,1), box-shadow .35s, border-color .35s;
+  opacity:0;transform:translateY(20px);
+  animation:cardIn .5s cubic-bezier(.22,1,.36,1) forwards;
+}
+@keyframes cardIn{to{opacity:1;transform:translateY(0);}}
+.card:hover{
+  transform:translateY(-6px);
+  box-shadow:0 20px 60px rgba(53,168,71,.14), 0 4px 12px rgba(0,0,0,.06);
+  border-color:rgba(53,168,71,.3);
+}
+
+.card-img{
+  position:relative;aspect-ratio:16/10;overflow:hidden;background:linear-gradient(135deg,#EBF8ED,#D4F0D9);
+}
+.card-img img{
+  width:100%;height:100%;object-fit:cover;display:block;
+  transition:transform .6s cubic-bezier(.22,1,.36,1);
+}
+.card:hover .card-img img{transform:scale(1.06);}
+
+/* Placeholder illustration for cards without images */
+.card-img.placeholder{background:linear-gradient(135deg,#EBF8ED 0%,#35A847 120%);display:flex;align-items:center;justify-content:center;}
+.card-img.placeholder svg{width:60px;height:60px;opacity:.4;}
+.card-img.placeholder-orange{background:linear-gradient(135deg,#FFF3E6 0%,#F4831F 140%);}
+
+.card-cat{
+  position:absolute;top:14px;left:14px;
+  background:rgba(255,255,255,.95);backdrop-filter:blur(6px);
+  color:var(--green);
+  font-family:var(--font-head);font-size:10px;font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;
+  padding:6px 12px;border-radius:999px;
+  border:1px solid rgba(53,168,71,.2);
+}
+.card-cat.cat-news{color:var(--orange);border-color:rgba(244,131,31,.25);}
+
+.card-body{padding:22px 22px 26px;display:flex;flex-direction:column;gap:10px;flex:1;}
+.card-body h3{
+  font-family:var(--font-head);font-size:18px;font-weight:800;
+  letter-spacing:-.015em;line-height:1.3;color:var(--ink);
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;
+}
+.card-body p{
+  font-family:var(--font-body);font-size:14px;line-height:1.6;color:var(--ink-muted);
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;
+  flex:1;
+}
+.card-meta{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  margin-top:8px;padding-top:14px;border-top:1px solid var(--border);
+}
+.card-source{font-family:var(--font-head);font-size:12px;color:var(--ink-muted);font-weight:500;}
+.card-arrow{
+  width:32px;height:32px;border-radius:50%;
+  background:var(--green-light);color:var(--green);
+  display:flex;align-items:center;justify-content:center;
+  transition:background .25s,transform .25s,color .25s;flex-shrink:0;
+}
+.card-arrow svg{width:14px;height:14px;}
+.card:hover .card-arrow{background:var(--green);color:#fff;transform:translateX(4px);}
+
+/* Featured card (larger) */
+.card.featured{grid-column:span 2;}
+.card.featured .card-img{aspect-ratio:16/9;}
+.card.featured .card-body h3{font-size:26px;-webkit-line-clamp:2;}
+.card.featured .card-body p{font-size:15px;-webkit-line-clamp:3;}
+@media(max-width:1000px){.card.featured{grid-column:span 2;}}
+@media(max-width:640px){.card.featured{grid-column:span 1;}
+  .card.featured .card-body h3{font-size:20px;}}
+
+/* ── CTA SECTION ── */
+.cta-block{
+  max-width:1180px;margin:40px auto 80px;padding:56px 48px;
+  background:linear-gradient(135deg,var(--green) 0%,var(--green-deep) 100%);
+  border-radius:28px;position:relative;overflow:hidden;
+  display:grid;grid-template-columns:1.4fr 1fr;gap:40px;align-items:center;
+}
+.cta-block::before{
+  content:'';position:absolute;top:-100px;right:-100px;
+  width:400px;height:400px;border-radius:50%;
+  background:rgba(255,255,255,.08);
+}
+.cta-block::after{
+  content:'';position:absolute;bottom:-80px;left:-80px;
+  width:300px;height:300px;border-radius:50%;
+  background:rgba(244,131,31,.15);
+}
+.cta-block > *{position:relative;z-index:1;}
+.cta-block h3{font-family:var(--font-head);font-size:clamp(26px,2.8vw,36px);font-weight:900;color:#fff;letter-spacing:-.02em;line-height:1.15;margin-bottom:14px;}
+.cta-block p{font-family:var(--font-body);font-size:16px;color:rgba(255,255,255,.85);line-height:1.7;max-width:520px;}
+.cta-actions{display:flex;flex-direction:column;gap:12px;}
+.btn-white{background:#fff;color:var(--green);font-family:var(--font-head);font-weight:700;font-size:14px;padding:15px 28px;border-radius:999px;text-decoration:none;text-align:center;transition:transform .2s,box-shadow .2s;display:block;}
+.btn-white:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(0,0,0,.15);}
+.btn-outline-w{border:1.5px solid rgba(255,255,255,.5);color:#fff;font-family:var(--font-head);font-weight:600;font-size:13px;padding:13px 28px;border-radius:999px;text-decoration:none;text-align:center;transition:border-color .2s,background .2s;display:block;}
+.btn-outline-w:hover{border-color:#fff;background:rgba(255,255,255,.1);}
+@media(max-width:800px){.cta-block{grid-template-columns:1fr;padding:40px 28px;}}
+
+/* ── FOOTER (identical) ── */
+footer{background:#0e1512;padding:60px 48px 40px;position:relative;z-index:1;}.flogo{display:block;height:34px;width:auto;filter:invert(1);}
+.fg{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px;}
+.fbt{font-family:var(--font-body);font-size:14px;color:var(--ink-muted);line-height:1.65;margin-top:16px;}
+.fct{font-family:var(--font-head);font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:16px;}
+.flinks{list-style:none;display:flex;flex-direction:column;gap:10px;}
+.flinks a{font-family:var(--font-head);font-size:13px;color:rgba(255,255,255,.5);text-decoration:none;transition:color .2s;}
+.flinks a:hover{color:#fff;}
+.fbottom{max-width:1100px;margin:0 auto;border-top:1px solid rgba(255,255,255,.05);padding-top:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+.fcopy{font-family:var(--font-head);font-size:12px;color:rgba(255,255,255,.2);}
+@media(max-width:800px){.fg{grid-template-columns:1fr 1fr;}}
+@media(max-width:500px){.fg{grid-template-columns:1fr;}}
+
+/* Responsive */
+@media(max-width:900px){
+  nav{padding:14px 20px;}
+  .nav-links{display:none;}
+  .page-hero{padding:140px 24px 50px;}
+  .section-wrap{padding:20px 20px 50px;}
+  .filter-bar{padding:0 20px 30px;}
+  #installer-bar{padding:6px 20px;}
+}
+
+/* Empty state */
+.empty-state{
+  text-align:center;padding:60px 20px;color:var(--ink-muted);
+  font-family:var(--font-body);font-size:15px;
+}
+
+/* Cards stagger */
+.card:nth-child(1){animation-delay:.05s;}
+.card:nth-child(2){animation-delay:.1s;}
+.card:nth-child(3){animation-delay:.15s;}
+.card:nth-child(4){animation-delay:.2s;}
+.card:nth-child(5){animation-delay:.25s;}
+.card:nth-child(6){animation-delay:.3s;}
+.card:nth-child(n+7){animation-delay:.35s;}
+</style>
+</head>
+<body>
+
+<!-- BLOBS -->
+<div id="gc">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+</div>
+
+<!-- TOP INSTALLER BAR -->
+<div id="installer-bar">
+  <a href="installatie.html">Installer pagina</a>
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <div style="display:flex;align-items:center;gap:20px;">
+    <a href="home.html" class="nav-logo">
+      <img src="midia/solyx-logo.png" alt="Solyx Energy">
+    </a>
+  </div>
+  <ul class="nav-links">
+    <li><a href="hoe-werkt-het.html">Hoe werkt het</a></li>
+    <li><a href="besparen.html">Besparen</a></li>
+    <li><a href="faq.html">FAQs</a></li>
+    <li><a href="shop.html">Shop</a></li>
+  </ul>
+  <a href="how-to-get-it.html" class="btn-orange">Buy</a>
+</nav>
+
+<main>
+
+  <!-- HERO -->
+  <section class="page-hero">
+    <h1>Blog &amp; <span class="hl">Nieuws</span></h1>
+    <p>Alles over de WaterAccu, Solyx Energy en ander relevant nieuws.<br>Blogs en nieuws op één plek</p>
+  </section>
+
+  <!-- FILTER + ZOEKEN -->
+  <div class="filter-bar">
+    <button class="fbtn active" data-type="all">Alles</button>
+    <button class="fbtn" data-type="blog">Blogs</button>
+    <button class="fbtn" data-type="news">Nieuws</button>
+    <div class="feed-search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="feed-search" type="search" placeholder="Zoek, bijv. &#39;Homey&#39;&hellip;" aria-label="Zoek in artikelen">
+    </div>
+  </div>
+  <div class="feed-empty" id="feed-empty">Geen artikelen gevonden — probeer een ander trefwoord.</div>
+
+  <!-- GECOMBINEERDE FEED (blogs + nieuws) -->
+  <section class="section-wrap" id="sec-blog" data-section="blog">
+    <div class="card-grid" id="grid-blog">
+      <!-- Featured -->
+      <a class="card featured" href="https://www.solyxenergy.nl/itho-daalderop-en-solyx-energy-slaan-de-handen-ineen-voor-nieuwe-generatie-zon-gestuurde-boilers/" target="_blank" rel="noopener">
+        <div class="card-img"><span class="card-cat">Blog</span><img src="https://www.solyxenergy.nl/wp-content/uploads/2026/01/partneship-Itodal-scaled.jpg" alt="" loading="lazy" onerror="this.parentElement.classList.add('placeholder');this.remove();"></div>
+        <div class="card-body">
+          <h3>Itho Daalderop en Solyx Energy slaan de handen ineen voor nieuwe generatie zon-gestuurde boilers</h3>
+          <p>Itho Daalderop en Solyx Energy gaan een strategische samenwerking aan om samen een nieuwe generatie innovatieve warmwateroplossingen te ontwikkelen. Twee Nederlandse bedrijven bundelen hun krachten, productiecapaciteit en technologische expertise.</p>
+          <div class="card-meta">
+            <span class="card-source">Solyx Energy · Blog</span>
+            <span class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card" href="https://www.solyxenergy.nl/lancering-nymo-x-homey-voor-wateraccu-op-dynamische-prijzen/" target="_blank" rel="noopener">
+        <div class="card-img"><span class="card-cat">Blog</span><img src="https://www.solyxenergy.nl/wp-content/uploads/2025/11/Nymo_final-scaled.jpg" alt="" loading="lazy" onerror="this.parentElement.classList.add('placeholder');this.remove();"></div>
+        <div class="card-body">
+          <h3>Lancering Nymo voor Homey gebruikers: dynamische prijzen en integratie met thuisbatterij en EV-lader</h3>
+          <p>Homey en Solyx Energy werken samen aan een toekomstbestendig plan voor zonnepaneel-eigenaren. Eén app voor WaterAccu, thuisbatterij en EV-lader.</p>
+          <div class="card-meta">
+            <span class="card-source">Blog</span>
+            <span class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card" href="https://www.solyxenergy.nl/zonnepanelen-dynamisch-contract/" target="_blank" rel="noopener">
+        <div class="card-img"><span class="card-cat">Blog</span><img src="https://www.solyxenergy.nl/wp-content/uploads/2025/02/Dynamisch-contract.png" alt="" loading="lazy" onerror="this.parentElement.classList.add('placeholder');this.remove();"></div>
+        <div class="card-body">
+          <h3>Zonnepanelen en dynamische contracten: een goede of slechte combinatie?</h3>
+          <p>Dynamische energiecontracten zijn in. Steeds vaker hoor je dat een dynamisch contract erg gunstig is in combinatie met zonnepanelen. Maar klopt dat wel?</p>
+          <div class="card-meta">
+            <span class="card-source">Blog</span>
+            <span class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card" href="https://www.solyxenergy.nl/nieuws-blogs-wateraccu-vs-slimme-schakelaar/" target="_blank" rel="noopener">
+        <div class="card-img"><span class="card-cat">Blog</span><img src="https://www.solyxenergy.nl/wp-content/uploads/2024/11/Solyx_Energy_Curve_WaterAccu-min.png" alt="" loading="lazy" onerror="this.parentElement.classList.add('placeholder');this.remove();"></div>
+        <div class="card-body">
+          <h3>WaterAccu vs slimme schakelaar: een vergelijking</h3>
+          <p>Een betaalbare manier om je zonne-energie beter te benutten is een elektrische boiler met slimme aansturing. Wat zijn de extra voordelen van de Nymo?</p>
+          <div class="card-meta">
+            <span class="card-source">Blog</span>
+            <span class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card" href="https://www.solyxenergy.nl/nieuws-blogs-de-afschaffing-van-de-salderingsregeling/" target="_blank" rel="noopener">
+        <div class="card-img"><span class="card-cat">Blog</span><img src="https://www.solyxenergy.nl/wp-content/uploads/2022/11/Solyx_Energy_SolariBoost_Wateraccu_Zonnepanelen_Besparen_Resultaat.png" alt="" loading="lazy" onerror="this.parentElement.classList.add('placeholder');this.remove();"></div>
+        <div class="card-body">
+          <h3>De afschaffing van de salderingsregeling is definitief: wat nu?</h3>
+          <p>Wat gaat er veranderen nu de salderingsregeling wordt afgebouwd? In dit blog leggen we uit hoe je het meeste voordeel blijft halen uit je panelen.</p>
+          <div class="card-meta">
+            <span class="card-source">Blog</span>
+            <span class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card" href="https://www.solyxenergy.nl/nieuws-blogs-energieverbruik-huishouden/" target="_blank" rel="noopener">
+        <div class="card-img"><span class="card-cat">Blog</span><img src="https://www.solyxenergy.nl/wp-content/uploads/2024/12/Energiestromen-9-maanden.png" alt="" loading="lazy" onerror="this.parentElement.classList.add('placeholder');this.remove();"></div>
+        <div class="card-body">
+          <h3>Hoe ziet energieverbruik eruit in mijn huis, en hoe verduurzaam ik dat?</h3>
+          <p>Je wilt je huis verduurzamen en je energierekening verlagen. Waar begin je? We leggen uit welke opties je hebt om gericht stappen te zetten.</p>
+          <div class="card-meta">
+            <span class="card-source">Blog</span>
+            <span class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card" href="https://www.solyxenergy.nl/nieuws-blogs-lancering-van-de-nymo/" target="_blank" rel="noopener">
+        <div class="card-img"><span class="card-cat">Blog</span><img src="https://www.solyxenergy.nl/wp-content/uploads/2024/12/Solyx-Energy-51-scaled.jpg" alt="" loading="lazy" onerror="this.parentElement.classList.add('placeholder');this.remove();"></div>
+        <div class="card-body">
+          <h3>De lancering van de Nymo, wat een mijlpaal!</h3>
+          <p>In oktober vond de lancering plaats van de Nymo, waarmee je van een boiler een WaterAccu maakt. We vertellen je hoe we dit moment hebben beleefd.</p>
+          <div class="card-meta">
+            <span class="card-source">Blog</span>
+            <span class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card" href="https://www.solyxenergy.nl/zonnestroomboiler-als-oplossing-voor-terugleverkosten/" target="_blank" rel="noopener">
+        <div class="card-img"><span class="card-cat">Blog</span><img src="https://www.solyxenergy.nl/wp-content/uploads/2024/09/Solyx_Energy_Concept_Uitleg_Wateraccu_NymoBoiler_NIet_Gecomprimeerd-min.png" alt="" loading="lazy" onerror="this.parentElement.classList.add('placeholder');this.remove();"></div>
+        <div class="card-body">
+          <h3>Zonnestroomboiler als oplossing voor terugleverkosten</h3>
+          <p>Terugleverkosten worden steeds meer een financiële last. De zonnestroomboiler biedt een eenvoudige uitweg door je zonne-energie zelf te gebruiken.</p>
+          <div class="card-meta">
+            <span class="card-source">Blog</span>
+            <span class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card" href="https://www.solyxenergy.nl/nieuws-blogs-de-gevolgen-van-salderen/" target="_blank" rel="noopener">
+        <div class="card-img"><span class="card-cat">Blog</span><img src="https://www.solyxenergy.nl/wp-content/uploads/2024/09/Solyx_Energy_WaterAccu_Nymo_Effect_Verschil_Met_Zonder_Vergelijking-min.png" alt="" loading="lazy" onerror="this.parentElement.classList.add('placeholder');this.remove();"></div>
+        <div class="card-body">
+          <h3>De gevolgen van salderen</h3>
+          <p>Wat gaat er veranderen nu de salderingsregeling wordt afgebouwd? In dit blog leggen we uit wat je hierover kunt verwachten.</p>
+          <div class="card-meta">
+            <span class="card-source">Blog</span>
+            <span class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card" href="https://www.solyxenergy.nl/nieuws-blogs-de-wateraccu-met-dynamische-tarieven/" target="_blank" rel="noopener">
+        <div class="card-img"><span class="card-cat">Blog</span><img src="https://www.solyxenergy.nl/wp-content/uploads/2024/02/Solyx_Energy_Stroomkosten_per_uur_gemiddeld_etmaal_Visueel.png" alt="" loading="lazy" onerror="this.parentElement.classList.add('placeholder');this.remove();"></div>
+        <div class="card-body">
+          <h3>De WaterAccu met dynamische tarieven</h3>
+          <p>Wilt u meer voordeel uit uw dynamische tarieven halen? Lees hier hoe de Solyx WaterAccu u helpt de prijspieken slim te benutten.</p>
+          <div class="card-meta">
+            <span class="card-source">Blog</span>
+            <span class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card" href="https://www.solyxenergy.nl/nieuws-blogs-thuisbatterij-of-wateraccu-een-diepere-vergelijking/" target="_blank" rel="noopener">
+        <div class="card-img"><span class="card-cat">Blog</span><img src="https://www.solyxenergy.nl/wp-content/uploads/2023/10/Solyx_Energy_Thuisbatterij_Blog.png" alt="" loading="lazy" onerror="this.parentElement.classList.add('placeholder');this.remove();"></div>
+        <div class="card-body">
+          <h3>Thuisbatterij of WaterAccu: een diepere vergelijking</h3>
+          <p>Twijfelt u tussen een thuisbatterij en een WaterAccu? In dit blog bieden we extra uitleg over hoe beide systemen werken en wanneer welke keuze logisch is.</p>
+          <div class="card-meta">
+            <span class="card-source">Blog</span>
+            <span class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card" href="https://www.solyxenergy.nl/nieuws-blogs-zonneboiler-en-wateraccu-een-betere-vergelijking/" target="_blank" rel="noopener">
+        <div class="card-img"><span class="card-cat">Blog</span><img src="https://www.solyxenergy.nl/wp-content/uploads/2023/10/Solyx_Energy_Zonneboiler_Blog.jpg" alt="" loading="lazy" onerror="this.parentElement.classList.add('placeholder');this.remove();"></div>
+        <div class="card-body">
+          <h3>Zonneboiler en WaterAccu: een betere vergelijking</h3>
+          <p>In dit blog nemen wij twee opties voor het duurzaam verwarmen van tapwater onder de loep en vergelijken we ze eerlijk en helder.</p>
+          <div class="card-meta">
+            <span class="card-source">Blog</span>
+            <span class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card" href="https://www.solyxenergy.nl/nieuws-blogs-hoe-voorkom-ik-dat-mijn-zonnepanelen-afslaan/" target="_blank" rel="noopener">
+        <div class="card-img"><span class="card-cat">Blog</span><img src="https://www.solyxenergy.nl/wp-content/uploads/2022/06/Solyx_Energy_Zonnepanelen_Zonne-energie_Warm_Water-.png" alt="" loading="lazy" onerror="this.parentElement.classList.add('placeholder');this.remove();"></div>
+        <div class="card-body">
+          <h3>Hoe voorkom ik dat mijn zonnepanelen afslaan?</h3>
+          <p>Werken uw zonnepanelen vaak niet op zonnige dagen? Dan slaan ze mogelijk af door een te hoge netspanning. Lees hoe je dit voorkomt.</p>
+          <div class="card-meta">
+            <span class="card-source">Blog</span>
+            <span class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card" href="https://www.solyxenergy.nl/nieuws-blogs-de-toekomst-van-salderen-en-terug-leveren/" target="_blank" rel="noopener">
+        <div class="card-img"><span class="card-cat">Blog</span><img src="https://www.solyxenergy.nl/wp-content/uploads/2022/12/Solyx_Energy_WaterAccu_Elke_Druppel_Zonne-energie_Gebruiken_Huishouden_Badkamer.png" alt="" loading="lazy" onerror="this.parentElement.classList.add('placeholder');this.remove();"></div>
+        <div class="card-body">
+          <h3>De toekomst van salderen en terugleveren</h3>
+          <p>Naast de geplande afbouw van de salderingsregeling komen er nu ook kosten voor het terugleveren van zonnestroom. Wat betekent dit voor u?</p>
+          <div class="card-meta">
+            <span class="card-source">Blog</span>
+            <span class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card" href="https://www.solyxenergy.nl/nieuws-blogs-een-boiler-op-zonnepanelen-hoe-werkt-dat/" target="_blank" rel="noopener">
+        <div class="card-img"><span class="card-cat">Blog</span><img src="https://www.solyxenergy.nl/wp-content/uploads/2023/08/Solyx_Energy_Verschil_Wel_Geen_Solar_iBoost_Water_Accu.png" alt="" loading="lazy" onerror="this.parentElement.classList.add('placeholder');this.remove();"></div>
+        <div class="card-body">
+          <h3>Een boiler op zonnepanelen, hoe werkt dat?</h3>
+          <p>U wilt een boiler op zonnepanelen laten werken, maar hoe werkt dat precies? En hoeveel panelen heeft u nodig? Lees snel verder.</p>
+          <div class="card-meta">
+            <span class="card-source">Blog</span>
+            <span class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card" href="https://www.solyxenergy.nl/nieuws-blogs-optimalisatie-van-gebruik-zonne-energie-een-overzicht/" target="_blank" rel="noopener">
+        <div class="card-img"><span class="card-cat">Blog</span><img src="https://www.solyxenergy.nl/wp-content/uploads/2022/12/Solyx_Energy_Water_Accu_Solar_iBoost_Installateur_Installeren-scaled.jpg" alt="" loading="lazy" onerror="this.parentElement.classList.add('placeholder');this.remove();"></div>
+        <div class="card-body">
+          <h3>Optimalisatie van gebruik zonne-energie: een overzicht</h3>
+          <p>Zonder salderingsregeling is het slim inzetten van onbenutte zonne-energie niet alleen duurzamer, maar ook kostenbesparend.</p>
+          <div class="card-meta">
+            <span class="card-source">Blog</span>
+            <span class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card" href="https://www.solyxenergy.nl/nieuws-blogs-400-euro-sew-premie-op-de-solar-iboost-in-vlaanderen/" target="_blank" rel="noopener">
+        <div class="card-img"><span class="card-cat">Blog</span><img src="https://www.solyxenergy.nl/wp-content/uploads/2023/05/Solyx_Energy_Solar_iBoost_Subsidie_Vlaanderen_Verduurzamen_SEW_Premie.png" alt="" loading="lazy" onerror="this.parentElement.classList.add('placeholder');this.remove();"></div>
+        <div class="card-body">
+          <h3>400 euro SEW premie op de WaterAccu in Vlaanderen</h3>
+          <p>De SEW premie is goed nieuws voor gebruikers van de WaterAccu in België. De Solar iBoost staat op de lijst met goedgekeurde apparaten — 297 tot 400 euro terug.</p>
+          <div class="card-meta">
+            <span class="card-source">Blog</span>
+            <span class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card" href="https://www.solyxenergy.nl/nieuws-blogs-zonnepanelen-optimaal-benutten/" target="_blank" rel="noopener">
+        <div class="card-img"><span class="card-cat">Blog</span><img src="https://www.solyxenergy.nl/wp-content/uploads/2023/05/Dagelijkse-energiebalans-zomer-en-winter.png" alt="" loading="lazy" onerror="this.parentElement.classList.add('placeholder');this.remove();"></div>
+        <div class="card-body">
+          <h3>Hoe haal ik het meeste uit mijn zonnepanelen?</h3>
+          <p>Zonne-energie zelf gebruiken of salderen? We laten zien hoe je als eigenaar van zonnepanelen optimaal voordeel haalt uit je eigen opwek.</p>
+          <div class="card-meta">
+            <span class="card-source">Blog</span>
+            <span class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+          </div>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- NEWS SECTION -->
+  <section class="section-wrap" id="sec-news" data-section="news">
+    <div class="section-head">
+      <div class="section-head-left">
+        <div class="section-lbl">In de media</div>
+        <h2>Solyx Energy in het nieuws</h2>
+        <p>Artikelen, interviews en podcasts over Solyx Energy, de Nymo en de WaterAccu in nationale en internationale media.</p>
+      </div>
+      <div class="section-count"><span id="count-news">17</span> artikelen</div>
+    </div>
+
+    <div class="card-grid" id="grid-news">
+      <a class="card" href="https://www.solyxenergy.nl/neem-ook-de-zonnestroomboiler-mee-als-oplossing-na-salderen/" target="_blank" rel="noopener">
+        <div class="card-img">
+          <span class="card-cat cat-news">Nieuws</span>
+          <img src="https://www.solyxenergy.nl/wp-content/uploads/2026/01/artikel.png" alt="" onerror="this.parentElement.classList.add('placeholder','placeholder-orange');this.remove();">
+        </div>
+        <div class="card-body">
+          <h3>Neem ook de zonnestroomboiler mee als oplossing na salderen</h3>
+          <p>Na de afbouw van saldering zoeken huishoudens naar concrete alternatieven. De zonnestroomboiler wordt genoemd als betaalbare oplossing.</p>
+          <div class="card-meta">
+            <span class="card-source">Pers · 2026</span>
+            <span class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card" href="https://www.solyxenergy.nl/simpele-wateraccu-kan-ingestorte-zonnepanelenmarkt-nieuw-leven-inblazen/" target="_blank" rel="noopener">
+        <div class="card-img">
+          <span class="card-cat cat-news">Nieuws</span>
+          <img src="https://www.solyxenergy.nl/wp-content/uploads/2025/11/solyxenergy-scaled.jpg" alt="" onerror="this.parentElement.classList.add('placeholder');this.remove();">
+        </div>
+        <div class="card-body">
+          <h3>Simpele 'wateraccu' kan ingestorte zonnepanelenmarkt nieuw leven inblazen</h3>
+          <p>Een artikel over hoe de WaterAccu een nieuwe impuls kan geven aan de zonnepanelenmarkt in Nederland.</p>
+          <div class="card-meta">
+            <span class="card-source">Pers · 11.2025</span>
+            <span class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card" href="https://www.solyxenergy.nl/een-toekomstbestendig-plan-voor-zonnepaneel-eigenaren-de-gouden-driehoek-van-wateraccu-thuisbatterij-en-ev-lader/" target="_blank" rel="noopener">
+        <div class="card-img">
+          <span class="card-cat cat-news">Nieuws</span>
+          <img src="https://www.solyxenergy.nl/wp-content/uploads/2025/11/Nymo_final-scaled.jpg" alt="" onerror="this.parentElement.classList.add('placeholder','placeholder-orange');this.remove();">
+        </div>
+        <div class="card-body">
+          <h3>Een toekomstbestendig plan voor zonnepaneel-eigenaren: de 'gouden' driehoek</h3>
+          <p>Door Folkert van der Molen, 06.11.2025. Over de combinatie van WaterAccu, thuisbatterij en EV-lader als slimme keten.</p>
+          <div class="card-meta">
+            <span class="card-source">Duurzaam Ondernemen · 2025</span>
+            <span class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card" href="https://www.solyxenergy.nl/deze-5-startups-pakkenzonne-energie-net-even-iets-anders-aan/" target="_blank" rel="noopener">
+        <div class="card-img">
+          <span class="card-cat cat-news">Nieuws</span>
+          <img src="https://www.solyxenergy.nl/wp-content/uploads/2025/07/metsprot4.png" alt="" onerror="this.parentElement.classList.add('placeholder');this.remove();">
+        </div>
+        <div class="card-body">
+          <h3>Deze 5 startups pakken zonne-energie net even iets anders aan</h3>
+          <p>Door Herwin Thole, MT/Sprout · 12.01.2024. Een overzicht van vernieuwende startups in de Nederlandse zonne-energiemarkt.</p>
+          <div class="card-meta">
+            <span class="card-source">MT/Sprout · 2024</span>
+            <span class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card" href="https://www.solyxenergy.nl/hoe-breng-je-een-nieuw-apparaat-naar-de-markt/" target="_blank" rel="noopener">
+        <div class="card-img">
+          <span class="card-cat cat-news">Nieuws</span>
+          <img src="https://www.solyxenergy.nl/wp-content/uploads/2025/07/bnr-podcast.png" alt="" onerror="this.parentElement.classList.add('placeholder','placeholder-orange');this.remove();">
+        </div>
+        <div class="card-body">
+          <h3>Hoe breng je een nieuw apparaat naar de markt?</h3>
+          <p>Luister naar de podcast — Baanbrekende Businessmodellen, PV magazine · 23.09.2024. Over de weg van idee naar product.</p>
+          <div class="card-meta">
+            <span class="card-source">BNR · 2024</span>
+            <span class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card" href="https://www.solyxenergy.nl/check-deze-slimme-wateraccu-van-vader-en-dochter-snaak/" target="_blank" rel="noopener">
+        <div class="card-img">
+          <span class="card-cat cat-news">Nieuws</span>
+          <img src="https://www.solyxenergy.nl/wp-content/uploads/2025/07/happyactivist.png" alt="" onerror="this.parentElement.classList.add('placeholder');this.remove();">
+        </div>
+        <div class="card-body">
+          <h3>Check deze slimme wateraccu van vader en dochter Snaak</h3>
+          <p>Een persoonlijk verhaal over het familiebedrijf achter Solyx Energy en de filosofie achter de WaterAccu.</p>
+          <div class="card-meta">
+            <span class="card-source">Happy Activist</span>
+            <span class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card" href="https://www.solyxenergy.nl/de-nieuwe-betaalbare-thuisbatterij/" target="_blank" rel="noopener">
+        <div class="card-img">
+          <span class="card-cat cat-news">Nieuws</span>
+          <img src="https://www.solyxenergy.nl/wp-content/uploads/2025/07/degroene-nerds.png" alt="" onerror="this.parentElement.classList.add('placeholder','placeholder-orange');this.remove();">
+        </div>
+        <div class="card-body">
+          <h3>De nieuwe &amp; betaalbare thuisbatterij?!</h3>
+          <p>Bekijk de video — De Groene Nerds testen en reviewen de WaterAccu als betaalbaar alternatief voor een klassieke thuisbatterij.</p>
+          <div class="card-meta">
+            <span class="card-source">Video</span>
+            <span class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card" href="https://www.solyxenergy.nl/dutch-startup-unveils-controller-to-store-excess-pv-power-in-hot-water/" target="_blank" rel="noopener">
+        <div class="card-img">
+          <span class="card-cat cat-news">Nieuws</span>
+          <img src="https://www.solyxenergy.nl/wp-content/uploads/2025/07/pvmagazine.png" alt="" onerror="this.parentElement.classList.add('placeholder');this.remove();">
+        </div>
+        <div class="card-body">
+          <h3>Dutch startup unveils controller to store excess PV power in hot water</h3>
+          <p>By Beatriz Santos, PV magazine · 07.02.2023. International coverage of the Solyx Energy innovation.</p>
+          <div class="card-meta">
+            <span class="card-source">PV Magazine · 2023</span>
+            <span class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card" href="https://www.solyxenergy.nl/nijkerkse-startup-introduceert-een-voudige-opslag-van-zonne-energie-in-warm-water/" target="_blank" rel="noopener">
+        <div class="card-img">
+          <span class="card-cat cat-news">Nieuws</span>
+          <img src="https://www.solyxenergy.nl/wp-content/uploads/2025/07/nijkerk.png" alt="" onerror="this.parentElement.classList.add('placeholder','placeholder-orange');this.remove();">
+        </div>
+        <div class="card-body">
+          <h3>Nijkerkse startup introduceert eenvoudige opslag van zonne-energie</h3>
+          <p>Door De Stad Nijkerk · 15.05.2023. Lokale aandacht voor het Nijkerkse bedrijf en de introductie van de technologie.</p>
+          <div class="card-meta">
+            <span class="card-source">Stad Nijkerk · 2023</span>
+            <span class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card" href="https://www.solyxenergy.nl/hoe-een-simpele-boiler-een-slimme-batterij-wordt/" target="_blank" rel="noopener">
+        <div class="card-img">
+          <span class="card-cat cat-news">Nieuws</span>
+          <img src="https://www.solyxenergy.nl/wp-content/uploads/2025/07/gawaloscrr.png" alt="" onerror="this.parentElement.classList.add('placeholder');this.remove();">
+        </div>
+        <div class="card-body">
+          <h3>Hoe een simpele boiler een slimme batterij wordt</h3>
+          <p>Door Gawalo · 24.09.2024. Vakartikel voor installateurs over de werking en installatie van de Nymo.</p>
+          <div class="card-meta">
+            <span class="card-source">Gawalo · 2024</span>
+            <span class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card" href="https://www.solyxenergy.nl/wateraccu-nymo-maakt-van-je-boiler-een-goedkoper-alternatief-voor-de-thuisbatterij/" target="_blank" rel="noopener">
+        <div class="card-img">
+          <span class="card-cat cat-news">Nieuws</span>
+          <img src="https://www.solyxenergy.nl/wp-content/uploads/2025/07/mtsprout2.png" alt="" onerror="this.parentElement.classList.add('placeholder','placeholder-orange');this.remove();">
+        </div>
+        <div class="card-body">
+          <h3>Wateraccu Nymo maakt van je boiler een (goedkoper) alternatief voor de thuisbatterij</h3>
+          <p>Door Herwin Thole, MT/Sprout · 26.09.2024. Over het kostenvoordeel van de WaterAccu tegenover klassieke thuisbatterijen.</p>
+          <div class="card-meta">
+            <span class="card-source">MT/Sprout · 2024</span>
+            <span class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card" href="https://www.solyxenergy.nl/premie-tot-400-euro-is-de-wateraccu-een-goed-alternatief-voor-een-thuisbatterij/" target="_blank" rel="noopener">
+        <div class="card-img">
+          <span class="card-cat cat-news">Nieuws</span>
+          <img src="https://www.solyxenergy.nl/wp-content/uploads/2025/07/hnl-news.png" alt="" onerror="this.parentElement.classList.add('placeholder');this.remove();">
+        </div>
+        <div class="card-body">
+          <h3>Premie tot 400 euro: is de WaterAccu een goed alternatief voor een thuisbatterij?</h3>
+          <p>Door HLN · 06.11.2023. Belgisch nieuws over de SEW-premie en de rol van de WaterAccu.</p>
+          <div class="card-meta">
+            <span class="card-source">HLN · 2023</span>
+            <span class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card" href="https://www.solyxenergy.nl/maak-je-eigen-wateraccu-met-solyx-energy/" target="_blank" rel="noopener">
+        <div class="card-img">
+          <span class="card-cat cat-news">Nieuws</span>
+          <img src="https://www.solyxenergy.nl/wp-content/uploads/2025/07/warmte365.png" alt="" onerror="this.parentElement.classList.add('placeholder','placeholder-orange');this.remove();">
+        </div>
+        <div class="card-body">
+          <h3>Maak je eigen WaterAccu met Solyx Energy</h3>
+          <p>Door Gijs De Koning, Warmte365 · 30.09.2024. Praktische gids voor installateurs en huiseigenaren.</p>
+          <div class="card-meta">
+            <span class="card-source">Warmte365 · 2024</span>
+            <span class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card" href="https://www.solyxenergy.nl/nieuws-blogs-duurzaamondernemen-nl-over-solyxenergy/" target="_blank" rel="noopener">
+        <div class="card-img">
+          <span class="card-cat cat-news">Nieuws</span>
+          <img src="https://www.solyxenergy.nl/wp-content/uploads/2024/12/Scherm­afbeelding-2024-12-02-om-16.41.50.png" alt="" onerror="this.parentElement.classList.add('placeholder');this.remove();">
+        </div>
+        <div class="card-body">
+          <h3>Solyx Energy lanceert de Nymo, waarmee je van een boiler een slimme WaterAccu maakt</h3>
+          <p>Door Folkert van der Molen, Duurzaam Ondernemen.nl · 23.09.2024. Over de lancering van de Nymo controller.</p>
+          <div class="card-meta">
+            <span class="card-source">DuurzaamOndernemen · 2024</span>
+            <span class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card" href="https://www.solyxenergy.nl/nieuws-blogs-vader-en-dochter-runnen-start-up-goedkoop-zonnestroom-opslaan-met-wateraccu/" target="_blank" rel="noopener">
+        <div class="card-img">
+          <span class="card-cat cat-news">Nieuws</span>
+          <img src="https://www.solyxenergy.nl/wp-content/uploads/2022/08/15b4ad64-8bb2-4196-90f9-3372e336ff73.jpg" alt="" onerror="this.parentElement.classList.add('placeholder','placeholder-orange');this.remove();">
+        </div>
+        <div class="card-body">
+          <h3>Vader en dochter runnen start-up: goedkoop zonnestroom opslaan met wateraccu</h3>
+          <p>Door Kaz Schonebeek, Change INC. · 24.08.2023. Interview met Emma en Hans van Solyx Energy.</p>
+          <div class="card-meta">
+            <span class="card-source">Change INC. · 2023</span>
+            <span class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card" href="https://www.solyxenergy.nl/nieuws-blogs-mt-sprout-emma-snaak-ex-tesla-ontwikkelt-met-solyx-energy-een-wateraccu/" target="_blank" rel="noopener">
+        <div class="card-img">
+          <span class="card-cat cat-news">Nieuws</span>
+          <img src="https://www.solyxenergy.nl/wp-content/uploads/2023/04/Scherm­afbeelding-2023-04-21-om-14.15.26.png" alt="" onerror="this.parentElement.classList.add('placeholder');this.remove();">
+        </div>
+        <div class="card-body">
+          <h3>Emma Snaak (ex-Tesla) ontwikkelt met Solyx Energy een wateraccu</h3>
+          <p>Door Amy van der Wiel, MT/Sprout · 08.02.2023. Interview over de achtergrond en missie van oprichter Emma Snaak.</p>
+          <div class="card-meta">
+            <span class="card-source">MT/Sprout · 2023</span>
+            <span class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+          </div>
+        </div>
+      </a>
+
+      <a class="card" href="https://www.solyxenergy.nl/nieuws-blogs-zonne-energie-opslaan_solar365/" target="_blank" rel="noopener">
+        <div class="card-img">
+          <span class="card-cat cat-news">Nieuws</span>
+          <img src="https://www.solyxenergy.nl/wp-content/uploads/2023/04/HeaderSolar365.png" alt="" onerror="this.parentElement.classList.add('placeholder','placeholder-orange');this.remove();">
+        </div>
+        <div class="card-body">
+          <h3>Solar365: Zonne-energie eenvoudig opslaan in warm water</h3>
+          <p>Door Simone Tresoor, Solar365 · 23.01.2023. Dit interview verscheen ook op Warmte365.</p>
+          <div class="card-meta">
+            <span class="card-source">Solar365 · 2023</span>
+            <span class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+          </div>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="fg">
+    <div>
+      <img class="flogo" src="midia/solyx-logo.png" alt="Solyx Energy">
+      <p class="fbt">Slimme energieopslag voor huishoudens met zonnepanelen. Simpel, betaalbaar, direct resultaat.</p>
+    </div>
+    <div>
+      <div class="fct">Product</div>
+      <ul class="flinks">
+        <li><a href="wateraccu.html">WaterAccu</a></li>
+        <li><a href="#">Nymo controller</a></li>
+        <li><a href="besparen.html">Besparing berekenen</a></li>
+        <li><a href="shop.html">Shop</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="fct">Installatie</div>
+      <ul class="flinks">
+        <li><a href="installatie.html">Hoe werkt het</a></li>
+        <li><a href="klantverhalen.html">Klantverhalen</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+        <li><a href="how-to-get-it.html">Contact</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="fct">Bedrijf</div>
+      <ul class="flinks">
+        <li><a href="over-ons.html">Over Solyx</a></li>
+        <li><a href="#">Werken bij</a></li>
+        <li><a href="#" style="color:var(--green);">Blog &amp; Nieuws</a></li>
+        <li><a href="installatie.html">Partners</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="fbottom">
+    <div class="fcopy">© 2025 Solyx Energy BV · Alle rechten voorbehouden</div>
+    <div style="display:flex;gap:20px">
+      <a href="#" style="font-family:var(--font-head);font-size:12px;color:rgba(255,255,255,.2);text-decoration:none">Privacy</a>
+      <a href="#" style="font-family:var(--font-head);font-size:12px;color:rgba(255,255,255,.2);text-decoration:none">Voorwaarden</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Nav scroll state
+var nav = document.getElementById('nav');
+var installer = document.getElementById('installer-bar');
+window.addEventListener('scroll', function(){
+  var scrolled = window.scrollY > 40;
+  nav.classList.toggle('scrolled', scrolled);
+  installer.classList.toggle('hide', scrolled);
+}, {passive:true});
+
+// ── Eén gecombineerde feed: blogs + nieuws samengevoegd, met filter + zoeken ──
+(function(){
+  var feed = document.getElementById('grid-blog');
+  if(!feed) return;
+  var blogs = Array.prototype.slice.call(document.querySelectorAll('#grid-blog .card'));
+  var news  = Array.prototype.slice.call(document.querySelectorAll('#grid-news .card'));
+  blogs.forEach(function(c){ c.dataset.type = 'blog'; });
+  news.forEach(function(c){ c.dataset.type = 'news'; });
+
+  // Interleave (2 blogs, 1 nieuws) zodat nieuws niet onderaan verdwijnt
+  var merged = [], bi = 0, ni = 0;
+  while(bi < blogs.length || ni < news.length){
+    for(var k = 0; k < 2 && bi < blogs.length; k++) merged.push(blogs[bi++]);
+    if(ni < news.length) merged.push(news[ni++]);
+  }
+  merged.forEach(function(c){ feed.appendChild(c); });
+  var secNews = document.getElementById('sec-news');
+  if(secNews) secNews.parentNode.removeChild(secNews);
+
+  // Filter (Alles/Blogs/Nieuws) + zoeken op trefwoord
+  var chips  = Array.prototype.slice.call(document.querySelectorAll('.filter-bar .fbtn'));
+  var search = document.getElementById('feed-search');
+  var empty  = document.getElementById('feed-empty');
+  var cards  = Array.prototype.slice.call(feed.querySelectorAll('.card'));
+  var activeType = 'all';
+  function apply(){
+    var q = (search.value || '').trim().toLowerCase();
+    var shown = 0;
+    cards.forEach(function(c){
+      var typeOk = activeType === 'all' || c.dataset.type === activeType;
+      var textOk = !q || c.textContent.toLowerCase().indexOf(q) !== -1;
+      var show = typeOk && textOk;
+      c.style.display = show ? '' : 'none';
+      if(show) shown++;
+    });
+    empty.style.display = shown ? 'none' : 'block';
+  }
+  chips.forEach(function(ch){
+    ch.addEventListener('click', function(){
+      chips.forEach(function(x){ x.classList.remove('active'); });
+      ch.classList.add('active');
+      activeType = ch.dataset.type;
+      apply();
+    });
+  });
+  search.addEventListener('input', apply);
+})();
+</script>
+
+</body>
+</html>
