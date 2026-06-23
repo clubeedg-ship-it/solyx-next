@@ -254,7 +254,7 @@ hr.div{border:none;border-top:1px solid var(--border);margin:28px 0;}
 .fu:nth-child(2){transition-delay:.1s;}
 
 /* ── FOOTER ── */
-footer{background:#080c0a;padding:56px 48px 36px;position:relative;z-index:5;isolation:isolate;}
+footer{background:#080c0a;padding:56px 48px 36px;position:relative;z-index:5;isolation:isolate;}.flogo{display:block;height:34px;width:auto;filter:invert(1);}
 .fg{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:48px;margin-bottom:44px;}
 .fbt{font-family:var(--font-body);font-size:14px;color:var(--ink-muted);line-height:1.65;margin-top:14px;}
 .fct{font-family:var(--font-head);font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:14px;}
@@ -561,7 +561,7 @@ document.querySelectorAll('.fu').forEach(el => obs.observe(el));
   <footer>
     <div class="fg">
       <div>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 252 44" height="32" fill="none"><circle cx="16" cy="22" r="14" fill="#FFF"/><path d="M18 10L12 22h5l-3 12L22 20h-5L18 10z" fill="#1C2422"/><text x="38" y="29" font-family="Inter,sans-serif" font-size="19" font-weight="300" letter-spacing="5" fill="#FFF">SOLYX ENERGY</text></svg>
+        <img class="flogo" src="midia/solyx-logo.png" alt="Solyx Energy">
         <p class="fbt">Slimme energieopslag voor huishoudens met zonnepanelen. Simpel, betaalbaar, direct resultaat. Made in Holland.</p>
       </div>
       <div><div class="fct">Product</div><ul class="flinks"><li><a href="wateraccu.html">WaterAccu</a></li><li><a href="wateraccu.html">De Nymo</a></li><li><a href="wateraccu.html">Nymo × Homey</a></li><li><a href="shop.html">Shop</a></li></ul></div>

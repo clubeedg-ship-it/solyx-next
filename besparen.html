@@ -326,6 +326,7 @@ img{max-width:100%;height:auto;}
 /* FOOTER */
 
 .fg{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:48px;margin-bottom:44px;}
+.flogo{display:block;height:34px;width:auto;filter:invert(1);}
 .fbt{font-family:var(--font-body);font-size:14px;color:var(--ink-muted);line-height:1.65;margin-top:14px;}
 .fct{font-family:var(--font-head);font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:14px;}
 .flinks{list-style:none;display:flex;flex-direction:column;gap:9px;}
@@ -1808,6 +1809,48 @@ body.page-id-196 .entry-content { height: 100%; }
     </div>
   </div>
 
+<footer>
+  <div class="fg">
+    <div>
+      <img class="flogo" src="midia/solyx-logo.png" alt="Solyx Energy">
+      <p class="fbt">Slimme energieopslag voor huishoudens met zonnepanelen. Simpel, betaalbaar, direct resultaat.</p>
+    </div>
+    <div>
+      <div class="fct">Product</div>
+      <ul class="flinks">
+        <li><a href="wateraccu.html">WaterAccu</a></li>
+        <li><a href="hoe-werkt-het.html">Nymo controller</a></li>
+        <li><a href="besparen.html">Besparing berekenen</a></li>
+        <li><a href="shop.html">Shop</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="fct">Installatie</div>
+      <ul class="flinks">
+        <li><a href="hoe-werkt-het.html">Hoe werkt het</a></li>
+        <li><a href="klantverhalen.html">Klantverhalen</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+        <li><a href="how-to-get-it.html">Contact</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="fct">Bedrijf</div>
+      <ul class="flinks">
+        <li><a href="over-ons.html">Over Solyx</a></li>
+        <li><a href="#">Werken bij</a></li>
+        <li><a href="#">Blog &amp; Nieuws</a></li>
+        <li><a href="#">Partners</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="fbottom">
+    <div class="fcopy">© 2025 Solyx Energy BV · Alle rechten voorbehouden</div>
+    <div style="display:flex;gap:20px">
+      <a href="#" style="font-family:var(--font-head);font-size:12px;color:rgba(255,255,255,.2);text-decoration:none">Privacy</a>
+      <a href="#" style="font-family:var(--font-head);font-size:12px;color:rgba(255,255,255,.2);text-decoration:none">Voorwaarden</a>
+    </div>
+  </div>
+</footer>
 </div>
 <script>/* === interactive widget: sliders, panels, charts, dimmer (js/besparen-widget.js) === */
 /* Besparen Calculator Widget — WPCode snippet for page 196 */
@@ -1832,7 +1875,8 @@ body.page-id-196 .entry-content { height: 100%; }
     + '#s-bd .bd-left{position:sticky !important;top:var(--bd-anchor-top) !important;align-self:start !important;z-index:5 !important;height:calc(100vh - var(--bd-anchor-top) - 24px) !important;display:flex !important;flex-direction:column !important;justify-content:center !important;}'
     + '#s-bd .hero-h1{position:sticky !important;top:var(--bd-nav-h) !important;z-index:6 !important;width:100% !important;max-width:100% !important;font-family:var(--font-head) !important;font-weight:900 !important;font-size:clamp(40px,6.4vw,76px) !important;letter-spacing:-.03em !important;line-height:1.0 !important;color:var(--ink) !important;white-space:normal !important;text-align:center !important;margin:0 auto clamp(40px,8vh,96px) !important;padding:clamp(20px,5vh,64px) 0 0 !important;transition:font-size .35s cubic-bezier(.22,1,.36,1),margin .35s,padding .35s !important;}'
     + '#s-bd .hero-h1 .hl{color:var(--green) !important;}'
-    + '#s-bd.bd-scrolled .hero-h1{font-size:clamp(22px,2.6vw,32px) !important;margin:0 auto clamp(22px,4vh,40px) !important;padding:14px 0 12px !important;background:linear-gradient(180deg,var(--off-white) 55%,rgba(247,249,247,0)) !important;}'
+    + '#s-bd.bd-scrolled .hero-h1{font-size:clamp(22px,2.6vw,32px) !important;margin:0 auto clamp(22px,4vh,40px) !important;padding:14px 0 12px !important;background:none !important;overflow:visible !important;}'
+    + '#s-bd.bd-scrolled .hero-h1::before{content:"" !important;position:absolute !important;top:0 !important;left:50% !important;transform:translateX(-50%) !important;width:100vw !important;height:100% !important;background:linear-gradient(180deg,var(--off-white) 55%,rgba(247,249,247,0)) !important;z-index:-1 !important;pointer-events:none !important;}'
     + '#s-bd .bd-opt-input{width:100% !important;max-width:100% !important;}'
     + '#s-bd .hero-opt{background:rgba(255,255,255,.85) !important;backdrop-filter:blur(20px) !important;border-radius:20px !important;box-shadow:0 12px 40px rgba(0,0,0,.08) !important;padding:26px 30px 24px !important;display:flex !important;flex-direction:column !important;text-align:left !important;position:relative !important;overflow:visible !important;}'
     + '#s-bd .bd-col-right{display:flex !important;flex-direction:column !important;z-index:1 !important;}'
