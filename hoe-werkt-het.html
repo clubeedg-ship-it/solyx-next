@@ -477,6 +477,17 @@ footer{background:#0e1512;padding:60px 48px 40px;position:relative;z-index:1;mar
 @media(max-width:900px){.fg{grid-template-columns:1fr 1fr;gap:32px;}.fbottom{flex-direction:column;gap:14px;text-align:center;}footer{padding:48px 20px 32px;}}
 @media(max-width:520px){.fg{grid-template-columns:1fr;}}
 
+
+/* #s-cta — mirrors home #s5 cta layout for consistency */
+#s-cta{min-height:100vh;display:flex;flex-direction:column;justify-content:center;text-align:center;padding:clamp(48px,7vh,96px) 64px;gap:clamp(30px,5vh,56px);}
+#s-cta .cta-corner{align-self:flex-start;text-align:left;}
+#s-cta .cta-center{align-self:center;max-width:1180px;width:100%;display:flex;flex-direction:column;align-items:center;}
+#s-cta .cta-h{text-align:center;max-width:760px;margin-left:auto;margin-right:auto;}
+#s-cta .cta-body{text-align:center;max-width:660px;margin-left:auto;margin-right:auto;}
+#s-cta .hero-options{max-width:1180px;gap:22px;}
+#s-cta .hero-opt{padding:54px 46px 32px;box-shadow:0 12px 40px rgba(0,0,0,.1);}
+#s-cta .hero-installer{margin-top:26px;}
+
 </style>
 </head>
 <body>
@@ -549,7 +560,7 @@ footer{background:#0e1512;padding:60px 48px 40px;position:relative;z-index:1;mar
 <div id="s-mod" style="scroll-snap-align:start;scroll-snap-stop:always;">
   <div class="prob-page">
     <div class="prob-l">
-      <div class="sec-num">01 / 07</div>
+      <div class="sec-num">01 / 08</div>
       <div class="sec-lbl">De waarde<br>van de<br><span class="hl">WaterAccu</span></div>
       <div class="sec-line"></div>
     </div>
@@ -613,7 +624,7 @@ footer{background:#0e1512;padding:60px 48px 40px;position:relative;z-index:1;mar
 <div id="s-dimmer" class="snap-page" style="scroll-snap-align:start;scroll-snap-stop:always;">
 <div class="two-col">
   <div class="col-l">
-    <div class="sec-num">02 / 07</div>
+    <div class="sec-num">02 / 08</div>
     <div class="sec-lbl">Zo werkt<br>de <span class="hl">Nymo</span>.</div>
     <div class="sec-line"></div>
   </div>
@@ -750,7 +761,7 @@ l-3 -33 -95 0 -95 0 -3 33 -3 32 101 0 101 0 -3 -32z"/>
 <div class="snap-page" id="s-comp" style="scroll-snap-align:start;scroll-snap-stop:always;">
   <div class="two-col">
     <div class="col-l">
-      <div class="sec-num">03 / 07</div>
+      <div class="sec-num">03 / 08</div>
       <div class="sec-lbl">De<br><span class="hl">Componenten</span></div>
       <div class="sec-line"></div>
 
@@ -1013,7 +1024,7 @@ l-3 -33 -95 0 -95 0 -3 33 -3 32 101 0 101 0 -3 -32z"/>
 
   <div class="nymo-wrap">
     <div class="nymo-left">
-      <div class="sec-num">04 / 07</div>
+      <div class="sec-num">04 / 08</div>
       <div class="sec-lbl">De<br><span class="hl">Nymo</span></div>
       <div class="sec-line"></div>
       <div class="nymo-switcher">
@@ -1059,7 +1070,7 @@ l-3 -33 -95 0 -95 0 -3 33 -3 32 101 0 101 0 -3 -32z"/>
 <div class="snap-page" id="s-check" style="scroll-snap-align:start;scroll-snap-stop:always;">
   <div class="two-col">
     <div class="col-l">
-      <div class="sec-num">05 / 07</div>
+      <div class="sec-num">05 / 08</div>
       <div class="sec-lbl">Is mijn<br>huis<br><span class="hl">geschikt?</span></div>
       <div class="sec-line"></div>
     </div>
@@ -1153,7 +1164,7 @@ l-3 -33 -95 0 -95 0 -3 33 -3 32 101 0 101 0 -3 -32z"/>
 <div class="snap-page" id="s-cost" style="scroll-snap-align:start;scroll-snap-stop:always;background:var(--off-white);">
   <div class="two-col" style="background:var(--off-white)">
     <div class="col-l" style="background:var(--off-white)">
-      <div class="sec-num">06 / 07</div>
+      <div class="sec-num">06 / 08</div>
       <div class="sec-lbl">Wat kost<br>een<br><span class="hl">WaterAccu?</span></div>
       <div class="sec-line"></div>
     </div>
@@ -1207,7 +1218,7 @@ l-3 -33 -95 0 -95 0 -3 33 -3 32 101 0 101 0 -3 -32z"/>
 <div class="snap-page" id="s-video" style="scroll-snap-align:start;scroll-snap-stop:always;">
   <div class="two-col">
     <div class="col-l">
-      <div class="sec-num">07 / 07</div>
+      <div class="sec-num">07 / 08</div>
       <div class="sec-lbl">Klanten<br>aan het<br><span class="hl">woord</span></div>
       <div class="sec-line"></div>
     </div>
@@ -1249,16 +1260,16 @@ l-3 -33 -95 0 -95 0 -3 33 -3 32 101 0 101 0 -3 -32z"/>
 
 <!-- ═══ DE NYMO + NYMO x HOMEY ═══ -->
 <!-- ═══ DE NYMO — SPATIAL SHOWCASE ═══ -->
-<div class="snap-page cta-section" id="s-cta" style="scroll-snap-align:start;scroll-snap-stop:always;">
-  <div class="two-col">
-    <div class="col-l" style="background:var(--green)">
-      <div class="sec-lbl" style="color:#fff">Start<br>vandaag.</div>
-      <div class="sec-line" style="background:#fff"></div>
-    </div>
-    <div class="col-r" style="background:var(--green)">
-      <h3 class="cta-h">Sla jouw onbenutte zonne-energie op in de WaterAccu.</h3>
-      <p class="cta-body">Haal meer voordeel uit jouw zonnepanelen én bespaar gas. Verwarm tapwater met onbenutte zonne-energie en bespaar direct. Plug & play, terugverdient in minder dan 3 jaar.</p>
-      <div class="hero-options">
+<div class="snap-page" id="s-cta" style="scroll-snap-align:start;scroll-snap-stop:always;background:var(--green);">
+  <div class="cta-corner">
+    <div class="sec-num" style="color:rgba(255,255,255,.6)">08 / 08</div>
+    <div class="sec-lbl" style="color:#fff">Start<br>vandaag.</div>
+    <div class="sec-line" style="background:#fff"></div>
+  </div>
+  <div class="cta-center">
+    <h3 class="cta-h">Sla jouw onbenutte zonne-energie op in de WaterAccu.</h3>
+    <p class="cta-body">Haal meer voordeel uit jouw zonnepanelen én bespaar gas. Verwarm tapwater met onbenutte zonne-energie en bespaar direct. Plug & play, terugverdient in minder dan 3 jaar.</p>
+    <div class="hero-options">
       <div class="hero-opt" onclick="window.location.href='wateraccu.html'">
         <div class="hero-opt-title">Nymo</div>
         <div class="hero-opt-price">€649</div>
@@ -1363,7 +1374,6 @@ l-3 -33 -95 0 -95 0 -3 33 -3 32 101 0 101 0 -3 -32z"/>
       </div>
     </div>
     <div class="hero-installer">Installateur? <a href="installatie.html">Klik hier.</a></div>
-    </div>
   </div>
 </div>
 
