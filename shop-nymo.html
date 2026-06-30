@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nymo WaterAccu — Solyx Energy</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+<link href="https://fonts.cdnfonts.com/css/alliance-no-2" rel="stylesheet">
+<style>
+:root{
+  --green:#35A847;--green-deep:#1E7A30;--green-light:#EBF8ED;
+  --orange:#F4831F;--ink:#3D3D3D;--ink-mid:#5A5A5A;--ink-muted:#888888;
+  --white:#FFFFFF;--off-white:#F7F9F7;--border:rgba(60,60,60,.1);
+  --font-head:'Inter',sans-serif;
+  --font-body:'Alliance No.2','DM Sans',Georgia,sans-serif;
+  --nav-h:80px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--font-body);color:var(--ink);background:var(--white);-webkit-font-smoothing:antialiased;min-height:100vh;}
+
+/* ── BLOB CANVAS ── */
+#gc{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+.blob{position:absolute;border-radius:50%;filter:blur(90px);mix-blend-mode:multiply;will-change:transform;}
+.blob-1{width:900px;height:900px;background:radial-gradient(circle,rgba(57,171,72,.32) 0%,rgba(57,171,72,.1) 45%,transparent 70%);top:-200px;left:-200px;animation:bl1 14s ease-in-out infinite;}
+@keyframes bl1{0%{transform:translate(0,0)}25%{transform:translate(55vw,80px)}50%{transform:translate(60vw,-60px)}75%{transform:translate(25vw,100px)}100%{transform:translate(0,0)}}
+.blob-2{width:1000px;height:1000px;background:radial-gradient(circle,rgba(57,171,72,.26) 0%,rgba(30,122,48,.08) 45%,transparent 70%);bottom:-250px;right:-250px;animation:bl2 18s ease-in-out infinite;animation-delay:-7s;}
+@keyframes bl2{0%{transform:translate(0,0)}33%{transform:translate(-60vw,-80px)}66%{transform:translate(-30vw,60px)}100%{transform:translate(0,0)}}
+.blob-3{width:700px;height:700px;background:radial-gradient(circle,rgba(57,171,72,.2) 0%,rgba(57,171,72,.07) 50%,transparent 70%);top:40vh;right:10vw;animation:bl3 22s ease-in-out infinite;animation-delay:-4s;}
+@keyframes bl3{0%{transform:translate(0,0)}25%{transform:translate(-30vw,-15vh)}50%{transform:translate(-10vw,10vh)}75%{transform:translate(10vw,5vh)}100%{transform:translate(0,0)}}
+
+/* ── SCROLL PROGRESS ── */
+#scroll-progress{position:fixed;top:0;left:0;height:2px;background:var(--green);z-index:700;width:0%;transition:width .3s ease;}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:600;display:flex;align-items:center;justify-content:space-between;padding:20px 48px;transition:background .4s,backdrop-filter .4s,box-shadow .4s;}
+nav.scrolled{background:rgba(255,255,255,.96);backdrop-filter:blur(20px);border-bottom:1px solid rgba(28,36,34,.08);box-shadow:0 2px 20px rgba(28,36,34,.06);}
+.nav-logo{display:flex;align-items:center;text-decoration:none;}
+.nav-logo img{display:block;height:32px;mix-blend-mode:multiply;}
+.nav-links{display:flex;gap:28px;list-style:none;}
+.nav-links a{font-family:var(--font-head);font-size:13px;font-weight:500;color:var(--ink-mid);text-decoration:none;transition:color .2s;}
+.nav-links a:hover{color:var(--ink);}
+.btn-orange{background:#F4831F;color:#fff;font-family:var(--font-head);font-size:13px;font-weight:700;padding:10px 22px;border-radius:999px;border:none;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;transition:background .2s,transform .2s;}
+.btn-orange:hover{background:#d96f10;transform:translateY(-1px);}
+
+/* ── PAGE WRAP ── */
+.page-wrap{position:relative;z-index:1;padding-top:var(--nav-h);}
+
+/* ── BREADCRUMB ── */
+.crumb{max-width:1200px;margin:0 auto;padding:20px 48px 0;font-family:var(--font-head);font-size:12px;color:var(--ink-muted);display:flex;gap:8px;align-items:center;}
+.crumb a{color:var(--ink-muted);text-decoration:none;transition:color .15s;}
+.crumb a:hover{color:var(--green);}
+.crumb-sep{opacity:.4;}
+.crumb-cur{color:var(--ink);font-weight:600;}
+
+/* ── MAIN LAYOUT ── */
+.wrap{max-width:1200px;margin:0 auto;padding:40px 48px 120px;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start;}
+@media(max-width:900px){
+  .wrap{grid-template-columns:1fr;gap:40px;padding:32px 20px 80px;}
+  .sticky{position:static!important;}
+  nav{padding:16px 20px;}
+  .nav-links{display:none;}
+  .crumb{padding:16px 20px 0;}
+}
+
+/* ── LEFT: IMAGE PANEL ── */
+.sticky{position:sticky;top:calc(var(--nav-h) + 24px);}
+
+.img-box{
+  background:rgba(255,255,255,.85);
+  border:1.5px solid var(--border);
+  border-radius:24px;
+  height:460px;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;margin-bottom:14px;position:relative;
+  backdrop-filter:blur(10px);
+  box-shadow:0 8px 40px rgba(53,168,71,.07);
+  transition:box-shadow .3s;
+}
+.img-box:hover{box-shadow:0 16px 60px rgba(53,168,71,.13);}
+.img-box img{max-width:100%;max-height:100%;object-fit:contain;padding:32px;transition:opacity .3s,transform .3s;}
+.img-box img.out{opacity:0;transform:scale(.97);}
+
+.img-badge{
+  position:absolute;top:16px;left:16px;
+  background:var(--ink);color:#fff;
+  font-family:var(--font-head);font-size:11px;font-weight:700;
+  padding:5px 14px;border-radius:999px;letter-spacing:.04em;
+  transition:opacity .3s;opacity:0;
+}
+.img-badge.on{opacity:1;}
+
+.thumbs{display:flex;gap:10px;margin-bottom:14px;}
+.thumb{
+  width:72px;height:72px;border-radius:14px;
+  border:1.5px solid var(--border);
+  background:rgba(255,255,255,.85);
+  overflow:hidden;cursor:pointer;
+  transition:border-color .18s,transform .18s,box-shadow .18s;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  backdrop-filter:blur(6px);
+}
+.thumb img{width:100%;height:100%;object-fit:contain;padding:6px;}
+.thumb:hover{border-color:rgba(53,168,71,.5);transform:translateY(-2px);box-shadow:0 6px 20px rgba(53,168,71,.1);}
+.thumb.on{border-color:var(--green);box-shadow:0 4px 16px rgba(53,168,71,.15);}
+
+.img-note{
+  background:rgba(255,255,255,.8);
+  border:1px solid rgba(53,168,71,.2);
+  border-radius:14px;
+  padding:14px 18px;
+  font-family:var(--font-body);font-size:13px;color:var(--ink-mid);
+  display:flex;gap:10px;align-items:flex-start;line-height:1.6;
+  backdrop-filter:blur(8px);
+}
+.img-note svg{flex-shrink:0;margin-top:2px;}
+
+/* ── RIGHT: CONFIGURATOR ── */
+.config h1{
+  font-family:var(--font-head);
+  font-size:clamp(28px,3.5vw,40px);
+  font-weight:900;letter-spacing:-.03em;line-height:1.05;
+  margin-bottom:8px;color:var(--ink);
+}
+.from-price{
+  font-family:var(--font-head);
+  font-size:15px;color:var(--ink-muted);margin-bottom:36px;
+}
+.from-price strong{color:var(--green);font-weight:800;}
+
+/* Section label */
+.sec{margin-bottom:28px;}
+.sec-label{
+  font-family:var(--font-head);font-size:11px;font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--ink-muted);
+  margin-bottom:14px;display:block;
+}
+hr.div{border:none;border-top:1px solid var(--border);margin:28px 0;}
+
+/* Version buttons (big cards) */
+.vrow{display:flex;gap:12px;flex-wrap:wrap;}
+.vbtn{
+  flex:1;min-width:150px;
+  display:flex;flex-direction:column;gap:6px;
+  padding:13px 16px;border-radius:16px;
+  border:1.5px solid var(--border);
+  background:rgba(255,255,255,.85);
+  cursor:pointer;transition:all .2s;font-family:inherit;text-align:left;
+  backdrop-filter:blur(6px);
+}
+.v-foot{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;}
+.vbtn:hover{border-color:rgba(53,168,71,.4);box-shadow:0 6px 24px rgba(53,168,71,.1);}
+.vbtn.on{background:var(--green);border-color:var(--green);box-shadow:0 6px 24px rgba(53,168,71,.25);}
+.v-name{font-family:var(--font-head);font-size:13px;font-weight:800;color:var(--ink);line-height:1.25;}
+.vbtn.on .v-name{color:#fff;}
+.v-tag{font-family:var(--font-head);font-size:11px;font-weight:600;color:var(--ink-muted);letter-spacing:.04em;}
+.vbtn.on .v-tag{color:rgba(255,255,255,.75);}
+.v-price{font-family:var(--font-head);font-size:13px;font-weight:700;color:var(--green);white-space:nowrap;}
+.vbtn.on .v-price{color:#fff;}
+
+/* Disclaimer */
+.disclaimer{
+  background:rgba(255,255,255,.75);
+  border:1px solid var(--border);border-radius:14px;
+  padding:14px 18px;
+  font-family:var(--font-body);font-size:13px;color:var(--ink-mid);
+  margin-top:12px;line-height:1.7;display:none;
+  backdrop-filter:blur(6px);
+}
+.disclaimer.on{display:block;}
+
+/* Add-ons */
+.addons-title{
+  font-family:var(--font-head);font-size:11px;font-weight:700;
+  color:var(--ink-muted);text-transform:uppercase;letter-spacing:.12em;
+  margin-bottom:14px;display:block;
+}
+.addon{
+  display:flex;align-items:center;gap:12px;
+  padding:14px 18px;border-radius:14px;
+  border:1.5px solid var(--border);
+  background:rgba(255,255,255,.85);
+  margin-bottom:8px;cursor:pointer;
+  transition:border-color .18s,background .18s,transform .18s;
+  backdrop-filter:blur(6px);
+}
+.addon:hover{border-color:rgba(53,168,71,.3);transform:translateX(3px);}
+.addon.on{border-color:var(--green);background:var(--green-light);}
+.a-box{
+  width:20px;height:20px;border-radius:6px;
+  border:1.5px solid var(--border);background:var(--white);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;transition:all .15s;
+}
+.addon.on .a-box{background:var(--green);border-color:var(--green);}
+.a-box svg{display:none;}
+.addon.on .a-box svg{display:block;}
+.a-lbl{font-family:var(--font-head);font-size:13px;font-weight:600;color:var(--ink);flex:1;}
+.a-price{font-family:var(--font-head);font-size:13px;font-weight:700;color:var(--green);}
+.addons-note{font-family:var(--font-body);font-size:11px;color:var(--ink-muted);margin-top:10px;line-height:1.6;}
+
+/* addon groups shown/hidden per version */
+.addon-group{display:none;}
+.addon-group.on{display:block;}
+
+/* Price box */
+.pbox{
+  background:rgba(255,255,255,.85);
+  border-radius:24px;
+  border:1.5px solid var(--border);
+  padding:28px;margin-top:28px;
+  backdrop-filter:blur(12px);
+  box-shadow:0 8px 40px rgba(53,168,71,.08);
+}
+.prow{display:flex;justify-content:space-between;align-items:center;font-family:var(--font-head);font-size:13px;color:var(--ink-muted);padding:5px 0;}
+.prow.main{font-size:14px;color:var(--ink);font-weight:600;}
+.prow .v{font-weight:700;color:var(--ink);}
+.total{font-family:var(--font-head);font-size:38px;font-weight:900;color:var(--ink);margin:6px 0 24px;letter-spacing:-.03em;}
+.total-note{font-family:var(--font-head);font-size:12px;color:var(--ink-muted);margin-bottom:24px;}
+
+.add-btn{
+  width:100%;padding:17px;
+  background:var(--green);color:#fff;
+  font-family:var(--font-head);font-size:15px;font-weight:700;
+  border:none;border-radius:999px;cursor:pointer;
+  transition:background .2s,transform .2s,box-shadow .2s;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  box-shadow:0 6px 24px rgba(53,168,71,.3);
+}
+.add-btn:hover{background:#2d9040;transform:translateY(-1px);box-shadow:0 10px 32px rgba(53,168,71,.4);}
+
+
+.trust-row{display:flex;gap:14px;margin-top:18px;justify-content:center;flex-wrap:wrap;}
+.trust-i{display:flex;align-items:center;gap:5px;font-family:var(--font-head);font-size:11px;color:var(--ink-muted);white-space:nowrap;}
+.trust-i svg{color:var(--green);}
+
+/* Fade in */
+.fu{opacity:0;transform:translateY(20px);transition:opacity .6s cubic-bezier(.22,1,.36,1),transform .6s cubic-bezier(.22,1,.36,1);}
+.fu.in{opacity:1;transform:none;}
+.fu:nth-child(2){transition-delay:.1s;}
+
+/* ── FOOTER ── */
+footer{background:#0e1512;padding:56px 48px 36px;}.flogo{display:block;height:32px;width:auto;filter:invert(1);}
+.fg{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:48px;margin-bottom:44px;}
+.fbt{font-family:var(--font-body);font-size:14px;color:var(--ink-muted);line-height:1.65;margin-top:14px;}
+.fct{font-family:var(--font-head);font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:14px;}
+.flinks{list-style:none;display:flex;flex-direction:column;gap:9px;}
+.flinks a{font-family:var(--font-head);font-size:13px;color:rgba(255,255,255,.5);text-decoration:none;transition:color .2s;}
+.flinks a:hover{color:#fff;}
+.fbottom{max-width:1100px;margin:0 auto;border-top:1px solid rgba(255,255,255,.05);padding-top:22px;display:flex;justify-content:space-between;align-items:center;}
+.fcopy{font-family:var(--font-head);font-size:12px;color:rgba(255,255,255,.2);}
+@media(max-width:900px){footer{padding:40px 20px 24px;} .fg{grid-template-columns:1fr 1fr;gap:28px;}}
+
+/* ── PRODUCT INFO SECTIONS ── */
+.shop-section{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:0 48px;}
+.band-title{font-family:var(--font-head);font-size:clamp(24px,3vw,32px);font-weight:900;letter-spacing:-.03em;color:var(--ink);margin-bottom:6px;}
+.band-sub{font-family:var(--font-body);font-size:15px;color:var(--ink-mid);line-height:1.6;margin-bottom:26px;max-width:560px;}
+.usp-reviews{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start;padding:8px 48px 16px;}
+.usp-list{display:flex;flex-direction:column;}
+.usp-ic{width:36px;height:36px;border-radius:10px;background:var(--green-light);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--green);}
+.usp-ic svg{width:17px;height:17px;}
+.usp-acc{border-bottom:1px solid var(--border);}
+.usp-trigger{width:100%;background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:13px;padding:13px 0;text-align:left;font-family:var(--font-head);}
+.usp-q{flex:1;font-size:15px;font-weight:700;color:var(--ink);transition:color .2s;}
+.usp-trigger:hover .usp-q{color:var(--green);}
+.usp-chev{width:9px;height:9px;border-right:2px solid var(--ink-muted);border-bottom:2px solid var(--ink-muted);transform:rotate(45deg);flex-shrink:0;margin-right:3px;transition:transform .22s ease,border-color .2s ease;}
+.usp-acc.open .usp-chev{transform:rotate(225deg);border-color:var(--green);}
+.usp-body{overflow:hidden;max-height:0;transition:max-height .3s ease;}
+.usp-acc.open .usp-body{max-height:760px;}
+.usp-homey{display:none;}
+.li-homey{display:none;}
+.usp-content{padding:2px 0 16px 49px;font-family:var(--font-body);font-size:13.5px;color:var(--ink-mid);line-height:1.6;}
+.usp-content p{margin:0 0 12px;}
+.usp-content ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:8px;}
+.usp-content ul.spec{gap:6px;}
+.usp-content li{line-height:1.55;}
+.usp-content strong{color:var(--ink);font-weight:700;}
+.usp-content a{color:var(--orange);font-weight:700;text-decoration:none;}
+.usp-content a:hover{text-decoration:underline;}
+.usp-content .cta{margin:14px 0 0;line-height:1.95;}
+.links-checks{margin-top:26px;padding:20px 22px;background:rgba(53,168,71,.06);border:1px solid rgba(53,168,71,.16);border-radius:14px;}
+.links-checks h4{font-family:var(--font-head);font-size:14px;font-weight:700;color:var(--ink);margin-bottom:12px;}
+.links-checks ul{list-style:none;display:flex;flex-direction:column;gap:9px;}
+.links-checks li{font-family:var(--font-body);font-size:13px;color:var(--ink-mid);line-height:1.5;}
+.links-checks a{font-family:var(--font-head);font-size:13.5px;font-weight:600;color:var(--green);text-decoration:none;}
+.links-checks a:hover{text-decoration:underline;}
+.reviews-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;}
+.rev-nav{display:flex;gap:6px;}
+.rev-arrow{width:30px;height:30px;border-radius:50%;border:1px solid var(--border);background:rgba(255,255,255,.85);color:var(--ink-mid);font-size:17px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:border-color .2s,color .2s;}
+.rev-arrow:hover{border-color:var(--green);color:var(--green);}
+.rev-viewport{overflow:hidden;}
+.rev-track{display:flex;align-items:flex-start;transition:transform .35s ease;}
+.rev-page{flex:0 0 100%;box-sizing:border-box;display:flex;flex-direction:column;gap:12px;}
+.review{box-sizing:border-box;background:rgba(255,255,255,.85);border:1px solid var(--border);border-radius:16px;padding:15px 18px;backdrop-filter:blur(6px);}
+.rev-all{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-head);font-size:13px;font-weight:600;color:var(--ink-mid);text-decoration:none;transition:color .2s;}
+.rev-all:hover{color:var(--green);}
+.rev-all .rev-stars-sm{color:var(--orange);letter-spacing:1px;}
+.rev-all strong{color:var(--ink);font-weight:800;}
+.review-stars{color:var(--orange);font-size:13px;letter-spacing:3px;margin-bottom:8px;}
+.review-text{font-family:var(--font-body);font-size:14px;color:var(--ink);line-height:1.6;margin-bottom:10px;}
+.review-meta{font-family:var(--font-head);font-size:12px;color:var(--ink-muted);}
+.review-meta b{color:var(--ink-mid);font-weight:700;}
+.more-info{margin-top:24px;padding-bottom:90px;}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;margin-top:22px;}
+.info-card{background:rgba(255,255,255,.8);border:1px solid var(--border);border-radius:18px;padding:24px 26px;backdrop-filter:blur(8px);}
+.info-card h3{font-family:var(--font-head);font-size:17px;font-weight:800;color:var(--ink);margin-bottom:10px;letter-spacing:-.01em;}
+.info-card p{font-family:var(--font-body);font-size:14px;color:var(--ink-mid);line-height:1.65;}
+.info-card ol,.info-card ul{margin:0;padding-left:18px;font-family:var(--font-body);font-size:14px;color:var(--ink-mid);line-height:1.6;}
+.info-card li{margin-bottom:9px;}
+.info-card strong{color:var(--ink);font-weight:700;}
+.info-card a{color:var(--green);font-weight:600;text-decoration:underline;}
+.info-card a:hover{color:var(--green-deep);}
+@media(max-width:900px){
+  .shop-section{padding:0 20px;}
+  .usp-reviews{grid-template-columns:1fr;gap:32px;}
+  .info-grid{grid-template-columns:1fr;}
+  .more-info{padding-bottom:60px;}
+}
+
+/* ── canonical footer (matches installatie.html) ── */
+footer{background:#0e1512;padding:60px 48px 40px;position:relative;z-index:1;margin-top:0;}
+.fg{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px;}
+.fbt{font-family:var(--font-body);font-size:14px;color:var(--ink-muted);line-height:1.65;margin-top:16px;}
+.flogo{display:block;height:30px;width:auto;filter:invert(1);}
+.fcompany{font-style:normal;font-family:var(--font-body);font-size:13px;color:rgba(255,255,255,.5);line-height:1.55;margin-top:16px;}
+.fcompany a{color:rgba(255,255,255,.7);text-decoration:none;}
+.fcompany a:hover{color:#fff;}
+.fcompany-gap{display:block;height:7px;}
+.fsocial{display:flex;gap:12px;margin-top:22px;}
+.fsoc{width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.7);transition:background .2s,color .2s,border-color .2s;}
+.fsoc:hover{background:var(--green);border-color:var(--green);color:#fff;}
+.fgoogle{display:inline-flex;align-items:center;gap:11px;margin-top:18px;text-decoration:none;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:9px 15px;transition:background .2s;}
+.fgoogle:hover{background:rgba(255,255,255,.1);}
+.fgoogle-meta{display:flex;flex-direction:column;line-height:1.2;}
+.fgoogle-stars{position:relative;display:inline-block;font-size:12px;letter-spacing:1.5px;color:rgba(255,255,255,.22);}
+.fgoogle-stars-fill{position:absolute;top:0;left:0;overflow:hidden;white-space:nowrap;color:#FBBC04;}
+.fgoogle-text{font-family:var(--font-head);font-size:12px;color:rgba(255,255,255,.6);margin-top:3px;}
+.fgoogle-text strong{color:#fff;font-weight:800;}
+.flegal{display:flex;gap:22px;flex-wrap:wrap;}
+.flegal a{font-family:var(--font-head);font-size:12px;color:rgba(255,255,255,.55);text-decoration:none;transition:color .2s;}
+.flegal a:hover{color:#fff;}
+.fct{font-family:var(--font-head);font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:16px;}
+.flinks{list-style:none;display:flex;flex-direction:column;gap:10px;}
+.flinks a{font-family:var(--font-head);font-size:13px;color:rgba(255,255,255,.5);text-decoration:none;transition:color .2s;}
+.flinks a:hover{color:#fff;}
+.fbottom{max-width:1100px;margin:0 auto;border-top:1px solid rgba(255,255,255,.05);padding-top:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px;}
+.fcopy{font-family:var(--font-head);font-size:12px;color:rgba(255,255,255,.45);}
+@media(max-width:900px){.fg{grid-template-columns:1fr 1fr;gap:32px;}.fbottom{flex-direction:column;gap:14px;text-align:center;}footer{padding:48px 20px 32px;}}
+@media(max-width:520px){.fg{grid-template-columns:1fr;}}
+
+</style>
+</head>
+<body>
+
+<div id="gc">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+</div>
+<div id="scroll-progress"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="home.html" class="nav-logo">
+    <img src="midia/solyx-logo.png" alt="Solyx Energy" style="display:block;height:32px;">
+  </a>
+  <ul class="nav-links">
+    <li><a href="hoe-werkt-het.html">Hoe werkt het</a></li>
+    <li><a href="how-to-get-it.html">Aan de slag</a></li>
+    <li><a href="faq.html">FAQ</a></li>
+    <li><a href="shop.html">Shop</a></li>
+  </ul>
+  <a href="besparen.html" class="btn-orange">Bereken</a>
+</nav>
+
+<div class="page-wrap">
+
+  <!-- BREADCRUMB -->
+  <div class="crumb">
+    <a href="https://www.solyxenergy.nl">Home</a>
+    <span class="crumb-sep">›</span>
+    <a href="shop.html">Winkel</a>
+    <span class="crumb-sep">›</span>
+    <span class="crumb-cur">Nymo WaterAccu</span>
+  </div>
+
+  <!-- MAIN GRID -->
+  <div class="wrap">
+
+    <!-- LEFT: sticky image -->
+    <div class="sticky fu">
+      <div class="img-box">
+        <div class="img-badge on" id="badge">Nymo</div>
+        <img id="mainImg" src="images/shop/nymo-sensor.jpg" alt="Nymo WaterAccu Controller">
+      </div>
+      <div class="thumbs" id="thumbRow"></div>
+    </div>
+
+    <!-- RIGHT: configurator -->
+    <div class="config fu">
+      <h1>Nymo WaterAccu</h1>
+      <div class="from-price">Vanaf <strong>€611,00</strong> inclusief 21% btw</div>
+
+      <!-- VERSION SELECT -->
+      <div class="sec">
+        <span class="sec-label">Kies je versie</span>
+        <div class="vrow">
+          <button class="vbtn on" id="v-nymo" onclick="setVersion('nymo')">
+            <span class="v-name">Nymo</span>
+            <span class="v-foot"><span class="v-tag">Standaard</span><span class="v-price">€649,00</span></span>
+          </button>
+          <button class="vbtn" id="v-homey" onclick="setVersion('homey')">
+            <span class="v-name">Nymo voor Homey gebruikers</span>
+            <span class="v-foot"><span class="v-tag">Smarthome-integratie</span><span class="v-price">€611,00</span></span>
+          </button>
+        </div>
+
+        <!-- Nymo info -->
+        <div class="disclaimer on" id="disc-nymo">
+          <strong>Nymo</strong> — De standaard Nymo, inclusief alle benodigdheden, waaronder de sensor voor uitlezing van de P1-meter. Geschikt voor (toekomstige) combinatie met Homey.
+        </div>
+        <!-- Nymo voor Homey gebruikers info -->
+        <div class="disclaimer" id="disc-homey">
+          <strong>Nymo voor Homey gebruikers</strong> — De Nymo zónder Solyx-P1-sensor, aangezien deze vervangen wordt door Homey producten (Homey Pro of Homey Bridge, en compatibele P1-dongle).
+        </div>
+      </div>
+
+      <hr class="div">
+
+      <!-- ACCESSORIES: Nymo -->
+      <div class="addon-group on" id="addons-nymo">
+        <div class="addons-title">Optioneel toevoegen</div>
+        <div class="addon" id="n-kabels" onclick="toggleAddon('n-kabels', 14)">
+          <div class="a-box"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <span class="a-lbl">Nymo met kabels, voor plug &amp; play installatie</span><span class="a-price">+€14,00</span>
+        </div>
+        <div class="addon" id="n-p1" onclick="toggleAddon('n-p1', 16)">
+          <div class="a-box"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <span class="a-lbl">P1-splitter, voor als de P1-poort al bezet is</span><span class="a-price">+€16,00</span>
+        </div>
+        <div class="addons-note">Meer info onderaan de pagina.</div>
+      </div>
+
+      <!-- ACCESSORIES: Nymo voor Homey gebruikers -->
+      <div class="addon-group" id="addons-homey">
+        <div class="addons-title">Optioneel toevoegen</div>
+        <div class="addon" id="h-kabels" onclick="toggleAddon('h-kabels', 14)">
+          <div class="a-box"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <span class="a-lbl">Nymo met kabels, voor plug &amp; play installatie</span><span class="a-price">+€14,00</span>
+        </div>
+        <div class="addon" id="h-p1" onclick="toggleAddon('h-p1', 16)">
+          <div class="a-box"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <span class="a-lbl">P1-splitter, voor als de P1-poort al bezet is</span><span class="a-price">+€16,00</span>
+        </div>
+        <div class="addon" id="h-bridge" onclick="toggleAddon('h-bridge', 69)">
+          <div class="a-box"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <span class="a-lbl">Homey Bridge</span><span class="a-price">+€69,00</span>
+        </div>
+        <div class="addon" id="h-p1dongle" onclick="toggleAddon('h-p1dongle', 39)">
+          <div class="a-box"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <span class="a-lbl">Homey P1-dongle</span><span class="a-price">+€39,00</span>
+        </div>
+        <div class="addons-note">Meer info onderaan de pagina.</div>
+      </div>
+
+      <!-- PRICE BOX -->
+      <div class="pbox">
+        <div class="prow main"><span>Totaal incl. 21% btw</span><span></span></div>
+        <div class="total" id="total">€649,00</div>
+        <button class="add-btn" onclick="addCart()">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+          Toevoegen aan winkelwagen
+        </button>
+        <div class="trust-row">
+          <div class="trust-i"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Gratis verzending</div>
+          <div class="trust-i"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>2 jaar garantie</div>
+          <div class="trust-i"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2"/><circle cx="18.5" cy="18.5" r="2"/></svg>Binnen 3 dagen in huis</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /wrap -->
+
+  <!-- ============ USPs + REVIEWS ============ -->
+  <section class="shop-section usp-reviews fu">
+    <div class="usp-col">
+      <h2 class="band-title">Alles over de Nymo</h2>
+      <p class="band-sub">Klik op een onderwerp om uit te vouwen en meer te lezen.</p>
+      <div class="usp-list">
+        <div class="usp-acc">
+          <button type="button" class="usp-trigger"><span class="usp-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span class="usp-q">Maakt van boiler een WaterAccu</span><span class="usp-chev"></span></button>
+          <div class="usp-body"><div class="usp-content">
+            <p>Sla jouw onbenutte zonne-energie op in de WaterAccu. Beperk terugleveren tot een minimum, zonder enorme investeringen. De WaterAccu bestaat uit de Nymo en een elektrische boiler.</p>
+            <ul>
+              <li><strong>Geen aan/uit-schakeling</strong>, maar modulerende werking zodat iedere zonnestraal die ongebruikt is, naar de boiler wordt geleid.</li>
+              <li>Perfect voor zonnepaneeleigenaren met <strong>enkelfase én driefase zonne-systemen of huisaansluitingen</strong>.</li>
+              <li><strong>Werkt onafhankelijk</strong>, dus ongeacht het merk en type zonnepanelen of omvormers.</li>
+            </ul>
+            <p class="cta">Nog geen boiler? <a href="shop-complete-wateraccu.html">Geen probleem.</a><br>Jouw besparing berekenen? <a href="besparen.html">Bekijk onze calculator</a></p>
+          </div></div>
+        </div>
+        <div class="usp-acc usp-homey">
+          <button type="button" class="usp-trigger"><span class="usp-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span class="usp-q">Haal met Homey nóg meer voordeel uit jouw zonnepanelen</span><span class="usp-chev"></span></button>
+          <div class="usp-body"><div class="usp-content">
+            <p>Door de integratie met Homey kun je nu:</p>
+            <ul>
+              <li>De <strong>modulerende zonne-regeling</strong> activeren om iedere onbenutte zonnestraal te gebruiken (niet simpelweg aan/uit schakelen).</li>
+              <li>De Nymo <strong>aansturen op dynamische prijzen</strong>, in de winter of als de prijzen negatief zijn.</li>
+              <li>In <strong>1 app al jouw apparaten integreren</strong> zoals thuisbatterijen, EV-laders, omvormers, etc.</li>
+            </ul>
+            <p>De <a href="https://homey.app/nl-nl/homey-pro/" target="_blank" rel="noopener">Homey Pro</a> of <a href="https://homey.app/nl-nl/homey-bridge/" target="_blank" rel="noopener">Bridge</a> vervangt de Nymo-sensor.</p>
+            <p>Let op: Nymo energie-monitoring wordt <strong>niet</strong> ondersteund in de Homey-app, <strong>lees onderaan de pagina</strong> hoe dit kan worden opgelost.</p>
+          </div></div>
+        </div>
+        <div class="usp-acc">
+          <button type="button" class="usp-trigger"><span class="usp-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span class="usp-q">Gemakkelijk zelf te installeren</span><span class="usp-chev"></span></button>
+          <div class="usp-body"><div class="usp-content">
+            <ul>
+              <li>In zo'n 20 minuten geïnstalleerd, en inclusief kabels zelfs volledig plug &amp; play.</li>
+              <li class="li-nymo">Draadloze communicatie tussen de Nymo en de Sensor, dus er hoeven geen kabels getrokken te worden.</li>
+              <li class="li-homey">Draadloze communicatie tussen de Nymo en Homey via radiofrequentie 433 MHz, dus er hoeven geen kabels getrokken te worden.</li>
+              <li>Bekijk hier de <a href="https://www.solyxenergy.nl/ontdek-mogelijkheden/#Installatiehulp">3 stappen voor installatie</a>, of de <a href="https://www.solyxenergy.nl/wp-content/uploads/2025/01/Solyx-Energy-Installatiehandleiding-Nymo-NY-IH_01-2025.pdf">installatiehandleiding</a>.</li>
+            </ul>
+          </div></div>
+        </div>
+        <div class="usp-acc usp-slimme">
+          <button type="button" class="usp-trigger"><span class="usp-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span class="usp-q">Slimme features voor warm water garantie</span><span class="usp-chev"></span></button>
+          <div class="usp-body"><div class="usp-content">
+            <ul>
+              <li>Na installatie heb je er geen omkijken meer naar!</li>
+              <li>Automatisch programma ter voorkoming van legionella.</li>
+              <li>Aansluiting via cv-combiketel: geen enkele programmering nodig.</li>
+              <li>Zonder cv-ketel: programmeer elektrische bijverwarming, voor warmwatergarantie in de winter.</li>
+            </ul>
+          </div></div>
+        </div>
+        <div class="usp-acc">
+          <button type="button" class="usp-trigger"><span class="usp-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/><line x1="8" y1="9" x2="11" y2="9"/></svg></span><span class="usp-q">Specificaties Nymo-hoofdunit</span><span class="usp-chev"></span></button>
+          <div class="usp-body"><div class="usp-content">
+            <ul class="spec">
+              <li><strong>Voltage</strong> | 220 – 240V AC (enkelfase boiler of verwarmingselement)</li>
+              <li><strong>Maximaal toelaatbare belasting</strong> | maximaal 3 kW elektrische verwarmingselementen (13A weerstand)</li>
+              <li><strong>Gewicht</strong> | 2,2 kg</li>
+              <li><strong>Afmetingen</strong> | 166 x 243 x 91 mm</li>
+              <li><strong>Van toepassing zijnde normen</strong> | EN 300 220-2, EN 301 489-1, EN 301 489-3, EN 55014-1, EN 55014-2, EN 61000-3</li>
+            </ul>
+          </div></div>
+        </div>
+        <div class="usp-acc usp-sensor">
+          <button type="button" class="usp-trigger"><span class="usp-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/><line x1="8" y1="9" x2="11" y2="9"/></svg></span><span class="usp-q">Specificaties Sensor</span><span class="usp-chev"></span></button>
+          <div class="usp-body"><div class="usp-content">
+            <ul class="spec">
+              <li><strong>Slimme meter-compatibiliteit</strong> | P1-poort dsrm 5.0 (slimme meters vanaf 2015)</li>
+              <li><strong>Radiobereik</strong> | 1 – 30 m binnenshuis</li>
+              <li><strong>Radiofrequentie</strong> | 433,92 MHz</li>
+              <li><strong>Afmetingen</strong> | 67 x 67 x 30 mm (exclusief antenne)</li>
+              <li><strong>Van toepassing zijnde normen</strong> | EN 300 220-2, EN 301 489-3, EN 301 489-3</li>
+            </ul>
+          </div></div>
+        </div>
+      </div>
+      <div class="links-checks">
+        <h4>Links en checks</h4>
+        <ul>
+          <li><a href="https://www.solyxenergy.nl/ontdek-mogelijkheden/">Bekijk hier de checks</a> voor inpassing van de Nymo bij jou thuis.</li>
+          <li><a href="https://www.solyxenergy.nl/ontdek-mogelijkheden/#Installatiehulp">Bekijk hier de installatiestappen</a>.</li>
+          <li><a href="https://www.solyxenergy.nl/wp-content/uploads/2025/01/Solyx-Energy-Installatiehandleiding-Nymo-NY-IH_01-2025.pdf">Bekijk de installatiehandleiding</a>.</li>
+          <li><a href="https://www.solyxenergy.nl/wp-content/uploads/2025/01/Solyx-Energy-Gebruikershandleiding-Nymo-NY-GH_1-2025.pdf">Bekijk de gebruikershandleiding</a>.</li>
+          <li>De installatie liever uitbesteden? Vraag een totaal-offerte aan via ons <a href="installatie-formulier.html">installatieformulier</a>.</li>
+        </ul>
+      </div>
+    </div>
+    <aside class="reviews-col" tabindex="0" aria-label="Klantreviews, navigeer met de pijltjestoetsen">
+      <div class="reviews-head">
+        <a class="rev-all" href="#" target="_blank" rel="noopener"><span class="rev-stars-sm">★★★★★</span> <strong>4,7</strong> op Google · Bekijk al onze reviews →</a>
+        <div class="rev-nav">
+          <button type="button" class="rev-arrow" id="revPrev" aria-label="Vorige review">&#8249;</button>
+          <button type="button" class="rev-arrow" id="revNext" aria-label="Volgende review">&#8250;</button>
+        </div>
+      </div>
+      <div class="rev-viewport">
+        <div class="rev-track" id="revTrack">
+          <div class="rev-page">
+            <div class="review">
+              <div class="review-stars">★★★★★</div>
+              <p class="review-text">"Nog geen seconde spijt gehad van deze kleine investering en wat een opbrengst. Dan zwijg ik nog over de service! Echt top! Thx Solyx."</p>
+              <div class="review-meta"><b>Frank De W.</b> · 12 maanden geleden</div>
+            </div>
+            <div class="review">
+              <div class="review-stars">★★★★★</div>
+              <p class="review-text">"Erg tevreden over deze oplossing. Een slimme manier om je eigen zonne-energie te gebruiken, zonder een gigantische investering. Ik heb de Nymo zelf geïnstalleerd en dat ging best makkelijk."</p>
+              <div class="review-meta"><b>Lonneke V.</b> · 10 maanden geleden</div>
+            </div>
+            <div class="review">
+              <div class="review-stars">★★★★★</div>
+              <p class="review-text">"Geweldig product, met een slim idee om te profiteren van je overtollige zonne-energie zonder de bank te breken! De installatie was heel eenvoudig."</p>
+              <div class="review-meta"><b>Oliver M.</b> · 1 jaar geleden</div>
+            </div>
+            <div class="review">
+              <div class="review-stars">★★★★★</div>
+              <p class="review-text">"Dé toevoeging op de zonnepanelen waar ik naar op zoek was, top!"</p>
+              <div class="review-meta"><b>Bart van H.</b> · 1 jaar geleden</div>
+            </div>
+          </div>
+          <div class="rev-page">
+            <div class="review">
+              <div class="review-stars">★★★★★</div>
+              <p class="review-text">"Uitstekende service, prettig contact en het belangrijkste: een product dat goed werkt om het overschot aan zonne-energie te benutten!"</p>
+              <div class="review-meta"><b>Richard</b> · 2 jaar geleden</div>
+            </div>
+            <div class="review">
+              <div class="review-stars">★★★★★</div>
+              <p class="review-text">"Al een tijd op zoek naar een dergelijke oplossing en nu geïnstalleerd thuis. Heel blij met het resultaat, werkt feilloos."</p>
+              <div class="review-meta"><b>Jelle R.</b> · 1 jaar geleden</div>
+            </div>
+            <div class="review">
+              <div class="review-stars">★★★★★</div>
+              <p class="review-text">"Heel tevreden van de aanpak, technische toelichting en levering. Snelle levering tot hier in België. Werkt perfect. Bedankt Emma!"</p>
+              <div class="review-meta"><b>Stijn G.</b> · 1 jaar geleden</div>
+            </div>
+            <div class="review">
+              <div class="review-stars">★★★★★</div>
+              <p class="review-text">"Mooi product, makkelijk te installeren en gemakkelijk in gebruik!"</p>
+              <div class="review-meta"><b>Pim van B.</b> · 1 jaar geleden</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </section>
+
+  <!-- ============ MEER INFORMATIE ============ -->
+  <section class="shop-section more-info fu">
+    <div class="info-grid">
+      <div class="info-card">
+        <h3>Waarom de Nymo?</h3>
+        <ul>
+          <li>Perfect voor zonnepaneeleigenaren met <strong>enkelfase én driefase zonne-systemen of huisaansluitingen</strong>.</li>
+          <li><strong>Werkt onafhankelijk</strong>, dus ongeacht het merk en type zonnepanelen of omvormers. <a href="https://www.solyxenergy.nl/ontdek-mogelijkheden/">Bekijk hier de checks</a> voor inpassing bij jou thuis.</li>
+          <li><strong>Plug &amp; play:</strong> in zo'n 20 minuten geïnstalleerd – via aansluiting op de slimme meter (P1-poort). Optioneel is de Nymo ook bekabeld te bestellen voor de meest eenvoudige installatie. Na installatie heb je er bovendien geen omkijken meer naar.</li>
+          <li><strong>Geen aan/uit-schakeling</strong>, maar modulerende werking zodat iedere zonnestraal die ongebruikt is, naar de boiler wordt geleid.</li>
+          <li><strong>Slimme features</strong> zodat jij je geen zorgen hoeft te maken over warmwatergarantie en legionellapreventie.</li>
+        </ul>
+      </div>
+      <div class="info-card">
+        <h3>Wat zit er in de doos?</h3>
+        <ol>
+          <li><strong>De Sensor</strong> — detecteert hoeveel zonne-energie er wordt teruggeleverd aan het net.</li>
+          <li><strong>De Nymo-hoofdunit</strong> — ontvangt de meting van de Sensor en stuurt de elektrische boiler aan met precies de hoeveelheid zonne-energie die anders het net op zou gaan.</li>
+          <li><strong>Alle benodigde accessoires</strong> — P1-kabel om de Sensor aan te sluiten, pluggen en schroeven, installatiesjabloon en handleidingen.</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+</div><!-- /page-wrap -->
+
+<script>
+window.addEventListener('scroll', function(){
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 60);
+  var sp = document.getElementById('scroll-progress');
+  sp.style.width = (window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100) + '%';
+}, {passive:true});
+
+const PRICES = { nymo: 649, homey: 611 };
+const SHOP = 'images/shop/';
+// hoofdfoto per versie: met/zonder kabels
+const MAIN_IMG = {
+  nymo:  { base: SHOP+'nymo-sensor.jpg',  cables: SHOP+'nymo-cables-sensor.jpg' },
+  homey: { base: SHOP+'nymo-only.jpg',    cables: SHOP+'nymo-cables.jpg' }
+};
+// badge-tekst (linksboven) per afbeelding
+const IMG_LABEL = {
+  [SHOP+'nymo-sensor.jpg']: 'Nymo',
+  [SHOP+'nymo-only.jpg']: 'Nymo voor Homey gebruikers',
+  [SHOP+'nymo-cables.jpg']: 'Nymo + kabels',
+  [SHOP+'nymo-cables-sensor.jpg']: 'Nymo + kabels',
+  [SHOP+'p1-splitter.jpg']: 'P1-splitter',
+  [SHOP+'homey-bridge.jpg']: 'Homey Bridge',
+  [SHOP+'homey-p1-dongle.jpg']: 'Homey P1-dongle'
+};
+// thumbnails (incl. accessoires) per versie
+const THUMBS = {
+  nymo:  [SHOP+'nymo-sensor.jpg', SHOP+'nymo-cables-sensor.jpg', SHOP+'p1-splitter.jpg'],
+  homey: [SHOP+'nymo-only.jpg', SHOP+'nymo-cables.jpg', SHOP+'p1-splitter.jpg', SHOP+'homey-bridge.jpg', SHOP+'homey-p1-dongle.jpg']
+};
+// foto bij een gekozen accessoire
+function accImgFor(id) {
+  if(id === 'n-kabels' || id === 'h-kabels') return MAIN_IMG[st.version].cables;
+  if(id === 'n-p1' || id === 'h-p1') return SHOP+'p1-splitter.jpg';
+  if(id === 'h-bridge') return SHOP+'homey-bridge.jpg';
+  if(id === 'h-p1dongle') return SHOP+'homey-p1-dongle.jpg';
+  return null;
+}
+// toon de laatst-gekozen accessoire, anders de basisfoto van de versie
+function curMainImg() {
+  for(let i = st.accStack.length - 1; i >= 0; i--) {
+    const im = accImgFor(st.accStack[i]);
+    if(im) return im;
+  }
+  return MAIN_IMG[st.version].base;
+}
+function setMainImg(src) {
+  const img = document.getElementById('mainImg');
+  img.classList.add('out');
+  setTimeout(() => { img.src = src; img.classList.remove('out'); }, 200);
+  document.querySelectorAll('#thumbRow .thumb').forEach(t => t.classList.toggle('on', t.dataset.src === src));
+  document.getElementById('badge').textContent = IMG_LABEL[src] || 'Nymo';
+}
+function renderThumbs() {
+  const row = document.getElementById('thumbRow');
+  row.innerHTML = '';
+  THUMBS[st.version].forEach(src => {
+    const d = document.createElement('div');
+    d.className = 'thumb';
+    d.dataset.src = src;
+    d.onclick = () => setMainImg(src);
+    d.innerHTML = '<img src="' + src + '" alt="">';
+    row.appendChild(d);
+  });
+}
+function updateMainImg() { setMainImg(curMainImg()); }
+const NOTES = {
+  nymo:  'Nymo WaterAccu controller — slimme aansturing van je boiler op basis van zonne-energie.',
+  homey: 'Nymo voor Homey gebruikers — volledig geïntegreerd in je Homey smarthome voor maximale automatisering.',
+};
+
+// State
+const st = {
+  version: 'nymo',
+  accStack: [],
+  addons: {
+    'n-kabels': false, 'n-p1': false,
+    'h-kabels': false, 'h-p1': false, 'h-bridge': false, 'h-p1dongle': false
+  },
+  prices: {
+    'n-kabels': 14, 'n-p1': 16,
+    'h-kabels': 14, 'h-p1': 16, 'h-bridge': 69, 'h-p1dongle': 39
+  }
+};
+
+function setVersion(v) {
+  st.version = v;
+
+  // Reset all addons when switching version
+  Object.keys(st.addons).forEach(k => {
+    st.addons[k] = false;
+    const el = document.getElementById(k);
+    if(el) el.classList.remove('on');
+  });
+  st.accStack = [];
+
+  // Toggle version buttons
+  document.getElementById('v-nymo').classList.toggle('on', v === 'nymo');
+  document.getElementById('v-homey').classList.toggle('on', v === 'homey');
+
+  // Toggle disclaimers
+  document.getElementById('disc-nymo').classList.toggle('on', v === 'nymo');
+  document.getElementById('disc-homey').classList.toggle('on', v === 'homey');
+
+  // 'Alles over de Nymo': Homey-item alleen bij Homey, Sensor-specs alleen bij standaard
+  var homeyAcc = document.querySelector('.usp-homey');
+  var sensorAcc = document.querySelector('.usp-sensor');
+  var slimmeAcc = document.querySelector('.usp-slimme');
+  if(homeyAcc){ homeyAcc.style.display = (v === 'homey') ? 'block' : 'none'; if(v !== 'homey') homeyAcc.classList.remove('open'); }
+  if(sensorAcc){ sensorAcc.style.display = (v === 'homey') ? 'none' : 'block'; if(v === 'homey') sensorAcc.classList.remove('open'); }
+  if(slimmeAcc){ slimmeAcc.style.display = (v === 'homey') ? 'none' : 'block'; if(v === 'homey') slimmeAcc.classList.remove('open'); }
+  // 'Gemakkelijk zelf te installeren': communicatie-zin per variant
+  document.querySelectorAll('.li-nymo').forEach(function(el){ el.style.display = (v === 'homey') ? 'none' : 'list-item'; });
+  document.querySelectorAll('.li-homey').forEach(function(el){ el.style.display = (v === 'homey') ? 'list-item' : 'none'; });
+
+  // Toggle accessory groups
+  document.getElementById('addons-nymo').classList.toggle('on', v === 'nymo');
+  document.getElementById('addons-homey').classList.toggle('on', v === 'homey');
+
+  // Update gallery & badge (badge wordt door setMainImg gezet)
+  renderThumbs();
+  updateMainImg();
+
+  refreshPrice();
+}
+
+function toggleAddon(id, price) {
+  st.addons[id] = !st.addons[id];
+  document.getElementById(id).classList.toggle('on', st.addons[id]);
+  // gekozen accessoire bovenop de stapel; bij uitvinken weer eraf
+  if(st.addons[id]) st.accStack.push(id);
+  else st.accStack = st.accStack.filter(x => x !== id);
+  updateMainImg();
+  refreshPrice();
+}
+
+function refreshPrice() {
+  const basePrice = PRICES[st.version];
+
+  // Only count addons for the active version
+  const prefix = st.version === 'nymo' ? 'n-' : 'h-';
+  let addonTotal = 0;
+  Object.keys(st.addons).forEach(k => {
+    if(k.startsWith(prefix) && st.addons[k]) addonTotal += st.prices[k];
+  });
+
+  const total = basePrice + addonTotal;
+  document.getElementById('total').textContent = '€' + total.toLocaleString('nl-NL', {minimumFractionDigits:2, maximumFractionDigits:2});
+}
+
+function thumb(el, src) {
+  document.querySelectorAll('.thumb').forEach(t => t.classList.remove('on'));
+  el.classList.add('on');
+  const img = document.getElementById('mainImg');
+  img.classList.add('out');
+  setTimeout(() => { img.src = src; img.classList.remove('out'); }, 200);
+}
+
+function addCart() {
+  const btn = document.querySelector('.add-btn');
+  btn.innerHTML = '✓ Toegevoegd aan winkelwagen!';
+  btn.style.background = '#2d9040';
+  setTimeout(() => {
+    btn.innerHTML = `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Toevoegen aan winkelwagen`;
+    btn.style.background = '';
+  }, 2500);
+  window.open('https://www.solyxenergy.nl/product/elektrische-boiler/', '_blank');
+}
+
+// Fade-in on scroll
+const obs = new IntersectionObserver(e => {
+  e.forEach(x => { if(x.isIntersecting){ x.target.classList.add('in'); obs.unobserve(x.target); }});
+}, {threshold:.05});
+document.querySelectorAll('.fu').forEach(el => obs.observe(el));
+
+// Init productgalerij
+renderThumbs();
+updateMainImg();
+
+// USP accordion (uitvouwen)
+var uspList = document.querySelector('.usp-list');
+if(uspList){
+  uspList.addEventListener('click', function(e){
+    var t = e.target.closest('.usp-trigger');
+    if(!t) return;
+    t.parentElement.classList.toggle('open');
+  });
+}
+
+// Reviews carousel (pijltjes + pijltjestoetsen)
+(function(){
+  var track = document.getElementById('revTrack');
+  if(!track) return;
+  var slides = track.children.length, i = 0;
+  function go(n){ i = (n + slides) % slides; track.style.transform = 'translateX(-' + (i*100) + '%)'; }
+  var prev = document.getElementById('revPrev'), next = document.getElementById('revNext');
+  if(prev) prev.addEventListener('click', function(){ go(i-1); });
+  if(next) next.addEventListener('click', function(){ go(i+1); });
+  var col = document.querySelector('.reviews-col');
+  if(col) col.addEventListener('keydown', function(e){
+    if(e.key === 'ArrowLeft'){ e.preventDefault(); go(i-1); }
+    else if(e.key === 'ArrowRight'){ e.preventDefault(); go(i+1); }
+  });
+})();
+</script>
+  <footer>
+  <div class="fg">
+    <div class="fcol-brand">
+      <img class="flogo" src="midia/solyx-logo.png" alt="Solyx Energy">
+      <p class="fbt">Slimme energieopslag voor huishoudens met zonnepanelen. Simpel, betaalbaar, direct resultaat.</p>
+      <address class="fcompany">
+        Smitspol 15M<br>3861 RS Nijkerk<br>Nederland
+        <span class="fcompany-gap"></span>
+        KvK 85751391<br>BTW NL863729319B01
+        <span class="fcompany-gap"></span>
+        <a href="mailto:info@solyxenergy.nl">info@solyxenergy.nl</a><br>
+        <a href="tel:+31332087460">033 208 7460</a>
+      </address>
+    </div>
+    <div>
+      <div class="fct">Product</div>
+      <ul class="flinks">
+        <li><a href="landingspagina.html">WaterAccu</a></li>
+        <li><a href="#">Zonnestroomboiler</a></li>
+        <li><a href="besparen.html">Besparing</a></li>
+        <li><a href="shop.html">Shop</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="fct">Informatie</div>
+      <ul class="flinks">
+        <li><a href="how-to-get-it.html">Handleidingen</a></li>
+        <li><a href="installatie.html">Installatie</a></li>
+        <li><a href="klantverhalen.html">Klantverhalen</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="fct">Solyx</div>
+      <ul class="flinks">
+        <li><a href="over-ons.html">Over Solyx</a></li>
+        <li><a href="#">Werken bij</a></li>
+        <li><a href="blog-news.html">Blog en nieuws</a></li>
+        <li><a href="faq.html">Contact</a></li>
+      </ul>
+      <div class="fsocial">
+        <a href="#" class="fsoc" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.8 0 0 .78 0 1.74v20.51C0 23.22.8 24 1.77 24h20.45c.98 0 1.78-.78 1.78-1.75V1.74C24 .78 23.2 0 22.22 0z"/></svg></a>
+        <a href="#" class="fsoc" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41a3.7 3.7 0 0 1-1.38-.9 3.7 3.7 0 0 1-.9-1.38c-.16-.42-.36-1.06-.41-2.23C2.17 15.58 2.16 15.2 2.16 12s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41C8.42 2.17 8.8 2.16 12 2.16zm0 1.62c-3.15 0-3.5.01-4.74.07-.97.04-1.5.21-1.85.34-.46.18-.8.4-1.15.74-.34.35-.56.69-.74 1.15-.13.35-.3.88-.34 1.85-.06 1.24-.07 1.59-.07 4.74s.01 3.5.07 4.74c.04.97.21 1.5.34 1.85.18.46.4.8.74 1.15.35.34.69.56 1.15.74.35.13.88.3 1.85.34 1.24.06 1.59.07 4.74.07s3.5-.01 4.74-.07c.97-.04 1.5-.21 1.85-.34.46-.18.8-.4 1.15-.74.34-.35.56-.69.74-1.15.13-.35.3-.88.34-1.85.06-1.24.07-1.59.07-4.74s-.01-3.5-.07-4.74c-.04-.97-.21-1.5-.34-1.85a3.1 3.1 0 0 0-.74-1.15 3.1 3.1 0 0 0-1.15-.74c-.35-.13-.88-.3-1.85-.34-1.24-.06-1.59-.07-4.74-.07zm0 2.76a5.46 5.46 0 1 1 0 10.92 5.46 5.46 0 0 1 0-10.92zm0 9a3.54 3.54 0 1 0 0-7.08 3.54 3.54 0 0 0 0 7.08zm6.95-9.22a1.28 1.28 0 1 1-2.55 0 1.28 1.28 0 0 1 2.55 0z"/></svg></a>
+        <a href="#" class="fsoc" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M23.5 6.2a3.02 3.02 0 0 0-2.12-2.14C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.38.51A3.02 3.02 0 0 0 .5 6.2C0 8.07 0 12 0 12s0 3.93.5 5.8a3.02 3.02 0 0 0 2.12 2.14c1.88.51 9.38.51 9.38.51s7.5 0 9.38-.51a3.02 3.02 0 0 0 2.12-2.14C24 15.93 24 12 24 12s0-3.93-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      </div>
+      <a href="#" class="fgoogle" aria-label="Google reviews 4,7 sterren">
+        <svg class="fgoogle-g" viewBox="0 0 48 48" width="22" height="22"><path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 12.955 4 4 12.955 4 24s8.955 20 20 20 20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z"/><path fill="#FF3D00" d="M6.306 14.691l6.571 4.819C14.655 15.108 18.961 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 16.318 4 9.656 8.337 6.306 14.691z"/><path fill="#4CAF50" d="M24 44c5.166 0 9.86-1.977 13.409-5.192l-6.19-5.238C29.211 35.091 26.715 36 24 36c-5.202 0-9.619-3.317-11.283-7.946l-6.522 5.025C9.505 39.556 16.227 44 24 44z"/><path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303c-.792 2.237-2.231 4.166-4.087 5.571l6.19 5.238C36.971 39.205 44 34 44 24c0-1.341-.138-2.65-.389-3.917z"/></svg>
+        <span class="fgoogle-meta">
+          <span class="fgoogle-stars">★★★★★<span class="fgoogle-stars-fill" style="width:94%;">★★★★★</span></span>
+          <span class="fgoogle-text"><strong>4,7</strong> · Google reviews</span>
+        </span>
+      </a>
+    </div>
+  </div>
+  <div class="fbottom">
+    <div class="fcopy">© 2026 Solyx Energy BV · Alle rechten voorbehouden</div>
+    <div class="flegal">
+      <a href="#">Algemene voorwaarden</a>
+      <a href="#">Privacy policy</a>
+      <a href="#">Levering en retourbeleid</a>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
