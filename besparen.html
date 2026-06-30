@@ -1817,7 +1817,6 @@ body.page-id-196 .entry-content { height: 100%; }
             <div class="bd-slider-mount"></div>
             <p class="bd-hint">Verschuif het oranje bolletje en bekijk direct jouw geschatte besparing!</p>
           </div>
-          <button type="button" class="bd-nudge" id="bd-scroll-cue">Scroll voor meer ↓</button>
         </div>
         <div class="bd-col-right">
           <div class="bd-panels-mount"></div>
@@ -1951,11 +1950,9 @@ body.page-id-196 .entry-content { height: 100%; }
     + '#s-bd .bd-stats-grid{display:flex !important;flex-direction:column !important;gap:14px !important;max-width:none !important;}'
     + '#s-bd .payback-row{font-family:var(--font-head) !important;font-size:13px !important;font-weight:500 !important;color:var(--ink-mid) !important;line-height:1.45 !important;margin-top:4px !important;}'
     + '#s-bd .payback-row b{color:var(--ink) !important;font-weight:800 !important;}'
-    + '#s-bd .bd-nudge{display:inline-block !important;align-self:flex-start !important;margin:auto 0 0 !important;cursor:pointer !important;font-family:var(--font-body) !important;font-size:12px !important;font-weight:600 !important;letter-spacing:0 !important;color:var(--ink-muted) !important;background:none !important;border:none !important;padding:0 !important;transition:color .2s !important;}'
-    + '#s-bd .bd-nudge:hover{color:var(--ink-mid) !important;}'
     + '#s-bd .bd-panels-mount{display:flex !important;flex-direction:column !important;width:100% !important;}'
     + '#s-bd .bd-panels{display:flex !important;flex-direction:column !important;width:100% !important;}'
-    + '#s-bd .bd-panels-mount .bd-panel{height:auto !important;min-height:84vh !important;display:flex !important;flex-direction:column !important;align-items:flex-start !important;justify-content:center !important;padding:0 !important;margin:0 0 clamp(40px,9vh,110px) !important;scroll-snap-align:center !important;scroll-snap-stop:always !important;transition:opacity .45s ease,filter .45s ease,transform .45s cubic-bezier(.22,1,.36,1) !important;transform-origin:center center !important;will-change:opacity,transform,filter !important;}'
+    + '#s-bd .bd-panels-mount .bd-panel{height:auto !important;min-height:84vh !important;display:flex !important;flex-direction:column !important;align-items:flex-start !important;justify-content:center !important;padding:0 !important;margin:0 0 clamp(40px,9vh,110px) !important;}'
     + '#s-bd .bd-panels-mount .bd-panel:last-child{margin-bottom:0 !important;}'
     + '#s-bd .bd-panels-mount .bd-panel::after{content:none !important;}'
     + '#s-bd .bd-panel-title{font-family:var(--font-head) !important;font-size:16px !important;font-weight:700 !important;color:var(--ink) !important;text-align:left !important;margin:0 0 22px !important;letter-spacing:-.01em !important;}'
@@ -2003,21 +2000,6 @@ body.page-id-196 .entry-content { height: 100%; }
       if (prog) prog.style.width = (W.scrollTop / Math.max(1, W.scrollHeight - W.clientHeight) * 100) + '%';
       /* Title pins + shrinks once you leave the very top of the calculator */
       if (sBd) sBd.classList.toggle('bd-scrolled', W.scrollTop > 40);
-      /* Focus the snap panel nearest the viewport centre; dim/blur/shrink the others */
-      var panels = document.querySelectorAll('#s-bd .bd-panels-mount .bd-panel');
-      if (!panels.length) return;
-      if (window.innerWidth <= 1100){
-        for (var j=0;j<panels.length;j++){ panels[j].style.opacity=''; panels[j].style.filter=''; panels[j].style.transform=''; }
-        return;
-      }
-      var vc = window.innerHeight/2, falloff = window.innerHeight*0.6;
-      for (var i=0;i<panels.length;i++){
-        var r = panels[i].getBoundingClientRect();
-        var f = Math.max(0, Math.min(1, 1 - Math.abs((r.top + r.height/2) - vc)/falloff));
-        panels[i].style.opacity = (0.16 + 0.84*f).toFixed(3);
-        panels[i].style.filter = f > 0.985 ? 'none' : 'blur(' + ((1-f)*4).toFixed(2) + 'px)';
-        panels[i].style.transform = 'scale(' + (0.955 + 0.045*f).toFixed(4) + ')';
-      }
     }
     function onScroll(){ if(!ticking){ ticking = true; requestAnimationFrame(paint); } }
     W.addEventListener('scroll', onScroll, {passive: true});
@@ -2269,7 +2251,6 @@ body.page-id-196 .entry-content { height: 100%; }
     injectSidebars();
     injectSliders();
     injectPanels();
-    (function(){var cue=document.getElementById('bd-scroll-cue');if(cue){cue.addEventListener('click',function(){var sc=document.getElementById('scroll-container');if(sc)sc.scrollBy({top:Math.round(sc.clientHeight*0.82),left:0,behavior:'smooth'});});}})();
     injectDimCards();
     initScrollProgress();
     /* Rest at the very top on load (big hero title); snap takes over once the user scrolls */
