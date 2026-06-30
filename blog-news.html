@@ -225,6 +225,38 @@ footer{background:#0e1512;padding:60px 48px 40px;position:relative;z-index:1;}.f
 .card:nth-child(5){animation-delay:.25s;}
 .card:nth-child(6){animation-delay:.3s;}
 .card:nth-child(n+7){animation-delay:.35s;}
+
+/* ── canonical footer (matches installatie.html) ── */
+footer{background:#0e1512;padding:60px 48px 40px;position:relative;z-index:1;margin-top:0;}
+.fg{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px;}
+.fbt{font-family:var(--font-body);font-size:14px;color:var(--ink-muted);line-height:1.65;margin-top:16px;}
+.flogo{display:block;height:30px;width:auto;filter:invert(1);}
+.fcompany{font-style:normal;font-family:var(--font-body);font-size:13px;color:rgba(255,255,255,.5);line-height:1.55;margin-top:16px;}
+.fcompany a{color:rgba(255,255,255,.7);text-decoration:none;}
+.fcompany a:hover{color:#fff;}
+.fcompany-gap{display:block;height:7px;}
+.fsocial{display:flex;gap:12px;margin-top:22px;}
+.fsoc{width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.7);transition:background .2s,color .2s,border-color .2s;}
+.fsoc:hover{background:var(--green);border-color:var(--green);color:#fff;}
+.fgoogle{display:inline-flex;align-items:center;gap:11px;margin-top:18px;text-decoration:none;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:9px 15px;transition:background .2s;}
+.fgoogle:hover{background:rgba(255,255,255,.1);}
+.fgoogle-meta{display:flex;flex-direction:column;line-height:1.2;}
+.fgoogle-stars{position:relative;display:inline-block;font-size:12px;letter-spacing:1.5px;color:rgba(255,255,255,.22);}
+.fgoogle-stars-fill{position:absolute;top:0;left:0;overflow:hidden;white-space:nowrap;color:#FBBC04;}
+.fgoogle-text{font-family:var(--font-head);font-size:12px;color:rgba(255,255,255,.6);margin-top:3px;}
+.fgoogle-text strong{color:#fff;font-weight:800;}
+.flegal{display:flex;gap:22px;flex-wrap:wrap;}
+.flegal a{font-family:var(--font-head);font-size:12px;color:rgba(255,255,255,.55);text-decoration:none;transition:color .2s;}
+.flegal a:hover{color:#fff;}
+.fct{font-family:var(--font-head);font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:16px;}
+.flinks{list-style:none;display:flex;flex-direction:column;gap:10px;}
+.flinks a{font-family:var(--font-head);font-size:13px;color:rgba(255,255,255,.5);text-decoration:none;transition:color .2s;}
+.flinks a:hover{color:#fff;}
+.fbottom{max-width:1100px;margin:0 auto;border-top:1px solid rgba(255,255,255,.05);padding-top:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px;}
+.fcopy{font-family:var(--font-head);font-size:12px;color:rgba(255,255,255,.45);}
+@media(max-width:900px){.fg{grid-template-columns:1fr 1fr;gap:32px;}.fbottom{flex-direction:column;gap:14px;text-align:center;}footer{padding:48px 20px 32px;}}
+@media(max-width:520px){.fg{grid-template-columns:1fr;}}
+
 </style>
 </head>
 <body>
@@ -774,43 +806,64 @@ footer{background:#0e1512;padding:60px 48px 40px;position:relative;z-index:1;}.f
 <!-- FOOTER -->
 <footer>
   <div class="fg">
-    <div>
+    <div class="fcol-brand">
       <img class="flogo" src="midia/solyx-logo.png" alt="Solyx Energy">
       <p class="fbt">Slimme energieopslag voor huishoudens met zonnepanelen. Simpel, betaalbaar, direct resultaat.</p>
+      <address class="fcompany">
+        Smitspol 15M<br>3861 RS Nijkerk<br>Nederland
+        <span class="fcompany-gap"></span>
+        KvK 85751391<br>BTW NL863729319B01
+        <span class="fcompany-gap"></span>
+        <a href="mailto:info@solyxenergy.nl">info@solyxenergy.nl</a><br>
+        <a href="tel:+31332087460">033 208 7460</a>
+      </address>
     </div>
     <div>
       <div class="fct">Product</div>
       <ul class="flinks">
-        <li><a href="wateraccu.html">WaterAccu</a></li>
-        <li><a href="#">Nymo controller</a></li>
-        <li><a href="besparen.html">Besparing berekenen</a></li>
+        <li><a href="landingspagina.html">WaterAccu</a></li>
+        <li><a href="#">Zonnestroomboiler</a></li>
+        <li><a href="besparen.html">Besparing</a></li>
         <li><a href="shop.html">Shop</a></li>
       </ul>
     </div>
     <div>
-      <div class="fct">Installatie</div>
+      <div class="fct">Informatie</div>
       <ul class="flinks">
-        <li><a href="installatie.html">Hoe werkt het</a></li>
+        <li><a href="how-to-get-it.html">Handleidingen</a></li>
+        <li><a href="installatie.html">Installatie</a></li>
         <li><a href="klantverhalen.html">Klantverhalen</a></li>
         <li><a href="faq.html">FAQ</a></li>
-        <li><a href="how-to-get-it.html">Contact</a></li>
       </ul>
     </div>
     <div>
-      <div class="fct">Bedrijf</div>
+      <div class="fct">Solyx</div>
       <ul class="flinks">
         <li><a href="over-ons.html">Over Solyx</a></li>
         <li><a href="#">Werken bij</a></li>
-        <li><a href="#" style="color:var(--green);">Blog &amp; Nieuws</a></li>
-        <li><a href="installatie.html">Partners</a></li>
+        <li><a href="blog-news.html">Blog en nieuws</a></li>
+        <li><a href="faq.html">Contact</a></li>
       </ul>
+      <div class="fsocial">
+        <a href="#" class="fsoc" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.8 0 0 .78 0 1.74v20.51C0 23.22.8 24 1.77 24h20.45c.98 0 1.78-.78 1.78-1.75V1.74C24 .78 23.2 0 22.22 0z"/></svg></a>
+        <a href="#" class="fsoc" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41a3.7 3.7 0 0 1-1.38-.9 3.7 3.7 0 0 1-.9-1.38c-.16-.42-.36-1.06-.41-2.23C2.17 15.58 2.16 15.2 2.16 12s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41C8.42 2.17 8.8 2.16 12 2.16zm0 1.62c-3.15 0-3.5.01-4.74.07-.97.04-1.5.21-1.85.34-.46.18-.8.4-1.15.74-.34.35-.56.69-.74 1.15-.13.35-.3.88-.34 1.85-.06 1.24-.07 1.59-.07 4.74s.01 3.5.07 4.74c.04.97.21 1.5.34 1.85.18.46.4.8.74 1.15.35.34.69.56 1.15.74.35.13.88.3 1.85.34 1.24.06 1.59.07 4.74.07s3.5-.01 4.74-.07c.97-.04 1.5-.21 1.85-.34.46-.18.8-.4 1.15-.74.34-.35.56-.69.74-1.15.13-.35.3-.88.34-1.85.06-1.24.07-1.59.07-4.74s-.01-3.5-.07-4.74c-.04-.97-.21-1.5-.34-1.85a3.1 3.1 0 0 0-.74-1.15 3.1 3.1 0 0 0-1.15-.74c-.35-.13-.88-.3-1.85-.34-1.24-.06-1.59-.07-4.74-.07zm0 2.76a5.46 5.46 0 1 1 0 10.92 5.46 5.46 0 0 1 0-10.92zm0 9a3.54 3.54 0 1 0 0-7.08 3.54 3.54 0 0 0 0 7.08zm6.95-9.22a1.28 1.28 0 1 1-2.55 0 1.28 1.28 0 0 1 2.55 0z"/></svg></a>
+        <a href="#" class="fsoc" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M23.5 6.2a3.02 3.02 0 0 0-2.12-2.14C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.38.51A3.02 3.02 0 0 0 .5 6.2C0 8.07 0 12 0 12s0 3.93.5 5.8a3.02 3.02 0 0 0 2.12 2.14c1.88.51 9.38.51 9.38.51s7.5 0 9.38-.51a3.02 3.02 0 0 0 2.12-2.14C24 15.93 24 12 24 12s0-3.93-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      </div>
+      <a href="#" class="fgoogle" aria-label="Google reviews 4,7 sterren">
+        <svg class="fgoogle-g" viewBox="0 0 48 48" width="22" height="22"><path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 12.955 4 4 12.955 4 24s8.955 20 20 20 20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z"/><path fill="#FF3D00" d="M6.306 14.691l6.571 4.819C14.655 15.108 18.961 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 16.318 4 9.656 8.337 6.306 14.691z"/><path fill="#4CAF50" d="M24 44c5.166 0 9.86-1.977 13.409-5.192l-6.19-5.238C29.211 35.091 26.715 36 24 36c-5.202 0-9.619-3.317-11.283-7.946l-6.522 5.025C9.505 39.556 16.227 44 24 44z"/><path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303c-.792 2.237-2.231 4.166-4.087 5.571l6.19 5.238C36.971 39.205 44 34 44 24c0-1.341-.138-2.65-.389-3.917z"/></svg>
+        <span class="fgoogle-meta">
+          <span class="fgoogle-stars">★★★★★<span class="fgoogle-stars-fill" style="width:94%;">★★★★★</span></span>
+          <span class="fgoogle-text"><strong>4,7</strong> · Google reviews</span>
+        </span>
+      </a>
     </div>
   </div>
   <div class="fbottom">
-    <div class="fcopy">© 2025 Solyx Energy BV · Alle rechten voorbehouden</div>
-    <div style="display:flex;gap:20px">
-      <a href="#" style="font-family:var(--font-head);font-size:12px;color:rgba(255,255,255,.2);text-decoration:none">Privacy</a>
-      <a href="#" style="font-family:var(--font-head);font-size:12px;color:rgba(255,255,255,.2);text-decoration:none">Voorwaarden</a>
+    <div class="fcopy">© 2026 Solyx Energy BV · Alle rechten voorbehouden</div>
+    <div class="flegal">
+      <a href="#">Algemene voorwaarden</a>
+      <a href="#">Privacy policy</a>
+      <a href="#">Levering en retourbeleid</a>
     </div>
   </div>
 </footer>
