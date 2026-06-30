@@ -228,6 +228,11 @@ hr.div{border:none;border-top:1px solid var(--border);margin:28px 0;}
 }
 .add-btn:hover{background:#2d9040;transform:translateY(-1px);box-shadow:0 10px 32px rgba(53,168,71,.4);}
 
+.see-complete-btn{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;margin-top:10px;padding:12px 14px;background:transparent;border:1.5px solid rgba(0,0,0,.1);border-radius:12px;font-family:var(--font-head);font-size:13px;font-weight:600;color:#5a5a5a;text-decoration:none;cursor:pointer;transition:border-color .2s,color .2s,background .2s;box-sizing:border-box;}
+.see-complete-btn .arr{transition:transform .2s;}
+.see-complete-btn:hover{border-color:rgba(53,168,71,.5);color:#2d9040;background:rgba(53,168,71,.04);}
+.see-complete-btn:hover .arr{transform:translateX(3px);}
+
 .trust-row{display:flex;gap:14px;margin-top:18px;justify-content:center;flex-wrap:wrap;}
 .trust-i{display:flex;align-items:center;gap:5px;font-family:var(--font-head);font-size:11px;color:var(--ink-muted);white-space:nowrap;}
 .trust-i svg{color:var(--green);}
@@ -437,6 +442,7 @@ footer{background:#0e1512;padding:56px 48px 36px;}.flogo{display:block;height:32
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
           Toevoegen aan winkelwagen
         </button>
+        <a class="see-complete-btn" href="shop-complete-wateraccu.html">Nog geen boiler? Bekijk de complete set <span class="arr">→</span></a>
         <div class="trust-row">
           <div class="trust-i"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Gratis verzending</div>
           <div class="trust-i"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>2 jaar garantie</div>
