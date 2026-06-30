@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nymo WaterAccu — Solyx Energy</title>
+<title>WaterAccu – Complete set — Solyx Energy</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
 <link href="https://fonts.cdnfonts.com/css/alliance-no-2" rel="stylesheet">
 <style>
@@ -71,7 +71,9 @@ nav.scrolled{background:rgba(255,255,255,.96);backdrop-filter:blur(20px);border-
   border-radius:24px;
   height:460px;
   display:flex;align-items:center;justify-content:center;
-  overflow:hidden;margin-bottom:14px;position:relative;
+  overflow:hidden;
+  margin-bottom:14px;
+  position:relative;
   backdrop-filter:blur(10px);
   box-shadow:0 8px 40px rgba(53,168,71,.07);
   transition:box-shadow .3s;
@@ -127,16 +129,51 @@ nav.scrolled{background:rgba(255,255,255,.96);backdrop-filter:blur(20px);border-
 }
 .from-price strong{color:var(--green);font-weight:800;}
 
+/* Steps */
+.steps{display:flex;gap:0;margin-bottom:40px;}
+.step{
+  flex:1;display:flex;align-items:center;gap:8px;
+  font-family:var(--font-head);font-size:12px;font-weight:600;
+  color:var(--ink-muted);padding-bottom:12px;
+  border-bottom:2px solid var(--border);transition:all .2s;
+}
+.step.done{color:var(--green);border-color:rgba(53,168,71,.4);}
+.step.active{color:var(--ink);border-color:var(--green);}
+.step-n{
+  width:22px;height:22px;border-radius:50%;
+  background:var(--border);color:var(--ink-muted);
+  font-size:11px;font-weight:800;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;transition:all .2s;
+}
+.step.done .step-n{background:var(--green);color:#fff;}
+.step.active .step-n{background:var(--ink);color:#fff;}
+
 /* Section label */
-.sec{margin-bottom:28px;}
+.sec{margin-bottom:18px;}
 .sec-label{
   font-family:var(--font-head);font-size:11px;font-weight:700;
   letter-spacing:.12em;text-transform:uppercase;color:var(--ink-muted);
   margin-bottom:14px;display:block;
 }
-hr.div{border:none;border-top:1px solid var(--border);margin:28px 0;}
+.sec-sub{font-family:var(--font-head);font-size:12px;color:var(--ink-muted);margin-bottom:14px;display:block;}
 
-/* Version buttons (big cards) */
+/* Toggle buttons (orientation) */
+.trow{display:flex;gap:10px;flex-wrap:wrap;}
+.tbtn{
+  display:flex;align-items:center;gap:9px;
+  padding:12px 22px;border-radius:999px;
+  border:1.5px solid var(--border);
+  background:rgba(255,255,255,.85);
+  color:var(--ink-muted);
+  font-family:var(--font-head);font-size:14px;font-weight:600;
+  cursor:pointer;transition:all .2s;
+  backdrop-filter:blur(6px);
+}
+.tbtn:hover{border-color:rgba(53,168,71,.5);color:var(--green);}
+.tbtn.on{background:var(--green);color:#fff;border-color:var(--green);box-shadow:0 4px 20px rgba(53,168,71,.25);}
+
+/* Keuzeknoppen (versie, type boiler, formaat) — naam boven, sub links + prijs rechtsonder */
 .vrow{display:flex;gap:12px;flex-wrap:wrap;}
 .vbtn{
   flex:1;min-width:150px;
@@ -150,6 +187,7 @@ hr.div{border:none;border-top:1px solid var(--border);margin:28px 0;}
 .v-foot{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;}
 .vbtn:hover{border-color:rgba(53,168,71,.4);box-shadow:0 6px 24px rgba(53,168,71,.1);}
 .vbtn.on{background:var(--green);border-color:var(--green);box-shadow:0 6px 24px rgba(53,168,71,.25);}
+.vbtn.hide{display:none;}
 .v-name{font-family:var(--font-head);font-size:13px;font-weight:800;color:var(--ink);line-height:1.25;}
 .vbtn.on .v-name{color:#fff;}
 .v-tag{font-family:var(--font-head);font-size:11px;font-weight:600;color:var(--ink-muted);letter-spacing:.04em;}
@@ -157,7 +195,6 @@ hr.div{border:none;border-top:1px solid var(--border);margin:28px 0;}
 .v-price{font-family:var(--font-head);font-size:13px;font-weight:700;color:var(--green);white-space:nowrap;}
 .vbtn.on .v-price{color:#fff;}
 
-/* Disclaimer */
 .disclaimer{
   background:rgba(255,255,255,.75);
   border:1px solid var(--border);border-radius:14px;
@@ -169,6 +206,8 @@ hr.div{border:none;border-top:1px solid var(--border);margin:28px 0;}
 .disclaimer.on{display:block;}
 
 /* Add-ons */
+.addons{display:none;}
+.addons.on{display:block;}
 .addons-title{
   font-family:var(--font-head);font-size:11px;font-weight:700;
   color:var(--ink-muted);text-transform:uppercase;letter-spacing:.12em;
@@ -185,6 +224,7 @@ hr.div{border:none;border-top:1px solid var(--border);margin:28px 0;}
 }
 .addon:hover{border-color:rgba(53,168,71,.3);transform:translateX(3px);}
 .addon.on{border-color:var(--green);background:var(--green-light);}
+.addon.disabled{opacity:.4;pointer-events:none;filter:grayscale(1);}
 .a-box{
   width:20px;height:20px;border-radius:6px;
   border:1.5px solid var(--border);background:var(--white);
@@ -197,10 +237,9 @@ hr.div{border:none;border-top:1px solid var(--border);margin:28px 0;}
 .a-lbl{font-family:var(--font-head);font-size:13px;font-weight:600;color:var(--ink);flex:1;}
 .a-price{font-family:var(--font-head);font-size:13px;font-weight:700;color:var(--green);}
 .addons-note{font-family:var(--font-body);font-size:11px;color:var(--ink-muted);margin-top:10px;line-height:1.6;}
-
-/* addon groups shown/hidden per version */
-.addon-group{display:none;}
-.addon-group.on{display:block;}
+.cap-note{font-family:var(--font-body);font-size:12.5px;color:var(--ink-muted);margin-top:14px;line-height:1.55;}
+.cap-note a{color:var(--green);font-weight:600;text-decoration:none;}
+.cap-note a:hover{text-decoration:underline;}
 
 /* Price box */
 .pbox{
@@ -212,7 +251,7 @@ hr.div{border:none;border-top:1px solid var(--border);margin:28px 0;}
   box-shadow:0 8px 40px rgba(53,168,71,.08);
 }
 .prow{display:flex;justify-content:space-between;align-items:center;font-family:var(--font-head);font-size:13px;color:var(--ink-muted);padding:5px 0;}
-.prow.main{font-size:14px;color:var(--ink);font-weight:600;}
+.prow.main{font-size:14px;color:var(--ink);font-weight:600;border-top:1px solid var(--border);padding-top:14px;margin-top:10px;}
 .prow .v{font-weight:700;color:var(--ink);}
 .total{font-family:var(--font-head);font-size:38px;font-weight:900;color:var(--ink);margin:6px 0 24px;letter-spacing:-.03em;}
 .total-note{font-family:var(--font-head);font-size:12px;color:var(--ink-muted);margin-bottom:24px;}
@@ -264,18 +303,19 @@ footer{background:#0e1512;padding:56px 48px 36px;}.flogo{display:block;height:32
 .usp-chev{width:9px;height:9px;border-right:2px solid var(--ink-muted);border-bottom:2px solid var(--ink-muted);transform:rotate(45deg);flex-shrink:0;margin-right:3px;transition:transform .22s ease,border-color .2s ease;}
 .usp-acc.open .usp-chev{transform:rotate(225deg);border-color:var(--green);}
 .usp-body{overflow:hidden;max-height:0;transition:max-height .3s ease;}
-.usp-acc.open .usp-body{max-height:760px;}
-.usp-homey{display:none;}
-.li-homey{display:none;}
+.usp-acc.open .usp-body{max-height:1000px;}
 .usp-content{padding:2px 0 16px 49px;font-family:var(--font-body);font-size:13.5px;color:var(--ink-mid);line-height:1.6;}
 .usp-content p{margin:0 0 12px;}
-.usp-content ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:8px;}
-.usp-content ul.spec{gap:6px;}
-.usp-content li{line-height:1.55;}
+.usp-content p:last-child{margin-bottom:0;}
+.usp-content ul,.usp-content ol{margin:0 0 12px;padding-left:20px;}
+.usp-content ul{list-style:disc;}
+.usp-content ol{list-style:decimal;}
+.usp-content ul:last-child,.usp-content ol:last-child{margin-bottom:0;}
+.usp-content li{line-height:1.55;margin-bottom:8px;}
+.usp-content li:last-child{margin-bottom:0;}
 .usp-content strong{color:var(--ink);font-weight:700;}
 .usp-content a{color:var(--orange);font-weight:700;text-decoration:none;}
 .usp-content a:hover{text-decoration:underline;}
-.usp-content .cta{margin:14px 0 0;line-height:1.95;}
 .links-checks{margin-top:26px;padding:20px 22px;background:rgba(53,168,71,.06);border:1px solid rgba(53,168,71,.16);border-radius:14px;}
 .links-checks h4{font-family:var(--font-head);font-size:14px;font-weight:700;color:var(--ink);margin-bottom:12px;}
 .links-checks ul{list-style:none;display:flex;flex-direction:column;gap:9px;}
@@ -314,15 +354,27 @@ footer{background:#0e1512;padding:56px 48px 36px;}.flogo{display:block;height:32
   .info-grid{grid-template-columns:1fr;}
   .more-info{padding-bottom:60px;}
 }
+/* Boiler-specificatietabel (in Keuzehulp-fold) */
+.spec-wrap{overflow-x:auto;margin:6px 0 2px;-webkit-overflow-scrolling:touch;}
+.spec-table{border-collapse:collapse;width:100%;min-width:520px;font-family:var(--font-head);font-size:12px;}
+.spec-table th,.spec-table td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--border);vertical-align:top;}
+.spec-table thead th{font-weight:800;color:var(--ink);border-bottom:2px solid var(--ink);white-space:nowrap;}
+.spec-table th[scope=row]{font-weight:500;color:var(--ink-mid);white-space:nowrap;}
+.spec-table td{color:var(--ink);}
+.spec-table tbody tr:hover{background:rgba(53,168,71,.05);}
+.spec-table tr.spec-price th,.spec-table tr.spec-price td{font-weight:800;color:var(--ink);border-top:2px solid var(--ink);border-bottom:none;padding-top:9px;}
+.spec-foot{font-family:var(--font-body);font-size:12px;color:var(--ink-muted);line-height:1.6;margin-top:10px;font-style:italic;}
 </style>
 </head>
 <body>
 
+<!-- Animated background blobs -->
 <div id="gc">
   <div class="blob blob-1"></div>
   <div class="blob blob-2"></div>
   <div class="blob blob-3"></div>
 </div>
+
 <div id="scroll-progress"></div>
 
 <!-- NAV -->
@@ -347,7 +399,7 @@ footer{background:#0e1512;padding:56px 48px 36px;}.flogo{display:block;height:32
     <span class="crumb-sep">›</span>
     <a href="shop.html">Winkel</a>
     <span class="crumb-sep">›</span>
-    <span class="crumb-cur">Nymo WaterAccu</span>
+    <span class="crumb-cur">WaterAccu – Complete set</span>
   </div>
 
   <!-- MAIN GRID -->
@@ -356,73 +408,101 @@ footer{background:#0e1512;padding:56px 48px 36px;}.flogo{display:block;height:32
     <!-- LEFT: sticky image -->
     <div class="sticky fu">
       <div class="img-box">
-        <div class="img-badge on" id="badge">Nymo</div>
-        <img id="mainImg" src="images/shop/nymo-sensor.jpg" alt="Nymo WaterAccu Controller">
+        <div class="img-badge on" id="badge">Verticaal · Staal · 100L</div>
+        <img id="mainImg" src="images/shop/complete-tesy-v.jpg" alt="WaterAccu Complete set">
       </div>
       <div class="thumbs" id="thumbRow"></div>
     </div>
 
     <!-- RIGHT: configurator -->
     <div class="config fu">
-      <h1>Nymo WaterAccu</h1>
-      <div class="from-price">Vanaf <strong>€611,00</strong> inclusief 21% btw</div>
+      <h1>WaterAccu – Complete set</h1>
+      <div class="from-price">Vanaf <strong>€1.151,00</strong> inclusief 21% btw</div>
 
-      <!-- VERSION SELECT -->
+      <!-- STEP 0: Nymo versie -->
       <div class="sec">
         <span class="sec-label">Kies je versie</span>
         <div class="vrow">
-          <button class="vbtn on" id="v-nymo" onclick="setVersion('nymo')">
+          <button class="vbtn on" id="ny-nymo" onclick="setNymo('nymo')">
             <span class="v-name">Nymo</span>
             <span class="v-foot"><span class="v-tag">Standaard</span><span class="v-price">€649,00</span></span>
           </button>
-          <button class="vbtn" id="v-homey" onclick="setVersion('homey')">
+          <button class="vbtn" id="ny-homey" onclick="setNymo('homey')">
             <span class="v-name">Nymo voor Homey gebruikers</span>
             <span class="v-foot"><span class="v-tag">Smarthome-integratie</span><span class="v-price">€611,00</span></span>
           </button>
         </div>
+      </div>
 
-        <!-- Nymo info -->
-        <div class="disclaimer on" id="disc-nymo">
-          <strong>Nymo</strong> — De standaard Nymo, inclusief alle benodigdheden, waaronder de sensor voor uitlezing van de P1-meter. Geschikt voor (toekomstige) combinatie met Homey.
+      <!-- STEP 1: brand -->
+      <div class="sec">
+        <span class="sec-label">Kies je type boiler</span>
+        <div class="vrow">
+          <button class="vbtn on" id="bt" onclick="setBrand('steel')">
+            <span class="v-name">Staal</span>
+            <span class="v-foot"><span class="v-tag">Tesy</span><span class="v-price">vanaf €540</span></span>
+          </button>
+          <button class="vbtn" id="bo" onclick="setBrand('rvs')">
+            <span class="v-name">RVS</span>
+            <span class="v-foot"><span class="v-tag">OSO Saga</span><span class="v-price">€1.119</span></span>
+          </button>
         </div>
-        <!-- Nymo voor Homey gebruikers info -->
-        <div class="disclaimer" id="disc-homey">
-          <strong>Nymo voor Homey gebruikers</strong> — De Nymo zónder Solyx-P1-sensor, aangezien deze vervangen wordt door Homey producten (Homey Pro of Homey Bridge, en compatibele P1-dongle).
+        <div class="disclaimer on" id="disc-steel">
+          <strong>Staal</strong> — Uitstekende prijs-kwaliteit, energiezuinig. Onderhoud: iedere 5 jaar. Beschikbaar verticaal en horizontaal.
+        </div>
+        <div class="disclaimer" id="disc-rvs">
+          <strong>RVS</strong> — Premium kwaliteit met zeer goede isolatie, en lange levensduur. Geen onderhoud nodig. Beschikbaar als 200L verticaal.
         </div>
       </div>
 
-      <hr class="div">
-
-      <!-- ACCESSORIES: Nymo -->
-      <div class="addon-group on" id="addons-nymo">
-        <div class="addons-title">Optioneel toevoegen</div>
-        <div class="addon" id="n-kabels" onclick="toggleAddon('n-kabels', 14)">
-          <div class="a-box"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
-          <span class="a-lbl">Nymo met kabels, voor plug &amp; play installatie</span><span class="a-price">+€14,00</span>
+      <!-- STEP 2: orientation -->
+      <div class="sec">
+        <span class="sec-label">Kies de oriëntatie van je boiler</span>
+        <div class="trow" id="orientRow">
+          <button class="tbtn on" id="bv" onclick="setOrientation('v')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="17" rx="3"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="9" y1="22" x2="15" y2="22"/></svg>
+            Verticaal
+          </button>
+          <button class="tbtn" id="bh" onclick="setOrientation('h')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="17" height="10" rx="3"/><line x1="19" y1="12" x2="22" y2="12"/><line x1="22" y1="9" x2="22" y2="15"/></svg>
+            Horizontaal
+          </button>
         </div>
-        <div class="addon" id="n-p1" onclick="toggleAddon('n-p1', 16)">
-          <div class="a-box"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
-          <span class="a-lbl">P1-splitter, voor als de P1-poort al bezet is</span><span class="a-price">+€16,00</span>
-        </div>
-        <div class="addons-note">Meer info onderaan de pagina.</div>
+        <div id="orientNote" style="display:none;margin-top:10px;font-family:var(--font-head);font-size:12px;color:var(--ink-muted);">RVS is alleen beschikbaar als verticale boiler.</div>
       </div>
 
-      <!-- ACCESSORIES: Nymo voor Homey gebruikers -->
-      <div class="addon-group" id="addons-homey">
-        <div class="addons-title">Optioneel toevoegen</div>
-        <div class="addon" id="h-kabels" onclick="toggleAddon('h-kabels', 14)">
-          <div class="a-box"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
-          <span class="a-lbl">Nymo met kabels, voor plug &amp; play installatie</span><span class="a-price">+€14,00</span>
+      <!-- STEP 3: capacity -->
+      <div class="sec">
+        <span class="sec-label">Kies het formaat</span>
+        <div class="vrow" id="capRow">
+          <button class="vbtn on" id="c100" onclick="setCap(this)" data-l="100"><span class="v-name">100L</span><span class="v-foot"><span class="v-tag">1–2 pers.</span><span class="v-price" id="p100">€540</span></span></button>
+          <button class="vbtn hide" id="c120" onclick="setCap(this)" data-l="120"><span class="v-name">120L</span><span class="v-foot"><span class="v-tag">2–3 pers.</span><span class="v-price" id="p120">€610</span></span></button>
+          <button class="vbtn" id="c150" onclick="setCap(this)" data-l="150"><span class="v-name">150L</span><span class="v-foot"><span class="v-tag">3–4 pers.</span><span class="v-price" id="p150">€680</span></span></button>
+          <button class="vbtn hide" id="c200" onclick="setCap(this)" data-l="200"><span class="v-name">200L</span><span class="v-foot"><span class="v-tag">4–6 pers.</span><span class="v-price" id="p200">€1.119</span></span></button>
         </div>
-        <div class="addon" id="h-p1" onclick="toggleAddon('h-p1', 16)">
+        <p class="cap-note">Een ander formaat nodig? <a href="mailto:info@solyxenergy.nl">Stuur ons een mailtje</a> — we leveren andere formaten op factuurbasis.</p>
+      </div>
+
+      <!-- ADD-ONS -->
+      <div class="addons on" id="addons">
+        <div class="addons-title">Optioneel meeleveren</div>
+        <div class="addon" id="a1" onclick="toggleAddon('a1',19.50)">
           <div class="a-box"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
-          <span class="a-lbl">P1-splitter, voor als de P1-poort al bezet is</span><span class="a-price">+€16,00</span>
+          <span class="a-lbl">Handige ophangbeugel (voor Tesy)</span><span class="a-price">+€19,50</span>
         </div>
-        <div class="addon" id="h-bridge" onclick="toggleAddon('h-bridge', 69)">
+        <div class="addon" id="a2" onclick="toggleAddon('a2',75.00)">
+          <div class="a-box"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <span class="a-lbl">Complete installatieset (incl. ophangbeugel)</span><span class="a-price">+€75,00</span>
+        </div>
+        <div class="addon" id="a3" onclick="toggleAddon('a3',16.00)">
+          <div class="a-box"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <span class="a-lbl">P1-splitter, indien de P1-poort al bezet is</span><span class="a-price">+€16,00</span>
+        </div>
+        <div class="addon" id="a4" onclick="toggleAddon('a4',69.00)" style="display:none">
           <div class="a-box"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
           <span class="a-lbl">Homey Bridge</span><span class="a-price">+€69,00</span>
         </div>
-        <div class="addon" id="h-p1dongle" onclick="toggleAddon('h-p1dongle', 39)">
+        <div class="addon" id="a5" onclick="toggleAddon('a5',39.00)" style="display:none">
           <div class="a-box"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
           <span class="a-lbl">Homey P1-dongle</span><span class="a-price">+€39,00</span>
         </div>
@@ -431,8 +511,11 @@ footer{background:#0e1512;padding:56px 48px 36px;}.flogo{display:block;height:32
 
       <!-- PRICE BOX -->
       <div class="pbox">
+        <div class="prow"><span id="nymoLbl">Nymo</span><span class="v" id="nymoVal">€649,00</span></div>
+        <div class="prow"><span id="boilerLbl">Staal boiler (100L verticaal)</span><span class="v" id="boilerVal">€540,00</span></div>
+        <div class="prow" id="addonProw" style="display:none"><span id="addonLbl">Toebehoren</span><span class="v" id="addonVal">€0,00</span></div>
         <div class="prow main"><span>Totaal incl. 21% btw</span><span></span></div>
-        <div class="total" id="total">€649,00</div>
+        <div class="total" id="total">€1.165,00</div>
         <button class="add-btn" onclick="addCart()">
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
           Toevoegen aan winkelwagen
@@ -447,80 +530,92 @@ footer{background:#0e1512;padding:56px 48px 36px;}.flogo{display:block;height:32
 
   </div><!-- /wrap -->
 
-  <!-- ============ USPs + REVIEWS ============ -->
+  <!-- ============ ALLES OVER + REVIEWS ============ -->
   <section class="shop-section usp-reviews fu">
     <div class="usp-col">
-      <h2 class="band-title">Alles over de Nymo</h2>
+      <h2 class="band-title">Alles over de WaterAccu</h2>
       <p class="band-sub">Klik op een onderwerp om uit te vouwen en meer te lezen.</p>
       <div class="usp-list">
         <div class="usp-acc">
-          <button type="button" class="usp-trigger"><span class="usp-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span class="usp-q">Maakt van boiler een WaterAccu</span><span class="usp-chev"></span></button>
+          <button type="button" class="usp-trigger"><span class="usp-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span class="usp-q">Waaruit bestaat de complete set?</span><span class="usp-chev"></span></button>
           <div class="usp-body"><div class="usp-content">
-            <p>Sla jouw onbenutte zonne-energie op in de WaterAccu. Beperk terugleveren tot een minimum, zonder enorme investeringen. De WaterAccu bestaat uit de Nymo en een elektrische boiler.</p>
-            <ul>
-              <li><strong>Geen aan/uit-schakeling</strong>, maar modulerende werking zodat iedere zonnestraal die ongebruikt is, naar de boiler wordt geleid.</li>
-              <li>Perfect voor zonnepaneeleigenaren met <strong>enkelfase én driefase zonne-systemen of huisaansluitingen</strong>.</li>
-              <li><strong>Werkt onafhankelijk</strong>, dus ongeacht het merk en type zonnepanelen of omvormers.</li>
-            </ul>
-            <p class="cta">Nog geen boiler? <a href="shop-complete-wateraccu.html">Geen probleem.</a><br>Jouw besparing berekenen? <a href="besparen.html">Bekijk onze calculator</a></p>
-          </div></div>
-        </div>
-        <div class="usp-acc usp-homey">
-          <button type="button" class="usp-trigger"><span class="usp-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span class="usp-q">Haal met Homey nóg meer voordeel uit jouw zonnepanelen</span><span class="usp-chev"></span></button>
-          <div class="usp-body"><div class="usp-content">
-            <p>Door de integratie met Homey kun je nu:</p>
-            <ul>
-              <li>De <strong>modulerende zonne-regeling</strong> activeren om iedere onbenutte zonnestraal te gebruiken (niet simpelweg aan/uit schakelen).</li>
-              <li>De Nymo <strong>aansturen op dynamische prijzen</strong>, in de winter of als de prijzen negatief zijn.</li>
-              <li>In <strong>1 app al jouw apparaten integreren</strong> zoals thuisbatterijen, EV-laders, omvormers, etc.</li>
-            </ul>
-            <p>De <a href="https://homey.app/nl-nl/homey-pro/" target="_blank" rel="noopener">Homey Pro</a> of <a href="https://homey.app/nl-nl/homey-bridge/" target="_blank" rel="noopener">Bridge</a> vervangt de Nymo-sensor.</p>
-            <p>Let op: Nymo energie-monitoring wordt <strong>niet</strong> ondersteund in de Homey-app, <strong>lees onderaan de pagina</strong> hoe dit kan worden opgelost.</p>
+            <p>De complete set bestaat uit:</p>
+            <ol>
+              <li>De Nymo met alle bijbehorende accessoires (sensor, etc).</li>
+              <li>De elektrische boiler die zeer geschikt is om te combineren met de Nymo.</li>
+            </ol>
+            <p>Zo haal jij de volledige WaterAccu zonnestroomboiler in huis!</p>
+            <p>Optioneel kan bij de Tesy boilers installatiemateriaal worden aangeschaft.</p>
           </div></div>
         </div>
         <div class="usp-acc">
-          <button type="button" class="usp-trigger"><span class="usp-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span class="usp-q">Gemakkelijk zelf te installeren</span><span class="usp-chev"></span></button>
+          <button type="button" class="usp-trigger"><span class="usp-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span class="usp-q">Waarom deze boilers?</span><span class="usp-chev"></span></button>
           <div class="usp-body"><div class="usp-content">
+            <p>Deze boilers zijn zeer geschikt om te combineren met de Nymo. Waarom wij deze boilers aanbevelen:</p>
             <ul>
-              <li>In zo'n 20 minuten geïnstalleerd, en inclusief kabels zelfs volledig plug &amp; play.</li>
-              <li class="li-nymo">Draadloze communicatie tussen de Nymo en de Sensor, dus er hoeven geen kabels getrokken te worden.</li>
-              <li class="li-homey">Draadloze communicatie tussen de Nymo en Homey via radiofrequentie 433 MHz, dus er hoeven geen kabels getrokken te worden.</li>
-              <li>Bekijk hier de <a href="https://www.solyxenergy.nl/ontdek-mogelijkheden/#Installatiehulp">3 stappen voor installatie</a>, of de <a href="https://www.solyxenergy.nl/wp-content/uploads/2025/01/Solyx-Energy-Installatiehandleiding-Nymo-NY-IH_01-2025.pdf">installatiehandleiding</a>.</li>
-            </ul>
-          </div></div>
-        </div>
-        <div class="usp-acc usp-slimme">
-          <button type="button" class="usp-trigger"><span class="usp-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span class="usp-q">Slimme features voor warm water garantie</span><span class="usp-chev"></span></button>
-          <div class="usp-body"><div class="usp-content">
-            <ul>
-              <li>Na installatie heb je er geen omkijken meer naar!</li>
-              <li>Automatisch programma ter voorkoming van legionella.</li>
-              <li>Aansluiting via cv-combiketel: geen enkele programmering nodig.</li>
-              <li>Zonder cv-ketel: programmeer elektrische bijverwarming, voor warmwatergarantie in de winter.</li>
+              <li>Zeer goede prijs-kwaliteit verhouding.</li>
+              <li>Energie-zuinig door goede isolatie (minder warmteverliezen).</li>
+              <li>Minder tot geen onderhoud en hoge betrouwbaarheid.</li>
+              <li>Zelf installeren is mogelijk.</li>
             </ul>
           </div></div>
         </div>
         <div class="usp-acc">
-          <button type="button" class="usp-trigger"><span class="usp-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/><line x1="8" y1="9" x2="11" y2="9"/></svg></span><span class="usp-q">Specificaties Nymo-hoofdunit</span><span class="usp-chev"></span></button>
+          <button type="button" class="usp-trigger"><span class="usp-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span class="usp-q">Boiler vergelijkingstabel (inclusief specificaties)</span><span class="usp-chev"></span></button>
           <div class="usp-body"><div class="usp-content">
-            <ul class="spec">
-              <li><strong>Voltage</strong> | 220 – 240V AC (enkelfase boiler of verwarmingselement)</li>
-              <li><strong>Maximaal toelaatbare belasting</strong> | maximaal 3 kW elektrische verwarmingselementen (13A weerstand)</li>
-              <li><strong>Gewicht</strong> | 2,2 kg</li>
-              <li><strong>Afmetingen</strong> | 166 x 243 x 91 mm</li>
-              <li><strong>Van toepassing zijnde normen</strong> | EN 300 220-2, EN 301 489-1, EN 301 489-3, EN 55014-1, EN 55014-2, EN 61000-3</li>
+            <p><strong>Boiler aanbod en specificaties</strong> — kies je boiler aan de hand van deze vergelijkingstabel:</p>
+            <div class="spec-wrap">
+              <table class="spec-table">
+                <thead>
+                  <tr><th>Grootte van huishouden</th><th>2 personen</th><th>3–4 personen</th><th>4–5 personen</th></tr>
+                </thead>
+                <tbody>
+                  <tr><th scope="row">Inhoud van boiler</th><td>100 L</td><td>150 L</td><td>200 L</td></tr>
+                  <tr><th scope="row">Aantal minuten douchen</th><td>20 minuten</td><td>30 minuten</td><td>40 minuten</td></tr>
+                  <tr><th scope="row">Producent</th><td>Tesy</td><td>Tesy</td><td>OSO Saga</td></tr>
+                  <tr><th scope="row">Materiaal</th><td>Staal geëmailleerd</td><td>Staal geëmailleerd</td><td>RVS</td></tr>
+                  <tr><th scope="row">Onderhoudsvoorschrift</th><td>Iedere 5 jaar</td><td>Iedere 5 jaar</td><td>Geen onderhoud</td></tr>
+                  <tr><th scope="row">Montage</th><td>Wand (hangend)</td><td>Wand (hangend)</td><td>Vloer (staand)</td></tr>
+                  <tr><th scope="row">Voltage</th><td>230 V AC</td><td>230 V AC</td><td>230 V AC</td></tr>
+                  <tr><th scope="row">Nominaal vermogen</th><td>2,4 kW</td><td>2,4 kW</td><td>2,8 kW</td></tr>
+                  <tr><th scope="row">Opwarmtijd</th><td>2h:10m (bij 2400 W)</td><td>3h:5m (bij 2400 W)</td><td>4h:0m</td></tr>
+                  <tr><th scope="row">Energie-opslagcapaciteit</th><td>7 kWh</td><td>10,5 kWh</td><td>14 kWh</td></tr>
+                  <tr><th scope="row">Temperatuur-indicator</th><td>Ja</td><td>Ja</td><td>Ja</td></tr>
+                  <tr><th scope="row">Energielabel</th><td>B</td><td>C</td><td>C</td></tr>
+                  <tr><th scope="row">Gewicht (leeg)</th><td>27,5 kg</td><td>31 kg</td><td>39 kg</td></tr>
+                  <tr><th scope="row">Afmetingen (B×H×L)</th><td>47 × 98,5 × 45 cm</td><td>47 × 131,5 × 49,6 cm</td><td>57 × 126 × 57 cm</td></tr>
+                  <tr class="spec-price"><th scope="row">Prijs</th><td>€ 540,-</td><td>€ 680,-</td><td>€ 1.119,-</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="spec-foot">Boilers van een ander merk zijn ook mogelijk, zolang het geen smart boilers zijn en geen elektronische functies (zoals een display) hebben. De Nymo moet direct op het elektrische verwarmingselement kunnen worden aangesloten.</p>
+            <p>Ander formaat boiler nodig? <a href="mailto:info@solyxenergy.nl">Stuur ons een mailtje</a></p>
+          </div></div>
+        </div>
+        <div class="usp-acc">
+          <button type="button" class="usp-trigger"><span class="usp-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span class="usp-q">Over Tesy Modeco</span><span class="usp-chev"></span></button>
+          <div class="usp-body"><div class="usp-content">
+            <ul>
+              <li>Zeer goede <strong>prijs-kwaliteit verhouding</strong>.</li>
+              <li><strong>Energie-zuinig</strong>: door goede isolatie zijn de warmteverliezen een stuk minder dan de meeste boilers in dezelfde prijscategorie.</li>
+              <li><strong>Minder onderhoud</strong>: onderhoud is eens in de vijf jaar nodig, in plaats van eens in de twee jaar.</li>
+              <li>Voorzien van <strong>anti-kalk elementen</strong>.</li>
+              <li><strong>Garantie van 3 jaar</strong> en hoge betrouwbaarheid.</li>
+              <li>Zelf installeren is mogelijk met installatiehandleiding en <a href="#">installatievideo</a>.</li>
             </ul>
           </div></div>
         </div>
-        <div class="usp-acc usp-sensor">
-          <button type="button" class="usp-trigger"><span class="usp-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/><line x1="8" y1="9" x2="11" y2="9"/></svg></span><span class="usp-q">Specificaties Sensor</span><span class="usp-chev"></span></button>
+        <div class="usp-acc">
+          <button type="button" class="usp-trigger"><span class="usp-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span class="usp-q">Over OSO Saga</span><span class="usp-chev"></span></button>
           <div class="usp-body"><div class="usp-content">
-            <ul class="spec">
-              <li><strong>Slimme meter-compatibiliteit</strong> | P1-poort dsrm 5.0 (slimme meters vanaf 2015)</li>
-              <li><strong>Radiobereik</strong> | 1 – 30 m binnenshuis</li>
-              <li><strong>Radiofrequentie</strong> | 433,92 MHz</li>
-              <li><strong>Afmetingen</strong> | 67 x 67 x 30 mm (exclusief antenne)</li>
-              <li><strong>Van toepassing zijnde normen</strong> | EN 300 220-2, EN 301 489-3, EN 301 489-3</li>
+            <ul>
+              <li>Zeer goede <strong>prijs-kwaliteit verhouding</strong>.</li>
+              <li><strong>Geen onderhoud</strong> nodig, doordat de boiler van RVS is.</li>
+              <li>Kan <strong>zowel staand als hangend</strong> worden geïnstalleerd.</li>
+              <li><strong>Kalkbestendig</strong> verwarmingselement.</li>
+              <li><strong>Hogere opslagtemperatuur van 90 graden</strong> zorgt voor meer warm water.</li>
+              <li><strong>Mooi én praktisch design</strong>: leidingen en verbindingen zijn verborgen, maar eenvoudig te installeren doordat alle verbindingen aan de bovenkant zitten.</li>
+              <li>Installatiehandleiding.</li>
             </ul>
           </div></div>
         </div>
@@ -547,48 +642,16 @@ footer{background:#0e1512;padding:56px 48px 36px;}.flogo{display:block;height:32
       <div class="rev-viewport">
         <div class="rev-track" id="revTrack">
           <div class="rev-page">
-            <div class="review">
-              <div class="review-stars">★★★★★</div>
-              <p class="review-text">"Nog geen seconde spijt gehad van deze kleine investering en wat een opbrengst. Dan zwijg ik nog over de service! Echt top! Thx Solyx."</p>
-              <div class="review-meta"><b>Frank De W.</b> · 12 maanden geleden</div>
-            </div>
-            <div class="review">
-              <div class="review-stars">★★★★★</div>
-              <p class="review-text">"Erg tevreden over deze oplossing. Een slimme manier om je eigen zonne-energie te gebruiken, zonder een gigantische investering. Ik heb de Nymo zelf geïnstalleerd en dat ging best makkelijk."</p>
-              <div class="review-meta"><b>Lonneke V.</b> · 10 maanden geleden</div>
-            </div>
-            <div class="review">
-              <div class="review-stars">★★★★★</div>
-              <p class="review-text">"Geweldig product, met een slim idee om te profiteren van je overtollige zonne-energie zonder de bank te breken! De installatie was heel eenvoudig."</p>
-              <div class="review-meta"><b>Oliver M.</b> · 1 jaar geleden</div>
-            </div>
-            <div class="review">
-              <div class="review-stars">★★★★★</div>
-              <p class="review-text">"Dé toevoeging op de zonnepanelen waar ik naar op zoek was, top!"</p>
-              <div class="review-meta"><b>Bart van H.</b> · 1 jaar geleden</div>
-            </div>
+            <div class="review"><div class="review-stars">★★★★★</div><p class="review-text">"Nog geen seconde spijt gehad van deze kleine investering en wat een opbrengst. Dan zwijg ik nog over de service! Echt top! Thx Solyx."</p><div class="review-meta"><b>Frank De W.</b> · 12 maanden geleden</div></div>
+            <div class="review"><div class="review-stars">★★★★★</div><p class="review-text">"Erg tevreden over deze oplossing. Een slimme manier om je eigen zonne-energie te gebruiken, zonder een gigantische investering. Ik heb de Nymo zelf geïnstalleerd en dat ging best makkelijk."</p><div class="review-meta"><b>Lonneke V.</b> · 10 maanden geleden</div></div>
+            <div class="review"><div class="review-stars">★★★★★</div><p class="review-text">"Geweldig product, met een slim idee om te profiteren van je overtollige zonne-energie zonder de bank te breken! De installatie was heel eenvoudig."</p><div class="review-meta"><b>Oliver M.</b> · 1 jaar geleden</div></div>
+            <div class="review"><div class="review-stars">★★★★★</div><p class="review-text">"Dé toevoeging op de zonnepanelen waar ik naar op zoek was, top!"</p><div class="review-meta"><b>Bart van H.</b> · 1 jaar geleden</div></div>
           </div>
           <div class="rev-page">
-            <div class="review">
-              <div class="review-stars">★★★★★</div>
-              <p class="review-text">"Uitstekende service, prettig contact en het belangrijkste: een product dat goed werkt om het overschot aan zonne-energie te benutten!"</p>
-              <div class="review-meta"><b>Richard</b> · 2 jaar geleden</div>
-            </div>
-            <div class="review">
-              <div class="review-stars">★★★★★</div>
-              <p class="review-text">"Al een tijd op zoek naar een dergelijke oplossing en nu geïnstalleerd thuis. Heel blij met het resultaat, werkt feilloos."</p>
-              <div class="review-meta"><b>Jelle R.</b> · 1 jaar geleden</div>
-            </div>
-            <div class="review">
-              <div class="review-stars">★★★★★</div>
-              <p class="review-text">"Heel tevreden van de aanpak, technische toelichting en levering. Snelle levering tot hier in België. Werkt perfect. Bedankt Emma!"</p>
-              <div class="review-meta"><b>Stijn G.</b> · 1 jaar geleden</div>
-            </div>
-            <div class="review">
-              <div class="review-stars">★★★★★</div>
-              <p class="review-text">"Mooi product, makkelijk te installeren en gemakkelijk in gebruik!"</p>
-              <div class="review-meta"><b>Pim van B.</b> · 1 jaar geleden</div>
-            </div>
+            <div class="review"><div class="review-stars">★★★★★</div><p class="review-text">"Uitstekende service, prettig contact en het belangrijkste: een product dat goed werkt om het overschot aan zonne-energie te benutten!"</p><div class="review-meta"><b>Richard</b> · 2 jaar geleden</div></div>
+            <div class="review"><div class="review-stars">★★★★★</div><p class="review-text">"Al een tijd op zoek naar een dergelijke oplossing en nu geïnstalleerd thuis. Heel blij met het resultaat, werkt feilloos."</p><div class="review-meta"><b>Jelle R.</b> · 1 jaar geleden</div></div>
+            <div class="review"><div class="review-stars">★★★★★</div><p class="review-text">"Heel tevreden van de aanpak, technische toelichting en levering. Snelle levering tot hier in België. Werkt perfect. Bedankt Emma!"</p><div class="review-meta"><b>Stijn G.</b> · 1 jaar geleden</div></div>
+            <div class="review"><div class="review-stars">★★★★★</div><p class="review-text">"Mooi product, makkelijk te installeren en gemakkelijk in gebruik!"</p><div class="review-meta"><b>Pim van B.</b> · 1 jaar geleden</div></div>
           </div>
         </div>
       </div>
@@ -621,182 +684,239 @@ footer{background:#0e1512;padding:56px 48px 36px;}.flogo{display:block;height:32
 </div><!-- /page-wrap -->
 
 <script>
+// Nav scroll state
 window.addEventListener('scroll', function(){
   document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 60);
   var sp = document.getElementById('scroll-progress');
   sp.style.width = (window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100) + '%';
 }, {passive:true});
 
-const PRICES = { nymo: 649, homey: 611 };
-const SHOP = 'images/shop/';
-// hoofdfoto per versie: met/zonder kabels
-const MAIN_IMG = {
-  nymo:  { base: SHOP+'nymo-sensor.jpg',  cables: SHOP+'nymo-cables-sensor.jpg' },
-  homey: { base: SHOP+'nymo-only.jpg',    cables: SHOP+'nymo-cables.jpg' }
+// Pricing matrix
+// Staal: vertical 100L, 150L — horizontal 120L only
+// RVS: vertical only — 100L, 150L, 200L
+const CAPS = {
+  steel: {
+    v: [{l:100,p:540},{l:120,p:610},{l:150,p:680}],
+    h: [{l:100,p:465},{l:120,p:495},{l:150,p:540}]
+  },
+  rvs: {
+    v: [{l:200,p:1119}],
+    h: []
+  }
 };
-// badge-tekst (linksboven) per afbeelding
-const IMG_LABEL = {
-  [SHOP+'nymo-sensor.jpg']: 'Nymo',
-  [SHOP+'nymo-only.jpg']: 'Nymo voor Homey gebruikers',
-  [SHOP+'nymo-cables.jpg']: 'Nymo + kabels',
-  [SHOP+'nymo-cables-sensor.jpg']: 'Nymo + kabels',
+
+const SHOP = 'images/shop/';
+// hoofdfoto per Nymo-versie × boilertype × oriëntatie (formaat maakt voor de foto niet uit)
+const IMGS = {
+  'nymo-steel-v':  SHOP+'complete-tesy-v.jpg',
+  'nymo-steel-h':  SHOP+'complete-tesy-h.jpg',
+  'nymo-rvs-v':    SHOP+'complete-oso.jpg',
+  'homey-steel-v': SHOP+'complete-homey-tesy-v.jpg',
+  'homey-steel-h': SHOP+'complete-homey-tesy-h.jpg',
+  'homey-rvs-v':   SHOP+'complete-homey-oso.jpg',
+};
+
+const NOTES = {
+  'steel-v': 'Staal verticale boiler — compact wandmodel, energiezuinig en eenvoudig zelf te installeren.',
+  'steel-h': 'Staal horizontale boiler — ideaal als de boiler horizontaal moet worden gemonteerd (bijv. in een kast).',
+  'rvs-v':   'RVS verticale boiler — premium kwaliteit met superieure isolatie. Maximaal rendement voor grote huishoudens.',
+};
+
+const NYMO_PRICES = { nymo:649, homey:611 };
+const st = { o:'v', b:'steel', l:100, bp:540, nymo:'nymo', addons:{a1:false,a2:false,a3:false,a4:false,a5:false}, ap:{a1:19.5,a2:75,a3:16,a4:69,a5:39} };
+
+function setNymo(v){
+  st.nymo = v;
+  document.getElementById('ny-nymo').classList.toggle('on', v==='nymo');
+  document.getElementById('ny-homey').classList.toggle('on', v==='homey');
+  // Homey-accessoires (Bridge + P1-dongle) alleen tonen bij 'Nymo voor Homey'
+  ['a4','a5'].forEach(function(id){
+    var el = document.getElementById(id);
+    el.style.display = (v==='homey') ? '' : 'none';
+    if(v!=='homey' && st.addons[id]){ st.addons[id]=false; el.classList.remove('on'); }
+  });
+  refreshImg();
+  refreshPrice();
+}
+
+function setBrand(b) {
+  st.b = b;
+  document.getElementById('bt').classList.toggle('on', b==='steel');
+  document.getElementById('bo').classList.toggle('on', b==='rvs');
+  // ophangbeugel + installatieset: alleen voor Staal; P1-splitter voor beide
+  const a1=document.getElementById('a1'), a2=document.getElementById('a2');
+  if(b==='rvs'){
+    a1.style.display='none'; a2.style.display='none';
+    st.addons.a1=false; st.addons.a2=false;
+    a1.classList.remove('on','disabled'); a2.classList.remove('on','disabled');
+  } else {
+    a1.style.display=''; a2.style.display='';
+  }
+  document.getElementById('disc-steel').classList.toggle('on', b==='steel');
+  document.getElementById('disc-rvs').classList.toggle('on', b==='rvs');
+
+  // RVS is vertical only — lock orientation and hide horizontal button
+  const hBtn = document.getElementById('bh');
+  const orientNote = document.getElementById('orientNote');
+  if(b === 'rvs') {
+    st.o = 'v';
+    document.getElementById('bv').classList.add('on');
+    hBtn.classList.remove('on');
+    hBtn.style.opacity = '0.35';
+    hBtn.style.pointerEvents = 'none';
+    orientNote.style.display = 'block';
+  } else {
+    hBtn.style.opacity = '';
+    hBtn.style.pointerEvents = '';
+    orientNote.style.display = 'none';
+  }
+
+  refreshCaps(); refreshImg(); refreshPrice(); refreshSteps();
+}
+
+function setOrientation(o) {
+  if(st.b === 'rvs') return; // RVS locked to vertical
+  st.o = o;
+  document.getElementById('bv').classList.toggle('on', o==='v');
+  document.getElementById('bh').classList.toggle('on', o==='h');
+  refreshCaps(); refreshImg(); refreshPrice(); refreshSteps();
+}
+
+function setCap(btn) {
+  document.querySelectorAll('#capRow .vbtn').forEach(c=>c.classList.remove('on'));
+  btn.classList.add('on');
+  st.l = parseInt(btn.dataset.l);
+  const found = (CAPS[st.b][st.o]||[]).find(x=>x.l===st.l);
+  st.bp = found ? found.p : 0;
+  refreshImg(); refreshPrice(); refreshSteps();
+}
+
+function toggleAddon(id, price) {
+  st.addons[id] = !st.addons[id];
+  document.getElementById(id).classList.toggle('on', st.addons[id]);
+  // ophangbeugel en installatieset sluiten elkaar uit: de ander wordt lichtgrijs zodra er één gekozen is
+  if(id==='a1' || id==='a2'){
+    const other = id==='a1' ? 'a2' : 'a1';
+    document.getElementById(other).classList.toggle('disabled', st.addons[id]);
+  }
+  // gekozen accessoire tonen als hoofdfoto; bij uitvinken terug naar de configuratiefoto
+  const ACC_IMG = { a1: SHOP+'tesy-ophangbeugel.jpg', a2: SHOP+'tesy-installatieset.jpg', a3: SHOP+'p1-splitter.jpg', a4: SHOP+'homey-bridge.jpg', a5: SHOP+'homey-p1-dongle.jpg' };
+  if(st.addons[id] && ACC_IMG[id]) setMainImg(ACC_IMG[id]);
+  else setMainImg(curImg());
+  refreshPrice();
+}
+
+function refreshCaps() {
+  const avail = CAPS[st.b][st.o] || [];
+  const all = [100,120,150,200];
+  all.forEach(l => {
+    const btn = document.getElementById('c'+l);
+    if(!btn) return;
+    const found = avail.find(x=>x.l===l);
+    btn.classList.toggle('hide', !found);
+    if(found) document.getElementById('p'+l).textContent = '€'+found.p.toLocaleString('nl-NL');
+  });
+  // behoud de huidige keuze als die nog bestaat, anders de eerste beschikbare
+  const sel = avail.find(x=>x.l===st.l) || avail[0];
+  all.forEach(l => { const b=document.getElementById('c'+l); if(b) b.classList.remove('on'); });
+  if(sel) {
+    const sb = document.getElementById('c'+sel.l);
+    if(sb) sb.classList.add('on');
+    st.l = sel.l; st.bp = sel.p;
+  }
+}
+
+function curImg() {
+  return IMGS[st.nymo+'-'+st.b+'-'+st.o] || IMGS['nymo-steel-v'];
+}
+function configBadge(){
+  const brandLabel = st.b === 'steel' ? 'Tesy (staal)' : 'OSO (RVS)';
+  return (st.o==='v'?'Verticaal':'Horizontaal')+' · '+brandLabel+' · '+st.l+'L';
+}
+const ACC_LABEL = {
+  [SHOP+'tesy-ophangbeugel.jpg']: 'Ophangbeugel (Tesy)',
+  [SHOP+'tesy-installatieset.jpg']: 'Installatieset (Tesy)',
   [SHOP+'p1-splitter.jpg']: 'P1-splitter',
   [SHOP+'homey-bridge.jpg']: 'Homey Bridge',
   [SHOP+'homey-p1-dongle.jpg']: 'Homey P1-dongle'
 };
-// thumbnails (incl. accessoires) per versie
-const THUMBS = {
-  nymo:  [SHOP+'nymo-sensor.jpg', SHOP+'nymo-cables-sensor.jpg', SHOP+'p1-splitter.jpg'],
-  homey: [SHOP+'nymo-only.jpg', SHOP+'nymo-cables.jpg', SHOP+'p1-splitter.jpg', SHOP+'homey-bridge.jpg', SHOP+'homey-p1-dongle.jpg']
-};
-// foto bij een gekozen accessoire
-function accImgFor(id) {
-  if(id === 'n-kabels' || id === 'h-kabels') return MAIN_IMG[st.version].cables;
-  if(id === 'n-p1' || id === 'h-p1') return SHOP+'p1-splitter.jpg';
-  if(id === 'h-bridge') return SHOP+'homey-bridge.jpg';
-  if(id === 'h-p1dongle') return SHOP+'homey-p1-dongle.jpg';
-  return null;
-}
-// toon de laatst-gekozen accessoire, anders de basisfoto van de versie
-function curMainImg() {
-  for(let i = st.accStack.length - 1; i >= 0; i--) {
-    const im = accImgFor(st.accStack[i]);
-    if(im) return im;
-  }
-  return MAIN_IMG[st.version].base;
-}
 function setMainImg(src) {
   const img = document.getElementById('mainImg');
   img.classList.add('out');
-  setTimeout(() => { img.src = src; img.classList.remove('out'); }, 200);
+  setTimeout(()=>{ img.src = src; img.classList.remove('out'); }, 200);
   document.querySelectorAll('#thumbRow .thumb').forEach(t => t.classList.toggle('on', t.dataset.src === src));
-  document.getElementById('badge').textContent = IMG_LABEL[src] || 'Nymo';
+  document.getElementById('badge').textContent = ACC_LABEL[src] || configBadge();
 }
 function renderThumbs() {
+  const main = curImg();
+  const list = [main];
+  if(st.b === 'steel'){ list.push(SHOP+'tesy-ophangbeugel.jpg', SHOP+'tesy-installatieset.jpg'); }
+  list.push(SHOP+'p1-splitter.jpg');
+  if(st.nymo === 'homey'){ list.push(SHOP+'homey-bridge.jpg', SHOP+'homey-p1-dongle.jpg'); }
   const row = document.getElementById('thumbRow');
   row.innerHTML = '';
-  THUMBS[st.version].forEach(src => {
+  list.forEach(src => {
     const d = document.createElement('div');
-    d.className = 'thumb';
+    d.className = 'thumb' + (src === main ? ' on' : '');
     d.dataset.src = src;
     d.onclick = () => setMainImg(src);
     d.innerHTML = '<img src="' + src + '" alt="">';
     row.appendChild(d);
   });
 }
-function updateMainImg() { setMainImg(curMainImg()); }
-const NOTES = {
-  nymo:  'Nymo WaterAccu controller — slimme aansturing van je boiler op basis van zonne-energie.',
-  homey: 'Nymo voor Homey gebruikers — volledig geïntegreerd in je Homey smarthome voor maximale automatisering.',
-};
-
-// State
-const st = {
-  version: 'nymo',
-  accStack: [],
-  addons: {
-    'n-kabels': false, 'n-p1': false,
-    'h-kabels': false, 'h-p1': false, 'h-bridge': false, 'h-p1dongle': false
-  },
-  prices: {
-    'n-kabels': 14, 'n-p1': 16,
-    'h-kabels': 14, 'h-p1': 16, 'h-bridge': 69, 'h-p1dongle': 39
-  }
-};
-
-function setVersion(v) {
-  st.version = v;
-
-  // Reset all addons when switching version
-  Object.keys(st.addons).forEach(k => {
-    st.addons[k] = false;
-    const el = document.getElementById(k);
-    if(el) el.classList.remove('on');
-  });
-  st.accStack = [];
-
-  // Toggle version buttons
-  document.getElementById('v-nymo').classList.toggle('on', v === 'nymo');
-  document.getElementById('v-homey').classList.toggle('on', v === 'homey');
-
-  // Toggle disclaimers
-  document.getElementById('disc-nymo').classList.toggle('on', v === 'nymo');
-  document.getElementById('disc-homey').classList.toggle('on', v === 'homey');
-
-  // 'Alles over de Nymo': Homey-item alleen bij Homey, Sensor-specs alleen bij standaard
-  var homeyAcc = document.querySelector('.usp-homey');
-  var sensorAcc = document.querySelector('.usp-sensor');
-  var slimmeAcc = document.querySelector('.usp-slimme');
-  if(homeyAcc){ homeyAcc.style.display = (v === 'homey') ? 'block' : 'none'; if(v !== 'homey') homeyAcc.classList.remove('open'); }
-  if(sensorAcc){ sensorAcc.style.display = (v === 'homey') ? 'none' : 'block'; if(v === 'homey') sensorAcc.classList.remove('open'); }
-  if(slimmeAcc){ slimmeAcc.style.display = (v === 'homey') ? 'none' : 'block'; if(v === 'homey') slimmeAcc.classList.remove('open'); }
-  // 'Gemakkelijk zelf te installeren': communicatie-zin per variant
-  document.querySelectorAll('.li-nymo').forEach(function(el){ el.style.display = (v === 'homey') ? 'none' : 'list-item'; });
-  document.querySelectorAll('.li-homey').forEach(function(el){ el.style.display = (v === 'homey') ? 'list-item' : 'none'; });
-
-  // Toggle accessory groups
-  document.getElementById('addons-nymo').classList.toggle('on', v === 'nymo');
-  document.getElementById('addons-homey').classList.toggle('on', v === 'homey');
-
-  // Update gallery & badge (badge wordt door setMainImg gezet)
+function refreshImg() {
   renderThumbs();
-  updateMainImg();
-
-  refreshPrice();
-}
-
-function toggleAddon(id, price) {
-  st.addons[id] = !st.addons[id];
-  document.getElementById(id).classList.toggle('on', st.addons[id]);
-  // gekozen accessoire bovenop de stapel; bij uitvinken weer eraf
-  if(st.addons[id]) st.accStack.push(id);
-  else st.accStack = st.accStack.filter(x => x !== id);
-  updateMainImg();
-  refreshPrice();
+  setMainImg(curImg());
 }
 
 function refreshPrice() {
-  const basePrice = PRICES[st.version];
-
-  // Only count addons for the active version
-  const prefix = st.version === 'nymo' ? 'n-' : 'h-';
-  let addonTotal = 0;
-  Object.keys(st.addons).forEach(k => {
-    if(k.startsWith(prefix) && st.addons[k]) addonTotal += st.prices[k];
-  });
-
-  const total = basePrice + addonTotal;
-  document.getElementById('total').textContent = '€' + total.toLocaleString('nl-NL', {minimumFractionDigits:2, maximumFractionDigits:2});
+  let addonTotal=0, addonNames=[];
+  const ADDON_NAME = {a1:'Ophangbeugel', a2:'Installatieset', a3:'P1-splitter', a4:'Homey Bridge', a5:'Homey P1-dongle'};
+  Object.keys(st.addons).forEach(k=>{ if(st.addons[k]){ addonTotal+=st.ap[k]; addonNames.push(ADDON_NAME[k]); }});
+  const nymoPrice = NYMO_PRICES[st.nymo];
+  const total = nymoPrice + st.bp + addonTotal;
+  document.getElementById('nymoLbl').textContent = (st.nymo==='nymo' ? 'Nymo' : 'Nymo voor Homey gebruikers');
+  document.getElementById('nymoVal').textContent = '€'+nymoPrice.toFixed(2).replace('.',',');
+  const brandLabel = st.b === 'steel' ? 'Staal' : 'RVS';
+  document.getElementById('boilerLbl').textContent = brandLabel+' boiler ('+st.l+'L '+(st.o==='v'?'verticaal':'horizontaal')+')';
+  document.getElementById('boilerVal').textContent = '€'+st.bp.toLocaleString('nl-NL',{minimumFractionDigits:2,maximumFractionDigits:2});
+  const ar = document.getElementById('addonProw');
+  if(addonTotal>0){ ar.style.display='flex'; document.getElementById('addonLbl').textContent=addonNames.join(' + '); document.getElementById('addonVal').textContent='+€'+addonTotal.toFixed(2).replace('.',','); }
+  else ar.style.display='none';
+  document.getElementById('total').textContent = '€'+total.toLocaleString('nl-NL',{minimumFractionDigits:2,maximumFractionDigits:2});
 }
 
+function refreshSteps() {}
+
 function thumb(el, src) {
-  document.querySelectorAll('.thumb').forEach(t => t.classList.remove('on'));
+  document.querySelectorAll('.thumb').forEach(t=>t.classList.remove('on'));
   el.classList.add('on');
-  const img = document.getElementById('mainImg');
+  const img=document.getElementById('mainImg');
   img.classList.add('out');
-  setTimeout(() => { img.src = src; img.classList.remove('out'); }, 200);
+  setTimeout(()=>{ img.src=src; img.classList.remove('out'); }, 200);
 }
 
 function addCart() {
   const btn = document.querySelector('.add-btn');
-  btn.innerHTML = '✓ Toegevoegd aan winkelwagen!';
-  btn.style.background = '#2d9040';
-  setTimeout(() => {
-    btn.innerHTML = `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Toevoegen aan winkelwagen`;
-    btn.style.background = '';
+  btn.innerHTML='✓ Toegevoegd aan winkelwagen!';
+  btn.style.background='#2d9040';
+  setTimeout(()=>{
+    btn.innerHTML=`<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Toevoegen aan winkelwagen`;
+    btn.style.background='';
   }, 2500);
-  window.open('https://www.solyxenergy.nl/product/elektrische-boiler/', '_blank');
+  window.open('https://www.solyxenergy.nl/product/elektrische-boiler/','_blank');
 }
 
 // Fade-in on scroll
-const obs = new IntersectionObserver(e => {
-  e.forEach(x => { if(x.isIntersecting){ x.target.classList.add('in'); obs.unobserve(x.target); }});
-}, {threshold:.05});
-document.querySelectorAll('.fu').forEach(el => obs.observe(el));
+const obs = new IntersectionObserver(e=>{
+  e.forEach(x=>{ if(x.isIntersecting){ x.target.classList.add('in'); obs.unobserve(x.target); }});
+},{threshold:.05});
+document.querySelectorAll('.fu').forEach(el=>obs.observe(el));
 
-// Init productgalerij
-renderThumbs();
-updateMainImg();
+// Sync galerij + prijs met de standaardkeuzes bij laden
+refreshCaps();
+refreshImg();
+refreshPrice();
 
 // USP accordion (uitvouwen)
 var uspList = document.querySelector('.usp-list');
