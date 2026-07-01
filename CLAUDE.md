@@ -37,31 +37,62 @@ Read `PROJECT.md §E` (handoff) first. Then `§A` if the task is structural, `§
 ## 6. Current snapshot
 > Hot state — overwritten at session close. YAML.
 ```yaml
-branch: n/a (no git)
-commit: n/a
+branch: main
+commit: 3a6e075
+repo: https://github.com/clubeedg-ship-it/solyx-next
+vm: adminuser@oopuopu-cloud (Tailscale), served at http://oopuopu-cloud:8090 via systemd
+    solyx-next.service (python3 http.server), root /home/adminuser/solyx-next. Deploy:
+    `git push` then `ssh adminuser@oopuopu-cloud 'cd ~/solyx-next && git pull'`. Old
+    docker WordPress stack + volumes destroyed; nginx solyx configs removed.
 state: >
-  standardized + polished. All site pages share ONE header (full-width frosted-glass bar,
-  flush top:0, installer-bar hidden). Every internal link is local — zero live-domain bounces
-  (href AND onclick/window.open) and zero 404s. The 5 previously-missing pages exist
-  (klantverhalen, over-ons, installatie-formulier x2, new home.html drop-in). index.html
-  redirects -> home.html; registry = hub.html. Card icons unified: detailed Nymo + the boiler
-  from midia/new_boiler.svg (viewBox 230x392, inlined as currentColor); old 92x132 stroke
-  boiler removed site-wide. Footers darkened to #080c0a. Every nav logo is the transparent inline
-  SVG wordmark (home/besparen/installatie/landingspagina were a base64 JPEG that showed a white
-  box — swapped out). midia/ assets renamed to descriptive names + refs updated; screenshots
-  live in screenshots/. Fixed: home 01/06 & 02/06 oversized content, hoe-werkt-het 07/07 video
-  carousel (max-width 640->920px). Served on :4599 (no-cache); preview_start works (port 4599 pinned).
+  Every marketing page (17 total) carries a shell.com-style utility strip at top:0 —
+  light grey rgba(240,240,240,.96) + 1px border-bottom, right-aligned "Installer pagina"
+  → installateurs.html. Nav pushed to top:30px. Real logo (midia/solyx-logo.png) in
+  every nav + footer. Canonical footer (SHA 0aa1776f45ab, fcol-brand + fcompany + fsocial
+  + fgoogle 4.7★ + flegal) on installatie/home/landingspagina/installateurs/handleidingen
+  and 12 more. Shop split: shop.html = 2-card hub (60% size), shop-nymo + shop-complete-
+  wateraccu as product pages; existing "Nog geen boiler? Geen probleem" inline text is
+  the only cross-link (subtle by designer intent). Hero eyebrow tag "Nieuwe website · 2026"
+  (client rejected "Welkom op onze vernieuwde website" as AI-marketing fluff). 5 previously-
+  orphan footer labels now real HTML: algemene-voorwaarden, privacy, levering-en-
+  retourbeleid, werken-bij, zonnestroomboiler (Onder constructie template). handleidingen
+  .html brought in (NL/EN/DE/FR PDF hub for Nymo + Homey + Solar iBoost). besparen page:
+  perf sweep done (killed mix-blend-mode:multiply, blob animations, backdrop-filter site-
+  wide; nav bumped to rgba(255,255,255,.92); dim cards opacity 0.85→0.96), scroll calmed
+  (snap-align + per-panel opacity/blur/scale animations + "Scroll voor meer ↓" nudge all
+  removed — content preserved), sticky "Jouw besparing." title slides center→left over
+  bd-left card when bd-scrolled fires. how-to-get-it quiz: found + verified — the 10
+  href="#" buttons INSIDE quiz-result panels are the "broken redirects" (obvious targets
+  mapped, awaiting user greenlight to wire). Klantverhalen 01/03 fixed (h2 margin-top 160
+  removed + scroll-snap-type y proximity).
 next: >
-  the end goal — convert the finished pages to Greenshift blocks (user: "ONLY THEN convert";
-  use the Greenshift skill). Then: optionally swap the SVG wordmark for the official Solyx logo
-  asset if one is supplied; consistent mobile hamburger nav; <html lang> en->nl where stale.
-blockers: none
+  BESPAREN focus for next session — client called it WIP. Already applied: A+C+D perf,
+  scroll calming, sticky title slide, dim opacity fix. Remaining opportunities: revisit
+  layout consistency (client mentioned "left header higher than right header"); the
+  bd-panels-mount panels still stack tall (min-height:84vh each) — may need height
+  reduction now that scroll transitions are gone; consider whether the sticky-input UX
+  still makes sense post-perf-sweep. Also: finish wiring 5 dead canonical-footer hrefs
+  (Zonnestroomboiler, Werken bij, Algemene voorwaarden, Privacy, Levering) on 13
+  remaining pages (blog-news, faq, hoe-werkt-het, how-to-get-it, installatie-formulier
+  ×2, klantverhalen, landingspagina, over-ons, shop, shop-complete-wateraccu, shop-nymo,
+  wateraccu) — 3 edits each, same anchors as installatie.html footer.
+blockers: >
+  13 pages still have href="#" for Zonnestroomboiler/Werken bij/legal trio — same
+  mechanical pattern, just tedious. handleidingen.html links exist in shop-nymo/shop-
+  complete-wateraccu but currently point to how-to-get-it.html (from earlier remap when
+  handleidingen didn't exist yet) — could be repointed but not urgent.
 working_style: >
-  DON'T over-engineer or add unrequested UI (pill nav/hover/hamburger were rejected). Edit files
-  directly; scripts only for bulk mechanical sweeps, never for visible-content transforms.
-  Run the server yourself, never ask the user to. Verify VISUALLY before editing — he's terse and
-  references things loosely; map his words to the real DOM/file first. See PROJECT.md §F.
-updated: 2026-06-19
+  Client mantra: "step back first to understand before executing" — for UX/perf/design
+  issues, always investigate root cause and PRESENT OPTIONS with tradeoffs before
+  editing. Reference files (zip pages) are NEVER edited beyond mechanical fixes
+  (logo/href/CSS technical); content/copy/sections/layout stay untouched.
+  Copy standards: NO AI-marketing fluff — no "Welkom", "vernieuwde", "ontdek",
+  "renewed" framing; prefer factual/dated/place-anchored ("Nieuwe website · 2026",
+  "Gemaakt in Nederland"). Minimal-invasive design changes: aim for smallest visual
+  change that solves the issue. Client is terse and references things loosely — map
+  words to real DOM/file first (VERIFY VISUALLY where possible). No mobile burger
+  nav additions unrequested. See PROJECT.md §F for accumulated lessons.
+updated: 2026-07-01
 ```
 
 ## 7. Pointer table — `PROJECT.md`
