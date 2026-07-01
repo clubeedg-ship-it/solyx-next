@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" sizes="64x64" href="midia/favicon.png">
+<link rel="apple-touch-icon" href="midia/apple-touch-icon.png">
+<title>Werken bij Solyx — Solyx Energy</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+<link href="https://fonts.cdnfonts.com/css/alliance-no-2" rel="stylesheet">
+<style>
+:root{
+  --green:#35A847;--green-deep:#1E7A30;--green-light:#EBF8ED;
+  --orange:#F4831F;--ink:#3D3D3D;--ink-mid:#5A5A5A;--ink-muted:#888888;
+  --white:#FFFFFF;--off-white:#F7F9F7;--border:rgba(60,60,60,.1);
+  --font-head:'Inter',sans-serif;
+  --font-body:'Alliance No.2','DM Sans',Georgia,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{min-height:100%;background:var(--off-white);color:var(--ink);font-family:var(--font-body);}
+body{overflow-x:hidden;}
+
+/* installer-bar */
+#installer-bar{position:fixed;top:0;left:0;right:0;z-index:610;display:flex;align-items:center;justify-content:flex-end;padding:9px 48px;background:rgba(240,240,240,.96);border-bottom:1px solid rgba(0,0,0,.06);pointer-events:auto;}
+#installer-bar a{font-family:var(--font-head);font-size:12px;font-weight:500;color:var(--ink-mid);text-decoration:none;transition:color .2s;letter-spacing:.01em;}
+#installer-bar a:hover{color:var(--ink);}
+
+/* nav */
+nav{position:fixed;top:30px;left:0;right:0;z-index:600;display:flex;align-items:center;justify-content:space-between;padding:16px 48px;background:rgba(255,255,255,.92);border-bottom:1px solid rgba(0,0,0,.05);}
+.nav-logo img{display:block;height:32px;}
+.nav-links{display:flex;gap:32px;list-style:none;}
+.nav-links a{font-family:var(--font-head);font-size:13px;font-weight:500;color:var(--ink-mid);text-decoration:none;transition:color .2s;}
+.nav-links a:hover{color:var(--ink);}
+.btn-orange{background:#F4831F;color:#fff;font-family:var(--font-head);font-size:13px;font-weight:700;padding:10px 22px;border-radius:999px;border:none;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;transition:background .2s,transform .2s;}
+.btn-orange:hover{background:#d96f10;transform:translateY(-1px);}
+
+/* page */
+main{padding:150px 48px 80px;max-width:820px;margin:0 auto;min-height:calc(100vh - 400px);}
+.crumb{font-family:var(--font-head);font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--green);margin-bottom:18px;display:inline-flex;align-items:center;gap:8px;}
+.crumb::before{content:'';width:24px;height:1px;background:var(--green);}
+.page-h1{font-family:var(--font-head);font-size:clamp(32px,5vw,54px);font-weight:900;letter-spacing:-.03em;line-height:1.05;color:var(--ink);margin-bottom:14px;}
+.page-h1 .accent{color:var(--green);}
+.page-sub{font-family:var(--font-body);font-size:17px;line-height:1.6;color:var(--ink-mid);max-width:600px;margin-bottom:40px;}
+.wip-card{background:#fff;border:1px solid var(--border);border-radius:16px;padding:36px 30px;display:flex;flex-direction:column;gap:14px;}
+.wip-tag{font-family:var(--font-head);font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--orange);display:inline-flex;align-items:center;gap:8px;}
+.wip-tag::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--orange);}
+.wip-title{font-family:var(--font-head);font-size:20px;font-weight:800;letter-spacing:-.01em;color:var(--ink);}
+.wip-body{font-family:var(--font-body);font-size:15px;line-height:1.7;color:var(--ink-mid);}
+.wip-body a{color:var(--green-deep);text-decoration:underline;font-weight:600;}
+
+/* footer (canonical) */
+footer{background:#0e1512;padding:60px 48px 40px;position:relative;z-index:1;}
+.fg{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px;}
+.fcol-brand{}
+.flogo{display:block;height:30px;width:auto;filter:invert(1);}
+.fbt{font-family:var(--font-body);font-size:14px;color:rgba(255,255,255,.5);line-height:1.65;margin-top:16px;}
+.fcompany{font-style:normal;font-family:var(--font-body);font-size:13px;color:rgba(255,255,255,.5);line-height:1.55;margin-top:16px;}
+.fcompany a{color:rgba(255,255,255,.7);text-decoration:none;}
+.fcompany a:hover{color:#fff;}
+.fcompany-gap{display:block;height:7px;}
+.fct{font-family:var(--font-head);font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:16px;}
+.flinks{list-style:none;display:flex;flex-direction:column;gap:10px;}
+.flinks a{font-family:var(--font-head);font-size:13px;color:rgba(255,255,255,.5);text-decoration:none;transition:color .2s;}
+.flinks a:hover{color:#fff;}
+.fsocial{display:flex;gap:12px;margin-top:22px;}
+.fsoc{width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.7);transition:background .2s,color .2s,border-color .2s;}
+.fsoc:hover{background:var(--green);border-color:var(--green);color:#fff;}
+.fgoogle{display:inline-flex;align-items:center;gap:11px;margin-top:18px;text-decoration:none;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:9px 15px;transition:background .2s;}
+.fgoogle:hover{background:rgba(255,255,255,.1);}
+.fgoogle-meta{display:flex;flex-direction:column;line-height:1.2;}
+.fgoogle-stars{position:relative;display:inline-block;font-size:12px;letter-spacing:1.5px;color:rgba(255,255,255,.22);}
+.fgoogle-stars-fill{position:absolute;top:0;left:0;overflow:hidden;white-space:nowrap;color:#FBBC04;}
+.fgoogle-text{font-family:var(--font-head);font-size:12px;color:rgba(255,255,255,.6);margin-top:3px;}
+.fgoogle-text strong{color:#fff;font-weight:800;}
+.fbottom{max-width:1100px;margin:0 auto;border-top:1px solid rgba(255,255,255,.05);padding-top:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;}
+.fcopy{font-family:var(--font-head);font-size:12px;color:rgba(255,255,255,.25);}
+.flegal{display:flex;gap:22px;flex-wrap:wrap;}
+.flegal a{font-family:var(--font-head);font-size:12px;color:rgba(255,255,255,.55);text-decoration:none;transition:color .2s;}
+.flegal a:hover{color:#fff;}
+
+@media(max-width:900px){
+  nav{padding:16px 20px;}
+  .nav-links{display:none;}
+  #installer-bar{padding:6px 20px;}
+  main{padding:130px 20px 60px;}
+  footer{padding:48px 20px 32px;}
+  .fg{grid-template-columns:1fr 1fr;gap:32px;}
+}
+@media(max-width:560px){.fg{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<!-- INSTALLER BAR -->
+<div id="installer-bar">
+  <a href="installateurs.html">Installer pagina</a>
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="home.html" class="nav-logo" aria-label="Solyx Energy home">
+    <img src="midia/solyx-logo.png" alt="Solyx Energy">
+  </a>
+  <ul class="nav-links">
+    <li><a href="hoe-werkt-het.html">Hoe werkt het</a></li>
+    <li><a href="besparen.html">Besparen</a></li>
+    <li><a href="how-to-get-it.html">Aan de slag</a></li>
+    <li><a href="faq.html">FAQs</a></li>
+    <li><a href="shop.html">Shop</a></li>
+  </ul>
+  <a href="how-to-get-it.html" class="btn-orange">Bestel</a>
+</nav>
+
+<!-- MAIN -->
+<main>
+  <div class="crumb">Solyx Energy</div>
+  <h1 class="page-h1">Werken bij <span class="accent">Solyx.</span></h1>
+  <p class="page-sub">Bouw mee aan slimme energieopslag voor thuis.</p>
+  <div class="wip-card">
+    <span class="wip-tag">Onder constructie</span>
+    <div class="wip-title">Deze pagina wordt binnenkort ingevuld.</div>
+    <p class="wip-body">De volledige tekst van deze pagina wordt binnenkort geplaatst. Heb je nu al een vraag? Neem contact op via <a href="mailto:info@solyxenergy.nl">info@solyxenergy.nl</a>.</p>
+  </div>
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="fg">
+    <div class="fcol-brand">
+      <img class="flogo" src="midia/solyx-logo.png" alt="Solyx Energy">
+      <p class="fbt">Slimme energieopslag voor huishoudens met zonnepanelen. Simpel, betaalbaar, direct resultaat.</p>
+      <address class="fcompany">
+        Smitspol 15M<br>3861 RS Nijkerk<br>Nederland
+        <span class="fcompany-gap"></span>
+        KvK 85751391<br>BTW NL863729319B01
+        <span class="fcompany-gap"></span>
+        <a href="mailto:info@solyxenergy.nl">info@solyxenergy.nl</a><br>
+        <a href="tel:+31332087460">033 208 7460</a>
+      </address>
+    </div>
+    <div>
+      <div class="fct">Product</div>
+      <ul class="flinks">
+        <li><a href="landingspagina.html">WaterAccu</a></li>
+        <li><a href="zonnestroomboiler.html">Zonnestroomboiler</a></li>
+        <li><a href="besparen.html">Besparing</a></li>
+        <li><a href="shop.html">Shop</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="fct">Informatie</div>
+      <ul class="flinks">
+        <li><a href="how-to-get-it.html">Handleidingen</a></li>
+        <li><a href="installatie.html">Installatie</a></li>
+        <li><a href="klantverhalen.html">Klantverhalen</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="fct">Solyx</div>
+      <ul class="flinks">
+        <li><a href="over-ons.html">Over Solyx</a></li>
+        <li><a href="werken-bij.html">Werken bij</a></li>
+        <li><a href="blog-news.html">Blog en nieuws</a></li>
+        <li><a href="faq.html">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="fbottom">
+    <div class="fcopy">© 2026 Solyx Energy BV · Alle rechten voorbehouden</div>
+    <div class="flegal">
+      <a href="algemene-voorwaarden.html">Algemene voorwaarden</a>
+      <a href="privacy.html">Privacy policy</a>
+      <a href="levering-en-retourbeleid.html">Levering en retourbeleid</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

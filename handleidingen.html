@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Handleidingen — Solyx Energy</title>
+<meta name="description" content="Alle handleidingen van de Nymo WaterAccu, op één plek.">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+<link href="https://fonts.cdnfonts.com/css/alliance-no-2" rel="stylesheet">
+<style>
+:root{
+  --green:#35A847;--green-deep:#1E7A30;--green-light:#EBF8ED;
+  --orange:#F4831F;--ink:#3D3D3D;--ink-mid:#5A5A5A;--ink-muted:#888888;
+  --white:#FFFFFF;--off-white:#F7F9F7;--border:rgba(60,60,60,.1);
+  --font-head:'Inter',sans-serif;
+  --font-body:'Alliance No.2','DM Sans',Georgia,sans-serif;
+  --nav-h:80px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{min-height:100%;background:#fff;color:var(--ink);font-family:var(--font-body);}
+body{overflow-x:hidden;}
+
+/* ── BLOB CANVAS (subtle, fixed) ── */
+#gc{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+.blob{position:absolute;border-radius:50%;filter:blur(110px);mix-blend-mode:multiply;will-change:transform;opacity:.7;}
+.blob-1{width:800px;height:800px;background:radial-gradient(circle,rgba(57,171,72,.30) 0%,rgba(57,171,72,.10) 45%,transparent 70%);top:-250px;left:-200px;animation:bl1 18s ease-in-out infinite;}
+@keyframes bl1{0%{transform:translate(0,0)}50%{transform:translate(40vw,60px)}100%{transform:translate(0,0)}}
+.blob-2{width:900px;height:900px;background:radial-gradient(circle,rgba(57,171,72,.22) 0%,rgba(30,122,48,.08) 45%,transparent 70%);top:40vh;right:-280px;animation:bl2 22s ease-in-out infinite;animation-delay:-7s;}
+@keyframes bl2{0%{transform:translate(0,0)}50%{transform:translate(-45vw,-40px)}100%{transform:translate(0,0)}}
+
+/* ── INSTALLER BAR ── */
+#installer-bar{position:fixed;top:0;left:0;right:0;z-index:610;display:flex;align-items:center;justify-content:flex-end;padding:9px 48px;background:rgba(240,240,240,.96);border-bottom:1px solid rgba(0,0,0,.06);pointer-events:auto;}
+#installer-bar a{font-family:var(--font-head);font-size:12px;font-weight:500;color:var(--ink-mid);text-decoration:none;transition:color .2s;letter-spacing:.01em;}
+#installer-bar a:hover{color:var(--ink);}
+
+/* ── NAV ── */
+nav{position:fixed;top:30px;left:0;right:0;z-index:600;display:flex;align-items:center;justify-content:space-between;padding:16px 48px;transition:background .4s,backdrop-filter .4s,box-shadow .4s;}
+nav.scrolled{background:rgba(255,255,255,.85);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 1px 0 rgba(0,0,0,.04);}
+.nav-logo{display:flex;align-items:center;text-decoration:none;}
+.nav-logo svg{display:block;height:30px;}
+.nav-links{display:flex;gap:32px;list-style:none;}
+.nav-links a{font-family:var(--font-head);font-size:13px;font-weight:500;color:var(--ink-mid);text-decoration:none;transition:color .2s;}
+.nav-links a:hover{color:var(--ink);}
+.btn-orange{background:#F4831F;color:#fff;font-family:var(--font-head);font-size:13px;font-weight:700;padding:10px 22px;border-radius:999px;border:none;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;transition:background .2s,transform .2s;}
+.btn-orange:hover{background:#d96f10;transform:translateY(-1px);}
+
+/* ── PAGE ── */
+main{position:relative;z-index:2;padding-top:118px;}
+
+/* ── PAGE HEADER ── */
+.page-head{width:100%;max-width:1100px;margin:0 auto;padding:14px 48px 10px;text-align:left;}
+.crumb{font-family:var(--font-head);font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--green);margin-bottom:18px;display:inline-flex;align-items:center;gap:8px;}
+.crumb::before{content:'';width:24px;height:1px;background:var(--green);}
+.page-h1{font-family:var(--font-head);font-size:clamp(30px,4.2vw,46px);font-weight:900;letter-spacing:-.03em;line-height:1.0;color:var(--ink);margin-bottom:0;}
+.page-h1 .accent{color:var(--green);}
+.page-sub{font-family:var(--font-body);font-size:clamp(16px,1.6vw,18px);line-height:1.6;color:var(--ink-mid);max-width:560px;}
+
+/* ── SEARCH / FILTER BAR ── */
+.toolbar{max-width:1100px;margin:32px auto 0;padding:0 48px;display:flex;flex-wrap:wrap;gap:14px;align-items:center;}
+.search-wrap{flex:1 1 320px;position:relative;}
+.search-wrap svg{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:var(--ink-muted);pointer-events:none;}
+.search-input{width:100%;font-family:var(--font-body);font-size:15px;color:var(--ink);background:#fff;border:1px solid var(--border);border-radius:12px;padding:14px 18px 14px 46px;outline:none;transition:border-color .2s,box-shadow .2s;}
+.search-input:focus{border-color:var(--green);box-shadow:0 0 0 4px rgba(53,168,71,.12);}
+.search-input::placeholder{color:var(--ink-muted);}
+.lang-filter{display:flex;gap:6px;align-items:center;background:#fff;border:1px solid var(--border);border-radius:999px;padding:5px;}
+.lang-chip{font-family:var(--font-head);font-size:12px;font-weight:600;letter-spacing:.04em;color:var(--ink-mid);background:transparent;border:none;padding:7px 14px;border-radius:999px;cursor:pointer;transition:background .2s,color .2s;}
+.lang-chip:hover{color:var(--ink);}
+.lang-chip.active{background:var(--green);color:#fff;}
+
+/* ── PRODUCT GROUPS ── */
+.groups{width:100%;max-width:1100px;margin:48px auto 0;padding:0 48px 40px;display:flex;flex-direction:column;gap:30px;}
+#groups{flex:1;justify-content:center;margin-top:0;}
+.group-note{font-family:var(--font-body);font-size:14px;color:var(--ink-muted);margin:-8px 0 20px;line-height:1.5;max-width:560px;}
+.group{position:relative;}
+.group-head{display:flex;align-items:baseline;gap:18px;padding-bottom:12px;border-bottom:1px solid var(--border);margin-bottom:18px;flex-wrap:wrap;}
+.group-num{font-family:var(--font-head);font-size:11px;font-weight:700;letter-spacing:.18em;color:var(--ink-muted);}
+.group-title{font-family:var(--font-head);font-size:clamp(17px,1.8vw,21px);font-weight:700;letter-spacing:-.01em;color:var(--ink);}
+.group-count{display:none;}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:18px;}
+
+/* ── CARD ── */
+.card{background:#fff;border:1px solid var(--border);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:16px;transition:transform .25s cubic-bezier(.22,1,.36,1),box-shadow .25s,border-color .25s;position:relative;overflow:hidden;}
+.card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--green);transform:scaleY(0);transform-origin:top;transition:transform .3s cubic-bezier(.22,1,.36,1);}
+.card:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(28,36,34,.06);border-color:rgba(53,168,71,.25);}
+.card:hover::before{transform:scaleY(1);}
+
+.card-top{display:flex;align-items:center;gap:14px;}
+.card-icon{flex-shrink:0;width:44px;height:44px;border-radius:10px;background:var(--green-light);display:flex;align-items:center;justify-content:center;color:var(--green-deep);}
+.card-meta{font-family:var(--font-head);font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-muted);}
+.card-title{font-family:var(--font-head);font-size:16px;font-weight:500;letter-spacing:-.01em;color:var(--ink);line-height:1.3;}
+.card-desc{font-family:var(--font-body);font-size:14px;line-height:1.55;color:var(--ink-mid);}
+
+.card-langs{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto;}
+.lang-pill{font-family:var(--font-head);font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--ink-mid);background:#F4F6F4;border:1px solid var(--border);padding:6px 11px;border-radius:8px;text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:background .2s,color .2s,border-color .2s,transform .15s;}
+.lang-pill.primary{background:var(--ink);color:#fff;border-color:var(--ink);}
+.lang-pill.primary:hover{background:var(--green-deep);border-color:var(--green-deep);}
+.lang-pill:hover{background:var(--green);color:#fff;border-color:var(--green);transform:translateY(-1px);}
+.lang-pill svg{flex-shrink:0;opacity:.7;}
+
+.card-footer{display:none;}
+.card-footer .fmt{display:inline-flex;align-items:center;gap:6px;}
+
+/* ── EMPTY STATE ── */
+.empty-state{display:none;text-align:center;padding:80px 24px;color:var(--ink-muted);font-family:var(--font-body);font-size:15px;}
+.empty-state.show{display:block;}
+
+/* ── HELP BAND ── */
+/* hero = eerste scherm: header + 4 Nymo-blokken + FAQ-balk onderaan */
+.hero-wrap{min-height:calc(100vh - 118px);display:flex;flex-direction:column;padding-bottom:28px;}
+.help-band{width:100%;margin:8px 0 0;padding:0;}
+.help-card{width:100%;background:#fff;border:2px solid var(--green);border-radius:16px;padding:22px 30px;display:flex;align-items:center;justify-content:space-between;gap:12px;text-decoration:none;cursor:pointer;transition:transform .2s,box-shadow .2s;}
+.help-card:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(53,168,71,.20);}
+.faq-bar-text{font-family:var(--font-head);font-size:14px;font-weight:500;color:var(--ink);white-space:nowrap;}
+.faq-bar-text strong{color:var(--green-deep);font-weight:800;}
+.faq-arrow-sm{flex-shrink:0;display:inline-flex;align-items:center;color:var(--green);transition:transform .2s;}
+.help-card:hover .faq-arrow-sm{transform:translateX(4px);}
+
+/* ── FOOTER ── */
+footer{background:#0e1512;padding:60px 48px 40px;position:relative;z-index:3;}
+.fg{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px;}
+.fbt{font-family:var(--font-body);font-size:14px;color:rgba(255,255,255,.45);line-height:1.65;margin-top:16px;}
+.fct{font-family:var(--font-head);font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:16px;}
+.flinks{list-style:none;display:flex;flex-direction:column;gap:10px;}
+.flinks a{font-family:var(--font-head);font-size:13px;color:rgba(255,255,255,.5);text-decoration:none;transition:color .2s;}
+.flinks a:hover{color:#fff;}
+.fbottom{max-width:1100px;margin:0 auto;border-top:1px solid rgba(255,255,255,.05);padding-top:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;}
+.fcopy{font-family:var(--font-head);font-size:12px;color:rgba(255,255,255,.25);}
+.flogo{display:block;height:30px;width:auto;filter:invert(1);}
+.fcompany{font-style:normal;font-family:var(--font-body);font-size:13px;color:rgba(255,255,255,.5);line-height:1.55;margin-top:16px;}
+.fcompany a{color:rgba(255,255,255,.7);text-decoration:none;}
+.fcompany a:hover{color:#fff;}
+.fcompany-gap{display:block;height:7px;}
+.fsocial{display:flex;gap:12px;margin-top:22px;}
+.fsoc{width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.7);transition:background .2s,color .2s,border-color .2s;}
+.fsoc:hover{background:var(--green);border-color:var(--green);color:#fff;}
+.fgoogle{display:inline-flex;align-items:center;gap:11px;margin-top:18px;text-decoration:none;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:9px 15px;transition:background .2s;}
+.fgoogle:hover{background:rgba(255,255,255,.1);}
+.fgoogle-meta{display:flex;flex-direction:column;line-height:1.2;}
+.fgoogle-stars{position:relative;display:inline-block;font-size:12px;letter-spacing:1.5px;color:rgba(255,255,255,.22);}
+.fgoogle-stars-fill{position:absolute;top:0;left:0;overflow:hidden;white-space:nowrap;color:#FBBC04;}
+.fgoogle-text{font-family:var(--font-head);font-size:12px;color:rgba(255,255,255,.6);margin-top:3px;}
+.fgoogle-text strong{color:#fff;font-weight:800;}
+.flegal{display:flex;gap:22px;flex-wrap:wrap;}
+.flegal a{font-family:var(--font-head);font-size:12px;color:rgba(255,255,255,.55);text-decoration:none;transition:color .2s;}
+.flegal a:hover{color:#fff;}
+
+/* ── ENTRANCE ANIMATION ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.page-head>*{animation:fadeUp .7s cubic-bezier(.22,1,.36,1) both;}
+.page-head .crumb{animation-delay:.05s;}
+.page-head .page-h1{animation-delay:.15s;}
+.page-head .page-sub{animation-delay:.25s;}
+.toolbar{animation:fadeUp .7s cubic-bezier(.22,1,.36,1) .35s both;}
+.group{animation:fadeUp .7s cubic-bezier(.22,1,.36,1) both;}
+.group:nth-child(1){animation-delay:.45s;}
+.group:nth-child(2){animation-delay:.55s;}
+.group:nth-child(3){animation-delay:.65s;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  nav{padding:16px 20px;}
+  .nav-links{display:none;}
+  #installer-bar{padding:6px 20px;}
+  .page-head{padding:24px 20px;}
+  .toolbar{padding:0 20px;}
+  .groups{padding:0 20px 60px;}
+  .help-band{padding:0 20px;}
+  .help-card{padding:28px 24px;}
+  footer{padding:48px 20px 32px;}
+  .fg{grid-template-columns:1fr 1fr;gap:32px;}
+}
+@media(max-width:560px){
+  .fg{grid-template-columns:1fr;}
+  .group-head{gap:10px;}
+  .group-count{margin-left:0;}
+}
+</style>
+</head>
+<body>
+
+<!-- BLOB BACKGROUND -->
+<div id="gc">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+</div>
+
+<!-- INSTALLER BAR -->
+<div id="installer-bar">
+  <a href="installateurs.html">Installer pagina</a>
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="home.html" class="nav-logo" aria-label="Solyx Energy home">
+    <img src="midia/solyx-logo.png" alt="Solyx Energy" style="display:block;height:30px;">
+  </a>
+  <ul class="nav-links">
+    <li><a href="hoe-werkt-het.html">Hoe werkt het</a></li>
+    <li><a href="besparen.html">Besparen</a></li>
+    <li><a href="how-to-get-it.html">Aan de slag</a></li>
+    <li><a href="faq.html">FAQs</a></li>
+    <li><a href="shop.html">Shop</a></li>
+  </ul>
+  <a href="how-to-get-it.html" class="btn-orange">Bestel</a>
+</nav>
+
+<!-- MAIN -->
+<main>
+
+  <div class="hero-wrap">
+  <header class="page-head">
+    <h1 class="page-h1">Handleidingen<span class="accent">.</span></h1>
+  </header>
+
+  <section class="groups" id="groups">
+
+    <!-- GROUP 1: NYMO WATERACCU -->
+    <div class="group" data-product="Nymo WaterAccu">
+      <div class="group-head">
+        <span class="group-num">01</span>
+        <h2 class="group-title">Nymo WaterAccu</h2>
+        <span class="group-count">2 documenten</span>
+      </div>
+      <div class="cards">
+
+        <article class="card" data-title="Installatiehandleiding" data-langs="NL,EN,DE,FR">
+          <div class="card-top">
+            <div class="card-icon" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+            </div>
+            <h3 class="card-title">Installatiehandleiding</h3>
+          </div>
+          <div class="card-langs">
+            <a class="lang-pill primary" href="https://www.solyxenergy.nl/wp-content/uploads/2025/10/253585-Solyx-Energy-Installatiehandleiding-Nymo-NY-IH_ID_10-2025.pdf" target="_blank" rel="noopener" data-lang="NL">NL
+            </a>
+            <a class="lang-pill" href="https://www.solyxenergy.nl/wp-content/uploads/2026/01/253700-Solyx-Energy-Installatiehandleiding-Nymo-NY-IH_ID_UK_01-2026_proef.pdf" target="_blank" rel="noopener" data-lang="EN">EN</a>
+            <a class="lang-pill" href="https://www.solyxenergy.nl/wp-content/uploads/2026/01/253700-Solyx-Energy-Installatiehandleiding-Nymo-NY-IH_ID_DE_01-2026_proef.pdf" target="_blank" rel="noopener" data-lang="DE">DE</a>
+            <a class="lang-pill" href="https://www.solyxenergy.nl/wp-content/uploads/2026/01/253700-Solyx-Energy-Installatiehandleiding-Nymo-NY-IH_ID_FR_01-2026_proef.pdf" target="_blank" rel="noopener" data-lang="FR">FR</a>
+          </div>
+          <div class="card-footer">
+            <span class="fmt"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> PDF</span>
+            <span>Bijgewerkt 10·2025</span>
+          </div>
+        </article>
+
+        <article class="card" data-title="Gebruikershandleiding" data-langs="NL,EN,DE,FR">
+          <div class="card-top">
+            <div class="card-icon" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+            </div>
+            <h3 class="card-title">Gebruikershandleiding</h3>
+          </div>
+          <div class="card-langs">
+            <a class="lang-pill primary" href="https://www.solyxenergy.nl/wp-content/uploads/2025/10/253539-Solyx-Energy-Gebruikershandleiding-Nymo-NY-GH_10-2025.pdf" target="_blank" rel="noopener" data-lang="NL">NL
+            </a>
+            <a class="lang-pill" href="https://www.solyxenergy.nl/wp-content/uploads/2026/01/253700-Solyx-Energy-Gebruikershandleiding-Nymo-NY-GH_UK_01-2026_proef.pdf" target="_blank" rel="noopener" data-lang="EN">EN</a>
+            <a class="lang-pill" href="https://www.solyxenergy.nl/wp-content/uploads/2026/01/253700-Solyx-Energy-Gebruikershandleiding-Nymo-NY-GH_DE_01-2026_proef.pdf" target="_blank" rel="noopener" data-lang="DE">DE</a>
+            <a class="lang-pill" href="https://www.solyxenergy.nl/wp-content/uploads/2026/01/253700-Solyx-Energy-Gebruikershandleiding-Nymo-NY-GH_FR_01-2026_proef.pdf" target="_blank" rel="noopener" data-lang="FR">FR</a>
+          </div>
+          <div class="card-footer">
+            <span class="fmt"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> PDF</span>
+            <span>Bijgewerkt 10·2025</span>
+          </div>
+        </article>
+
+      </div>
+    </div>
+
+    <!-- GROUP 2: NYMO x HOMEY -->
+    <div class="group" data-product="Nymo voor Homey gebruikers">
+      <div class="group-head">
+        <span class="group-num">02</span>
+        <h2 class="group-title">Nymo voor Homey gebruikers</h2>
+        <span class="group-count">2 documenten</span>
+      </div>
+      <div class="cards">
+
+        <article class="card" data-title="Handleiding Nymo voor Homey gebruikers" data-langs="NL">
+          <div class="card-top">
+            <div class="card-icon" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            </div>
+            <h3 class="card-title">Handleiding Nymo voor Homey gebruikers</h3>
+          </div>
+          <div class="card-langs">
+            <a class="lang-pill primary" href="https://www.solyxenergy.nl/wp-content/uploads/2025/10/253598-Solyx-Energy-Handleiding-Nymo-NY-IH_HO_10-2025_NL.pdf" target="_blank" rel="noopener" data-lang="NL">NL
+            </a>
+          </div>
+          <div class="card-footer">
+            <span class="fmt"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> PDF</span>
+            <span>Bijgewerkt 10·2025</span>
+          </div>
+        </article>
+
+        <article class="card" data-title="Nymo koppelen met Homey" data-langs="EN">
+          <div class="card-top">
+            <div class="card-icon" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            </div>
+            <h3 class="card-title">Nymo koppelen met Homey</h3>
+          </div>
+          <div class="card-langs">
+            <a class="lang-pill primary" href="https://support.homey.app/hc/en-us/articles/23160471520540-Connect-Solyx-Nymo-with-Homey" target="_blank" rel="noopener">Bekijk online
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg>
+            </a>
+          </div>
+        </article>
+
+      </div>
+    </div>
+
+  <!-- FAQ-BALK (onder de content) -->
+  <div class="help-band">
+    <a href="faq.html" class="help-card faq-link">
+      <span class="faq-bar-text"><strong>FAQs</strong> — Bekijk de veelgestelde vragen</span>
+      <span class="faq-arrow-sm" aria-hidden="true">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </span>
+    </a>
+  </div>
+  </section>
+  </div><!-- /hero-wrap -->
+
+  <!-- GROUP 3: SOLAR IBOOST (ouder product, beperkt aantal klanten) -->
+  <section class="groups" id="groups-iboost">
+    <div class="group" data-product="Solar iBoost">
+      <div class="group-head">
+        <span class="group-num">03</span>
+        <h2 class="group-title">Solar iBoost</h2>
+      </div>
+      <p class="group-note">Documentatie voor bestaande gebruikers van de Solar iBoost.</p>
+      <div class="cards">
+
+        <article class="card" data-title="Installatiehandleiding Solar iBoost" data-langs="NL">
+          <div class="card-top">
+            <div class="card-icon" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+            </div>
+            <h3 class="card-title">Installatiehandleiding</h3>
+          </div>
+          <div class="card-langs">
+            <a class="lang-pill primary" href="https://www.solyxenergy.nl/wp-content/uploads/2023/01/Solyx-Energy-Installatiehandleiding-Solar-iBoost.pdf" target="_blank" rel="noopener" data-lang="NL">NL</a>
+          </div>
+        </article>
+
+        <article class="card" data-title="Gebruikershandleiding Solar iBoost" data-langs="NL">
+          <div class="card-top">
+            <div class="card-icon" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+            </div>
+            <h3 class="card-title">Gebruikershandleiding</h3>
+          </div>
+          <div class="card-langs">
+            <a class="lang-pill primary" href="https://www.solyxenergy.nl/wp-content/uploads/2023/01/Solyx-Energy-Installatiehandleiding-Solar-iBoost.pdf" target="_blank" rel="noopener" data-lang="NL">NL</a>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="fg">
+    <div class="fcol-brand">
+      <img class="flogo" src="midia/solyx-logo.png" alt="Solyx Energy">
+      <p class="fbt">Slimme energieopslag voor huishoudens met zonnepanelen. Simpel, betaalbaar, direct resultaat.</p>
+      <address class="fcompany">
+        Smitspol 15M<br>3861 RS Nijkerk<br>Nederland
+        <span class="fcompany-gap"></span>
+        KvK 85751391<br>BTW NL863729319B01
+        <span class="fcompany-gap"></span>
+        <a href="mailto:info@solyxenergy.nl">info@solyxenergy.nl</a><br>
+        <a href="tel:+31332087460">033 208 7460</a>
+      </address>
+    </div>
+    <div>
+      <div class="fct">Product</div>
+      <ul class="flinks">
+        <li><a href="landingspagina.html">WaterAccu</a></li>
+        <li><a href="zonnestroomboiler.html">Zonnestroomboiler</a></li>
+        <li><a href="besparen.html">Besparing</a></li>
+        <li><a href="shop.html">Shop</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="fct">Informatie</div>
+      <ul class="flinks">
+        <li><a href="handleidingen.html">Handleidingen</a></li>
+        <li><a href="installatie.html">Installatie</a></li>
+        <li><a href="klantverhalen.html">Klantverhalen</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="fct">Solyx</div>
+      <ul class="flinks">
+        <li><a href="over-ons.html">Over Solyx</a></li>
+        <li><a href="werken-bij.html">Werken bij</a></li>
+        <li><a href="blog-news.html">Blog en nieuws</a></li>
+        <li><a href="faq.html">Contact</a></li>
+      </ul>
+      <div class="fsocial">
+        <a href="#" class="fsoc" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.8 0 0 .78 0 1.74v20.51C0 23.22.8 24 1.77 24h20.45c.98 0 1.78-.78 1.78-1.75V1.74C24 .78 23.2 0 22.22 0z"/></svg></a>
+        <a href="#" class="fsoc" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41a3.7 3.7 0 0 1-1.38-.9 3.7 3.7 0 0 1-.9-1.38c-.16-.42-.36-1.06-.41-2.23C2.17 15.58 2.16 15.2 2.16 12s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41C8.42 2.17 8.8 2.16 12 2.16zm0 1.62c-3.15 0-3.5.01-4.74.07-.97.04-1.5.21-1.85.34-.46.18-.8.4-1.15.74-.34.35-.56.69-.74 1.15-.13.35-.3.88-.34 1.85-.06 1.24-.07 1.59-.07 4.74s.01 3.5.07 4.74c.04.97.21 1.5.34 1.85.18.46.4.8.74 1.15.35.34.69.56 1.15.74.35.13.88.3 1.85.34 1.24.06 1.59.07 4.74.07s3.5-.01 4.74-.07c.97-.04 1.5-.21 1.85-.34.46-.18.8-.4 1.15-.74.34-.35.56-.69.74-1.15.13-.35.3-.88.34-1.85.06-1.24.07-1.59.07-4.74s-.01-3.5-.07-4.74c-.04-.97-.21-1.5-.34-1.85a3.1 3.1 0 0 0-.74-1.15 3.1 3.1 0 0 0-1.15-.74c-.35-.13-.88-.3-1.85-.34-1.24-.06-1.59-.07-4.74-.07zm0 2.76a5.46 5.46 0 1 1 0 10.92 5.46 5.46 0 0 1 0-10.92zm0 9a3.54 3.54 0 1 0 0-7.08 3.54 3.54 0 0 0 0 7.08zm6.95-9.22a1.28 1.28 0 1 1-2.55 0 1.28 1.28 0 0 1 2.55 0z"/></svg></a>
+        <a href="#" class="fsoc" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M23.5 6.2a3.02 3.02 0 0 0-2.12-2.14C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.38.51A3.02 3.02 0 0 0 .5 6.2C0 8.07 0 12 0 12s0 3.93.5 5.8a3.02 3.02 0 0 0 2.12 2.14c1.88.51 9.38.51 9.38.51s7.5 0 9.38-.51a3.02 3.02 0 0 0 2.12-2.14C24 15.93 24 12 24 12s0-3.93-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      </div>
+      <a href="#" class="fgoogle" aria-label="Google reviews 4,7 sterren">
+        <svg class="fgoogle-g" viewBox="0 0 48 48" width="22" height="22"><path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 12.955 4 4 12.955 4 24s8.955 20 20 20 20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z"/><path fill="#FF3D00" d="M6.306 14.691l6.571 4.819C14.655 15.108 18.961 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 16.318 4 9.656 8.337 6.306 14.691z"/><path fill="#4CAF50" d="M24 44c5.166 0 9.86-1.977 13.409-5.192l-6.19-5.238C29.211 35.091 26.715 36 24 36c-5.202 0-9.619-3.317-11.283-7.946l-6.522 5.025C9.505 39.556 16.227 44 24 44z"/><path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303c-.792 2.237-2.231 4.166-4.087 5.571l6.19 5.238C36.971 39.205 44 34 44 24c0-1.341-.138-2.65-.389-3.917z"/></svg>
+        <span class="fgoogle-meta">
+          <span class="fgoogle-stars">★★★★★<span class="fgoogle-stars-fill" style="width:94%;">★★★★★</span></span>
+          <span class="fgoogle-text"><strong>4,7</strong> · Google reviews</span>
+        </span>
+      </a>
+    </div>
+  </div>
+  <div class="fbottom">
+    <div class="fcopy">© 2026 Solyx Energy BV · Alle rechten voorbehouden</div>
+    <div class="flegal">
+      <a href="algemene-voorwaarden.html">Algemene voorwaarden</a>
+      <a href="privacy.html">Privacy policy</a>
+      <a href="levering-en-retourbeleid.html">Levering en retourbeleid</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Nav scroll state
+const nav = document.getElementById('nav');
+function onScroll(){
+  if (window.scrollY > 20) nav.classList.add('scrolled');
+  else nav.classList.remove('scrolled');
+}
+window.addEventListener('scroll', onScroll, {passive:true});
+onScroll();
+</script>
+</body>
+</html>
