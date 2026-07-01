@@ -37,7 +37,7 @@ html,body{height:100%;overflow:hidden;}
 #scroll-progress{position:fixed;top:0;left:0;height:2px;background:var(--green);z-index:700;width:0%;transition:width .3s ease;}
 
 /* INSTALLER BAR + NAV (copied from hoe_werkt_het) */
-#installer-bar{position:fixed;top:0;left:0;right:0;z-index:601;display:none;align-items:center;justify-content:flex-start;padding:6px 48px;pointer-events:none;}
+#installer-bar{position:fixed;top:0;left:0;right:0;z-index:601;display:flex;align-items:center;justify-content:flex-start;padding:6px 48px;pointer-events:none;}
 #installer-bar a{pointer-events:all;font-family:var(--font-head);font-size:12px;font-weight:500;color:var(--ink-mid);text-decoration:none;transition:color .2s;letter-spacing:.01em;}
 #installer-bar a:hover{color:var(--ink);}
 nav{position:fixed;top:0;left:0;right:0;z-index:600;display:flex;align-items:center;justify-content:space-between;padding:16px 48px;background:linear-gradient(180deg,rgba(255,255,255,.7),rgba(255,255,255,.5));backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border-bottom:1px solid rgba(255,255,255,.55);box-shadow:0 8px 30px rgba(28,36,34,.1),inset 0 1px 0 rgba(255,255,255,.7);transition:box-shadow .4s;}
@@ -368,7 +368,7 @@ footer{background:#0e1512;padding:60px 48px 40px;position:relative;z-index:1;mar
 <div id="scroll-progress"></div>
 
 <div id="installer-bar">
-  <a href="#">Voor installateurs</a>
+  <a href="installateurs.html">Installer pagina</a>
 </div>
 
 <nav id="nav">
