@@ -113,4 +113,4 @@ updated: 2026-07-01
 - New pages go in the repo root as `<kebab-name>.html`; add a matching card to `hub.html`, the standardized frosted-glass nav/footer (copy from a sibling page), and route all links local.
 
 ## 9. Session close
-1. Decision landed? → append `PROJECT.md §B`. 2. Durable lesson? → `§F`. 3. Next-step changed? → overwrite the `§E` YAML. 4. Update the `§6` YAML snapshot above.
+1. Decision landed? → append `PROJECT.md §B`. 2. Durable lesson? → `§F`. 3. Next-step changed? → overwrite the `§E` YAML. 4. Update the `§6` YAML snapshot above. 5. If the user asks for a handoff, put it in a **paste-ready chat block** — never write session reports (what happened / recent commits / likely-next asks) as memory files or repo files. Memory is for durable rules only; point-in-time state goes stale and pollutes future context. See `solyx-no-session-reports.md`.
