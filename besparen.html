@@ -1915,12 +1915,12 @@ body.page-id-196 .entry-content { height: 100%; }
     + '#s-bd{min-height:100vh !important;height:auto !important;display:flex !important;flex-direction:column !important;align-items:center !important;justify-content:flex-start !important;text-align:left !important;padding:var(--bd-pt) 0 var(--bd-pb) !important;position:relative !important;scroll-snap-align:start !important;scroll-snap-stop:always !important;}'
     + '#s-bd .hero-inner{position:relative !important;z-index:2 !important;max-width:none !important;width:100% !important;margin:0 auto !important;padding:0 clamp(48px,9vw,180px) !important;}'
     + '#s-bd .hero-options{display:grid !important;grid-template-columns:minmax(0,1fr) minmax(0,2fr) !important;gap:var(--bd-col-gap) !important;width:100% !important;max-width:none !important;margin:0 !important;align-items:start !important;}'
-    + '#s-bd .bd-left{position:sticky !important;top:var(--bd-anchor-top) !important;align-self:start !important;z-index:5 !important;height:calc(100vh - var(--bd-anchor-top) - 24px) !important;display:flex !important;flex-direction:column !important;justify-content:center !important;}'
+    + '#s-bd .bd-left{position:sticky !important;top:var(--bd-anchor-top) !important;align-self:start !important;z-index:5 !important;height:auto !important;display:flex !important;flex-direction:column !important;justify-content:flex-start !important;}'
     + '#s-bd .hero-h1{position:static !important;width:100% !important;max-width:100% !important;font-family:var(--font-head) !important;font-weight:900 !important;font-size:clamp(40px,6.4vw,76px) !important;letter-spacing:-.03em !important;line-height:1.0 !important;color:var(--ink) !important;white-space:normal !important;text-align:center !important;margin:0 auto clamp(40px,8vh,96px) !important;padding:clamp(20px,5vh,64px) 0 0 !important;}'
     + '#s-bd .hero-h1 .hl{color:var(--green) !important;}'
     + '#s-bd .bd-opt-input{width:100% !important;max-width:100% !important;}'
     + '#s-bd .hero-opt{background:rgba(255,255,255,.96) !important;border-radius:20px !important;box-shadow:0 12px 40px rgba(0,0,0,.08) !important;padding:26px 30px 24px !important;display:flex !important;flex-direction:column !important;text-align:left !important;position:relative !important;overflow:visible !important;}'
-    + '#s-bd .bd-col-right{display:flex !important;flex-direction:column !important;z-index:1 !important;}'
+    + '#s-bd .bd-col-right{display:flex !important;flex-direction:column !important;z-index:1 !important;overflow-y:auto !important;scroll-snap-type:y mandatory !important;scrollbar-width:thin !important;}'
     + '#s-bd .bd-res-1{min-height:calc(100vh - 400px) !important;justify-content:flex-start !important;}'
     + '#s-bd .bd-sub,#s-bd .bd-saving-label{font-family:var(--font-head) !important;font-size:16px !important;font-weight:700 !important;color:var(--ink) !important;text-align:left !important;letter-spacing:-.01em !important;font-style:normal !important;margin:0 0 20px !important;}'
     + '#s-bd .bd-hint{font-family:var(--font-body) !important;font-size:12.5px !important;font-style:italic !important;color:var(--ink-muted) !important;line-height:1.5 !important;margin:18px 0 0 !important;}'
@@ -1942,7 +1942,7 @@ body.page-id-196 .entry-content { height: 100%; }
     + '#s-bd .payback-row b{color:var(--ink) !important;font-weight:800 !important;}'
     + '#s-bd .bd-panels-mount{display:flex !important;flex-direction:column !important;width:100% !important;}'
     + '#s-bd .bd-panels{display:flex !important;flex-direction:column !important;width:100% !important;}'
-    + '#s-bd .bd-panels-mount .bd-panel{height:auto !important;min-height:0 !important;display:flex !important;flex-direction:column !important;align-items:center !important;justify-content:center !important;padding:clamp(32px,3.5vw,52px) !important;margin:0 0 clamp(24px,4vh,40px) !important;background:rgba(255,255,255,.5) !important;border:1px solid rgba(255,255,255,.6) !important;border-radius:28px !important;box-shadow:0 12px 40px rgba(0,0,0,.05) !important;}'
+    + '#s-bd .bd-panels-mount .bd-panel{height:auto !important;min-height:0 !important;display:flex !important;flex-direction:column !important;align-items:center !important;justify-content:center !important;padding:clamp(32px,3.5vw,52px) !important;margin:0 0 clamp(24px,4vh,40px) !important;background:rgba(255,255,255,.5) !important;border:1px solid rgba(255,255,255,.6) !important;border-radius:28px !important;box-shadow:0 12px 40px rgba(0,0,0,.05) !important;scroll-snap-align:start !important;scroll-snap-stop:always !important;}'
     + '#s-bd .bd-panels-mount .bd-panel:last-child{margin-bottom:0 !important;}'
     + '#s-bd .bd-panels-mount .bd-panel::after{content:none !important;}'
     + '#s-bd .bd-panel-title{font-family:var(--font-head) !important;font-size:16px !important;font-weight:700 !important;color:var(--ink) !important;text-align:center !important;margin:0 0 22px !important;letter-spacing:-.01em !important;}'
@@ -2048,7 +2048,29 @@ body.page-id-196 .entry-content { height: 100%; }
     if (!mount) return;
     mount.innerHTML = '<div class="bd-panels"><div class="bd-panel"><div class="bd-save-wrap"><div class="bd-save-top"><div class="bd-saving-label">Jouw besparing is gemiddeld:</div></div><div class="bd-save-mid"><div class="bd-saving-pill"><span class="bd-saving-amount">€ <span id="bd-saving-num">186</span></span><span class="bd-saving-period">per<br>jaar</span></div></div><div class="bd-save-bot"><div class="bd-stats-grid"><div class="bd-stat"><div class="bd-stat-label">CO₂-besparing</div><div class="bd-stat-value"><span id="bd-co2-kg">311</span> kg <span class="bd-stat-unit">CO₂/jaar</span></div></div><div class="bd-stat"><div class="bd-stat-label">Terugverdientijd</div><div class="payback-row"><b><span id="bd-payback-nymo">1</span> jaar</b> bij Nymo only</div><div class="payback-row"><b><span id="bd-payback-full">5</span> jaar</b> bij Nymo + boiler + installatie</div></div></div></div></div></div><div class="bd-panel"><div class="bd-panel-title">Gebruik zonne-energie</div><div class="bd-pies-wrap"><div class="bd-pie-block"><div class="bd-pie-block-title">zonder<strong>WaterAccu</strong></div><div class="bd-pie-wrap"><canvas id="bd-pie-without" role="img" aria-label="Verdeling zonne-energie zonder WaterAccu"></canvas></div><div class="bd-pie-legend"><div class="bd-pie-legend-row"><span class="bd-pie-legend-dot" style="background:var(--green)"></span>Eigen verbruik [kWh] <span style="margin-left:auto;font-weight:700;color:var(--ink)" id="bd-without-own">877</span></div><div class="bd-pie-legend-row"><span class="bd-pie-legend-dot" style="background:#c9c9c9"></span>Teruglevering [kWh] <span style="margin-left:auto;font-weight:700;color:var(--ink)" id="bd-without-ret">1.877</span></div></div></div><div class="bd-pie-block"><div class="bd-pie-block-title">met<strong>WaterAccu</strong></div><div class="bd-pie-wrap"><canvas id="bd-pie-with" role="img" aria-label="Verdeling zonne-energie met WaterAccu"></canvas></div><div class="bd-pie-legend"><div class="bd-pie-legend-row"><span class="bd-pie-legend-dot" style="background:var(--green)"></span>Eigen verbruik [kWh] <span style="margin-left:auto;font-weight:700;color:var(--ink)" id="bd-with-own">2435</span></div><div class="bd-pie-legend-row"><span class="bd-pie-legend-dot" style="background:#c9c9c9"></span>Teruglevering [kWh] <span style="margin-left:auto;font-weight:700;color:var(--ink)" id="bd-with-ret">1016</span></div></div></div></div></div><div class="bd-panel"><div class="bd-panel-title">Cumulatieve besparing</div><p class="bd-cum-sub">Zo loopt jouw besparing op — extra impact vanaf 2027 door de afschaffing van de salderingsregeling.</p><div class="bd-cum-wrap"><canvas id="bd-cum-chart" role="img" aria-label="Cumulatieve besparing over de jaren"></canvas></div><div class="bd-cum-stats"><div class="bd-cum-stat"><div class="bd-cum-stat-label">Na 5 jaar</div><div class="bd-cum-stat-val">€ <span id="bd-cum-5">1.620</span></div></div><div class="bd-cum-stat bd-cum-stat-highlight"><div class="bd-cum-stat-label">Na 10 jaar</div><div class="bd-cum-stat-val">€ <span id="bd-cum-10">3.890</span></div></div><div class="bd-cum-stat"><div class="bd-cum-stat-label">Levensduur (15 jaar)</div><div class="bd-cum-stat-val">€ <span id="bd-cum-15">6.450</span></div></div></div></div></div>';
     /* All three panels (saving, pies, cumulative) stay together as the snap-scroll stack */
+    bdSyncWindow();
   }
+
+  /* ── 5b. LOCK THE RESULT COLUMN TO THE FORM CARD'S BAND ──
+     The right column becomes a scroll window exactly as tall as the left form
+     card: its top and bottom align with the card, and the 3 result cards
+     snap-scroll inside it. Desktop only; ≤1100px falls back to normal flow. */
+  function bdSyncWindow() {
+    var form = document.querySelector('#s-bd .bd-left .hero-opt');
+    var win = document.querySelector('#s-bd .bd-col-right');
+    if (!form || !win) return;
+    var panels = document.querySelectorAll('#s-bd .bd-panels-mount .bd-panel');
+    if (window.innerWidth <= 1100) {
+      win.style.height = '';
+      panels.forEach(function (p) { p.style.minHeight = ''; });
+      return;
+    }
+    var h = form.offsetHeight;
+    win.style.height = h + 'px';
+    panels.forEach(function (p) { p.style.minHeight = h + 'px'; });
+  }
+  window.addEventListener('resize', bdSyncWindow, {passive: true});
+  window.addEventListener('load', bdSyncWindow);
 
   /* ── 6. INJECT DIM CARDS + SLIDER INTO .dim-cards-mount ── */
   function injectDimCards() {
