@@ -61,7 +61,9 @@ success/failure, order confirmation, and email flows in both languages.
 routes; replace legal stubs from the approved source documents.
 - **Done when:** every launch route, system message, form, checkout, legal link,
 canonical, and language switch works in both languages.
-- **Blocker:** none.
+- **Blocker:** no multilingual plugin is installed on staging (no WPML,
+Polylang, or TranslatePress in the active list), so no lane can pass its
+English half until the mechanism is chosen.
 
 
 
@@ -109,6 +111,28 @@ stop without a database/customer/order/stock migration.
 least-privilege WordPress access, draft-first edits, and approval gates.
 
 
+
+## Needs review
+
+Open findings awaiting a decision. Each names the lane that owns the fix.
+
+- **Notification delivery (lane 1).** Gravity Forms logs that WordPress passed
+the mail to the sending server, which is as far as evidence reaches from inside
+WordPress. Someone with the `info@solyxenergy.nl` mailbox must confirm a test
+notification actually arrives, including its spam placement.
+- **`Aan de slag` product routing (lane 1).** All five quiz result CTAs on page
+801 are still `href="#"`. Three targets are unambiguous (Boilergarant 807,
+installatieformulier 800, handleidingen 756); the two shop outcomes both point
+at the plain Nymo, so the second launch product, Nymo with boiler, has no
+purchase route from the quiz. Deferred pending discussion — wiring it may need
+an approved change to the quiz UI.
+- **HubSpot still active (lane 0/6).** Both "HubSpot All-In-One" and the
+"Gravity Forms HubSpot Add-On" are active on staging, against the fixed launch
+shape's no-HubSpot rule. No feeds exist on the two installation forms, so
+nothing flows there today; the plugins need a keep/remove call in the inventory.
+- **Alliance No.2 font CDN returns 500 (page assets).** Logged in
+`work/greenshift-migration/ISSUES.md`; affects every page importing that font,
+not just the wizards, and is invisible on screen because the fallback holds.
 
 ## Update format
 
