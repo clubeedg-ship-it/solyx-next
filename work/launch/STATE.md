@@ -14,6 +14,14 @@ Live status only
 - **Status:** `in_progress`
 - **Done:** production Arc session authenticated and verified on
 `www.solyxenergy.nl/wp-admin/`; staging auth state exists locally.
+HubSpot removed from staging on the user's instruction — "HubSpot All-In-One"
+(`leadin/leadin.php`) and the "Gravity Forms HubSpot Add-On"
+(`gravityformshubspot/hubspot.php`) deactivated then deleted, satisfying the
+no-HubSpot launch rule. Staging went 21 → 19 active plugins with no PHP errors,
+no HubSpot admin menu, and no HubSpot frontend requests; both wizard pages still
+render their forms and a post-removal submission produced entry 4 with 4 uploads
+and a sent notification. Deletion removed the plugin files, so restoring either
+plugin means reinstalling it.
 - **Next:** inventory staging pages, products, forms, plugins, snippets, menus, templates, redirects, SEO, consent, and Woo settings according to what user needs after an inspepction is  made and shown.
 - **Output:** dependency-aware `keep / replace / disable / remove` list.
 - **Blocker:** none.
@@ -126,10 +134,6 @@ installatieformulier 800, handleidingen 756); the two shop outcomes both point
 at the plain Nymo, so the second launch product, Nymo with boiler, has no
 purchase route from the quiz. Deferred pending discussion — wiring it may need
 an approved change to the quiz UI.
-- **HubSpot still active (lane 0/6).** Both "HubSpot All-In-One" and the
-"Gravity Forms HubSpot Add-On" are active on staging, against the fixed launch
-shape's no-HubSpot rule. No feeds exist on the two installation forms, so
-nothing flows there today; the plugins need a keep/remove call in the inventory.
 - **Alliance No.2 font CDN returns 500 (page assets).** Logged in
 `work/greenshift-migration/ISSUES.md`; affects every page importing that font,
 not just the wizards, and is invisible on screen because the fallback holds.
