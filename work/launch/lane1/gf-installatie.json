@@ -1,0 +1,613 @@
+{
+  "0": {
+    "title": "Installatie aanvraag",
+    "description": "",
+    "labelPlacement": "top_label",
+    "descriptionPlacement": "below",
+    "button": {
+      "type": "text",
+      "text": "Verzenden",
+      "imageUrl": ""
+    },
+    "fields": [
+      {
+        "isRequired": true,
+        "size": "large",
+        "errorMessage": "",
+        "inputs": null,
+        "description": "",
+        "allowsPrepopulate": false,
+        "visibility": "visible",
+        "pageNumber": 1,
+        "formId": 0,
+        "id": 1,
+        "type": "text",
+        "label": "Voornaam",
+        "adminLabel": "firstName"
+      },
+      {
+        "isRequired": true,
+        "size": "large",
+        "errorMessage": "",
+        "inputs": null,
+        "description": "",
+        "allowsPrepopulate": false,
+        "visibility": "visible",
+        "pageNumber": 1,
+        "formId": 0,
+        "id": 2,
+        "type": "text",
+        "label": "Achternaam",
+        "adminLabel": "lastName"
+      },
+      {
+        "isRequired": true,
+        "size": "large",
+        "errorMessage": "",
+        "inputs": null,
+        "description": "",
+        "allowsPrepopulate": false,
+        "visibility": "visible",
+        "pageNumber": 1,
+        "formId": 0,
+        "id": 3,
+        "type": "email",
+        "label": "E-mailadres",
+        "adminLabel": "email"
+      },
+      {
+        "isRequired": true,
+        "size": "large",
+        "errorMessage": "",
+        "inputs": null,
+        "description": "",
+        "allowsPrepopulate": false,
+        "visibility": "visible",
+        "pageNumber": 1,
+        "formId": 0,
+        "id": 4,
+        "type": "phone",
+        "label": "Telefoonnummer",
+        "adminLabel": "phone",
+        "phoneFormat": "standard"
+      },
+      {
+        "isRequired": true,
+        "size": "large",
+        "errorMessage": "",
+        "inputs": null,
+        "description": "",
+        "allowsPrepopulate": false,
+        "visibility": "visible",
+        "pageNumber": 1,
+        "formId": 0,
+        "id": 5,
+        "type": "text",
+        "label": "Installatieadres",
+        "adminLabel": "address"
+      },
+      {
+        "isRequired": true,
+        "size": "large",
+        "errorMessage": "",
+        "inputs": null,
+        "description": "",
+        "allowsPrepopulate": false,
+        "visibility": "visible",
+        "pageNumber": 1,
+        "formId": 0,
+        "id": 6,
+        "type": "text",
+        "label": "Woonplaats",
+        "adminLabel": "city"
+      },
+      {
+        "isRequired": false,
+        "size": "large",
+        "errorMessage": "",
+        "inputs": [
+          {
+            "id": "7.1",
+            "label": "Nymo",
+            "name": ""
+          },
+          {
+            "id": "7.2",
+            "label": "Elektrische boiler",
+            "name": ""
+          }
+        ],
+        "description": "",
+        "allowsPrepopulate": false,
+        "visibility": "visible",
+        "pageNumber": 1,
+        "formId": 0,
+        "id": 7,
+        "type": "checkbox",
+        "label": "Installatie van",
+        "adminLabel": "installation",
+        "enableChoiceValue": true,
+        "choices": [
+          {
+            "text": "Nymo",
+            "value": "nymo",
+            "isSelected": false,
+            "price": ""
+          },
+          {
+            "text": "Elektrische boiler",
+            "value": "boiler",
+            "isSelected": false,
+            "price": ""
+          }
+        ]
+      },
+      {
+        "isRequired": false,
+        "size": "large",
+        "errorMessage": "",
+        "inputs": null,
+        "description": "",
+        "allowsPrepopulate": false,
+        "visibility": "visible",
+        "pageNumber": 1,
+        "formId": 0,
+        "id": 8,
+        "type": "radio",
+        "label": "Welke boiler wordt geïnstalleerd?",
+        "adminLabel": "boilerType",
+        "enableChoiceValue": true,
+        "choices": [
+          {
+            "text": "100L boiler",
+            "value": "100L",
+            "isSelected": false,
+            "price": ""
+          },
+          {
+            "text": "150L boiler",
+            "value": "150L",
+            "isSelected": false,
+            "price": ""
+          },
+          {
+            "text": "Anders",
+            "value": "anders",
+            "isSelected": false,
+            "price": ""
+          }
+        ]
+      },
+      {
+        "isRequired": false,
+        "size": "large",
+        "errorMessage": "",
+        "inputs": null,
+        "description": "",
+        "allowsPrepopulate": false,
+        "visibility": "visible",
+        "pageNumber": 1,
+        "formId": 0,
+        "id": 9,
+        "type": "text",
+        "label": "Boiler — anders, namelijk",
+        "adminLabel": "boilerOther"
+      },
+      {
+        "isRequired": false,
+        "size": "large",
+        "errorMessage": "",
+        "inputs": null,
+        "description": "",
+        "allowsPrepopulate": false,
+        "visibility": "visible",
+        "pageNumber": 1,
+        "formId": 0,
+        "id": 10,
+        "type": "radio",
+        "label": "Is er een P1-poort splitter nodig?",
+        "adminLabel": "splitter",
+        "enableChoiceValue": true,
+        "choices": [
+          {
+            "text": "Ja",
+            "value": "ja",
+            "isSelected": false,
+            "price": ""
+          },
+          {
+            "text": "Nee",
+            "value": "nee",
+            "isSelected": false,
+            "price": ""
+          },
+          {
+            "text": "Weet ik niet",
+            "value": "onbekend",
+            "isSelected": false,
+            "price": ""
+          }
+        ]
+      },
+      {
+        "isRequired": false,
+        "size": "large",
+        "errorMessage": "",
+        "inputs": null,
+        "description": "",
+        "allowsPrepopulate": false,
+        "visibility": "visible",
+        "pageNumber": 1,
+        "formId": 0,
+        "id": 11,
+        "type": "radio",
+        "label": "Aparte elektrische groep aanwezig?",
+        "adminLabel": "separateGroup",
+        "enableChoiceValue": true,
+        "choices": [
+          {
+            "text": "Ja",
+            "value": "ja",
+            "isSelected": false,
+            "price": ""
+          },
+          {
+            "text": "Nee",
+            "value": "nee",
+            "isSelected": false,
+            "price": ""
+          },
+          {
+            "text": "Anders / weet ik niet",
+            "value": "anders",
+            "isSelected": false,
+            "price": ""
+          }
+        ]
+      },
+      {
+        "isRequired": false,
+        "size": "large",
+        "errorMessage": "",
+        "inputs": null,
+        "description": "",
+        "allowsPrepopulate": false,
+        "visibility": "visible",
+        "pageNumber": 1,
+        "formId": 0,
+        "id": 12,
+        "type": "radio",
+        "label": "Wordt de boiler aangesloten op de CV-combiketel?",
+        "adminLabel": "cvConnection",
+        "enableChoiceValue": true,
+        "choices": [
+          {
+            "text": "Ja",
+            "value": "ja",
+            "isSelected": false,
+            "price": ""
+          },
+          {
+            "text": "Nee",
+            "value": "nee",
+            "isSelected": false,
+            "price": ""
+          },
+          {
+            "text": "Er is al een elektrische boiler geïnstalleerd",
+            "value": "al-geinstalleerd",
+            "isSelected": false,
+            "price": ""
+          }
+        ]
+      },
+      {
+        "isRequired": false,
+        "size": "large",
+        "errorMessage": "",
+        "inputs": null,
+        "description": "",
+        "allowsPrepopulate": false,
+        "visibility": "visible",
+        "pageNumber": 1,
+        "formId": 0,
+        "id": 13,
+        "type": "radio",
+        "label": "Genoeg ruimte naast de CV-combiketel?",
+        "adminLabel": "spaceNextToCV",
+        "enableChoiceValue": true,
+        "choices": [
+          {
+            "text": "Ja, er is genoeg ruimte",
+            "value": "ja",
+            "isSelected": false,
+            "price": ""
+          },
+          {
+            "text": "Nee / misschien niet",
+            "value": "nee",
+            "isSelected": false,
+            "price": ""
+          }
+        ]
+      },
+      {
+        "isRequired": false,
+        "size": "large",
+        "errorMessage": "",
+        "inputs": null,
+        "description": "",
+        "allowsPrepopulate": false,
+        "visibility": "visible",
+        "pageNumber": 1,
+        "formId": 0,
+        "id": 14,
+        "type": "textarea",
+        "label": "Opmerkingen",
+        "adminLabel": "notes"
+      },
+      {
+        "isRequired": true,
+        "size": "large",
+        "errorMessage": "",
+        "inputs": [
+          {
+            "id": "15.1",
+            "label": "Akkoord",
+            "name": ""
+          }
+        ],
+        "description": "",
+        "allowsPrepopulate": false,
+        "visibility": "visible",
+        "pageNumber": 1,
+        "formId": 0,
+        "id": 15,
+        "type": "checkbox",
+        "label": "Toestemming delen met installateur",
+        "adminLabel": "installerShare",
+        "enableChoiceValue": true,
+        "choices": [
+          {
+            "text": "Akkoord dat dit formulier gedeeld wordt met de installateur in de regio",
+            "value": "ja",
+            "isSelected": false,
+            "price": ""
+          }
+        ]
+      },
+      {
+        "isRequired": false,
+        "size": "large",
+        "errorMessage": "",
+        "inputs": [
+          {
+            "id": "16.1",
+            "label": "Opt-in",
+            "name": ""
+          }
+        ],
+        "description": "",
+        "allowsPrepopulate": false,
+        "visibility": "visible",
+        "pageNumber": 1,
+        "formId": 0,
+        "id": 16,
+        "type": "checkbox",
+        "label": "Marketing opt-in",
+        "adminLabel": "marketingOptIn",
+        "enableChoiceValue": true,
+        "choices": [
+          {
+            "text": "Wil op de hoogte blijven van nieuwe producten en acties",
+            "value": "ja",
+            "isSelected": false,
+            "price": ""
+          }
+        ]
+      },
+      {
+        "isRequired": false,
+        "size": "large",
+        "errorMessage": "",
+        "inputs": null,
+        "description": "",
+        "allowsPrepopulate": false,
+        "visibility": "visible",
+        "pageNumber": 1,
+        "formId": 0,
+        "id": 17,
+        "type": "fileupload",
+        "label": "Foto van de gehele meterkast (1)",
+        "adminLabel": "meterkast1",
+        "allowedExtensions": "jpg,jpeg,png,heic,heif,webp",
+        "multipleFiles": false
+      },
+      {
+        "isRequired": false,
+        "size": "large",
+        "errorMessage": "",
+        "inputs": null,
+        "description": "",
+        "allowsPrepopulate": false,
+        "visibility": "visible",
+        "pageNumber": 1,
+        "formId": 0,
+        "id": 18,
+        "type": "fileupload",
+        "label": "Foto van de gehele meterkast (2)",
+        "adminLabel": "meterkast2",
+        "allowedExtensions": "jpg,jpeg,png,heic,heif,webp",
+        "multipleFiles": false
+      },
+      {
+        "isRequired": false,
+        "size": "large",
+        "errorMessage": "",
+        "inputs": null,
+        "description": "",
+        "allowsPrepopulate": false,
+        "visibility": "visible",
+        "pageNumber": 1,
+        "formId": 0,
+        "id": 19,
+        "type": "fileupload",
+        "label": "Foto van de CV-combiketel specificaties (1)",
+        "adminLabel": "cvSpecs1",
+        "allowedExtensions": "jpg,jpeg,png,heic,heif,webp",
+        "multipleFiles": false
+      },
+      {
+        "isRequired": false,
+        "size": "large",
+        "errorMessage": "",
+        "inputs": null,
+        "description": "",
+        "allowsPrepopulate": false,
+        "visibility": "visible",
+        "pageNumber": 1,
+        "formId": 0,
+        "id": 20,
+        "type": "fileupload",
+        "label": "Foto van de CV-combiketel specificaties (2)",
+        "adminLabel": "cvSpecs2",
+        "allowedExtensions": "jpg,jpeg,png,heic,heif,webp",
+        "multipleFiles": false
+      },
+      {
+        "isRequired": false,
+        "size": "large",
+        "errorMessage": "",
+        "inputs": null,
+        "description": "",
+        "allowsPrepopulate": false,
+        "visibility": "visible",
+        "pageNumber": 1,
+        "formId": 0,
+        "id": 21,
+        "type": "fileupload",
+        "label": "Foto's van de onderkant van de CV-ketel (1)",
+        "adminLabel": "cvBottom1",
+        "allowedExtensions": "jpg,jpeg,png,heic,heif,webp",
+        "multipleFiles": false
+      },
+      {
+        "isRequired": false,
+        "size": "large",
+        "errorMessage": "",
+        "inputs": null,
+        "description": "",
+        "allowsPrepopulate": false,
+        "visibility": "visible",
+        "pageNumber": 1,
+        "formId": 0,
+        "id": 22,
+        "type": "fileupload",
+        "label": "Foto's van de onderkant van de CV-ketel (2)",
+        "adminLabel": "cvBottom2",
+        "allowedExtensions": "jpg,jpeg,png,heic,heif,webp",
+        "multipleFiles": false
+      },
+      {
+        "isRequired": false,
+        "size": "large",
+        "errorMessage": "",
+        "inputs": null,
+        "description": "",
+        "allowsPrepopulate": false,
+        "visibility": "visible",
+        "pageNumber": 1,
+        "formId": 0,
+        "id": 23,
+        "type": "fileupload",
+        "label": "Foto's van de installatieruimte (1)",
+        "adminLabel": "installSpace1",
+        "allowedExtensions": "jpg,jpeg,png,heic,heif,webp",
+        "multipleFiles": false
+      },
+      {
+        "isRequired": false,
+        "size": "large",
+        "errorMessage": "",
+        "inputs": null,
+        "description": "",
+        "allowsPrepopulate": false,
+        "visibility": "visible",
+        "pageNumber": 1,
+        "formId": 0,
+        "id": 24,
+        "type": "fileupload",
+        "label": "Foto's van de installatieruimte (2)",
+        "adminLabel": "installSpace2",
+        "allowedExtensions": "jpg,jpeg,png,heic,heif,webp",
+        "multipleFiles": false
+      },
+      {
+        "isRequired": false,
+        "size": "large",
+        "errorMessage": "",
+        "inputs": null,
+        "description": "",
+        "allowsPrepopulate": false,
+        "visibility": "visible",
+        "pageNumber": 1,
+        "formId": 0,
+        "id": 25,
+        "type": "hidden",
+        "label": "Bron",
+        "adminLabel": "source",
+        "defaultValue": "installatie-formulier"
+      },
+      {
+        "isRequired": false,
+        "size": "large",
+        "errorMessage": "",
+        "inputs": null,
+        "description": "",
+        "allowsPrepopulate": false,
+        "visibility": "visible",
+        "pageNumber": 1,
+        "formId": 0,
+        "id": 26,
+        "type": "hidden",
+        "label": "Pagina",
+        "adminLabel": "pageUrl",
+        "defaultValue": ""
+      }
+    ],
+    "version": "2.10.5",
+    "confirmations": {
+      "5f1a20c4a2001": {
+        "id": "5f1a20c4a2001",
+        "name": "Default Confirmation",
+        "isDefault": true,
+        "type": "message",
+        "message": "<div class=\"solyx-gf-ok\">ok</div>",
+        "url": "",
+        "pageId": "",
+        "queryString": ""
+      }
+    },
+    "notifications": {
+      "5f1a20c4a1001": {
+        "id": "5f1a20c4a1001",
+        "isActive": true,
+        "to": "info@solyxenergy.nl",
+        "name": "Aanvraag naar Solyx",
+        "event": "form_submission",
+        "toType": "email",
+        "from": "{admin_email}",
+        "fromName": "Solyx Energy website",
+        "replyTo": "{E-mailadres:3}",
+        "subject": "Installatie aanvraag: {Voornaam:1} {Achternaam:2} — {Woonplaats:6}",
+        "message": "{all_fields}",
+        "disableAutoformat": false
+      }
+    },
+    "enableHoneypot": true,
+    "requireLogin": false,
+    "is_active": "1",
+    "is_trash": "0"
+  },
+  "version": "2.10.5"
+}

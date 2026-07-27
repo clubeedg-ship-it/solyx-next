@@ -1,6 +1,6 @@
 # Solyx Energy website — master doc
 
-Chunked retrieval. Reach a section via its `## §X` anchor — see `CLAUDE.md §7` for the index, `§G` below for snippets. There is no separate spec; `hub.html` is the page registry (`index.html` redirects to `home.html`) and this doc is the authority on conventions.
+Chunked retrieval. Reach a section via its `## §X` anchor — see `AGENTS.md` §8 for the index, `§G` below for snippets. There is no separate spec; `hub.html` is the page registry (`index.html` redirects to `home.html`) and this doc is the authority on static-site conventions. Staging WP migration truth: `.cursor/skills/solyx-migration/SKILL.md` + `work/greenshift-migration/status.json`.
 
 Cadence: `§A` PR-gated · `§B` append-only · `§F` append-only · `§C §D §E §G` overwrite freely. `§E` hot state is YAML.
 
@@ -26,7 +26,7 @@ Author names a page + the change → edit that page's inline HTML/CSS/JS → sav
 `hub.html` (the old `index.html` body, preserved) lists pages in three groups: **Main pages**, **New pages**, **Forms**; `index.html` itself now just redirects to `home.html`. Site pages present (14): `home`, `hoe-werkt-het`, `besparen`, `how-to-get-it`, `shop`, `wateraccu`, `faq`, `installatie`, `landingspagina`, `klantverhalen`, `over-ons`, `installatie-formulier`, `installatie-formulier-boilergarant`, plus the registry `hub` and the redirect `index`. Helper file: `design-canvas.html` (the approved look mockup — not a site page; excluded from link sweeps). Still **not built**: `handleidingen`, `blog-news`, `installateurs` — links that pointed at these are routed to the nearest real page (no 404s).
 
 ### §A.10 Invariants
-Byte-identical mirror of `CLAUDE.md §5`. Changes require updating both files + a `§B` entry.
+Byte-identical mirror of static invariants in `AGENTS.md` §5 (static surface). Changes require updating both files + a `§B` entry.
 - No build step, no framework, no npm: every page is a single standalone `.html` with inline `<style>` and inline `<script>`. Don't add bundlers, shared CSS/JS files, or dependencies.
 - Each page carries its own `<nav>` and scripts — there is no shared shell; edits to nav/footer must be repeated per page.
 - Brand palette is fixed: primary green `#35A847`, dark green `#1E7A30`, ink `#1c2422`. Fonts: Inter + DM Sans via Google Fonts (`--font-head` / `--font-body`).
@@ -66,6 +66,46 @@ Each entry: date · id · title, then Decision / Rationale.
 ### 2026-06-20 · D-08 · `midia/` assets use descriptive names
 **Decision:** Renamed all `midia/` files from meeting-export names to descriptive ones (e.g. `htg-1/2/3.jpg` → `solyx-logo.jpg`/`nymo-homey.jpg`/`nymo-sensor.jpg`; "Boiler Icon…"→`new_boiler.png`; "Solyx Website Next Steps…"→`solar-roof-icon`/`sun-icon`; "Scherm_afbeelding…"→`solar-house-icon`) and updated the 12 references in `how-to-get-it.html`. Verification screenshots moved to `screenshots/`. **Rationale:** The folder was unreadable; clear names + a tidy root help the next agent and the eventual Greenshift port.
 
+### 2026-07-17 · D-09 · Profile-and-adapter Greenshift migration pipeline
+**Decision:** Migrate each static page through a durable profile (`profiles/<slug>.json`) and page adapter (`profiles/<slug>.adapter.js`) instead of one-off page mutations. The pipeline requires valid editable blocks, scoped CSS, staging drafts, and automated source/preview/editor QA; complex DOM/interaction pages remain adapter-led rather than being falsely called “automatic.” **Rationale:** The Hybrid B homepage exposed editor sandbox failures (HTML iframes, SVG/CSS loss, page chrome overlays) that generic raw HTML imports cannot solve safely or repeatably.
+
+### 2026-07-27 · D-20 · Agent memory is AGENTS.md; migration queue closed
+**Decision:** Canonical always-loaded memory is `AGENTS.md`; `CLAUDE.md` is a pointer only. Treat the migrate-page queue as 22/22 finished (Otto verification pending). Next work is post-migration lanes in `AGENTS.md` §7 — not another migration sweep. **Rationale:** Queue work is complete as agent output; remaining website work is verification, home-on-ask, IA/go-live, WooCommerce, forms, WIP copy, and media.
+
+### 2026-07-27 · D-21 · Install forms → Gravity Forms backend, UI frozen
+**Decision:** Keep `installatie-formulier` (800) and `installatie-formulier-boilergarant` (807) wizard UI exactly as migrated. Gravity Forms collects submissions and emails `info@solyxenergy.nl`; do not connect HubSpot. No GF shortcode UI and no visual redesign of the wizard.
+**Rationale:** Otto: never change the form UI; GF is data collection only (Option B).
+
+### 2026-07-27 · D-22 · Two products and two conversion paths
+**Decision:** The new customer-facing catalogue has exactly two products: Nymo without boiler and Nymo with boiler. `Aan de slag` routes a customer either to direct WooCommerce/Mollie purchase or to a customized, prefilled Gravity Forms quotation.
+**Rationale:** Customers need both immediate purchasing and an installation-aware quotation path; the current cosmetic cart and submit states do neither.
+
+### 2026-07-27 · D-23 · Staging becomes production; legacy stays isolated
+**Decision:** Continue all development on `2026.solyxenergy.nl` while the legacy site remains live. After full staging verification, promote staging through the production domain/SSL switch and then stop the legacy host. Do not replace, merge, or migrate the live WordPress database, customers, orders, or stock.
+**Rationale:** Staging is a cloned but independently rebuilt replacement site—the “new car” runs before the legacy engine stops.
+
+### 2026-07-27 · D-24 · Launch lanes and Claude Code bootstrap
+**Decision:** `AGENTS.md` defines the compact launch lane contract,
+`work/launch/STATE.md` stores live status only, and `CLAUDE.md` imports
+`AGENTS.md` using Claude Code’s supported `@AGENTS.md` syntax. Reusable browser
+access is documented in `work/launch/BROWSER-ACCESS.md`.
+**Rationale:** Cursor and Claude Code need the same lean instructions without
+duplicated prompt templates or state.
+
+### 2026-07-27 · D-25 · Wizard UI submits into a hidden Gravity Form
+**Decision:** The approved installation-wizard UI is kept exactly as migrated and
+is not rebuilt in Gravity Forms. WPCode snippet 859 renders a real, hidden,
+AJAX Gravity Form on pages 800 (form 1) and 807 (form 4); `bridge.js` intercepts
+the wizard's "Verzenden" button in the document capture phase, mirrors every
+answer plus files into that form, submits it, and only advances to the "Bedankt!"
+step after Gravity Forms confirms. Each photo zone maps to two single-file upload
+fields, because GF multi-file fields use their own async uploader that cannot be
+populated without relying on plugin internals. Sources of truth live in
+`work/launch/lane1/`; staging page content is untouched.
+**Rationale:** Preserves the approved UI and its 17-step branching while giving
+real entries, uploads, validation and notifications. Before this the wizard
+showed "Bedankt! We hebben je gegevens ontvangen" and sent nothing at all.
+
 ---
 
 ## §C — Roadmap & open questions
@@ -73,72 +113,94 @@ Each entry: date · id · title, then Decision / Rationale.
 ### §C.1 Roadmap
 | Phase/Milestone | Content | Status |
 |---|---|---|
-| Standardize shell | One frosted-glass header (flush top) + isolated footer, every page | **Done 2026-06-19** |
-| Local navigation | All links local; no live-domain bounces or 404s | **Done 2026-06-19** |
-| New pages | `over-ons`, `klantverhalen`, both `installatie-formulier*` | **Created + standardized** |
-| Icons | Unified Nymo + `midia/new_boiler.svg` boiler across cards | **Done** |
-| Support pages | `handleidingen`, `blog-news`, `installateurs` | Not built; links routed to nearest real page |
-| Greenshift conversion | Port the finished pages to Greenshift blocks (WordPress) | **Not started — the end goal** |
+| Static shell + local nav | Frosted header/footer, local links, hub registry | **Done** |
+| Static page set | Marketing + legal/WIP + shop split + forms | **Done** (see `hub.html`) |
+| Staging Gutenberg migration | 22-page `migrate-page` queue → editable drafts | **Done (agent)** 2026-07-27 — Otto verification pending |
+| Home track | Staging 626 + WPCode 655 | **Separate / out of queue** |
+| Launch backbone | Gravity Forms, two-product Woo/Mollie, NL/EN, tracking/consent | **Current** — `work/launch/STATE.md` |
+| Responsive QA | Mobile/tablet/cross-browser after backbone | **Blocked by backbone** |
+| Legacy cleanup | Approved staging allowlist; no blind deletion | **Ready for inventory** |
+| Live cutover | Promote staging via domain/SSL, then stop legacy | **Blocked by staging verification** |
 
 ### §C.2 Immediate next work
-- **Greenshift conversion** — the user's stated end goal ("ONLY THEN convert to Greenshift"). Port the finished, approved pages into Greenshift blocks in WordPress; invoke the Greenshift skill when starting, and keep section structure clean so it survives the port.
-- Drop the **real Solyx logo** into the footer (placeholder wordmark there now); confirm CTA accent (kept orange `Bestel`; green was offered).
-- Optional polish: consistent mobile hamburger nav (only some pages have one); `<html lang>` → `nl` where it still says `en`; externalize remaining base64 in `how-to-get-it.html` if perf matters.
+- Run Lane 0 inventory and establish reusable browser access.
+- Complete launch backbone lanes 1–4: Gravity Forms, two-product Woo/Mollie, Dutch/English, tracking/consent.
+- Then responsive QA, approved legacy cleanup, staging verification, and domain/SSL cutover.
+- Do not reopen the 22-page migration queue as a new migration project.
 
 ### §C.3 Open questions
-- ~~**OQ-1 — Which folder is canonical?**~~ **Resolved 2026-06-19 (D-03):** `solyx-next` is canonical; `.claude/launch.json` was repointed here (`solyx-next-static`, :4599).
-- **OQ-2 — How does content go live?** Now answered in principle: via **Greenshift** blocks in WordPress (the user's planned conversion step). Exact porting workflow still to be done — see §C.2.
+- ~~**OQ-1 — Which folder is canonical?**~~ **Resolved 2026-06-19 (D-03):** `solyx-next` is canonical.
+- ~~**OQ-2 — How do pages become editable WP?**~~ **Resolved 2026-07:** core Gutenberg drafts via `solyx-migration` skill (not paid Greenshift layout blocks).
+- ~~**OQ-3 — Go-live model:**~~ **Resolved 2026-07-27 (D-23):** staging becomes production through domain/SSL; legacy remains isolated until shutdown.
+- ~~**OQ-4 — Source of truth:**~~ **Resolved 2026-07-27 (D-23):** staging is the new site; static HTML is reference only.
+- **OQ-5 — Staging allowlist:** exact legacy pages/plugins/settings to keep, disable, or remove after dependency inventory.
 
 ---
 
 ## §D — Workstreams (lane memory)
 
-One lane per task. Read only the lane you're in.
+Lane scope lives in `AGENTS.md`; live status and handoff state live in
+`work/launch/STATE.md`.
 
-### §D.1 content lane
-**Roots:** the body of any existing `*.html` page.
-**Contract:** change copy (Dutch), prices, image URLs, and links only. Keep the page's existing inline structure and brand palette. Don't touch the duplicated `<nav>` unless the task is explicitly nav. Verify by opening the file in a browser.
+### §D.1 launch backbone
+**Lanes:** forms/quotation, two-product commerce/Mollie, Dutch/English/legal, tracking/consent.
+**Contract:** real backend success, no HubSpot, no PII in analytics, no cosmetic form/cart success.
 
-### §D.2 build lane
-**Roots:** new `*.html` pages, interactive widgets, and `hub.html` (the registry; `index.html` is only a redirect).
-**Contract:** new page = one standalone file in repo root + a matching card in `hub.html` (NOT `index.html`, which is just a redirect to `home.html`). Reuse the established palette/fonts and copy the standardized frosted-glass nav/footer + transparent SVG logo from a sibling page (no shared include). Keep all JS inline and dependency-free. Route every link local; no `solyxenergy.nl` bounces.
+### §D.2 responsive QA
+**Root:** stable staging backbone.
+**Contract:** mobile/tablet/cross-browser begins after the functional DOM and integrations stabilize.
+
+### §D.3 staging cleanup and cutover
+**Roots:** staging inventory, approved allowlist, domain/SSL promotion.
+**Contract:** production read-only; no DB/customer/order/stock migration; legacy remains available until the promoted staging host passes.
+
+### §D.4 deferred client agent
+**Root:** post-launch discovery.
+**Contract:** Claude/OpenClaw design requires explicit client consent, least-privilege WordPress access, draft-first edits, approval gates, and verified subscription/API billing behavior.
 
 ---
 
-## §E — Handoff (current next-step)
+## §E — Handoff
 
-> Hot state — overwrite per session. YAML.
 ```yaml
-as_of: 2026-06-20
-mode: static Dutch marketing-site mockup, finished locally; no git; served from solyx-next on :4599 (no-cache, /->home; preview_start pinned to 4599)
-what_matters: look + structure are approved and standardized — the next real step is the Greenshift port, not more page edits
-state_done (cumulative — the site is in this state now):
-  - one frosted-glass header (flush top:0) + isolated dark footer (#080c0a) on every page; installer-bar hidden
-  - every internal link local (href, onclick, window.open) — zero live-domain bounces, zero 404s
-  - all 5 once-missing pages built + standardized (klantverhalen, over-ons, installatie-formulier x2, new home.html)
-  - product-card icons unified; boiler = midia/new_boiler.svg inlined as currentColor; old 92x132 stroke boiler gone
-  - nav logos = transparent inline SVG wordmark (base64-JPEG white box removed from home/besparen/installatie/landingspagina)
-  - index.html -> redirect to home.html; hub.html = page registry
-  - midia/ files renamed to descriptive names (refs updated); verification screenshots live in screenshots/
-next_actions:
-  - convert the finished pages to Greenshift blocks (THE end goal; use the Greenshift skill)
-  - optional: swap the SVG wordmark for the official Solyx logo asset if one is supplied; consistent mobile hamburger nav; <html lang> en->nl where stale
+mode: launch-wiring
+memory: AGENTS.md
+launch_state: work/launch/STATE.md
+browser_access: work/launch/BROWSER-ACCESS.md
+migration_progress: work/greenshift-migration/status.json
+state: >
+  The 22-page migration is complete. Staging is the replacement site and stays
+  separate from legacy production until verified. Backbone work is Gravity
+  Forms quotations, two-product Woo/Mollie, Dutch/English, and consent-aware
+  tracking. Responsive QA follows the backbone.
+next_lanes:
+  - 0 access and staging legacy inventory
+  - 1 Gravity Forms and Aan de slag routing
+  - 2 two-product WooCommerce and Mollie
+  - 3 Dutch/English and final legal content
+  - 4 tracking and consent contract
+  - 5 responsive QA after backbone
+  - 6 allowlist cleanup and domain/SSL cutover
 do_not:
-  - introduce a build step, framework, or shared CSS/JS file
-  - link nav/footer/CTAs to solyxenergy.nl (only <img> + mailto may); check onclick/window.open too, not just href
-  - use a base64 JPEG logo (it shows a white box) — use the transparent inline SVG wordmark
-  - assume one edit propagates — nav/footer/logo are duplicated per file (use Edit replace_all or repeat per page)
-  - over-engineer or add unrequested UI; edit files directly (scripts only for bulk mechanical sweeps); run the server yourself
+  - write to legacy production without explicit task-level approval
+  - migrate or merge customers, orders, stock, or the production database
+  - connect HubSpot
+  - show false form/cart success before backend success
+  - clean staging without an approved dependency-aware allowlist
+  - place credentials or auth state in prompts/docs/source control
+updated: 2026-07-27
 ```
 
----
-
 ## §F — History (append-only)
+
+- **2026-07-27** — `AGENTS.md` becomes always-loaded memory (`CLAUDE.md` pointer). Migration queue closed (22/22 agent-finished); post-migration lanes documented.
+- 2026-07-20 hoe-werkt-het: Gutenberg `components-sandbox` iframes do not load page CSS — embed scoped CSS inside each `core/html`. On frontend, remove those `<style>` nodes (hoisted siblings possible) so preview uses page assets. Never put decorative shell padding (`.hwh-hero { padding:120px 48px }`) on the group that wraps a full HTML section already carrying its own padding.
 
 - **2026-06-16** — Memory docs (`CLAUDE.md` + `PROJECT.md`) created from a read-only deep-dive of the folder.
 - **2026-06** — Pages last edited (file mtimes 8–16 Jun): `home`, `besparen`, `faq`, `installatie` most recent; `index.html` reflects a 16-page target layout.
 - **2026-06-19** — Big standardization pass (D-03..D-06): one frosted-glass header flush to top on all pages; killed every live-domain bounce (href + JS); routed dead links to nearest real page; built + standardized the 5 missing pages; `index.html`→redirect, `hub.html`=registry; repointed `launch.json` to a no-cache :4599 server; unified Nymo + `midia/new_boiler.svg` card icons (renamed from "Boiler Icon from June 15 Meeting.svg"); fixed oversized content (home 01/06, 02/06), the hoe-werkt-het 07/07 video carousel width (640→920px), and darkened all footers (`#0e1512`→`#080c0a`). Design approved earlier via `design-canvas.html`.
 - **2026-06-20** — Polish + housekeeping (D-07, D-08): replaced the base64-JPEG nav logo (white-box) with the transparent inline SVG wordmark on `home`/`besparen`/`installatie`/`landingspagina`; renamed all `midia/` assets to descriptive names and updated the 12 `how-to-get-it.html` references; moved 31 loose screenshots into `screenshots/`; fixed the `launch.json` port conflict (kill stray :4599 process before `preview_start`).
+- **2026-07-17** — Added reusable editable-Gutenberg migration infrastructure: project skill, profile/adapter generator, parser validator, staging-draft uploader, and source/preview/editor visual QA gate. Profiled `hoe-werkt-het.html` as the first complex adapter candidate (snap/carousel/script features).
 
 ### Durable lessons
 - A `href=` grep does NOT catch JS bounces — `onclick="window.location.href=…"` and `window.open(…)` also jumped to the live site. Sweep those too before claiming "no live links."
@@ -149,6 +211,7 @@ do_not:
 - The user's pages can be **dropped in/replaced wholesale** between sessions (a fresh `home.html` reverted all prior standardization). Re-check, don't assume earlier edits survived.
 - `<html lang>` is unreliable (some Dutch pages declare `en`); never infer page language from the attribute.
 - A **base64 JPEG** logo shows a white square block (JPEG has no transparency); `mix-blend-mode:multiply` doesn't fully hide it. Use the transparent inline SVG wordmark (already on most pages). Same trap for any "white box behind a graphic" report.
+- `core/html` is rendered in a sandboxed iframe in Gutenberg’s visual editor. It cannot inherit the page stylesheet: make tiny fragment CSS self-contained, and inject decoration/page chrome only on the frontend. Never use `core/html` for the overall page layout or page-wide `<style>`.
 - `preview_start` fails if a stray background python server still holds **:4599** — `pkill -f 4599` / `lsof -ti tcp:4599 | xargs kill -9` first, then `preview_start` (`autoPort:false` keeps it on 4599, the URL the user relies on).
 
 ### Working with THIS user (read before touching anything)
