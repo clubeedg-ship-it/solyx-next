@@ -5,9 +5,26 @@ Live status only
 ## Current
 
 - Migration: 22/22 staging drafts complete; human launch verification remains.
-- Backbone: forms, commerce, bilingual content, and tracking are not wired.
+- Backbone: forms, commerce, and tracking-consent are wired; bilingual content
+is not.
 - Sequence: backbone → responsive QA → staging cleanup → domain/SSL cutover.
 - Legacy production remains live and read-only until cutover approval.
+- **Site chrome is now a theme property.** The header and footer were duplicated
+inside all 23 pages and missing entirely from the three legal pages. The design
+chrome was lifted into the theme's `header` and `footer` template parts, the
+per-page copies were removed, and every page moved off `solyx-blank` onto the
+theme template. One header and one footer everywhere, edited in one place.
+- **The unstyled-site incident was a stale page cache, not a broken snippet.**
+SiteGround's proxy cache was serving copies predating the generated CSS: an
+`x-proxy-cache: HIT` returned 921KB with 0 scoped rules while a `MISS` returned
+2.1MB with 362. WPCode snippet 684 was healthy throughout. Purge with
+`PUT /wp-json/siteground-optimizer/v1/purge-cache`; a HIT now carries ~8,600
+scoped rules. Any future "the CSS vanished" report should check the cache first.
+- **Admin session note:** the staging admin session expires periodically and
+returns `wp-login.php?...&reauth=1`. Scripts must select a tab already inside
+`/wp-admin` and take the REST nonce from
+`/wp-admin/admin-ajax.php?action=rest-nonce`, since `window.wpApiSettings` is
+absent on many admin screens.
 
 ## Lane 0 — Access and inventory
 
@@ -49,6 +66,15 @@ to production's final number at cutover.
 Cart, Checkout and My account kept as WooCommerce system pages. The 23 migrated
 drafts are untouched. Front page still points at trashed page 129 and must be
 repointed to migrated Home 626 once that is published.
+- **Transport security done:** SiteGround HTTPS enforcement was off
+(`ssl_enabled: 0`); it is on, and `http://` now answers `307` to `https://`.
+WPCode snippet **1354** adds the response headers that were all missing —
+`Strict-Transport-Security: max-age=15552000` (HTTPS only, no preload, so the
+host can still be moved at cutover), `X-Frame-Options: SAMEORIGIN`,
+`Referrer-Policy: strict-origin-when-cross-origin` and a `Permissions-Policy`
+denying geolocation, microphone and camera. No Content-Security-Policy: the
+pages carry inline styles and scripts throughout and a blind policy would break
+them. All five headers verified live.
 - **Next:** client enters the SMTP password, then send a real test message to
 prove delivery end-to-end. Then tracking.
 - **Output:** dependency-aware `keep / replace / disable / remove` list.
@@ -125,7 +151,25 @@ text.
 routes; replace legal stubs from the approved source documents.
 - **Done when:** every launch route, system message, form, checkout, legal link,
 canonical, and language switch works in both languages.
-- **Blocker:** (1) all three legal pages — privacy, delivery/returns, terms —
+- **Done:** legal text imported from production — terms 21,461 chars and
+delivery/returns 3,146 chars are live, placeholders gone, and the delivery page
+carries the EU 14-day withdrawal section. 43 Dutch blog posts imported with
+original slugs and dates; 34 legacy article links on the blog index localised.
+89 dead links repaired across 18 pages (166 -> 77 remaining) and every legacy
+`.html` link removed; 488 root-relative links now in place.
+- **Link audit is effectively clean.** A crawl of all 26 public routes found 155
+distinct internal targets and only two broken: `/installatie/` still linked the
+pre-migration file name `hoe-werkt-het.html#s-check`, and `/installateurs/`
+linked "Technische Info" to `/technisch`, which has never existed here and has
+no matching in-page anchor — the manuals page is the technical documentation, so
+it should point at `/handleidingen/`. **Both edits are still pending: the admin
+session expired mid-run.** `/contact/` and `/aan-de-slag/` return 404 but
+nothing links to them; they are cutover redirect entries, not on-site defects.
+- **Editor instruction text is gone.** It came from the `solyx-blank` template,
+not a snippet, and no page uses that template any more. Confirmed absent from
+all 26 routes.
+- **Blocker:** (1) the privacy page — production has no privacy page at all,
+only a May 2022 PDF, so there is nothing to copy (CLIENT-QUESTIONS B4) — privacy, delivery/returns, terms —
 are empty placeholders on both the static sources and staging; production
 appears to hold the real text and should be copied across (CLIENT-QUESTIONS B4).
 This blocks taking real payments. (2) No multilingual plugin is installed, so no
@@ -135,9 +179,27 @@ lane can pass its English half until the mechanism is chosen.
 
 ## Lane 4 — Tracking and consent
 
-- **Status:** `ready`
-- **Next:** audit CookieYes and existing Google/Meta ownership; define safe
-`dataLayer` events for the external GTM operator.
+- **Status:** `in_progress`
+- **Done:** the Meta Pixel no longer fires before consent. Pixel
+`2264362454021133` was pasted raw into the GreenShift theme's head code, so it
+ran on first paint and set `_fbp` while the consent cookie still said
+`advertisement:no`. It now lives in WPCode's site-wide header behind its own
+consent guard: it reads `cookieyes-consent`, starts only on
+`advertisement:yes`, and also listens for the CookieYes update event plus a
+short cookie poll so it starts the moment the banner is answered, without a
+reload. The `<noscript>` beacon was dropped — it fires an image request with no
+way to check consent first. CookieYes' own `data-cookieyes` blocking attribute
+was tried first and does not work on this install: the script stayed
+`text/plain` even after full consent.
+- **Evidence:** clean profile, `/besparen/`. Before consent — no `_fbp`, `fbq`
+undefined, 0 requests to any facebook host. After clicking accept — `_fbp` set,
+`fbq` a function, and `fbevents.js`, `signals/config` and
+`tr/?ev=PageView` all fire. A second run where consent was declined
+(`advertisement:no`) kept the pixel off. The HubSpot and Hotjar cookies seen
+earlier were stale `.solyxenergy.nl` cookies in the operator's own browser
+profile, not staging — a clean profile sets none.
+- **Next:** audit Google ownership and define safe `dataLayer` events for the
+external GTM operator.
 - **Required events:** `quote_started`, `quote_step_completed`,
 `generate_lead`, `view_item`, `add_to_cart`, `view_cart`,
 `begin_checkout`, `purchase`.
@@ -149,10 +211,21 @@ success, and no personal form data enters analytics.
 
 ## Lane 5 — Responsive and cross-browser QA
 
-- **Status:** `blocked`
-- **Blocked by:** lanes 1–4.
-- **Next:** test the stable backbone at mobile, tablet, laptop, and desktop
-widths across Chromium, Safari, and Firefox-class browsers.
+- **Status:** `in_progress`
+- **Done:** phones have navigation again. The design simply hid the nav links
+below 900px, leaving 18 pages with no menu at all; the new theme header carries
+a toggle that opens the links and the Bestel button, so the fix landed once
+rather than per page. Verified at 390px on the migrated and the legal pages —
+toggle visible, no horizontal overflow. All 23 pages measure 0 overflow at
+1440px with the chrome painted on top.
+- **Available, not yet deployed:** `work/launch/lane5/responsive-fixes.css`
+from the fix agent. Its measurements were taken while the stale cache was
+serving two different versions of the same URLs, and several rules are scoped to
+`.solyx-page-<slug> .solyx-nav-row` / `.solyx-installer` — selectors that no
+longer match now that the chrome sits in the theme part outside the page
+wrapper. Re-measure against the current site and re-scope the chrome rules to
+`.solyx-site-chrome` before deploying.
+- **Next:** re-run the sweep now that the cache serves one consistent version.
 - **Done when:** both languages and critical flows pass without overflow,
 inaccessible controls, or editor regressions.
 
