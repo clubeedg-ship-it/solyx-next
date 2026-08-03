@@ -133,6 +133,19 @@ with a 21% NL rate. EU standard rates corrected from a blanket 21% to
 destination values (DE 19, AT 20, SE 25, FI 25.5, LU 17, DK 25); revert if the
 client is under the €10k threshold and not OSS-registered. Mollie live key is
 present and iDEAL + Bancontact are enabled. Scripts in `work/launch/lane2/`.
+- **Shop is reachable.** WooCommerce's own "Store coming soon" mode was still
+on (`woocommerce_coming_soon: yes`, store pages only) — separate from the
+Under Construction plugin and gating every commerce route. Turned off; `/shop/`
+now lists both products at €611–€649 and €1.076–€1.768 with working
+"select options", and `/cart/` and `/checkout/` render. The store address was
+already complete, so the PDF-invoice warning is about something else and is
+still open.
+- **Site language was `en_US`** on a Dutch storefront, so WooCommerce rendered
+"Showing all 2 results", "Default sorting" and "Select options" to Dutch
+customers. Set to `nl_NL`. Setting this operator's own profile language back to
+English is still pending — WordPress lists that option with an empty value, and
+the browser session locked up before it was applied.
+- **Both products have no image** — the shop grid shows placeholder icons.
 - **Not verified:** no checkout has been run. Cart → checkout → Mollie redirect
 → order status → confirmation email are all unproven. The payment step itself
 needs the client, since it requires their bank login.
@@ -162,9 +175,18 @@ distinct internal targets and only two broken: `/installatie/` still linked the
 pre-migration file name `hoe-werkt-het.html#s-check`, and `/installateurs/`
 linked "Technische Info" to `/technisch`, which has never existed here and has
 no matching in-page anchor — the manuals page is the technical documentation, so
-it should point at `/handleidingen/`. **Both edits are still pending: the admin
-session expired mid-run.** `/contact/` and `/aan-de-slag/` return 404 but
-nothing links to them; they are cutover redirect entries, not on-site defects.
+it now points at `/handleidingen/`. Both are fixed and re-verified: 0 links
+ending in `.html` remain on `/installatie/`. `/contact/` and `/aan-de-slag/`
+return 404 but nothing links to them; they are cutover redirect entries, not
+on-site defects.
+- **Where the last legacy link was hiding:** not in page content and not in any
+snippet body, because snippet 684 stores its payloads base64-encoded — a
+literal search over the snippet source can never match. It holds two blobs, the
+page CSS (1,448,252 chars) and the injected page chrome (572,924). The link sat
+in the second. Patched by decoding only that blob, rewriting the pre-migration
+file names, re-encoding, and splicing it back with the CSS literal left
+byte-identical; verified afterwards that the site still delivers ~8,600 scoped
+rules. Use the same approach for anything else buried in generated assets.
 - **Editor instruction text is gone.** It came from the `solyx-blank` template,
 not a snippet, and no page uses that template any more. Confirmed absent from
 all 26 routes.
