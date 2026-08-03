@@ -22,43 +22,99 @@ no HubSpot admin menu, and no HubSpot frontend requests; both wizard pages still
 render their forms and a post-removal submission produced entry 4 with 4 uploads
 and a sent notification. Deletion removed the plugin files, so restoring either
 plugin means reinstalling it.
-- **Next:** inventory staging pages, products, forms, plugins, snippets, menus, templates, redirects, SEO, consent, and Woo settings according to what user needs after an inspepction is  made and shown.
+- **Staging inventory so far:** 28 pages (5 published, 23 drafts) plus **50
+pages in trash** from the old clone; 0 posts; 0 orders; 0 coupons; 3
+administrator accounts; Greenshift theme active alongside three unused default
+themes. Published pages are Cart 13, Checkout 14, My account 15 and the old Home
+129 — which coexists with migrated Home 626.
+- **Production surveyed (read-only):** 79 active plugins, 656 orders, 75 posts,
+76 pages, 12 products, and Gravity Forms carrying real history (home calculator
+3635 entries, installation form 389, Boilergarant 56, installers 137). Services
+running there that staging lacked: SMTP sending, WPML multilingual, Tag Manager
+/ Meta Pixel / Pixel Manager / Google for WooCommerce / Hotjar, PDF invoicing
+plus WeFact, product add-on fields, MailerLite, backups and caching.
+- **Replicated to staging so far:** Gravity Forms Zero Spam (installed, active,
+and regression-tested — the wizard still completes and the entry lands);
+WP Mail SMTP configured exactly as production (own mail server
+`mail.solyxenergy.nl`, SSL/465, auth on, sender `noreply@solyxenergy.nl` as
+"Solyx Energy", forced sender) with the password left blank for the client;
+PDF Invoices configured with the production company block, VAT and chamber of
+commerce numbers, footer text, A4/Simple template, attached to the new-order and
+processing-order emails, "WS" prefix, 30-day due date.
+- **Deliberately not copied:** the invoice counter. Production is past 656 and
+still issuing, so cloning it now would duplicate numbers. Set staging's counter
+to production's final number at cutover.
+- **Staging cleaned:** inherited published pages trashed (old Home 129, Shop 12
+— 12 restored because WooCommerce's shop-page setting still referenced it).
+Cart, Checkout and My account kept as WooCommerce system pages. The 23 migrated
+drafts are untouched. Front page still points at trashed page 129 and must be
+repointed to migrated Home 626 once that is published.
+- **Next:** client enters the SMTP password, then send a real test message to
+prove delivery end-to-end. Then tracking.
 - **Output:** dependency-aware `keep / replace / disable / remove` list.
-- **Blocker:** none.
+- **Blocker:** none. Production access works while the Arc session holds; it
+signs out periodically and a SiteGround bot challenge sits in front of it, so
+re-authentication is needed before any further production reads.
 
 
 
 ## Lane 1 — Forms and quotation routing
 
 - **Status:** `in_progress`
-- **Done:** staging had zero Gravity Forms and both wizards faked success —
-submit only rendered the "Bedankt!" step. Forms **1** (Installatie aanvraag) and
-**4** (Boilergarant) now exist, notifying `info@solyxenergy.nl` with the
-submitter as reply-to. WPCode snippet **859** renders a hidden AJAX form on
-pages 800/807 and loads the bridge (D-25); page content unchanged.
-- **Evidence:** full 17-step walk on both pages produced entries with every
-field correct, `source` distinguishing the two variants, and 4 photos stored and
-retrievable (`200 image/png` via `gf-download`); both slots of one photo zone
-fill independently. GF entry note: "WordPress successfully passed the
-notification email to the sending server." An invalid email showed the Dutch
-error plus GF's message and did **not** advance to "Bedankt!". Test entries
-trashed; reproduce with `work/launch/lane1/scripts/e2e-submit.js`.
-- **Next:** confirm a notification actually lands in the `info@solyxenergy.nl`
-inbox, then wire the `Aan de slag` (801) result CTAs — all five are still
-`href="#"` — once product routing is decided.
-- **Blocker:** English parity needs a multilingual mechanism (none installed);
-`Aan de slag` product routing is awaiting the user's decision.
+- **Done:** all four approved form UIs now submit into real Gravity Forms with
+the frontend unchanged. Forms **1** (Installatie), **4** (Boilergarant), **5**
+(Contactvraag, page 721) and **6** (Installateurs inkoopinformatie, page 781)
+are active and notify `info@solyxenergy.nl` with the submitter as reply-to;
+pages 721 and 781 previously faked success and discarded every submission.
+WPCode snippet **859** renders the hidden AJAX form per page (800→1, 807→4,
+721→5, 781→6) and loads one bridge bundle with three adapters (D-25); page
+content unchanged. Backend defects closed: form 4 now accepts the wizard's
+`horizontal` boiler choice, which was silently dropped; upload extensions
+widened to match `accept="image/*"`; phone fields moved off GF's US `standard`
+mask to `international`; Dutch validation messages on required fields;
+submitter confirmation notification on all four forms; personal-data
+export/erase mapping set. Bridge timeout 60s → 180s and it no longer re-enables
+submit on timeout, which had been producing duplicate leads.
+- **Evidence:** run `E2E-1785770194746` drove all four UIs through their own
+visible controls. Entries 6/7/8/9 recorded every field, including
+`boilerType: horizontal` on form 4 and `tapwater`, `marketingOptIn`, `source`
+and `pageUrl` on form 5. Existing success states unchanged (wizard step 17,
+`.sent`, "Verzonden ✓"). Test entries trashed; reproduce with
+`work/launch/lane1/scripts/e2e-all.js`. Form changes are idempotent and
+versioned in `work/launch/lane1/migrate.php`.
+- **Next:** once mail authenticates, confirm arrival and spam placement at
+`info@solyxenergy.nl`, then wire the `Aan de slag` (801) result CTAs — all five
+are still `href="#"` — once product routing is decided.
+- **Blocker:** **no form notification can leave the site.** Every one of the
+eight notifications fired by the E2E run failed with `SMTP Error: Could not
+authenticate` (WP Mail SMTP debug events #4–#8) — the empty SMTP password of
+CLIENT-QUESTIONS A1, now confirmed against live submissions rather than
+inferred. Earlier "passed to the sending server" entry notes predate the SMTP
+mailer and are not evidence of delivery. English parity still needs a
+multilingual mechanism; `Aan de slag` product routing awaits the user.
 
 
 
 ## Lane 2 — Commerce and Mollie
 
-- **Status:** `ready`
-- **Next:** inspect staging WooCommerce products and Mollie mode; map the two
-launch products and replace cosmetic cart behavior.
-- **Done when:** both products complete cart, checkout, payment
-success/failure, order confirmation, and email flows in both languages.
-- **Blocker:** none.
+- **Status:** `in_progress`
+- **Done:** the inherited 13-product component catalogue was trashed
+(recoverable) and replaced with the two launch products, priced from the static
+HTML configurator which the client confirmed is authoritative: `NYMO`
+€611–€649 (standard/Homey) and `NYMO-SET` €1.076–€1.768 (14 combinations,
+standard + 100L steel = €1.189). Tax needed no change — prices are BTW-inclusive
+with a 21% NL rate. EU standard rates corrected from a blanket 21% to
+destination values (DE 19, AT 20, SE 25, FI 25.5, LU 17, DK 25); revert if the
+client is under the €10k threshold and not OSS-registered. Mollie live key is
+present and iDEAL + Bancontact are enabled. Scripts in `work/launch/lane2/`.
+- **Not verified:** no checkout has been run. Cart → checkout → Mollie redirect
+→ order status → confirmation email are all unproven. The payment step itself
+needs the client, since it requires their bank login.
+- **Next:** drive a real order to the Mollie redirect, then have the client
+complete payment and verify order status and emails.
+- **Blocker:** Belgium shipping cost and the €1.725 package composition are
+client questions (see Needs review); go-live also needs the delivery/returns
+text.
 
 
 
@@ -69,9 +125,11 @@ success/failure, order confirmation, and email flows in both languages.
 routes; replace legal stubs from the approved source documents.
 - **Done when:** every launch route, system message, form, checkout, legal link,
 canonical, and language switch works in both languages.
-- **Blocker:** no multilingual plugin is installed on staging (no WPML,
-Polylang, or TranslatePress in the active list), so no lane can pass its
-English half until the mechanism is chosen.
+- **Blocker:** (1) all three legal pages — privacy, delivery/returns, terms —
+are empty placeholders on both the static sources and staging; production
+appears to hold the real text and should be copied across (CLIENT-QUESTIONS B4).
+This blocks taking real payments. (2) No multilingual plugin is installed, so no
+lane can pass its English half until the mechanism is chosen.
 
 
 
@@ -106,6 +164,9 @@ inaccessible controls, or editor regressions.
 - **Blocked by:** lanes 0–5.
 - **Next:** apply the reviewed staging inventory, verify the clean site, then
 prepare the approved domain/SSL switch.
+- **Checklist:** `work/launch/CUTOVER.md` holds every switch-day step, including
+the media URL search-and-replace, re-enabling search indexing, the invoice
+counter, and the 301 table.
 - **Done when:** staging is healthy on the production hostname and legacy can
 stop without a database/customer/order/stock migration.
 
@@ -122,21 +183,14 @@ least-privilege WordPress access, draft-first edits, and approval gates.
 
 ## Needs review
 
-Open findings awaiting a decision. Each names the lane that owns the fix.
+Client questions — credentials and business decisions — live in
+`work/launch/CLIENT-QUESTIONS.md`. Blocking right now: the SMTP password (A1),
+the delivery and returns text (B4), and Tag Manager / Meta / WPML credentials
+(A2, A3, A5) before tracking and English can start.
 
-- **Notification delivery (lane 1).** Gravity Forms logs that WordPress passed
-the mail to the sending server, which is as far as evidence reaches from inside
-WordPress. Someone with the `info@solyxenergy.nl` mailbox must confirm a test
-notification actually arrives, including its spam placement.
-- **`Aan de slag` product routing (lane 1).** All five quiz result CTAs on page
-801 are still `href="#"`. Three targets are unambiguous (Boilergarant 807,
-installatieformulier 800, handleidingen 756); the two shop outcomes both point
-at the plain Nymo, so the second launch product, Nymo with boiler, has no
-purchase route from the quiz. Deferred pending discussion — wiring it may need
-an approved change to the quiz UI.
-- **Alliance No.2 font CDN returns 500 (page assets).** Logged in
-`work/greenshift-migration/ISSUES.md`; affects every page importing that font,
-not just the wizards, and is invisible on screen because the fallback holds.
+**Staging is a clone of an old production site. Nothing already configured there
+is evidence of a decision — treat every pre-existing setting as unverified
+legacy until confirmed against production or by the client.**
 
 ## Update format
 

@@ -1,10 +1,10 @@
 <?php
 /**
- * Solyx Lane 1 — installation form backend.
+ * Solyx Lane 1 — form backend.
  *
- * Renders a real Gravity Form (hidden, AJAX) on the two installation wizard
- * pages and loads the bridge that submits the approved wizard UI into it.
- * The migrated page content is not modified.
+ * Renders a real Gravity Form (hidden, AJAX) on each page that carries an
+ * approved form UI, and loads the bridge that submits that UI into it. The
+ * migrated page content is not modified.
  *
  * Source of truth: work/launch/lane1/{snippet.php,bridge.js}
  * Redeploy with: node work/launch/lane1/scripts/deploy-snippet.js
@@ -15,7 +15,8 @@ if ( ! defined( 'ABSPATH' ) ) { return; }
 if ( ! function_exists( 'solyx_lane1_form_id' ) ) {
 	/**
 	 * Page ID => Gravity Forms form ID.
-	 * 800 Installatie Formulier · 807 Installatie Formulier Boilergarant
+	 * 800 Installatie Formulier      · 807 Installatie Formulier Boilergarant
+	 * 721 Veelgestelde vragen        · 781 Voor Installateurs
 	 */
 	function solyx_lane1_form_id() {
 		if ( is_admin() || ! is_page() ) {
@@ -24,6 +25,8 @@ if ( ! function_exists( 'solyx_lane1_form_id' ) ) {
 		$map = array(
 			800 => 1,
 			807 => 4,
+			721 => 5,
+			781 => 6,
 		);
 		$id  = (int) get_queried_object_id();
 		return isset( $map[ $id ] ) ? (int) $map[ $id ] : 0;

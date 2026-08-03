@@ -1,8 +1,10 @@
 #!/usr/bin/env node
 /**
- * Lane 1 — deploy the installation-form backend WPCode snippet to staging.
+ * Lane 1 — deploy the form-backend WPCode snippet to staging.
+ *
  * Builds snippet.php with bridge.js inlined, then creates or updates the
- * snippet by title. Staging only.
+ * snippet by title. Drives the user's authenticated Arc session over CDP;
+ * staging only, and every navigation is hostname-guarded.
  */
 const fs = require("node:fs");
 const path = require("node:path");
@@ -11,7 +13,6 @@ const { chromium } = require(path.join(MIG, "node_modules", "playwright"));
 
 const HOST = "2026.solyxenergy.nl";
 const BASE = `https://${HOST}`;
-const AUTH = path.join(MIG, "wp-auth-state.json");
 const LANE = path.resolve(__dirname, "..");
 const TITLE = "Solyx Lane 1 — installation form backend";
 
@@ -28,22 +29,36 @@ async function main() {
   const code = buildPhp();
   if (code.includes("__BRIDGE_B64__")) throw new Error("bridge placeholder not replaced");
 
-  const browser = await chromium.launch({ headless: true });
-  const ctx = await browser.newContext({ storageState: AUTH, viewport: { width: 1500, height: 1100 } });
-  const page = await ctx.newPage();
-  try {
-    await page.goto(`${BASE}/wp-admin/admin.php?page=wpcode`, { waitUntil: "domcontentloaded" });
-    if (page.url().includes("wp-login.php")) throw new Error("SESSION_EXPIRED");
+  const browser = await chromium.connectOverCDP("http://127.0.0.1:9222");
+  let page = null;
+  for (const ctx of browser.contexts()) {
+    for (const p of ctx.pages()) {
+      try { if (new URL(p.url()).hostname === HOST) { page = p; break; } } catch (_) {}
+    }
+    if (page) break;
+  }
+  if (!page) throw new Error("no staging tab open in Arc");
 
+  const go = async (url, settle = 3000) => {
+    if (new URL(url).hostname !== HOST) throw new Error(`refusing: ${url}`);
+    await page.goto(url, { waitUntil: "domcontentloaded", timeout: 90000 });
+    await page.waitForLoadState("load", { timeout: 30000 }).catch(() => {});
+    await page.waitForTimeout(settle);
+    if (new URL(page.url()).hostname !== HOST) throw new Error(`aborted: landed on ${page.url()}`);
+    if (page.url().includes("wp-login.php")) throw new Error("SESSION_EXPIRED");
+  };
+
+  try {
+    await go(`${BASE}/wp-admin/admin.php?page=wpcode`);
     const existing = await page.evaluate((title) => {
-      const links = [...document.querySelectorAll("a")].filter((n) => n.textContent.trim() === title);
-      const pick = links.find((n) => /snippet_id=\d+/.test(n.href)) || links[0];
-      return pick ? pick.href : null;
+      const rows = [...document.querySelectorAll("table.wp-list-table tbody tr")];
+      const row = rows.find((r) => (r.innerText || "").includes(title));
+      if (!row) return null;
+      const a = [...row.querySelectorAll("a")].find((x) => /snippet_id=\d+/.test(x.href));
+      return a ? a.href : null;
     }, TITLE);
 
-    const target = existing || `${BASE}/wp-admin/admin.php?page=wpcode-snippet-manager&custom=1`;
-    await page.goto(target, { waitUntil: "networkidle" });
-    await page.waitForTimeout(1200);
+    await go(existing || `${BASE}/wp-admin/admin.php?page=wpcode-snippet-manager&custom=1`, 3500);
 
     await page.evaluate(
       ({ code, title, isNew }) => {
@@ -79,21 +94,21 @@ async function main() {
 
         // "Save Snippet" is <button name="button" value="publish">; a bare
         // form.submit() drops that value and WPCode saves nothing.
-        const save = [...form.querySelectorAll('button[type=submit][name="button"]')].find(
-          (b) => b.value === "publish"
-        );
+        const save = [...form.querySelectorAll('button[type=submit][name="button"]')].find((b) => b.value === "publish");
         if (!save) throw new Error("WPCode save button not found.");
         form.requestSubmit(save);
       },
       { code, title: TITLE, isNew: !existing }
     );
 
-    await page.waitForTimeout(3500);
-    await page.goto(`${BASE}/wp-admin/admin.php?page=wpcode`, { waitUntil: "domcontentloaded" });
+    await page.waitForTimeout(4000);
+    await go(`${BASE}/wp-admin/admin.php?page=wpcode`);
     const row = await page.evaluate((title) => {
-      const rows = [...document.querySelectorAll("#the-list tr")];
-      const r = rows.find((x) => x.innerText.includes(title));
-      return r ? r.innerText.replace(/\s+/g, " ").trim().slice(0, 160) : null;
+      const rows = [...document.querySelectorAll("table.wp-list-table tbody tr")];
+      const r = rows.find((x) => (x.innerText || "").includes(title));
+      if (!r) return null;
+      const toggle = r.querySelector("input.wpcode-status-toggle");
+      return { text: r.innerText.replace(/\s+/g, " ").trim().slice(0, 120), active: toggle ? toggle.checked : null };
     }, TITLE);
 
     console.log(JSON.stringify({ ok: !!row, mode: existing ? "update" : "create", row }, null, 2));
