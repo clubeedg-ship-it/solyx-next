@@ -90,43 +90,46 @@ Does not reconcile with €1,189 plus roughly €400 for installation. It works 
 if the package assumes the 150-litre tank (€1,329 + ~€400). Needed before that
 tier is advertised.
 
-### B4. Legal pages are all empty — HARD BLOCKER for going live
-Not just delivery and returns. **All three legal pages are placeholders** that
-read "this page will be filled in shortly":
+### B4. Legal pages — LIVE, but the privacy policy needs a client update
 
-| Page | Status |
-|---|---|
-| Privacy policy | placeholder, 733 characters |
-| Levering en retourbeleid (delivery & returns) | placeholder, 751 characters |
-| Algemene voorwaarden (terms & conditions) | placeholder, 778 characters |
+All three legal pages are now published with real text. The compliance blocker
+is cleared; what remains is accuracy, not absence.
 
-A Dutch webshop taking real payments must publish terms, a privacy policy, and
-delivery/returns including the 14-day right of withdrawal. Going live without
-them is a compliance failure, not a content gap.
+| Page | Source | Live size |
+|---|---|---|
+| Algemene voorwaarden | production `/algemene-voorwaarden/` | 21,461 chars, 16 articles |
+| Levering en retourbeleid | production `/levering-en-retourbeleid/` | 3,146 chars |
+| Privacy policy | transcribed from the May 2022 PDF | 3,818 chars |
 
-**Two of the three are solved.** The real text was pulled off live production
-and saved to `work/launch/lane3/legal/`, ready to import:
+The delivery page carries the legally required "Europese Unie 14 dagen
+bedenktijd" — the EU 14-day right of withdrawal.
 
-| Page | Source | Size | Status |
-|---|---|---|---|
-| Algemene voorwaarden (terms) | `/algemene-voorwaarden/` | 21,891 chars | captured, ready |
-| Levering en retourbeleid | `/levering-en-retourbeleid/` | 3,599 chars | captured, ready |
-| Privacy policy | **no page exists** | — | see below |
+Both were rebuilt as WordPress core blocks after the first import: production's
+Elementor markup carried fixed 1470px containers that clipped roughly 75% of the
+terms text beyond reach on a 360px phone. Text was transcribed unchanged.
 
-The delivery text does cover the legally required point: a 15-day return window
-plus an explicit "Europese Unie 14 dagen bedenktijd" section — the EU 14-day
-right of withdrawal. It also states return postage is at the customer's cost
-unless the item is faulty, which sits alongside the free *outbound* shipping the
-shop pages advertise. Not contradictory, but worth the client confirming.
+**The privacy policy needs four additions from the client.** It dates from May
+2022 and predates most of what the site now does. Nothing in it is wrong; it is
+incomplete. No legal wording was invented — the PDF was transcribed as-is.
 
-**Privacy policy — still an open question.** Production has no privacy page at
-all. Its footer links to a PDF, `Privacy-Verklaring-Solyx-Energy.pdf`, uploaded
-in **May 2022**. Two problems: a PDF is a poor home for a policy the site must
-link from cookie banners, forms and checkout, and a 2022 document predates the
-current shop, the forms, and any tracking now planned. The client needs to
-decide: convert and update the PDF into a real page, or supply new copy.
+1. **Address and photo data.** The policy lists name, town, phone, email and
+   site activity. The installation form also collects a **home installation
+   address and up to eight photographs of the customer's home** — meter
+   cupboard, boiler, installation space. Neither is mentioned.
+2. **Sharing with installers.** The form's required consent box says the
+   submission is shared with the installer in the customer's region and points
+   at this policy as the explanation. The policy only says data is shared where
+   necessary to perform the agreement — it never names installers as recipients.
+3. **Payment processing.** The webshop takes real payments through Mollie. The
+   2022 policy predates the shop entirely and says nothing about payment data.
+4. **Tracking.** Google Tag Manager, Analytics and the Meta Pixel are planned.
+   The cookie section describes tracking cookies generically but names no
+   provider and covers no transfer outside the EU.
 
-**To import the two captured pages:** a working staging admin session.
+**Also worth an explicit confirmation:** the returns text says return postage is
+at the customer's cost unless the item is faulty, while the shop pages advertise
+free shipping. Free outbound and paid return is a normal arrangement — it just
+needs to be deliberate.
 
 ### B5. Product routing on the "Aan de slag" page
 All five quiz outcomes still link nowhere. Three targets are obvious. The two
@@ -143,3 +146,37 @@ day, or the accounting gets duplicate invoice numbers.
 The front-page setting still points at the old home page, now trashed. It needs
 to point at migrated Home (page 626), which means publishing 626 — a publish
 decision, not a technical one.
+
+### B8. Two pages have never been written — blocking a clean launch
+`/zonnestroomboiler/` and `/werken-bij/` both render:
+
+> **ONDER CONSTRUCTIE** — Deze pagina wordt binnenkort ingevuld.
+
+This is not a migration defect. The static design files say exactly the same
+thing, so the copy has never existed. Both pages are linked from the footer, so
+a visitor browsing the finished site lands on them.
+
+Between them these are a product page and a careers page — the text has to come
+from the client; inventing product claims or job descriptions is not an option.
+
+**Two choices, both one small change:**
+
+1. Client supplies the copy for either or both, and they go live properly.
+2. Ship without them: remove the two footer links so nothing points at an
+   unfinished page. The pages stay reachable by direct URL and can be linked
+   again the moment the copy arrives.
+
+Recommendation: option 2 if the copy will not be ready today. A production site
+should not advertise pages that announce they are unfinished.
+
+### B9. The savings figure shown on the home page
+The home calculator was migrated as a static mock and has been made to work
+again. Its numbers now follow the `/besparen/` calculator exactly, so the two
+pages agree — €342 for the default 8 panels and 3 people.
+
+Worth a client sanity check: the old static home page carried a *different*
+formula that returned €130 for that same input, while the panel directly above
+it claims €338 for 3 people with 10 panels. Those three numbers never agreed
+with each other in the source material. The site is now self-consistent, but
+the client should confirm the `/besparen/` model is the one they stand behind,
+because it is what customers now see everywhere.

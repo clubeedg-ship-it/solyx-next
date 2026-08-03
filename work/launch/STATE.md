@@ -145,7 +145,15 @@ still open.
 customers. Set to `nl_NL`. Setting this operator's own profile language back to
 English is still pending — WordPress lists that option with an empty value, and
 the browser session locked up before it was applied.
-- **Both products have no image** — the shop grid shows placeholder icons.
+- **Both products now carry the design's own images** — `nymo-sensor.jpg` and
+`complete-tesy-v.jpg`, the heroes of the two static shop pages, attached from
+media already in the library rather than uploading duplicates. Shop grid shows
+2 product images and 0 placeholders.
+- **The storefront speaks Dutch.** Setting the site language alone was not
+enough — the translation files still had to be fetched, until which point
+WooCommerce kept rendering English. The four system pages were also renamed
+(Winkel, Winkelwagen, Afrekenen, Mijn account); their slugs are unchanged so
+WooCommerce settings and existing links still resolve.
 - **Not verified:** no checkout has been run. Cart → checkout → Mollie redirect
 → order status → confirmation email are all unproven. The payment step itself
 needs the client, since it requires their bank login.
@@ -240,6 +248,23 @@ a toggle that opens the links and the Bestel button, so the fix landed once
 rather than per page. Verified at 390px on the migrated and the legal pages —
 toggle visible, no horizontal overflow. All 23 pages measure 0 overflow at
 1440px with the chrome painted on top.
+- **Home snap-scroll works again.** The container was never missing: `.solyx-hb`
+already had `scroll-snap-type: y mandatory` over 7200px of 100vh panels that
+each carry `scroll-snap-align: start`. What it lacked was the `#scroll-container`
+id that snippet 296 keys on, so the page took the "ordinary page" branch — html
+and body stayed 1522px tall, the window scrolled 622px, and the real scroller
+sat inside it. Adding the anchor to that one group locks the viewport and hands
+scrolling to the container. Verified with four wheel gestures: 900, 1800, 2700,
+3600 exactly, section rail tracking WaterAccu → Besparing → Reviews →
+Vergelijking.
+- **The home savings calculator is real again.** It had migrated as a mock — a
+label paragraph plus an `<hr>` styled to look like a track — on a panel headed
+"Stel jouw situatie in en zie direct je besparing". The separators are now range
+inputs using the original ids and the `cslider` styling, which survived intact.
+The numbers follow `/besparen/` rather than the old static formula; see
+CLIENT-QUESTIONS B9 for why, and keep the two constants in step with that page.
+Verified against six sampled inputs: 342, 427, 183, 548, 683, 43 — identical to
+`/besparen/` on every one.
 - **Available, not yet deployed:** `work/launch/lane5/responsive-fixes.css`
 from the fix agent. Its measurements were taken while the stale cache was
 serving two different versions of the same URLs, and several rules are scoped to
