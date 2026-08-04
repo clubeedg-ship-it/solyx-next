@@ -24,9 +24,6 @@ Order matters where noted.
       today only because legacy is still up; they break the instant it stops.
       WordPress must pull each image into its own media library and the post
       content be rewritten to the new URLs.
-- [ ] **Import the 32 English blog posts** once WPML is installed. They are
-      captured in `work/launch/lane3/blog/` and were deliberately held back
-      because their `/en/` paths cannot become WordPress slugs without it.
 - [ ] Record production's **final invoice number**. Staging's counter was
       deliberately left alone to avoid duplicate numbers across two live systems.
 
@@ -44,8 +41,6 @@ Order matters where noted.
       search, and nobody notices for weeks. This is the highest-consequence item
       on this list.
 - [ ] Set the **invoice counter** to production's final number.
-- [ ] **Re-activate the WPML licence** for the live hostname — licences are tied
-      to a domain.
 - [ ] Load the **301 redirect table**.
 
 ## After the switch
@@ -59,6 +54,50 @@ Order matters where noted.
 - [ ] Confirm **Mollie's webhook** reaches the new domain.
 - [ ] Spot-check the redirect table against real old URLs.
 - [ ] **Stop the legacy site** only once the above pass.
+
+---
+
+---
+
+## English, after the switch — client observation, not a question
+
+The site launches in Dutch only. That is a decision, not a gap: nothing is
+half-translated and no visitor sees an empty English page. English becomes a
+separate phase once the site is live on its real domain.
+
+**What we need from the client: one line of text — the WPML site key.**
+
+Not an API key, not their WordPress login, and nothing to buy.
+
+How it actually works, so the ask is clear in the meeting:
+
+1. WPML is a paid plugin the client already owns. Their subscription lives in an
+   account on **wpml.org**, and it is already registered to `solyxenergy.nl`,
+   because that is what production runs today.
+2. A WPML **site key** is a short string tied to a domain. Because the new site
+   launches on that same domain, the registration they already have is the one
+   we use. The old install being switched off does not affect it — the key
+   belongs to the domain, not to the installation.
+3. The client logs in at wpml.org, opens their site `solyxenergy.nl`, copies the
+   site key, and sends it to us. If the old install still holds it, they reset
+   the key from that same screen and send the new one.
+4. We paste it into WordPress. From that point WordPress can download and update
+   the WPML components by itself — no file transfers, no further logins.
+
+If the client would rather not handle it, the alternative is that they give us
+the wpml.org account login and we take the key ourselves. Either route works;
+the key is the only thing that has to travel.
+
+**Then a second, separate decision — who translates.** Registering WPML only
+provides the machinery. The Dutch content still has to become English one of
+three ways: the client writes it, a translator is hired, or WPML's automatic
+translation does it. Only the third has an extra cost — it runs on credits that
+are bought on top of the subscription. This decision can wait until the site is
+live; it changes nothing about the launch.
+
+Held for this phase: the **32 English blog posts** in
+`work/launch/lane3/blog/`, captured and ready. Their `/en/` paths cannot become
+WordPress slugs until WPML is registered.
 
 ---
 
