@@ -13,17 +13,25 @@ Order matters where noted.
       (76 pages, 75 posts). Write every rule root-relative — `/old/ → /new/`,
       never with a hostname — so it survives the domain change untouched.
       See `REDIRECT-MAP.md` §5.
-- [ ] **Confirm the blog decision is executed.** Production has 75 published
-      posts; staging has none. `blog-news` links 35 of them. See `SEO-PLAN.md` §2.1.
-- [ ] **Migrate the manuals and datasheets** into the new media library — 6 PDFs
-      from the guides page plus the privacy statement linked by both forms.
-      They currently point at the legacy site and die with it.
-      See `REDIRECT-MAP.md` §4a.
-- [ ] **Sideload the blog images.** 43 Dutch posts are imported and live, but
-      **115 of their 119 images still load from the legacy domain**. They render
-      today only because legacy is still up; they break the instant it stops.
-      WordPress must pull each image into its own media library and the post
-      content be rewritten to the new URLs.
+- [x] **Blog decision executed.** 43 Dutch posts are imported and live. The ~32
+      English ones are held for the WPML phase after cutover.
+- [x] **Migrate the manuals and datasheets** — done. 9 PDFs (the Nymo and Solar
+      iBoost manuals in NL/UK/DE/FR, plus the privacy statement linked by both
+      forms) and one video are now hosted on the new site; 18 references across
+      7 pages and posts were rewritten, and all ten serve 200. Nothing on the
+      site loads from the legacy domain any more, so switching it off breaks
+      nothing.
+      A server-side sideload cannot do this — the legacy host answers
+      non-browser requests with a 202 challenge, which is what made the earlier
+      PHP attempt record them as permanent failures. The files were fetched
+      same-origin from a browser tab on the legacy domain instead.
+      One casualty: the Gawalo publisher logo in post 969 was already 404 on the
+      legacy site in all three sizes, so there was nothing to migrate. The dead
+      `<img>` was removed; the article text is untouched.
+- [x] **Blog images resolved.** A full re-scan of all 70 pages and posts finds
+      **zero** remaining references to the legacy domain. The earlier "115 of
+      119 images" figure is stale — those images were pulled across by the
+      sideload passes; only the files listed above were left, and they are done.
 - [ ] Record production's **final invoice number**. Staging's counter was
       deliberately left alone to avoid duplicate numbers across two live systems.
 

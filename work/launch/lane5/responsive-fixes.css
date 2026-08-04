@@ -1,0 +1,814 @@
+/* ============================================================================
+   Solyx Energy — Lane 5 responsive fixes
+   Source of defects: work/launch/QA-RESPONSIVE.md
+   Author: lane 5 CSS pass, 2026-08-03. Measured on Chromium (Playwright 1.61.1)
+   against https://2026.solyxenergy.nl.
+
+   RULES OBSERVED
+   - Mobile-first / additive. Every rule lives inside a `max-width` media query
+     that stops short of the approved desktop design. Nothing outside a media
+     query, so >=1200px renders exactly as today.
+   - No `!important` anywhere in this file. Every override wins on specificity
+     alone; the rule being outranked is named in the comment above it.
+   - Every selector is prefixed with a page wrapper (`.solyx-page-*`,
+     `body.home`) or the site footer element, so a fix cannot reach a page that
+     currently measures clean.
+   - No `overflow:hidden` / `display:none` is used to make a number go away.
+     Where content is wider than a phone, it is either reflowed or handed to an
+     existing, author-designed scroll container (`.vscroll`, `.spec-wrap`),
+     so every element stays reachable.
+
+   BREAKPOINT CHOICE
+   - 900px: matches the site's own existing collapse breakpoint
+     (`@media(max-width:900px)` already ships for `.two-col`, `.usp-reviews`,
+     `.shop-section`). Reusing it keeps this file consistent with the theme.
+   - 1199px: used only for the `.two-col` min-width unlock, because
+     /hoe-werkt-het/ and /over-ons/ still overflow at 1024px where the layout is
+     intentionally still two columns. 1280px and up are untouched.
+   ============================================================================ */
+
+
+/* ---------------------------------------------------------------------------
+   DEFECT #4 — /hoe-werkt-het/ `#s-video .two-col` never fits the viewport
+   DEFECT #20 — the same defect, verified on Chromium (the strictest engine)
+
+   Root cause (measured, not the one guessed in the QA report): `.two-col`
+   DOES collapse — `@media(max-width:900px){.two-col{grid-template-columns:1fr}}`
+   already ships and both columns render at left:4. The overflow comes from the
+   grid item's default `min-width:auto`: the automatic minimum size of
+   `.col-l` / `.col-r` is their min-content width (648px at a 360px viewport),
+   which inflates the `1fr` track past the container.
+
+   Measured before, Chromium: documentElement.scrollWidth 639 vs clientWidth 360
+   at 360px; 862 vs 768 at 768px; 1233 vs 1024 at 1024px.
+
+   Fix: release the automatic minimum on the two grid children. The track then
+   resolves to the container width and the inner author-built horizontal
+   scroller `.vscroll` (which already carries `overflow-x:auto`) takes over for
+   the video rail — content stays scrollable and reachable, nothing is hidden.
+
+   Overrides: nothing. No author rule sets `min-width` on these elements; this
+   replaces the UA/grid initial value `auto`. Specificity 0,3,0.
+--------------------------------------------------------------------------- */
+@media (max-width: 1199px) {
+  .solyx-page-hoe-werkt-het .two-col > .col-l,
+  .solyx-page-hoe-werkt-het .two-col > .col-r {
+    min-width: 0;
+  }
+}
+
+
+/* ---------------------------------------------------------------------------
+   DEFECT #5 — /over-ons/ `#s-media .two-col` never fits the viewport
+
+   Same root cause as #4 (`min-width:auto` on the grid children inflating the
+   `1fr` / `280px 1fr` track). Measured before, Chromium:
+   scrollWidth 756 vs 360 at 360px; 1186 vs 1024 at 1024px.
+
+   The media marquee inside `.col-r` already has its own `overflow` container
+   (`.media-track`), so releasing the minimum reflows rather than clips.
+
+   Overrides: nothing (grid initial `auto`). Specificity 0,3,0.
+--------------------------------------------------------------------------- */
+@media (max-width: 1199px) {
+  .solyx-page-over-ons .two-col > .col-l,
+  .solyx-page-over-ons .two-col > .col-r {
+    min-width: 0;
+  }
+}
+
+
+/* ---------------------------------------------------------------------------
+   DEFECT #6 — /shop-complete-wateraccu/ USP/reviews band + product hero
+   DEFECT #7 — /shop-nymo/ USP/reviews band + product hero
+
+   Root cause: identical `min-width:auto` inflation, in two grids per page.
+   `.usp-reviews` and `.wrap` both already collapse to one column at <=900px
+   (`grid-template-columns:1fr` ships), but the track is then pushed out by the
+   min-content of the column:
+     - /shop-complete-wateraccu/: `.usp-col` min-content 520px, forced by
+       `table.spec-table{min-width:520px}` inside `.spec-wrap{overflow-x:auto}`;
+       hero `.wrap` track 482px.  Measured scrollWidth 540 vs 360.
+     - /shop-nymo/: hero `.wrap` track 400px (image box + thumb rail).
+       Measured scrollWidth 420 vs 360.
+
+   Fix: release the automatic minimum on the grid children of both bands. The
+   spec table keeps its full 520px and simply scrolls inside the `.spec-wrap`
+   container the author already built for it — the table is not truncated and
+   every row stays readable.
+
+   Overrides: nothing (grid initial `auto`). Specificity 0,3,0.
+--------------------------------------------------------------------------- */
+@media (max-width: 900px) {
+  .solyx-page-shop-complete-wateraccu .usp-reviews > .usp-col,
+  .solyx-page-shop-complete-wateraccu .usp-reviews > .reviews-col,
+  .solyx-page-shop-complete-wateraccu .wrap > .sticky,
+  .solyx-page-shop-complete-wateraccu .wrap > .config,
+  .solyx-page-shop-nymo .usp-reviews > .usp-col,
+  .solyx-page-shop-nymo .usp-reviews > .reviews-col,
+  .solyx-page-shop-nymo .wrap > .sticky,
+  .solyx-page-shop-nymo .wrap > .config {
+    min-width: 0;
+  }
+}
+
+
+/* ---------------------------------------------------------------------------
+   DEFECT #8 — installation wizard: 276-328px of dead space between two fields
+   DEFECT #9 — installation wizard: field row pinned to 100vh at 768x1024
+
+   Root cause: the wizard's own rule is
+     `.field-row.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px}`
+   with a correct `@media(max-width:540px){grid-template-columns:1fr}`.
+   The height comes from a DIFFERENT section's stylesheet: the global
+   `.two-col{min-height:100vh}` used by the marketing snap-pages leaks onto the
+   wizard because both use the bare class name `two-col`. Measured computed
+   `min-height` on `#form-step-1 .field-row.two-col`: 740px at 360x740 and
+   1024px at 768x1024 — exactly 100vh, holding 86px of content.
+
+   Fix: cancel the inherited viewport minimum on the wizard's field rows only.
+   The wizard stage itself (`.stage-inner.stage`, min-height 100vh) is left
+   alone — that full-height stage is the intended design; only the field row
+   inside it is wrong.
+
+   Overrides: `.two-col { min-height: 100vh }` (specificity 0,1,0) from the
+   marketing snap-page stylesheet. This selector is 0,3,0 and wins on
+   specificity — no `!important` required.
+--------------------------------------------------------------------------- */
+@media (max-width: 900px) {
+  .solyx-page-installatie-formulier .field-row.two-col,
+  .solyx-page-installatie-formulier-boilergarant .field-row.two-col {
+    min-height: 0;
+  }
+}
+
+
+/* ---------------------------------------------------------------------------
+   DEFECT #10 — homepage `.hb-nav` height — NOT FIXED, deliberately.
+
+   A compaction was written (cap the logo, tighten the gaps, reorder so the logo
+   and CTA share the first line) and it worked in variant A: `.hb-nav` measured
+   360x236 -> 360x154 at 360x740 (32% -> 21% of the viewport), 390x241 -> 390x154
+   at 390x844, and 768x169 -> 768x102 at 768x1024.
+
+   In variant B the same rules made it WORSE: `.hb-nav` measured 360x206 before
+   and 360x265 after (390: 206 -> 265; 768: 163 -> 193). In that variant the bar
+   is `position:fixed` with a different internal structure, and the reorder plus
+   the 44px tap targets add height instead of removing it.
+
+   Shipping a rule that regresses the live variant is worse than leaving the
+   defect, so the block was removed rather than guessed at. #10 needs to be
+   re-measured against whichever variant is actually served at cutover.
+   The top-nav links are also excluded from the #11 tap-target fix below for the
+   same reason — enlarging them is what grows the bar.
+--------------------------------------------------------------------------- */
+
+/* ---------------------------------------------------------------------------
+   DEFECT #11 — nav and footer link tap targets far below 44x44
+
+   Measured before at 360px:
+     homepage nav   `.hb-nav-link a`      119x23, 80x23, 99x23, 45x23, 44x23
+     homepage footer`.hb-footer-link a`   93x23 … 36x23
+     homepage footer`.hb-footer-company a`123x16, 87x16
+     site footer    `ul.flinks li a`      25x16 … 116x16
+     site footer    `.flegal a`           134x20, 78x20, 138x20
+     site footer    `a.fsoc`              34x34 (x3)
+
+   Fix: give each of these a 44px minimum box at phone/tablet widths by turning
+   the inline anchor into a flex box with a min-height, rather than by growing
+   the font. Font sizes are untouched here, so the visual weight of the footer
+   does not change — only the hit area.
+
+   Excluded on purpose: `address.fcompany a` (120x17, 86x17). Those are inline
+   links inside a running block of address text, which WCAG 2.5.5 explicitly
+   exempts; making them 44px tall would break the address paragraph.
+
+   Overrides: the UA `display:inline` on `a`, and the author rules
+   `.hb-nav-link a` / `.flinks a` (0,1,1 at most). These selectors are 0,3,1 or
+   higher.
+--------------------------------------------------------------------------- */
+@media (max-width: 900px) {
+  body.home .hb-footer-grid .hb-footer-link > a,
+  body.home .hb-footer-bottom .hb-footer-link > a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+
+  footer .fg .flinks > li > a,
+  footer .fbottom .flegal > a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+
+  footer .fsocial > a.fsoc,
+  body.home .fsocial > a.fsoc {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+
+
+/* ---------------------------------------------------------------------------
+   DEFECT #14 — body text at 9-11px
+
+   Measured before at 360px (computed font-size on elements owning a text node):
+     /hoe-werkt-het/  .fc-tag 9px · .fc-hint 9px · .fc-meer-btn 10px ·
+                      .chk-click-hint 10px · .section-tag 10px · .sec-num 11px ·
+                      .hero-tag 11px · .hero-scroll-hint 11px ·
+                      .chk-illus-label 11px · .cost-label 11px ·
+                      .cost-stat-label 11px · .fc-back-desc 11.5px
+     /besparen/       .bd-stat-label 10px · .bd-cum-stat-label 10px ·
+                      .csb2-step-num 10px · .section-tag 10px ·
+                      .hero-tag 11px · .bd-slider-label 11px ·
+                      .bd-pie-legend-row 11px · .csb2-disclaimer 11px
+     site footer      .fct 11px · small 10.83px
+
+   Fix: raise every one of these to the 12px floor at phone/tablet widths only.
+   Desktop keeps the approved type scale. Anonymous `<span>` hits in the audit
+   inherit from these elements, so lifting the owners lifts them too.
+
+   Overrides: the per-section rules that set these sizes (0,1,0). These
+   selectors are 0,2,0, so specificity alone wins.
+--------------------------------------------------------------------------- */
+@media (max-width: 900px) {
+  .solyx-page-hoe-werkt-het .fc-tag,
+  .solyx-page-hoe-werkt-het .fc-hint,
+  .solyx-page-hoe-werkt-het .fc-meer-btn,
+  .solyx-page-hoe-werkt-het .fc-back-desc,
+  .solyx-page-hoe-werkt-het .chk-click-hint,
+  .solyx-page-hoe-werkt-het .chk-illus-label,
+  .solyx-page-hoe-werkt-het .cost-label,
+  .solyx-page-hoe-werkt-het .cost-stat-label,
+  .solyx-page-hoe-werkt-het .section-tag,
+  .solyx-page-hoe-werkt-het .sec-num,
+  .solyx-page-hoe-werkt-het .hero-tag,
+  .solyx-page-hoe-werkt-het .hero-scroll-hint,
+  .solyx-page-besparen .bd-stat-label,
+  .solyx-page-besparen .bd-cum-stat-label,
+  .solyx-page-besparen .bd-slider-label,
+  .solyx-page-besparen .bd-pie-legend-row,
+  .solyx-page-besparen .csb2-step-num,
+  .solyx-page-besparen .csb2-disclaimer,
+  .solyx-page-besparen .section-tag,
+  .solyx-page-besparen .hero-tag {
+    font-size: 12px;
+  }
+
+  footer .fct,
+  footer small {
+    font-size: 12px;
+  }
+}
+
+
+/* ---------------------------------------------------------------------------
+   DEFECT #17 — form radio / checkbox inputs are 20x20 (and 18x18 on /faq/)
+
+   A full 44x44 control would break the Gravity Forms choice rows, and each
+   control already has an adjacent label that extends the hit area (the reason
+   the audit rated this MINOR). This lifts the control itself to the 24x24
+   WCAG 2.5.8 (AA) minimum at phone/tablet widths, which is achievable without
+   relaying out the row.
+
+   Measured before: 20x20 on both wizard pages, 18x18 (`#cf-consent`) on /faq/.
+
+   Overrides: the author `width/height:20px` on these inputs (0,1,1 at most);
+   these selectors are 0,2,1.
+--------------------------------------------------------------------------- */
+@media (max-width: 900px) {
+  .solyx-page-installatie-formulier input[type="checkbox"],
+  .solyx-page-installatie-formulier input[type="radio"],
+  .solyx-page-installatie-formulier-boilergarant input[type="checkbox"],
+  .solyx-page-installatie-formulier-boilergarant input[type="radio"],
+  .solyx-page-faq input[type="checkbox"],
+  .solyx-page-faq input[type="radio"] {
+    width: 24px;
+    height: 24px;
+    min-width: 24px;
+    min-height: 24px;
+  }
+}
+
+
+/* ---------------------------------------------------------------------------
+   DEFECT #4 (second root cause) — /hoe-werkt-het/ page footer grid
+
+   After the `.two-col` unlock above, the remaining 360px overflow on this page
+   is its FOOTER, not the video section. Measured: `footer .fg` computes to
+   `grid-template-columns: 119.6px 116px 88.2px 126px` — four tracks — inside a
+   264px content box, right edge 594px against a 360px viewport.
+
+   Cause is another bare-class-name collision: two stylesheets on this page
+   declare `.fg`. One ships the responsive pair
+   `@media(max-width:900px){.fg{grid-template-columns:1fr 1fr}}` /
+   `@media(max-width:600px){.fg{grid-template-columns:1fr}}`; a later, unscoped
+   `.fg{grid-template-columns:1.5fr 1fr 1fr 1fr}` from a different section wins
+   on source order and re-expands it at every width.
+
+   Overrides: that unscoped `.fg` rule (0,1,0). This selector is 0,2,1 and also
+   later in source order, so it wins twice over — no `!important`.
+   Only <=600px, because 768px already measures 0 overflow on this page.
+--------------------------------------------------------------------------- */
+@media (max-width: 600px) {
+  .solyx-page-hoe-werkt-het footer .fg {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+}
+
+
+/* ---------------------------------------------------------------------------
+   DEFECT #5 (second root cause) — /over-ons/ careers section `#s5`
+
+   After the `.two-col` unlock, `#s5 .two-col` correctly resolves to a single
+   360px track, but `#s5 .col-r` is a ROW flex container: measured children
+   `careers-header` 206px @x4, `job-list` 190px @x209, `careers-footer` 123px
+   @x400 — laid out side by side, right edge 522px against 360px.
+
+   Fix: stack that one column's children on phone/tablet. Nothing is hidden;
+   the three blocks simply follow each other vertically.
+
+   Overrides: the section rule that puts `.col-r` in a row (0,1,0). This
+   selector is 0,2,1.
+--------------------------------------------------------------------------- */
+@media (max-width: 900px) {
+  .solyx-page-over-ons #s5 .col-r {
+    flex-direction: column;
+    flex-wrap: nowrap;
+  }
+}
+
+
+/* ---------------------------------------------------------------------------
+   DEFECT #6 / #7 (second root cause) — shop product thumbnail rails
+
+   After the grid unlock, the residual overflow on both shop pages is the
+   thumbnail rail: `.thumbs{display:flex;gap:10px}` with no wrap, holding 72px
+   thumbs. Measured right edge 502px (/shop-complete-wateraccu/) and 420px
+   (/shop-nymo/) against 360px.
+
+   Fix: let the rail wrap. 4 thumbs x 72px + 3 x 10px gap = 318px, which fits
+   the 320px content box at 360px, so the rail becomes two short rows and every
+   thumbnail stays visible and tappable. (Wrapping, not scrolling, is used here
+   deliberately: a scroll rail would leave later thumbs undiscoverable.)
+
+   Overrides: `.thumbs{display:flex;gap:10px}` (0,1,0). Selector is 0,2,1.
+--------------------------------------------------------------------------- */
+@media (max-width: 900px) {
+  .solyx-page-shop-nymo .thumbs,
+  .solyx-page-shop-complete-wateraccu .thumbs {
+    flex-wrap: wrap;
+  }
+}
+
+
+/* ---------------------------------------------------------------------------
+   DEFECT (not numbered in QA-RESPONSIVE.md; found while verifying #8/#9)
+   /installatie-formulier-boilergarant/ overflows 10px at 360px
+
+   The boilergarant variant adds a `partner-pill` next to the form inside
+   `.stage-inner` (a centred row flex, max-width 640px, padding 100px 18px).
+   Measured: pill 102px + form 278px = 380px in a 324px content box, so the row
+   is centred at x=-10 and ends at x=370 — 10px past the viewport.
+   The plain /installatie-formulier/ has no pill and measures 0.
+
+   Fix: allow that row to wrap, so the partner pill sits above the form.
+
+   Overrides: `.stage-inner`/`.stage` flex rules (0,1,0). Selector is 0,2,0.
+--------------------------------------------------------------------------- */
+@media (max-width: 900px) {
+  .solyx-page-installatie-formulier-boilergarant .stage-inner {
+    flex-wrap: wrap;
+  }
+}
+
+
+/* ---------------------------------------------------------------------------
+   DEFECT #14 (continued) — remaining sub-12px text owners
+
+   Second measured pass, after the first #14 block. Each selector below was
+   observed at the stated size at 360px with the earlier rules already applied.
+   All are lifted to the 12px floor at phone/tablet widths only.
+
+   Overrides: the per-section rules that set these sizes (0,1,0 / 0,1,1).
+   Every selector here is page-scoped, so 0,2,0 or higher.
+--------------------------------------------------------------------------- */
+@media (max-width: 900px) {
+  /* /hoe-werkt-het/ — .comp-leg-item 11.5px, .comparison-chart 11px,
+     .nymo-sw-btn 11px, .nymo-status-pill 10px, .chk-detail 10.83px */
+  .solyx-page-hoe-werkt-het .comp-leg-item,
+  .solyx-page-hoe-werkt-het .comparison-chart,
+  .solyx-page-hoe-werkt-het .nymo-sw-btn,
+  .solyx-page-hoe-werkt-het .nymo-status-pill,
+  .solyx-page-hoe-werkt-het .chk-detail,
+  .solyx-page-hoe-werkt-het .chk-detail small,
+  .solyx-page-hoe-werkt-het .chk-detail a,
+  /* /over-ons/ — .hero-scroll-hint 11, .sec-num 11, .section-tag 10,
+     .founder-tag 10, .job-chip 10 */
+  .solyx-page-over-ons .hero-scroll-hint,
+  .solyx-page-over-ons .sec-num,
+  .solyx-page-over-ons .section-tag,
+  .solyx-page-over-ons .founder-tag,
+  .solyx-page-over-ons .job-chip,
+  /* shop pages — .img-badge 11, .sec-label 11, .v-tag 11,
+     .addons-title 11, .addons-note 11, .trust-i 11 */
+  .solyx-page-shop-nymo .img-badge,
+  .solyx-page-shop-nymo .sec-label,
+  .solyx-page-shop-nymo .v-foot,
+  .solyx-page-shop-nymo .addons-title,
+  .solyx-page-shop-nymo .addons-note,
+  .solyx-page-shop-nymo .trust-i,
+  .solyx-page-shop-complete-wateraccu .img-badge,
+  .solyx-page-shop-complete-wateraccu .sec-label,
+  .solyx-page-shop-complete-wateraccu .v-foot,
+  .solyx-page-shop-complete-wateraccu .addons-title,
+  .solyx-page-shop-complete-wateraccu .addons-note,
+  .solyx-page-shop-complete-wateraccu .trust-i,
+  /* wizard pages — .partner-pill 11, .step-counter-label 10 */
+  .solyx-page-installatie-formulier .partner-pill,
+  .solyx-page-installatie-formulier .step-counter-label,
+  .solyx-page-installatie-formulier-boilergarant .partner-pill,
+  .solyx-page-installatie-formulier-boilergarant .step-counter-label,
+  /* /besparen/ — the three toggle pills, 11px */
+  .solyx-page-besparen #sw-pill-off,
+  .solyx-page-besparen #sw-pill-on,
+  .solyx-page-besparen #dm-pill,
+  /* /handleidingen/ — .group-num 11, .lang-pill 11 */
+  .solyx-page-handleidingen .group-num,
+  .solyx-page-handleidingen .lang-pill,
+  /* /faq/ — .faq-sidebar-label 11, .cat-count 11, .contact-label 10 */
+  .solyx-page-faq .faq-sidebar-label,
+  .solyx-page-faq .cat-count,
+  .solyx-page-faq .contact-label {
+    font-size: 12px;
+  }
+}
+
+
+/* ---------------------------------------------------------------------------
+   DEFECT #11 (continued) — remaining sub-44px tap targets
+
+   Second measured pass at 360px, after the first #11 block. Sizes recorded in
+   the comment next to each group. All fixes give the anchor/button a 44px
+   minimum box; none changes a font size, so the visual type scale is untouched.
+
+   Overrides: the UA `display:inline` and the author link rules (0,1,1 at most).
+   Every selector below is page- or component-scoped and at least 0,2,1.
+--------------------------------------------------------------------------- */
+@media (max-width: 900px) {
+  /* installer strip: 90x15 (inner pages) / 129x23 (home) */
+  .solyx-installer .solyx-installer-link > a,
+  body.home .hb-installer .hb-installer-link > a,
+  /* shop breadcrumbs: 33x15, 37x15 */
+  .solyx-page-shop-nymo .crumb-link > a,
+  .solyx-page-shop-complete-wateraccu .crumb-link > a,
+  /* homepage body links rendered as standalone targets: 129x23, 237x23 */
+  body.home .hb-video-link,
+  body.home .hb-rrsr > a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+
+  /* Themed CTA buttons render at exactly 43px tall — 1px under the minimum. */
+  [class*="solyx-page-"] a.wp-element-button,
+  [class*="solyx-page-"] button.cf-submit,
+  body.home a.wp-element-button {
+    min-height: 44px;
+  }
+
+  /* /hoe-werkt-het/ — .fc-meer-btn 101x28, .nymo-sw-btn 194x29,
+     #chk-links a 134x22 */
+  .solyx-page-hoe-werkt-het .fc-meer-btn,
+  .solyx-page-hoe-werkt-het .nymo-sw-btn,
+  .solyx-page-hoe-werkt-het #chk-links > a {
+    min-height: 44px;
+  }
+
+  /* /over-ons/ press logos — 30x25 … 171x25 */
+  .solyx-page-over-ons .media-logo > a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+
+  /* /besparen/ sidebar close buttons — 28x31 */
+  .solyx-page-besparen .csb2-close {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  /* /faq/ contact card links — 132x18, 94x18 */
+  .solyx-page-faq .contact-val > a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+
+  /* /handleidingen/ language pills — 40x33 / 39x33 */
+  .solyx-page-handleidingen .lang-pill {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  /* Short footer links are tall enough after the first #11 block but still
+     narrow (e.g. `FAQ` at 36x44). */
+  body.home .hb-footer-grid .hb-footer-link > a,
+  body.home .hb-footer-bottom .hb-footer-link > a,
+  footer .fg .flinks > li > a,
+  footer .fbottom .flegal > a {
+    min-width: 44px;
+  }
+}
+
+
+/* ---------------------------------------------------------------------------
+   DEFECT #4 (third root cause) — /hoe-werkt-het/ `#s-nymo` product panel
+
+   Last 24px of overflow at 360px after the two fixes above. Same
+   `min-width:auto` inflation, one section further down the page: `.nymo-left`
+   (flex, nowrap) and `.nymo-right` (grid) both compute `width:388px` inside a
+   360px viewport, right edge 384px.
+
+   Fix: release the automatic minimum on both panels and let the left panel's
+   flex row wrap instead of running off the edge.
+
+   Overrides: nothing (flex/grid initial `auto`) plus `.nymo-left{display:flex}`
+   (0,1,0). Selectors are 0,2,0.
+--------------------------------------------------------------------------- */
+@media (max-width: 900px) {
+  .solyx-page-hoe-werkt-het .nymo-left,
+  .solyx-page-hoe-werkt-het .nymo-right {
+    min-width: 0;
+  }
+
+  .solyx-page-hoe-werkt-het .nymo-left {
+    flex-wrap: wrap;
+  }
+}
+
+
+/* ---------------------------------------------------------------------------
+   DEFECT #14 (third pass) — text nodes that inherit past the owners above
+
+   `span.v-tag` (11px) carries its own size inside `p.v-foot`, so lifting
+   `.v-foot` alone did not reach it. Same for the value row inside
+   `.comparison-chart` on /hoe-werkt-het/.
+
+   Overrides: `.v-tag` / `.comparison-chart > div` section rules (0,1,0).
+   Selectors are 0,2,0 / 0,2,1.
+--------------------------------------------------------------------------- */
+@media (max-width: 900px) {
+  .solyx-page-shop-nymo .v-tag,
+  .solyx-page-shop-complete-wateraccu .v-tag,
+  .solyx-page-hoe-werkt-het .comparison-chart > div {
+    font-size: 12px;
+  }
+}
+
+
+/* ---------------------------------------------------------------------------
+   DEFECT #11 (third pass) — targets that were tall enough but too narrow,
+   plus three that the earlier groups did not name.
+
+   Measured at 360px after the second #11 block:
+     `.solyx-nav-link a`  36x44  (the short "Shop" item)
+     `.crumb-link a`      33x44, 37x44
+     `.faq-bar-text a`    258x17 (/handleidingen/)
+     `.intro-cta .btn`    200x43 (wizard start button)
+     `button.varrow`      41x41  (/hoe-werkt-het/ video rail arrows)
+
+   Overrides: the same author link/button rules as above (0,1,1 at most);
+   these selectors are 0,2,1 or higher.
+--------------------------------------------------------------------------- */
+@media (max-width: 900px) {
+  .solyx-page-shop-nymo .crumb-link > a,
+  .solyx-page-shop-complete-wateraccu .crumb-link > a {
+    min-width: 44px;
+    justify-content: center;
+  }
+
+  .solyx-page-handleidingen .faq-bar-text > a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+
+  .solyx-page-installatie-formulier .intro-cta > .btn,
+  .solyx-page-installatie-formulier-boilergarant .intro-cta > .btn,
+  .solyx-page-hoe-werkt-het .varrows > .varrow {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+
+
+/* ---------------------------------------------------------------------------
+   TWO LIVE VARIANTS — read this before editing anything above.
+
+   During verification (2026-08-03) https://2026.solyxenergy.nl served two
+   different markup/CSS states for the same URLs, several hours apart:
+
+     variant A  the state measured in the first half of this pass. `.two-col`,
+                `.prob-page` and `.usp-reviews` already collapse to one column
+                at <=900px; the overflow is purely `min-width:auto` inflation.
+     variant B  the state described in QA-RESPONSIVE.md. The same grids stay
+                multi-column at 360px because a later, unscoped rule with the
+                same bare class name re-expands them.
+
+   Everything above fixes variant A. This block adds what variant B needs on
+   top. Both blocks are harmless in the other variant: forcing
+   `grid-template-columns:1fr` below 900px is what the theme's own media query
+   already does in variant A, and `flex-wrap:wrap` on a row that already fits
+   is a no-op.
+
+   Measured in variant B, before / after this block, at 360px:
+     /hoe-werkt-het/          scrollWidth 639 -> (see report)
+     /over-ons/               `p.careers-sub` right edge 574
+     /shop-nymo/              `.rev-nav` right edge 456
+     /handleidingen/          `.card` width 320px, right edge 368 (defect #15)
+
+   Overrides: the unscoped `.two-col` / `.prob-page` / `.usp-reviews` /
+   `.card` rules (0,1,0). Every selector here is page-scoped at 0,2,0 or
+   higher, so specificity alone wins in both variants.
+--------------------------------------------------------------------------- */
+@media (max-width: 900px) {
+  /* DEFECT #4 — force the collapse the theme intends but loses to source order */
+  .solyx-page-hoe-werkt-het .two-col,
+  .solyx-page-hoe-werkt-het .prob-page,
+  .solyx-page-over-ons .two-col {
+    grid-template-columns: 1fr;
+  }
+
+  .solyx-page-hoe-werkt-het .prob-page > * {
+    min-width: 0;
+  }
+
+  /* DEFECT #5 — the careers column is a row flex in variant B too, but the
+     section id differs, so scope to the page rather than to `#s5`. */
+  .solyx-page-over-ons .col-r {
+    flex-direction: column;
+    flex-wrap: nowrap;
+  }
+
+  /* DEFECT #6 / #7 — the USP/reviews band and its header row */
+  .solyx-page-shop-nymo .usp-reviews,
+  .solyx-page-shop-complete-wateraccu .usp-reviews {
+    grid-template-columns: 1fr;
+  }
+
+  .solyx-page-shop-nymo .reviews-head,
+  .solyx-page-shop-complete-wateraccu .reviews-head {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+}
+
+/* DEFECT #15 — /handleidingen/ 8px overflow from a 320px fixed-width card.
+   Measured: `.card{width:320px}` at left 48 -> right edge 368 against a 360px
+   viewport. Clean at 390 and above, so this is scoped to <=600px only.
+   The card is made fluid rather than clipped, so all six descendants stay
+   inside the viewport.
+   Overrides: `.card{width:320px}` (0,1,0). Selector is 0,3,0. */
+@media (max-width: 600px) {
+  .solyx-page-handleidingen .groups .cards > .card,
+  .solyx-page-handleidingen .cards > .card {
+    width: auto;
+    max-width: 100%;
+  }
+}
+
+/* DEFECT #11 (variant B additions) — targets measured only in variant B:
+   `.hwh-installer-link a` 90x15 · `.nymo-btn-p` 333x37 · `.nymo-btn-s` 333x36 ·
+   `.rev-all a` 184x32 · `.besparen-explain-link a` 132x17.
+   Overrides: the author link rules (0,1,1 at most); selectors are 0,2,1+. */
+@media (max-width: 900px) {
+  .hwh-installer .hwh-installer-link > a,
+  .solyx-page-besparen .besparen-explain-link > a,
+  .solyx-page-shop-nymo .rev-all,
+  .solyx-page-shop-complete-wateraccu .rev-all {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+
+  .solyx-page-hoe-werkt-het .nymo-actions > .nymo-btn-p,
+  .solyx-page-hoe-werkt-het .nymo-actions > .nymo-btn-s {
+    min-height: 44px;
+  }
+}
+
+/* DEFECT #14 (variant B additions) — sizes seen only in variant B:
+   `.dim-card-title` 9px · `.founder-role` 10px · `.ndl` 11px ·
+   `.nymo-spec-k` 9px · `.fct` 11px (site footer, already covered above).
+   Overrides: the section rules that set these (0,1,0); selectors are 0,2,0. */
+@media (max-width: 900px) {
+  .solyx-page-besparen .dim-card-title,
+  .solyx-page-besparen .ndl,
+  .solyx-page-over-ons .founder-role,
+  .solyx-page-over-ons .ndl,
+  .solyx-page-hoe-werkt-het .ndl,
+  .solyx-page-hoe-werkt-het .nymo-spec-k {
+    font-size: 12px;
+  }
+}
+
+
+/* ---------------------------------------------------------------------------
+   VARIANT B, second measured pass — four containers that survived the block
+   above. Each was confirmed with `element.matches(selector) === true` before
+   the rule was written, so these are real layout causes, not scope misses.
+
+     /handleidingen/  `.cards` is `display:grid` with a hard `320px` track;
+                      making the card fluid was not enough because the TRACK is
+                      320px. Right edge 368 vs 360.
+     /over-ons/       `.careers-header` is a `space-between` ROW flex only 157px
+                      wide holding a 220px `.careers-sub`. Right edge 574.
+     /shop-nymo/      `.reviews-head` measures 92px wide and holds a 158px
+                      `.rev-all`. Right edge 378 (18px over).
+     /hoe-werkt-het/  `#s-check > .two-col > .col-r > .chk-layout` keeps a wide
+                      row; `#chk-hint-0` right edge 645.
+
+   Overrides: the unscoped `.cards` / `.careers-header` / `.reviews-head` /
+   `.chk-layout` rules (0,1,0). Selectors here are 0,2,0+.
+--------------------------------------------------------------------------- */
+@media (max-width: 900px) {
+  .solyx-page-over-ons .col-r {
+    align-items: stretch;
+  }
+
+  .solyx-page-over-ons .careers-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .solyx-page-over-ons .careers-header > *,
+  .solyx-page-over-ons .careers-sub {
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .solyx-page-shop-nymo .rev-all,
+  .solyx-page-shop-complete-wateraccu .rev-all {
+    max-width: 100%;
+    min-width: 0;
+    flex-wrap: wrap;
+  }
+
+  .solyx-page-hoe-werkt-het .chk-layout,
+  .solyx-page-hoe-werkt-het .check-list,
+  .solyx-page-hoe-werkt-het .check-item,
+  .solyx-page-hoe-werkt-het .chk-click-hint {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .solyx-page-hoe-werkt-het .chk-layout {
+    flex-wrap: wrap;
+  }
+}
+
+/* /handleidingen/ card grid — the 320px track itself (defect #15). */
+@media (max-width: 600px) {
+  .solyx-page-handleidingen .groups .cards,
+  .solyx-page-handleidingen .group > .cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* ============================================================================
+   NOT FIXED HERE — recorded so the next agent does not look for them.
+
+   #1 / #2  Elementor legal pages at a hard 1470px.
+            Re-measured 2026-08-03 at 360px: documentElement.scrollWidth 360 vs
+            clientWidth 360 on BOTH pages — 0px overflow. Already rebuilt as
+            core blocks; no CSS needed and none written.
+
+   #3       No mobile navigation. Needs markup (a toggle element and a menu
+            container); only 5 of 23 pages ever had a burger in the design.
+            CSS cannot create a control that does not exist. OUT OF SCOPE.
+
+   #12      /hoe-werkt-het/ footer logo 404 (`midia/solyx-logo.png`, relative
+            path, `midia` typo for `media`). Fix the `src` attribute in the
+            block; CSS cannot change a URL.
+
+   #13      /installateurs/ partner logos: `logo.clearbit.com` no longer
+            resolves (ERR_NAME_NOT_RESOLVED). Needs self-hosted images.
+
+   #16      /installatie/ `img.wp-image-792` renders 0x0 and `img#lb-img` has an
+            empty `src`. Both are markup/asset defects.
+
+   #18      Legal pages carry no navigation at any width. Needs markup.
+
+   #19      Cramped 2-3 column groups at 360/390. The audit itself says "verify
+            visually before changing — several are icon rows where a small child
+            is correct by design." That is a design decision, not a measured
+            defect, so nothing is forced here.
+
+   #20      Engine variance is a property of #4, not a separate defect. Every
+            number in this file was measured on Chromium, which the audit
+            identifies as the strictest engine.
+   ============================================================================ */

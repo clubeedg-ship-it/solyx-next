@@ -280,8 +280,17 @@ inaccessible controls, or editor regressions.
 
 ## Lane 6 — Legacy cleanup and cutover
 
-- **Status:** `blocked`
-- **Blocked by:** lanes 0–5.
+- **Status:** `in_progress`
+- **Done:** the new site no longer depends on the legacy domain for anything.
+9 PDFs and one video were migrated and 18 references across 7 pages and posts
+rewritten; a re-scan of all 70 pages and posts now returns zero legacy URLs.
+The trick that made it work: the legacy host answers non-browser requests with
+a 202 challenge, so a server-side sideload can never fetch these files — they
+have to be pulled same-origin from a browser tab on the legacy domain and
+uploaded from there. `production-urls.json` (171 URLs from the old sitemaps)
+and `new-site-routes.json` (72 live routes) are exported to `lane6/` so the
+redirect table can be built without a production login.
+- **Blocked by:** lanes 0–5 for the switch itself.
 - **Next:** apply the reviewed staging inventory, verify the clean site, then
 prepare the approved domain/SSL switch.
 - **Checklist:** `work/launch/CUTOVER.md` holds every switch-day step, including

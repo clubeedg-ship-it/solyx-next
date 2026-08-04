@@ -1,0 +1,580 @@
+{
+ "pages": [
+  {
+   "id": 626,
+   "type": "page",
+   "slug": "gs-home-fse",
+   "path": "/",
+   "title": "Home",
+   "date": "2026-08-03T14:34:06"
+  },
+  {
+   "id": 720,
+   "type": "page",
+   "slug": "algemene-voorwaarden",
+   "path": "/algemene-voorwaarden/",
+   "title": "Algemene voorwaarden",
+   "date": "2026-08-03T14:34:05"
+  },
+  {
+   "id": 719,
+   "type": "page",
+   "slug": "privacy",
+   "path": "/privacy/",
+   "title": "Privacy policy",
+   "date": "2026-08-03T14:34:05"
+  },
+  {
+   "id": 721,
+   "type": "page",
+   "slug": "faq",
+   "path": "/faq/",
+   "title": "Veelgestelde vragen",
+   "date": "2026-08-03T14:34:04"
+  },
+  {
+   "id": 716,
+   "type": "page",
+   "slug": "solyx-shop",
+   "path": "/solyx-shop/",
+   "title": "Shop",
+   "date": "2026-08-03T14:34:04"
+  },
+  {
+   "id": 728,
+   "type": "page",
+   "slug": "zonnestroomboiler",
+   "path": "/zonnestroomboiler/",
+   "title": "Zonnestroomboiler",
+   "date": "2026-08-03T14:34:03"
+  },
+  {
+   "id": 727,
+   "type": "page",
+   "slug": "werken-bij",
+   "path": "/werken-bij/",
+   "title": "Werken bij Solyx",
+   "date": "2026-08-03T14:34:03"
+  },
+  {
+   "id": 729,
+   "type": "page",
+   "slug": "levering-en-retourbeleid",
+   "path": "/levering-en-retourbeleid/",
+   "title": "Levering en retourbeleid",
+   "date": "2026-08-03T14:34:02"
+  },
+  {
+   "id": 767,
+   "type": "page",
+   "slug": "blog-news",
+   "path": "/blog-news/",
+   "title": "Blog  Nieuws",
+   "date": "2026-08-03T14:34:01"
+  },
+  {
+   "id": 769,
+   "type": "page",
+   "slug": "wateraccu",
+   "path": "/wateraccu/",
+   "title": "Nymo WaterAccu Controller",
+   "date": "2026-08-03T14:34:00"
+  },
+  {
+   "id": 756,
+   "type": "page",
+   "slug": "handleidingen",
+   "path": "/handleidingen/",
+   "title": "Handleidingen",
+   "date": "2026-08-03T14:34:00"
+  },
+  {
+   "id": 800,
+   "type": "page",
+   "slug": "installatie-formulier",
+   "path": "/installatie-formulier/",
+   "title": "Installatie Formulier",
+   "date": "2026-08-03T14:33:59"
+  },
+  {
+   "id": 807,
+   "type": "page",
+   "slug": "installatie-formulier-boilergarant",
+   "path": "/installatie-formulier-boilergarant/",
+   "title": "Installatie Formulier Boilergarant",
+   "date": "2026-08-03T14:33:58"
+  },
+  {
+   "id": 782,
+   "type": "page",
+   "slug": "over-ons",
+   "path": "/over-ons/",
+   "title": "Over ons — Onze missie  team",
+   "date": "2026-08-03T14:33:58"
+  },
+  {
+   "id": 784,
+   "type": "page",
+   "slug": "besparen",
+   "path": "/besparen/",
+   "title": "Besparen",
+   "date": "2026-08-03T14:33:57"
+  },
+  {
+   "id": 840,
+   "type": "page",
+   "slug": "shop-complete-wateraccu",
+   "path": "/shop-complete-wateraccu/",
+   "title": "WaterAccu – Complete set",
+   "date": "2026-08-03T14:33:56"
+  },
+  {
+   "id": 838,
+   "type": "page",
+   "slug": "shop-nymo",
+   "path": "/shop-nymo/",
+   "title": "Nymo WaterAccu",
+   "date": "2026-08-03T14:33:56"
+  },
+  {
+   "id": 781,
+   "type": "page",
+   "slug": "installateurs",
+   "path": "/installateurs/",
+   "title": "Voor Installateurs",
+   "date": "2026-08-03T14:33:55"
+  },
+  {
+   "id": 839,
+   "type": "page",
+   "slug": "landingspagina",
+   "path": "/landingspagina/",
+   "title": "WaterAccu",
+   "date": "2026-08-03T14:33:54"
+  },
+  {
+   "id": 802,
+   "type": "page",
+   "slug": "installatie",
+   "path": "/installatie/",
+   "title": "Installatie  Opstellingen",
+   "date": "2026-08-03T14:33:54"
+  },
+  {
+   "id": 837,
+   "type": "page",
+   "slug": "klantverhalen",
+   "path": "/klantverhalen/",
+   "title": "Klantverhalen | De Nymo",
+   "date": "2026-08-03T14:33:53"
+  },
+  {
+   "id": 801,
+   "type": "page",
+   "slug": "how-to-get-it",
+   "path": "/how-to-get-it/",
+   "title": "Aan de slag — NYMO",
+   "date": "2026-08-03T14:33:51"
+  },
+  {
+   "id": 120,
+   "type": "page",
+   "slug": "hoe-werkt-het",
+   "path": "/hoe-werkt-het/",
+   "title": "Hoe werkt de WaterAccu? | De Nymo",
+   "date": "2026-04-08T10:00:15"
+  },
+  {
+   "id": 15,
+   "type": "page",
+   "slug": "my-account",
+   "path": "/my-account/",
+   "title": "Mijn account",
+   "date": "2026-03-17T09:31:43"
+  },
+  {
+   "id": 14,
+   "type": "page",
+   "slug": "checkout",
+   "path": "/checkout/",
+   "title": "Afrekenen",
+   "date": "2026-03-17T09:31:42"
+  },
+  {
+   "id": 13,
+   "type": "page",
+   "slug": "cart",
+   "path": "/cart/",
+   "title": "Winkelwagen",
+   "date": "2026-03-17T09:31:41"
+  },
+  {
+   "id": 12,
+   "type": "page",
+   "slug": "shop",
+   "path": "/shop/",
+   "title": "Winkel",
+   "date": "2026-03-17T09:31:40"
+  }
+ ],
+ "posts": [
+  {
+   "id": 930,
+   "type": "post",
+   "slug": "hbo-stage-commerciele-economie-of-operations",
+   "path": "/hbo-stage-commerciele-economie-of-operations/",
+   "title": "MBO/HBO: Stage Operations  Logistiek (32–40 uur)",
+   "date": "2026-06-18T14:26:37"
+  },
+  {
+   "id": 931,
+   "type": "post",
+   "slug": "wateraccu-voor-zonnepanelen-goedkoper-dan-een-thuisbatterij-en-toch-effectief",
+   "path": "/wateraccu-voor-zonnepanelen-goedkoper-dan-een-thuisbatterij-en-toch-effectief/",
+   "title": "Wateraccu voor zonnepanelen: goedkoper dan een thuisbatterij en toch effectief?",
+   "date": "2026-05-21T08:54:47"
+  },
+  {
+   "id": 932,
+   "type": "post",
+   "slug": "gebruik-een-boiler-met-elektrisch-element-om-je-stroomoverschot-op-te-slaan-als-warm-%f0%9f%a5%b5-water-zo-lever-je-minder-stroom-terug",
+   "path": "/gebruik-een-boiler-met-elektrisch-element-om-je-stroomoverschot-op-te-slaan-als-warm-%f0%9f%a5%b5-water-zo-lever-je-minder-stroom-terug/",
+   "title": "Gebruik een boiler met elektrisch element om je stroomoverschot op te slaan als warm 🥵 water. Zo lever je minder stroom terug.",
+   "date": "2026-05-13T13:38:36"
+  },
+  {
+   "id": 933,
+   "type": "post",
+   "slug": "zonnestroom-opslaan-na-salderen-zo-werkt-de-waterbatterij",
+   "path": "/zonnestroom-opslaan-na-salderen-zo-werkt-de-waterbatterij/",
+   "title": "Zonnestroom opslaan na salderen: zo werkt de WATERBATTERIJ",
+   "date": "2026-04-29T13:08:33"
+  },
+  {
+   "id": 934,
+   "type": "post",
+   "slug": "neem-ook-de-zonnestroomboiler-mee-als-oplossing-na-salderen",
+   "path": "/neem-ook-de-zonnestroomboiler-mee-als-oplossing-na-salderen/",
+   "title": "Neem ook de zonnestroomboiler mee als oplossing na salderen",
+   "date": "2026-01-19T08:59:18"
+  },
+  {
+   "id": 935,
+   "type": "post",
+   "slug": "itho-daalderop-en-solyx-energy-slaan-de-handen-ineen-voor-nieuwe-generatie-zon-gestuurde-boilers",
+   "path": "/itho-daalderop-en-solyx-energy-slaan-de-handen-ineen-voor-nieuwe-generatie-zon-gestuurde-boilers/",
+   "title": "Itho Daalderop en Solyx Energy slaan de handen ineen voor nieuwe generatie zon-gestuurde boilers",
+   "date": "2026-01-07T12:37:27"
+  },
+  {
+   "id": 936,
+   "type": "post",
+   "slug": "simpele-wateraccu-kan-ingestorte-zonnepanelenmarkt-nieuw-leven-inblazen",
+   "path": "/simpele-wateraccu-kan-ingestorte-zonnepanelenmarkt-nieuw-leven-inblazen/",
+   "title": "Simpele ‘wateraccu’ kan ingestorte zonnepanelenmarkt nieuw leven inblazen",
+   "date": "2025-11-17T13:05:15"
+  },
+  {
+   "id": 937,
+   "type": "post",
+   "slug": "lancering-nymo-x-homey-voor-wateraccu-op-dynamische-prijzen",
+   "path": "/lancering-nymo-x-homey-voor-wateraccu-op-dynamische-prijzen/",
+   "title": "Lancering Nymo x Homey: voor dynamische prijzen en integratie van WaterAccu, thuisbatterij en EV-lader",
+   "date": "2025-11-17T13:00:14"
+  },
+  {
+   "id": 938,
+   "type": "post",
+   "slug": "een-toekomstbestendig-plan-voor-zonnepaneel-eigenaren-de-gouden-driehoek-van-wateraccu-thuisbatterij-en-ev-lader",
+   "path": "/een-toekomstbestendig-plan-voor-zonnepaneel-eigenaren-de-gouden-driehoek-van-wateraccu-thuisbatterij-en-ev-lader/",
+   "title": "Een toekomstbestendig plan voor zonnepaneel-eigenaren: de ‘gouden’ driehoek van wateraccu, thuisbatterij en EV-lader",
+   "date": "2025-11-17T12:50:07"
+  },
+  {
+   "id": 939,
+   "type": "post",
+   "slug": "deze-5-startups-pakkenzonne-energie-net-even-iets-anders-aan",
+   "path": "/deze-5-startups-pakkenzonne-energie-net-even-iets-anders-aan/",
+   "title": "Deze 5 startups pakkenzonne-energie net even iets anders aan",
+   "date": "2025-07-16T12:15:25"
+  },
+  {
+   "id": 940,
+   "type": "post",
+   "slug": "hoe-breng-je-een-nieuw-apparaat-naar-de-markt",
+   "path": "/hoe-breng-je-een-nieuw-apparaat-naar-de-markt/",
+   "title": "Hoe breng je een nieuw apparaat naar de markt?",
+   "date": "2025-07-16T11:59:29"
+  },
+  {
+   "id": 941,
+   "type": "post",
+   "slug": "check-deze-slimme-wateraccu-van-vader-en-dochter-snaak",
+   "path": "/check-deze-slimme-wateraccu-van-vader-en-dochter-snaak/",
+   "title": "Check deze slimme wateraccu van vader en dochter Snaak",
+   "date": "2025-07-16T11:22:15"
+  },
+  {
+   "id": 942,
+   "type": "post",
+   "slug": "de-nieuwe-betaalbare-thuisbatterij",
+   "path": "/de-nieuwe-betaalbare-thuisbatterij/",
+   "title": "De nieuwe  betaalbare thuisbatterij?!",
+   "date": "2025-07-16T11:16:41"
+  },
+  {
+   "id": 943,
+   "type": "post",
+   "slug": "dutch-startup-unveils-controller-to-store-excess-pv-power-in-hot-water",
+   "path": "/dutch-startup-unveils-controller-to-store-excess-pv-power-in-hot-water/",
+   "title": "Dutch startup unveils controller to store excess PV power in hot water",
+   "date": "2025-07-16T10:14:19"
+  },
+  {
+   "id": 944,
+   "type": "post",
+   "slug": "nijkerkse-startup-introduceert-een-voudige-opslag-van-zonne-energie-in-warm-water",
+   "path": "/nijkerkse-startup-introduceert-een-voudige-opslag-van-zonne-energie-in-warm-water/",
+   "title": "Nijkerkse startup introduceert een voudige opslag van zonne-energie: in warm water",
+   "date": "2025-07-16T10:02:30"
+  },
+  {
+   "id": 945,
+   "type": "post",
+   "slug": "hoe-een-simpele-boiler-een-slimme-batterij-wordt",
+   "path": "/hoe-een-simpele-boiler-een-slimme-batterij-wordt/",
+   "title": "Hoe een simpele boiler een slimme batterij wordt",
+   "date": "2025-07-16T09:51:20"
+  },
+  {
+   "id": 946,
+   "type": "post",
+   "slug": "wateraccu-nymo-maakt-van-je-boiler-een-goedkoper-alternatief-voor-de-thuisbatterij",
+   "path": "/wateraccu-nymo-maakt-van-je-boiler-een-goedkoper-alternatief-voor-de-thuisbatterij/",
+   "title": "Wateraccu Nymo maakt van je boiler een (goedkoper) alternatief voor de thuisbatterij",
+   "date": "2025-07-16T09:48:46"
+  },
+  {
+   "id": 947,
+   "type": "post",
+   "slug": "premie-tot-400-euro-is-de-wateraccu-een-goed-alternatief-voor-een-thuisbatterij",
+   "path": "/premie-tot-400-euro-is-de-wateraccu-een-goed-alternatief-voor-een-thuisbatterij/",
+   "title": "Premie tot 400 euro: is de WaterAccu een goed alternatief voor een thuisbatterij?",
+   "date": "2025-07-16T09:47:03"
+  },
+  {
+   "id": 948,
+   "type": "post",
+   "slug": "maak-je-eigen-wateraccu-met-solyx-energy",
+   "path": "/maak-je-eigen-wateraccu-met-solyx-energy/",
+   "title": "Maak je eigen WaterAccu met Solyx Energy",
+   "date": "2025-07-16T09:46:30"
+  },
+  {
+   "id": 949,
+   "type": "post",
+   "slug": "sales-operations-medewerker-32-40-uur",
+   "path": "/sales-operations-medewerker-32-40-uur/",
+   "title": "Junior Sales  Operations medewerker (32–40 uur)",
+   "date": "2025-07-08T11:07:46"
+  },
+  {
+   "id": 950,
+   "type": "post",
+   "slug": "vacature_hbo-wo-stage-marketing",
+   "path": "/vacature_hbo-wo-stage-marketing/",
+   "title": "Administratie  Communicatie Medewerker (24-32 uur)",
+   "date": "2025-05-21T09:37:33"
+  },
+  {
+   "id": 951,
+   "type": "post",
+   "slug": "zonnepanelen-dynamisch-contract",
+   "path": "/zonnepanelen-dynamisch-contract/",
+   "title": "Zonnepanelen en Dynamische contracten: een goede of slechte combinatie?",
+   "date": "2025-02-26T13:18:24"
+  },
+  {
+   "id": 952,
+   "type": "post",
+   "slug": "nieuws-blogs-wateraccu-vs-slimme-schakelaar",
+   "path": "/nieuws-blogs-wateraccu-vs-slimme-schakelaar/",
+   "title": "WaterAccu vs slimme schakelaar: een vergelijking",
+   "date": "2025-01-03T12:52:39"
+  },
+  {
+   "id": 953,
+   "type": "post",
+   "slug": "nieuws-blogs-de-afschaffing-van-de-salderingsregeling",
+   "path": "/nieuws-blogs-de-afschaffing-van-de-salderingsregeling/",
+   "title": "De afschaffing van de salderingsregeling is definitief: hoe haal je het meeste voordeel uit je panelen?",
+   "date": "2024-12-18T10:53:12"
+  },
+  {
+   "id": 954,
+   "type": "post",
+   "slug": "nieuws-blogs-energieverbruik-huishouden",
+   "path": "/nieuws-blogs-energieverbruik-huishouden/",
+   "title": "Hoe ziet energieverbruik eruit in mijn huis, en hoe verduurzaam ik die?",
+   "date": "2024-12-09T09:31:43"
+  },
+  {
+   "id": 955,
+   "type": "post",
+   "slug": "nieuws-blogs-duurzaamondernemen-nl-over-solyxenergy",
+   "path": "/nieuws-blogs-duurzaamondernemen-nl-over-solyxenergy/",
+   "title": "Solyx Energy lanceert de Nymo, waarmee je van een boiler een slimme WaterAccu maakt",
+   "date": "2024-12-02T15:43:00"
+  },
+  {
+   "id": 956,
+   "type": "post",
+   "slug": "nieuws-blogs-lancering-van-de-nymo",
+   "path": "/nieuws-blogs-lancering-van-de-nymo/",
+   "title": "De lancering van de Nymo, wat een mijlpaal!",
+   "date": "2024-12-02T15:24:24"
+  },
+  {
+   "id": 957,
+   "type": "post",
+   "slug": "zonnestroomboiler-als-oplossing-voor-terugleverkosten",
+   "path": "/zonnestroomboiler-als-oplossing-voor-terugleverkosten/",
+   "title": "Zonnestroomboiler als oplossing voor Terugleverkosten",
+   "date": "2024-07-31T08:24:41"
+  },
+  {
+   "id": 958,
+   "type": "post",
+   "slug": "nieuws-blogs-de-gevolgen-van-salderen",
+   "path": "/nieuws-blogs-de-gevolgen-van-salderen/",
+   "title": "De gevolgen van salderen",
+   "date": "2024-03-08T06:58:18"
+  },
+  {
+   "id": 959,
+   "type": "post",
+   "slug": "nieuws-blogs-de-wateraccu-met-dynamische-tarieven",
+   "path": "/nieuws-blogs-de-wateraccu-met-dynamische-tarieven/",
+   "title": "De WaterAccu met Dynamische Tarieven",
+   "date": "2024-02-09T08:22:36"
+  },
+  {
+   "id": 960,
+   "type": "post",
+   "slug": "nieuws-blogs-thuisbatterij-of-wateraccu-een-diepere-vergelijking",
+   "path": "/nieuws-blogs-thuisbatterij-of-wateraccu-een-diepere-vergelijking/",
+   "title": "Thuisbatterij of WaterAccu: Een diepere vergelijking",
+   "date": "2023-11-14T09:23:17"
+  },
+  {
+   "id": 961,
+   "type": "post",
+   "slug": "nieuws-blogs-zonneboiler-en-wateraccu-een-betere-vergelijking",
+   "path": "/nieuws-blogs-zonneboiler-en-wateraccu-een-betere-vergelijking/",
+   "title": "Zonneboiler en WaterAccu: een betere vergelijking",
+   "date": "2023-10-13T07:52:26"
+  },
+  {
+   "id": 962,
+   "type": "post",
+   "slug": "nieuws-blogs-hoe-voorkom-ik-dat-mijn-zonnepanelen-afslaan",
+   "path": "/nieuws-blogs-hoe-voorkom-ik-dat-mijn-zonnepanelen-afslaan/",
+   "title": "Hoe voorkom ik dat mijn zonnepanelen afslaan?",
+   "date": "2023-09-13T07:29:55"
+  },
+  {
+   "id": 963,
+   "type": "post",
+   "slug": "nieuws-blogs-vader-en-dochter-runnen-start-up-goedkoop-zonnestroom-opslaan-met-wateraccu",
+   "path": "/nieuws-blogs-vader-en-dochter-runnen-start-up-goedkoop-zonnestroom-opslaan-met-wateraccu/",
+   "title": "Vader en dochter runnen start-up: goedkoop zonnestroom opslaan met wateraccu",
+   "date": "2023-09-06T09:44:43"
+  },
+  {
+   "id": 964,
+   "type": "post",
+   "slug": "nieuws-blogs-de-toekomst-van-salderen-en-terug-leveren",
+   "path": "/nieuws-blogs-de-toekomst-van-salderen-en-terug-leveren/",
+   "title": "De toekomst van salderen en terugleveren",
+   "date": "2023-08-29T07:38:13"
+  },
+  {
+   "id": 965,
+   "type": "post",
+   "slug": "nieuws-blogs-een-boiler-op-zonnepanelen-hoe-werkt-dat",
+   "path": "/nieuws-blogs-een-boiler-op-zonnepanelen-hoe-werkt-dat/",
+   "title": "Een boiler op zonnepanelen, hoe werkt dat?",
+   "date": "2023-08-14T07:18:33"
+  },
+  {
+   "id": 966,
+   "type": "post",
+   "slug": "nieuws-blogs-optimalisatie-van-gebruik-zonne-energie-een-overzicht",
+   "path": "/nieuws-blogs-optimalisatie-van-gebruik-zonne-energie-een-overzicht/",
+   "title": "Optimalisatie van gebruik zonne-energie",
+   "date": "2023-07-14T08:42:49"
+  },
+  {
+   "id": 967,
+   "type": "post",
+   "slug": "nieuws-blogs-400-euro-sew-premie-op-de-solar-iboost-in-vlaanderen",
+   "path": "/nieuws-blogs-400-euro-sew-premie-op-de-solar-iboost-in-vlaanderen/",
+   "title": "400 euro SEW premie op de WaterAccu in Vlaanderen",
+   "date": "2023-05-31T07:16:22"
+  },
+  {
+   "id": 968,
+   "type": "post",
+   "slug": "nieuws-blogs-zonnepanelen-optimaal-benutten",
+   "path": "/nieuws-blogs-zonnepanelen-optimaal-benutten/",
+   "title": "Hoe haal ik het meeste uit mijn zonnepanelen?",
+   "date": "2023-05-19T09:16:19"
+  },
+  {
+   "id": 969,
+   "type": "post",
+   "slug": "nieuws-blogs-gawalo-zonnestroom-opslaan-in-warm-water",
+   "path": "/nieuws-blogs-gawalo-zonnestroom-opslaan-in-warm-water/",
+   "title": "Gawalo: Zonnestroom opslaan in warm water",
+   "date": "2023-04-24T07:38:41"
+  },
+  {
+   "id": 970,
+   "type": "post",
+   "slug": "nieuws-blogs-mt-sprout-emma-snaak-ex-tesla-ontwikkelt-met-solyx-energy-een-wateraccu",
+   "path": "/nieuws-blogs-mt-sprout-emma-snaak-ex-tesla-ontwikkelt-met-solyx-energy-een-wateraccu/",
+   "title": "MT/Sprout: Emma Snaak (ex-Tesla) ontwikkelt met Solyx Energy een wateraccu",
+   "date": "2023-04-21T12:27:06"
+  },
+  {
+   "id": 971,
+   "type": "post",
+   "slug": "nieuws-blogs-duurzaamondernemen-nl-startup-solyx-introduceert-eenvoudige-opslag-van-zonne-energie-in-warm-water",
+   "path": "/nieuws-blogs-duurzaamondernemen-nl-startup-solyx-introduceert-eenvoudige-opslag-van-zonne-energie-in-warm-water/",
+   "title": "Duurzaam-Ondernemen.nl: Startup Solyx Energy introduceert eenvoudige opslag van zonne-energie",
+   "date": "2023-04-20T10:26:50"
+  },
+  {
+   "id": 972,
+   "type": "post",
+   "slug": "nieuws-blogs-zonne-energie-opslaan_solar365",
+   "path": "/nieuws-blogs-zonne-energie-opslaan_solar365/",
+   "title": "Solar365: Zonne-energie eenvoudig opslaan in warm water",
+   "date": "2023-04-18T08:29:59"
+  }
+ ],
+ "products": [
+  {
+   "id": 864,
+   "slug": "nymo-wateraccu-met-boiler",
+   "path": "/product/nymo-wateraccu-met-boiler/",
+   "title": "Nymo WaterAccu met boiler"
+  },
+  {
+   "id": 861,
+   "slug": "nymo-wateraccu",
+   "path": "/product/nymo-wateraccu/",
+   "title": "Nymo WaterAccu"
+  }
+ ]
+}
