@@ -9,10 +9,23 @@ Order matters where noted.
 
 ## Before the switch
 
-- [ ] **Build the 301 redirect table** from production's real URL inventory
-      (76 pages, 75 posts). Write every rule root-relative — `/old/ → /new/`,
-      never with a hostname — so it survives the domain change untouched.
-      See `REDIRECT-MAP.md` §5.
+- [x] **301 redirect table built and verified** — `lane6/redirects.csv`
+      (171 rows) with the reasoning in `lane6/REDIRECTS.md`. Independently
+      re-checked, not taken on trust: all 171 production URLs covered exactly
+      once, zero absolute targets, and every 301 lands on a route that actually
+      exists. 55 exact, 60 renamed, 50 judgement, 6 needing a client decision
+      (CLIENT-QUESTIONS B13). Ten URLs get a 410 rather than a redirect —
+      author archives and a WooCommerce shipping-class archive — deliberately
+      de-indexed instead of soft-404'd to the homepage.
+      **Every `/en/` rule is temporary** and must be deleted once WPML restores
+      the English pages, or the new English site will redirect to Dutch.
+- [ ] **Sweep the snippets for absolute staging URLs.** At least one exists: the
+      Nymo widget on `/hoe-werkt-het/` links its buy button to
+      `https://2026.solyxenergy.nl/winkel/` — absolute, so it breaks at cutover,
+      and `/winkel/` is not a route on this site. Page content follows the
+      root-relative rule, but the JavaScript widgets were never audited for it.
+      This is the one class of link the redirect table cannot save, because the
+      hostname is baked in.
 - [x] **Blog decision executed.** 43 Dutch posts are imported and live. The ~32
       English ones are held for the WPML phase after cutover.
 - [x] **Migrate the manuals and datasheets** — done. 9 PDFs (the Nymo and Solar
@@ -59,7 +72,17 @@ Order matters where noted.
       the mail server is the same, but the sending host changes.
 - [ ] **Place a real order** end to end: cart, checkout, Mollie payment,
       order status, confirmation email, invoice attachment.
-- [ ] Confirm **Mollie's webhook** reaches the new domain.
+- [ ] Confirm **Mollie's webhook** reaches the new domain. Test this rather than
+      assume it: SiteGround's Security Optimizer answers requests it considers
+      automated with a `202` and a captcha page instead of the real response.
+      That is a live behaviour on this host — it is what made the server-side
+      media migration fail, and it has twice returned a captcha to our own
+      measurements. Mollie's webhook is a server-to-server POST with no browser
+      to solve a challenge. If it is challenged, **customers will pay and their
+      orders will never be marked complete**, silently.
+- [ ] For the same reason, confirm **Googlebot is not challenged**. Use the URL
+      Inspection tool in Search Console on a live page; a challenged crawl means
+      the new site never gets indexed.
 - [ ] Spot-check the redirect table against real old URLs.
 - [ ] **Stop the legacy site** only once the above pass.
 

@@ -201,6 +201,42 @@ day, or the accounting gets duplicate invoice numbers.
 Migrated Home (626) is published and is the front page; `/` serves it. Nothing
 to decide.
 
+### B11. Three small content questions found while repairing dead links
+
+- **No installation video exists.** A link on `/shop-complete-wateraccu/` reads
+  "installatievideo". The site has exactly one video and it is the
+  savings-process explainer, not an installation video. It now points at
+  `/installatie/`, which is what a person clicking it actually wants, but the
+  label still promises a video. Either the client supplies one, or the wording
+  changes.
+- **The Google reviews link is a search, not their profile.** "★★★★★ 4,7 op
+  Google · Bekijk al onze reviews" points at
+  `google.com/search?q=Solyx+Energy+reviews` — the same URL `/besparen/` already
+  uses, so at least it is consistent. A direct link to their Google Business
+  profile would be better, and only they can supply it.
+- **Confirm the home page "Explainer video" link.** It now opens the
+  savings-process video, the only one on the site. If a different video was
+  intended, we need the file.
+
+### B12. Shipping currently costs nothing
+A real walk through checkout shows **verzending GRATIS** and a €649 total for a
+standard Nymo. So free shipping is already configured for the Netherlands.
+That is either the intended policy or a leftover — worth confirming in the same
+breath as the Belgium question in B1, since a customer sees this number at the
+moment they decide to pay.
+
+### B13. Six old URLs have no obvious new home
+The redirect table covers all 171 old URLs, but six need a decision. Interim
+rules are already in place, so nothing 404s while she thinks.
+
+- `/sitemap/` and `/en/sitemap-2/` — the old site had an HTML sitemap page; the
+  new one does not. Currently sent to `/`.
+- `/thank-you/` and `/en/thank-you-2/` — an old confirmation page. It is unclear
+  whether it followed a form submission or a purchase. Currently sent to
+  `/installatie-formulier/`.
+- `/contact/` and `/en/contact-2/` — currently sent to `/over-ons/`, and the
+  real answer depends on B10.
+
 ### B10. There is no contact page
 Production has `/contact/` and an English `/en/contact-2/`. The new site has
 neither, and the **"Contact" link in the footer points at `/faq/`** — so a
