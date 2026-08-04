@@ -228,8 +228,34 @@ undefined, 0 requests to any facebook host. After clicking accept — `_fbp` set
 (`advertisement:no`) kept the pixel off. The HubSpot and Hotjar cookies seen
 earlier were stale `.solyxenergy.nl` cookies in the operator's own browser
 profile, not staging — a clean profile sets none.
-- **Next:** audit Google ownership and define safe `dataLayer` events for the
-external GTM operator.
+- **Tag Manager is live and gated.** Container **GTM-PXFF53F** loads behind
+Google Consent Mode, with every signal denied by default *before* the container
+loads and updated from the CookieYes choice. Verified from a clean profile:
+before consent all signals read denied and no Google cookie is set; on accept
+they all flip to granted.
+- **The Meta pixel is the client's own account** — confirmed, so it stays rather
+than being replaced.
+- **Commerce events are measured.** `view_item`, `add_to_cart`, `view_cart`,
+`begin_checkout` and `purchase` are emitted into the dataLayer from PHP
+(snippet **1393**), not scraped from the DOM, so prices, tax and order totals
+come from WooCommerce itself and cannot drift when the theme changes. Purchase
+is flagged on the order after it fires, so refreshing the thank-you page cannot
+inflate revenue. A footer bridge maps them onto Meta standard events and
+replays anything queued before consent, since the pixel only starts once
+advertising is accepted. Verified end to end: product → PageView, ViewContent ·
+add → AddToCart · cart → PageView · checkout → PageView, InitiateCheckout.
+- **Two traps worth remembering.** `add_to_cart` cannot be caught in the
+browser: a variable product's add-to-cart form posts and reloads, so the push
+dies with the document, and WooCommerce's `added_to_cart` JS event only fires
+for the AJAX buttons in the shop loop. It is emitted from the
+`woocommerce_add_to_cart` hook and queued on the session instead. Having both a
+browser and a server push made every add count **twice** — caught in testing and
+removed. For the same reason, **do not add a Meta tag inside GTM-PXFF53F**: the
+pixel is hard-coded, and a container tag would double every event and report
+double revenue.
+- **Next:** the container currently fires nothing — the tags still have to be
+built inside GTM by whoever administers it. `purchase` is the one event not yet
+observed live, because no order has been completed.
 - **Required events:** `quote_started`, `quote_step_completed`,
 `generate_lead`, `view_item`, `add_to_cart`, `view_cart`,
 `begin_checkout`, `purchase`.
