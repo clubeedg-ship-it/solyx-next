@@ -201,6 +201,25 @@ day, or the accounting gets duplicate invoice numbers.
 Migrated Home (626) is published and is the front page; `/` serves it. Nothing
 to decide.
 
+### B10. There is no contact page
+Production has `/contact/` and an English `/en/contact-2/`. The new site has
+neither, and the **"Contact" link in the footer points at `/faq/`** — so a
+customer who wants to reach Solyx lands on a list of questions instead.
+
+The phone number and email address are in the footer, so nobody is stranded, but
+this is the one page type a buyer expects to find before spending €1,700.
+
+Three options, in order of effort:
+1. Build a real contact page — address, phone, email, opening hours, and the
+   existing contact form that already works on `/faq/`.
+2. Point the footer link at the contact section of `/faq/` with an anchor, so at
+   least the label matches the destination.
+3. Leave it, and 301 the old `/contact/` to `/over-ons/` — the interim rule
+   currently in the redirect table.
+
+Recommendation: option 1. It is an hour of work and it removes a real reason for
+someone to abandon a purchase.
+
 ### B8. Two pages have never been written — blocking a clean launch
 `/zonnestroomboiler/` and `/werken-bij/` both render:
 

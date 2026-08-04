@@ -1,0 +1,172 @@
+source,target,code,confidence,note
+/,/,301,exact,Homepage — same path serves new content after cutover; no functional redirect fires.
+/en/,/,301,strong,EN — site is Dutch-only at launch; redirected to the Dutch home. Remove this rule once WPML restores /en/ pages.
+/winkelwagen/,/cart/,301,strong,"WooCommerce cart; Dutch slug ""winkelwagen"" renamed to ""cart"", page title stays ""Winkelwagen""."
+/elektrische-boiler-op-zonnepanelen-laten-werken/,/zonnestroomboiler/,301,judgement,"Old landing page on running an electric boiler off solar; folded into the current zonnestroomboiler explainer, the closest live page on the same topic."
+/sitemap/,/,301,needs-decision,No HTML sitemap page exists on the new site. Recommend 301 to / (home); the XML sitemap for crawlers is unaffected.
+/alternatief-voor-terugleververgoeding/,/zonnestroomboiler-als-oplossing-voor-terugleverkosten/,301,judgement,Old page pitched an alternative to feed-in compensation; closest live content is the blog post on the zonnestroomboiler as a solution to feed-in costs.
+/zonne-energie-thuis-opslaan/,/wateraccu/,301,judgement,"Old generic ""store solar energy at home"" landing page; folded into the current WaterAccu product/explainer page."
+/slimme-boiler-of-wateraccu/,/hoe-een-simpele-boiler-een-slimme-batterij-wordt/,301,judgement,Old comparison landing page; closest live content is the blog post on a simple boiler becoming a smart battery.
+/solar-iboost/,/solyx-shop/,301,judgement,"Discontinued third-party accessory, not sold or referenced anywhere on the new site; routed to the shop."
+/levering-en-retourbeleid/,/levering-en-retourbeleid/,301,exact,
+/algemene-voorwaarden/,/algemene-voorwaarden/,301,exact,
+/ontdek-mogelijkheden/,/installatie/,301,judgement,"Known open item (REDIRECT-MAP.md §4c: no equivalent). ""Discover installation possibilities"" maps closest to the Installatie & Opstellingen page."
+/thank-you/,/installatie-formulier/,301,needs-decision,Generic old form/order confirmation page; unclear which flow it served (install form vs WooCommerce checkout). Recommend 301 to /installatie-formulier/ pending confirmation.
+/contact/,/over-ons/,301,needs-decision,"The new site has no standalone contact page. Recommend 301 to /over-ons/ as an interim target, or build a dedicated contact page before cutover."
+/installatie-formulier/,/installatie-formulier/,301,exact,
+/installatie-formulier-boilergarant/,/installatie-formulier-boilergarant/,301,exact,
+/calculator/,/besparen/,301,strong,"Old ""calculator"" slug is the same savings calculator, now titled/slugged besparen."
+/wateraccu-landing/,/landingspagina/,301,strong,"Same dedicated WaterAccu landing page, slug renamed wateraccu-landing to landingspagina."
+/en/terms-and-conditions/,/algemene-voorwaarden/,301,strong,EN — Dutch-only at launch; see English-URL note.
+/en/i-want-the-wateraccu/,/how-to-get-it/,301,judgement,EN — Dutch-only at launch; paired with /ik-wil-de-wateraccu/.
+/en/installation-form/,/installatie-formulier/,301,strong,EN — Dutch-only at launch; see English-URL note.
+/installation-form-boilergarant/,/installatie-formulier-boilergarant/,301,strong,Legacy Dutch-domain URL with an English slug; same Boilergarant install form.
+/en/installation-form-boilergarant/,/installatie-formulier-boilergarant/,301,strong,EN — Dutch-only at launch; see English-URL note.
+/en/shop/,/shop/,301,strong,EN — Dutch-only at launch; see English-URL note.
+/en/smart-boiler-of-wateraccu/,/hoe-een-simpele-boiler-een-slimme-batterij-wordt/,301,judgement,EN — Dutch-only at launch; paired with /slimme-boiler-of-wateraccu/.
+/en/alternative-to-feed-in-compensation/,/zonnestroomboiler-als-oplossing-voor-terugleverkosten/,301,judgement,EN — Dutch-only at launch; paired with /alternatief-voor-terugleververgoeding/.
+/en/cart/,/cart/,301,strong,EN — Dutch-only at launch; see English-URL note.
+/en/thank-you-2/,/installatie-formulier/,301,needs-decision,EN pair of /thank-you/ — same open question.
+/en/sitemap-2/,/,301,needs-decision,EN pair of /sitemap/ — same open question.
+/en/delivery-and-return-policy/,/levering-en-retourbeleid/,301,strong,EN — Dutch-only at launch; see English-URL note.
+/en/savings-calculator/,/besparen/,301,strong,EN — Dutch-only at launch; paired with /calculator/.
+/en/make-electric-boiler-work-on-solar-panels/,/zonnestroomboiler/,301,judgement,EN — Dutch-only at launch; paired with /elektrische-boiler-op-zonnepanelen-laten-werken/.
+/en/storing-solar-energy-at-home/,/wateraccu/,301,judgement,EN — Dutch-only at launch; paired with /zonne-energie-thuis-opslaan/.
+/en/wateraccu-landingspage/,/landingspagina/,301,strong,EN — Dutch-only at launch; paired with /wateraccu-landing/.
+/en/solar-water-heater/,/zonnestroomboiler/,301,judgement,EN — Dutch-only at launch; English name for the zonnestroomboiler page.
+/en/discover-possibilities/,/installatie/,301,judgement,EN — Dutch-only at launch; paired with /ontdek-mogelijkheden/.
+/en/news-blogs/,/blog-news/,301,strong,EN — Dutch-only at launch; see English-URL note.
+/en/home-b-2/,/,301,judgement,"EN — Dutch-only at launch; A/B homepage variant, same as /home-b/."
+/en/over-solyx-2/,/over-ons/,301,strong,EN — Dutch-only at launch; see English-URL note.
+/en/faqs/,/faq/,301,strong,EN — Dutch-only at launch; see English-URL note.
+/en/how-does-it-work/,/hoe-werkt-het/,301,strong,EN — Dutch-only at launch; see English-URL note.
+/en/contact-2/,/over-ons/,301,needs-decision,EN pair of /contact/ — same open question.
+/ik-wil-de-wateraccu/,/how-to-get-it/,301,judgement,"Old ""I want the WaterAccu"" CTA page; closest live equivalent is the Aan de slag get-started flow."
+/en/faqs-2/,/faq/,301,strong,"EN — duplicate legacy URL, same target as /en/faqs/."
+/en/customer-stories/,/klantverhalen/,301,strong,EN — Dutch-only at launch; see English-URL note.
+/zonnestroomboiler/,/zonnestroomboiler/,301,exact,
+/en/how-does-it-work-2/,/hoe-werkt-het/,301,strong,"EN — duplicate legacy URL, same target as /en/how-does-it-work/."
+/en/installation/,/installatie/,301,strong,EN — Dutch-only at launch; see English-URL note.
+/klantverhalen/,/klantverhalen/,301,exact,
+/vacatures/,/werken-bij/,301,strong,Vacancies index renamed/merged into the Werken bij Solyx careers page.
+/faq/,/faq/,301,exact,
+/handleidingen/,/handleidingen/,301,exact,
+/nieuws-blogs/,/blog-news/,301,strong,"Blog index, slug renamed nieuws-blogs to blog-news."
+/winkel/,/shop/,301,strong,"WooCommerce store page, same title ""Winkel"", slug renamed winkel to shop."
+/home-b/,/,301,judgement,Old A/B-test variant of the homepage; consolidated to the single canonical home.
+/voor-installateurs/,/installateurs/,301,strong,"Same installer page, title ""Voor Installateurs"" unchanged, slug shortened."
+/besparen/,/besparen/,301,exact,
+/wateraccu/,/wateraccu/,301,exact,
+/over-solyx/,/over-ons/,301,strong,"About-us page, slug renamed over-solyx to over-ons."
+/installatie/,/installatie/,301,exact,
+/nieuws-blogs-de-toekomst-van-salderen-en-terug-leveren/,/nieuws-blogs-de-toekomst-van-salderen-en-terug-leveren/,301,exact,
+/nieuws-blogs-vader-en-dochter-runnen-start-up-goedkoop-zonnestroom-opslaan-met-wateraccu/,/nieuws-blogs-vader-en-dochter-runnen-start-up-goedkoop-zonnestroom-opslaan-met-wateraccu/,301,exact,
+/nieuws-blogs-zonneboiler-en-wateraccu-een-betere-vergelijking/,/nieuws-blogs-zonneboiler-en-wateraccu-een-betere-vergelijking/,301,exact,
+/nieuws-blogs-hoe-voorkom-ik-dat-mijn-zonnepanelen-afslaan/,/nieuws-blogs-hoe-voorkom-ik-dat-mijn-zonnepanelen-afslaan/,301,exact,
+/nieuws-blogs-een-boiler-op-zonnepanelen-hoe-werkt-dat/,/nieuws-blogs-een-boiler-op-zonnepanelen-hoe-werkt-dat/,301,exact,
+/nieuws-blogs-optimalisatie-van-gebruik-zonne-energie-een-overzicht/,/nieuws-blogs-optimalisatie-van-gebruik-zonne-energie-een-overzicht/,301,exact,
+/nieuws-blogs-zonnepanelen-optimaal-benutten/,/nieuws-blogs-zonnepanelen-optimaal-benutten/,301,exact,
+/nieuws-blogs-de-wateraccu-met-dynamische-tarieven/,/nieuws-blogs-de-wateraccu-met-dynamische-tarieven/,301,exact,
+/nieuws-blogs-zonne-energie-opslaan_solar365/,/nieuws-blogs-zonne-energie-opslaan_solar365/,301,exact,
+/nieuws-blogs-400-euro-sew-premie-op-de-solar-iboost-in-vlaanderen/,/nieuws-blogs-400-euro-sew-premie-op-de-solar-iboost-in-vlaanderen/,301,exact,
+/nieuws-blogs-de-gevolgen-van-salderen/,/nieuws-blogs-de-gevolgen-van-salderen/,301,exact,
+/nieuws-blogs-lancering-van-de-nymo/,/nieuws-blogs-lancering-van-de-nymo/,301,exact,
+/nieuws-blogs-energieverbruik-huishouden/,/nieuws-blogs-energieverbruik-huishouden/,301,exact,
+/nieuws-blogs-de-afschaffing-van-de-salderingsregeling/,/nieuws-blogs-de-afschaffing-van-de-salderingsregeling/,301,exact,
+/nieuws-blogs-wateraccu-vs-slimme-schakelaar/,/nieuws-blogs-wateraccu-vs-slimme-schakelaar/,301,exact,
+/nieuws-blogs-thuisbatterij-of-wateraccu-een-diepere-vergelijking/,/nieuws-blogs-thuisbatterij-of-wateraccu-een-diepere-vergelijking/,301,exact,
+/zonnepanelen-dynamisch-contract/,/zonnepanelen-dynamisch-contract/,301,exact,
+/sales-operations-medewerker-32-40-uur/,/sales-operations-medewerker-32-40-uur/,301,exact,
+/maak-je-eigen-wateraccu-met-solyx-energy/,/maak-je-eigen-wateraccu-met-solyx-energy/,301,exact,
+/premie-tot-400-euro-is-de-wateraccu-een-goed-alternatief-voor-een-thuisbatterij/,/premie-tot-400-euro-is-de-wateraccu-een-goed-alternatief-voor-een-thuisbatterij/,301,exact,
+/wateraccu-nymo-maakt-van-je-boiler-een-goedkoper-alternatief-voor-de-thuisbatterij/,/wateraccu-nymo-maakt-van-je-boiler-een-goedkoper-alternatief-voor-de-thuisbatterij/,301,exact,
+/hoe-een-simpele-boiler-een-slimme-batterij-wordt/,/hoe-een-simpele-boiler-een-slimme-batterij-wordt/,301,exact,
+/nijkerkse-startup-introduceert-een-voudige-opslag-van-zonne-energie-in-warm-water/,/nijkerkse-startup-introduceert-een-voudige-opslag-van-zonne-energie-in-warm-water/,301,exact,
+/dutch-startup-unveils-controller-to-store-excess-pv-power-in-hot-water/,/dutch-startup-unveils-controller-to-store-excess-pv-power-in-hot-water/,301,exact,
+/de-nieuwe-betaalbare-thuisbatterij/,/de-nieuwe-betaalbare-thuisbatterij/,301,exact,
+/check-deze-slimme-wateraccu-van-vader-en-dochter-snaak/,/check-deze-slimme-wateraccu-van-vader-en-dochter-snaak/,301,exact,
+/hoe-breng-je-een-nieuw-apparaat-naar-de-markt/,/hoe-breng-je-een-nieuw-apparaat-naar-de-markt/,301,exact,
+/deze-5-startups-pakkenzonne-energie-net-even-iets-anders-aan/,/deze-5-startups-pakkenzonne-energie-net-even-iets-anders-aan/,301,exact,
+/zonnestroomboiler-als-oplossing-voor-terugleverkosten/,/zonnestroomboiler-als-oplossing-voor-terugleverkosten/,301,exact,
+/en/these-5-startups-are-approaching-solar-energy-in-a-slightly-different-way/,/deze-5-startups-pakkenzonne-energie-net-even-iets-anders-aan/,301,strong,EN — Dutch-only at launch; translated post already live at the Dutch URL.
+/en/how-do-you-bring-a-new-device-to-market/,/hoe-breng-je-een-nieuw-apparaat-naar-de-markt/,301,strong,EN — Dutch-only at launch; translated post already live at the Dutch URL.
+/en/check-out-this-smart-water-battery-from-father-and-daughter-snaak/,/check-deze-slimme-wateraccu-van-vader-en-dochter-snaak/,301,strong,EN — Dutch-only at launch; translated post already live at the Dutch URL.
+/en/the-new-and-affordable-home-battery/,/de-nieuwe-betaalbare-thuisbatterij/,301,strong,EN — Dutch-only at launch; translated post already live at the Dutch URL.
+/en/dutch-start-up-unveils-controller-to-store-surplus-pv-energy-in-hot-water/,/dutch-startup-unveils-controller-to-store-excess-pv-power-in-hot-water/,301,strong,EN — near-duplicate wording of an already-English-titled post that lives on a non-/en/ URL; consolidated to that URL.
+/en/nijkerk-startup-introduces-a-simple-way-to-store-solar-energy-in-hot-water/,/nijkerkse-startup-introduceert-een-voudige-opslag-van-zonne-energie-in-warm-water/,301,strong,EN — Dutch-only at launch; translated post already live at the Dutch URL.
+/en/how-a-simple-boiler-becomes-a-smart-battery/,/hoe-een-simpele-boiler-een-slimme-batterij-wordt/,301,strong,EN — Dutch-only at launch; translated post already live at the Dutch URL.
+/en/water-battery-nymo-turns-your-boiler-into-a-cheaper-alternative-to-a-home-battery/,/wateraccu-nymo-maakt-van-je-boiler-een-goedkoper-alternatief-voor-de-thuisbatterij/,301,strong,EN — Dutch-only at launch; translated post already live at the Dutch URL.
+/en/premium-up-to-e400-is-the-wateraccu-a-good-alternative-to-a-home-battery/,/premie-tot-400-euro-is-de-wateraccu-een-goed-alternatief-voor-een-thuisbatterij/,301,strong,EN — Dutch-only at launch; translated post already live at the Dutch URL.
+/en/make-your-own-wateraccu-with-solyx-energy/,/maak-je-eigen-wateraccu-met-solyx-energy/,301,strong,EN — Dutch-only at launch; translated post already live at the Dutch URL.
+/en/wateraccu-vs-smart-switch-a-comparison/,/nieuws-blogs-wateraccu-vs-slimme-schakelaar/,301,strong,EN — Dutch-only at launch; translated post already live at the Dutch URL.
+/en/the-abolition-of-the-net-metering-scheme-is-final-how-can-you-get-the-most-out-of-your-panels/,/nieuws-blogs-de-afschaffing-van-de-salderingsregeling/,301,strong,EN — Dutch-only at launch; translated post already live at the Dutch URL.
+/en/what-does-energy-consumption-look-like-in-my-home-and-how-can-i-make-it-more-sustainable/,/nieuws-blogs-energieverbruik-huishouden/,301,strong,EN — Dutch-only at launch; translated post already live at the Dutch URL.
+/en/the-launch-of-the-nymo-what-a-milestone/,/nieuws-blogs-lancering-van-de-nymo/,301,strong,EN — Dutch-only at launch; translated post already live at the Dutch URL.
+/en/the-consequences-of-netting/,/nieuws-blogs-de-gevolgen-van-salderen/,301,strong,EN — Dutch-only at launch; translated post already live at the Dutch URL.
+/en/the-wateraccu-with-dynamic-rates/,/nieuws-blogs-de-wateraccu-met-dynamische-tarieven/,301,strong,EN — Dutch-only at launch; translated post already live at the Dutch URL.
+/en/home-battery-or-wateraccu-a-deeper-comparison/,/nieuws-blogs-thuisbatterij-of-wateraccu-een-diepere-vergelijking/,301,strong,EN — Dutch-only at launch; translated post already live at the Dutch URL.
+/en/zonneboiler-en-wateraccu-een-betere-vergelijking/,/nieuws-blogs-zonneboiler-en-wateraccu-een-betere-vergelijking/,301,strong,EN — untranslated (Dutch) title under an /en/ URL; same post as the Dutch original.
+/en/the-future-of-netting-and-returning/,/nieuws-blogs-de-toekomst-van-salderen-en-terug-leveren/,301,strong,EN — Dutch-only at launch; translated post already live at the Dutch URL.
+/en/future-of-settlement-and-return/,/nieuws-blogs-de-toekomst-van-salderen-en-terug-leveren/,301,strong,EN — duplicate legacy translation of the same article as /en/the-future-of-netting-and-returning/.
+/en/boiler-on-solar-panels/,/nieuws-blogs-een-boiler-op-zonnepanelen-hoe-werkt-dat/,301,strong,EN — Dutch-only at launch; translated post already live at the Dutch URL.
+/en/400-euro-sew-premie-op-de-wateraccu-in-vlaanderen/,/nieuws-blogs-400-euro-sew-premie-op-de-solar-iboost-in-vlaanderen/,301,strong,EN — untranslated (Dutch) title under an /en/ URL; same post as the Dutch original.
+/en/how-do-i-get-the-most-out-of-my-solar-panels/,/nieuws-blogs-zonnepanelen-optimaal-benutten/,301,strong,EN — Dutch-only at launch; translated post already live at the Dutch URL.
+/en/solar-panels-and-dynamic-contracts-a-good-or-bad-combination/,/zonnepanelen-dynamisch-contract/,301,strong,EN — Dutch-only at launch; translated post already live at the Dutch URL.
+/nieuws-blogs-gawalo-zonnestroom-opslaan-in-warm-water/,/nieuws-blogs-gawalo-zonnestroom-opslaan-in-warm-water/,301,exact,
+/nieuws-blogs-mt-sprout-emma-snaak-ex-tesla-ontwikkelt-met-solyx-energy-een-wateraccu/,/nieuws-blogs-mt-sprout-emma-snaak-ex-tesla-ontwikkelt-met-solyx-energy-een-wateraccu/,301,exact,
+/en/gawalo-storing-solar-power-in-hot-water/,/nieuws-blogs-gawalo-zonnestroom-opslaan-in-warm-water/,301,strong,EN — Dutch-only at launch; translated post already live at the Dutch URL.
+/en/mt-sprout-emma-snaak-formerly-of-tesla-is-developing-a-water-battery-with-solyx-energy/,/nieuws-blogs-mt-sprout-emma-snaak-ex-tesla-ontwikkelt-met-solyx-energy-een-wateraccu/,301,strong,EN — Dutch-only at launch; translated post already live at the Dutch URL.
+/en/how-can-i-prevent-my-solar-panels-from-shutting-down/,/nieuws-blogs-hoe-voorkom-ik-dat-mijn-zonnepanelen-afslaan/,301,strong,EN — Dutch-only at launch; translated post already live at the Dutch URL.
+/en/father-and-daughter-run-start-up-cheap-solar-power-storage-with-water-batteries/,/nieuws-blogs-vader-en-dochter-runnen-start-up-goedkoop-zonnestroom-opslaan-met-wateraccu/,301,strong,EN — Dutch-only at launch; translated post already live at the Dutch URL.
+/en/solar-power-boiler-as-a-solution-for-delivery-costs/,/zonnestroomboiler-als-oplossing-voor-terugleverkosten/,301,strong,EN — Dutch-only at launch; translated post already live at the Dutch URL.
+/nieuws-blogs-duurzaamondernemen-nl-over-solyxenergy/,/nieuws-blogs-duurzaamondernemen-nl-over-solyxenergy/,301,exact,
+/nieuws-blogs-duurzaamondernemen-nl-startup-solyx-introduceert-eenvoudige-opslag-van-zonne-energie-in-warm-water/,/nieuws-blogs-duurzaamondernemen-nl-startup-solyx-introduceert-eenvoudige-opslag-van-zonne-energie-in-warm-water/,301,exact,
+/simpele-wateraccu-kan-ingestorte-zonnepanelenmarkt-nieuw-leven-inblazen/,/simpele-wateraccu-kan-ingestorte-zonnepanelenmarkt-nieuw-leven-inblazen/,301,exact,
+/een-toekomstbestendig-plan-voor-zonnepaneel-eigenaren-de-gouden-driehoek-van-wateraccu-thuisbatterij-en-ev-lader/,/een-toekomstbestendig-plan-voor-zonnepaneel-eigenaren-de-gouden-driehoek-van-wateraccu-thuisbatterij-en-ev-lader/,301,exact,
+/lancering-nymo-x-homey-voor-wateraccu-op-dynamische-prijzen/,/lancering-nymo-x-homey-voor-wateraccu-op-dynamische-prijzen/,301,exact,
+/en/simple-wateraccu-could-breathe-new-life-into-collapsed-solar-panel-market/,/simpele-wateraccu-kan-ingestorte-zonnepanelenmarkt-nieuw-leven-inblazen/,301,strong,EN — Dutch-only at launch; translated post already live at the Dutch URL.
+/en/a-future-proof-plan-for-solar-panel-owners-the-golden-triangle-of-water-storage-home-battery-and-ev-charger/,/een-toekomstbestendig-plan-voor-zonnepaneel-eigenaren-de-gouden-driehoek-van-wateraccu-thuisbatterij-en-ev-lader/,301,strong,EN — Dutch-only at launch; translated post already live at the Dutch URL.
+/en/launch-of-nymo-x-homey-for-dynamic-pricing-and-integration-of-wateraccu-home-battery-and-ev-charger/,/lancering-nymo-x-homey-voor-wateraccu-op-dynamische-prijzen/,301,strong,EN — Dutch-only at launch; translated post already live at the Dutch URL.
+/itho-daalderop-en-solyx-energy-slaan-de-handen-ineen-voor-nieuwe-generatie-zon-gestuurde-boilers/,/itho-daalderop-en-solyx-energy-slaan-de-handen-ineen-voor-nieuwe-generatie-zon-gestuurde-boilers/,301,exact,
+/neem-ook-de-zonnestroomboiler-mee-als-oplossing-na-salderen/,/neem-ook-de-zonnestroomboiler-mee-als-oplossing-na-salderen/,301,exact,
+/zonnestroom-opslaan-na-salderen-zo-werkt-de-waterbatterij/,/zonnestroom-opslaan-na-salderen-zo-werkt-de-waterbatterij/,301,exact,
+/gebruik-een-boiler-met-elektrisch-element-om-je-stroomoverschot-op-te-slaan-als-warm-%f0%9f%a5%b5-water-zo-lever-je-minder-stroom-terug/,/gebruik-een-boiler-met-elektrisch-element-om-je-stroomoverschot-op-te-slaan-als-warm-%f0%9f%a5%b5-water-zo-lever-je-minder-stroom-terug/,301,exact,
+/wateraccu-voor-zonnepanelen-goedkoper-dan-een-thuisbatterij-en-toch-effectief/,/wateraccu-voor-zonnepanelen-goedkoper-dan-een-thuisbatterij-en-toch-effectief/,301,exact,
+/vacature_hbo-wo-stage-marketing/,/vacature_hbo-wo-stage-marketing/,301,exact,
+/hbo-stage-commerciele-economie-of-operations/,/hbo-stage-commerciele-economie-of-operations/,301,exact,
+/en/product/solar-iboost-2/,/solyx-shop/,301,judgement,EN — discontinued third-party accessory; same as /product/solar-iboost/.
+/product/solar-iboost/,/solyx-shop/,301,judgement,Discontinued third-party accessory; routed to the shop.
+/en/product/nymo-x-homey/,/product/nymo-wateraccu/,301,judgement,EN — Dutch-only at launch; same as /product/nymo-x-homey/.
+/en/product/electric-boiler-kopie/,,410,judgement,"Duplicate/test product listing (""kopie"" is Dutch for copy); no distinct content to preserve, de-indexed rather than redirected."
+/en/product/electric-boiler/,/product/nymo-wateraccu-met-boiler/,301,judgement,EN — Dutch-only at launch; same as /product/elektrische-boiler/.
+/product/nymo/,/product/nymo-wateraccu/,301,strong,"Base Nymo controller, renamed slug nymo to nymo-wateraccu."
+/product/nymo-x-homey/,/product/nymo-wateraccu/,301,judgement,Homey-integration bundle discontinued as a separate SKU; Homey support now sits under the base product.
+/product/zonnestroomboiler-complete-set/,/product/nymo-wateraccu-met-boiler/,301,strong,Complete set including boiler is the current met-boiler variant.
+/product/elektrische-boiler/,/product/nymo-wateraccu-met-boiler/,301,judgement,Standalone boiler component; closest current offering is the complete met-boiler product.
+/product/wateraccu-x-homey-complete-set/,/product/nymo-wateraccu/,301,judgement,Homey bundle discontinued as a separate SKU; routed to the base product.
+/en/product-categorie/geen-categorie/,,410,judgement,"WooCommerce default ""no category"" placeholder term; never had real content, de-indexed."
+/en/product-categorie/nymo-x-homey/,/product/nymo-wateraccu/,301,judgement,EN — Dutch-only at launch; see English-URL note.
+/product-categorie/boilers/,/product/nymo-wateraccu-met-boiler/,301,judgement,Category held the boiler-related products; closest single equivalent is the met-boiler product.
+/en/product-categorie/boilers/,/product/nymo-wateraccu-met-boiler/,301,judgement,EN — Dutch-only at launch; see English-URL note.
+/product-categorie/nymo/,/product/nymo-wateraccu/,301,judgement,Category for the base Nymo; maps to the base product.
+/product-categorie/nymo-x-homey/,/product/nymo-wateraccu/,301,judgement,Homey bundle category discontinued; routed to the base product.
+/product-categorie/solar-iboost/,/solyx-shop/,301,judgement,Discontinued accessory category; routed to the shop.
+/?taxonomy=product_shipping_class&term=gratis-verzending,,410,judgement,"WooCommerce shipping-class archive; no public-facing content, a sitemap-generator artifact. De-indexed rather than redirected to avoid a soft-404."
+/en/category/article/,/blog-news/,301,judgement,EN — Dutch-only at launch; see English-URL note.
+/category/artikel/,/blog-news/,301,judgement,Editorial category archive consolidated into the single blog index.
+/category/blog/,/blog-news/,301,judgement,Blog category archive consolidated into the blog index.
+/en/category/blog/,/blog-news/,301,judgement,EN — Dutch-only at launch; see English-URL note.
+/category/interview/,/blog-news/,301,judgement,Editorial category archive consolidated into the blog index.
+/en/category/interview/,/blog-news/,301,judgement,EN — Dutch-only at launch; see English-URL note.
+/category/artikel/magazine/,/blog-news/,301,judgement,Nested editorial category archive consolidated into the blog index.
+/en/category/magazine/,/blog-news/,301,judgement,EN — Dutch-only at launch; see English-URL note.
+/category/interview/podcast/,/blog-news/,301,judgement,Nested editorial category archive consolidated into the blog index.
+/en/category/podcast/,/blog-news/,301,judgement,EN — Dutch-only at launch; see English-URL note.
+/category/vacature/,/werken-bij/,301,judgement,"Job-post category archive; the live equivalent is the careers page, not the blog index."
+/author/achourmiriam5gmail-com/,,410,judgement,"Author archive — thin, auto-generated listing of posts by one person; no unique content of its own. De-indexed rather than redirected to a barely-related page."
+/author/miriam/,,410,judgement,"Author archive — thin, auto-generated listing of posts by one person; no unique content of its own. De-indexed rather than redirected to a barely-related page."
+/author/ollie-milner/,,410,judgement,"Author archive — thin, auto-generated listing of posts by one person; no unique content of its own. De-indexed rather than redirected to a barely-related page."
+/author/emma_snaak/,,410,judgement,"Author archive — thin, auto-generated listing of posts by one person; no unique content of its own. De-indexed rather than redirected to a barely-related page."
+/author/ivar-kotte/,,410,judgement,"Author archive — thin, auto-generated listing of posts by one person; no unique content of its own. De-indexed rather than redirected to a barely-related page."
+/author/kirit-kerklaan/,,410,judgement,"Author archive — thin, auto-generated listing of posts by one person; no unique content of its own. De-indexed rather than redirected to a barely-related page."
+/author/job-van-breukelen/,,410,judgement,"Author archive — thin, auto-generated listing of posts by one person; no unique content of its own. De-indexed rather than redirected to a barely-related page."
