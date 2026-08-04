@@ -63,9 +63,20 @@ A4 for an Analytics ID — but the more useful question is who holds those
 accounts. A container someone else administers can push any tag onto the site at
 any time, without touching WordPress.
 
-### A4. Google Analytics measurement ID
-- **What:** the `G-XXXXXXX` ID, unless analytics is fired entirely from inside
-  the Tag Manager container — the client should confirm which.
+### A4. Google Analytics — answered
+Measurement ID **G-644YBV3GY2**.
+
+Where it should live is now the only open point. It must be configured in
+exactly one place, never both:
+- **Inside GTM-PXFF53F**, as a GA4 configuration tag — the tidier option, and
+  the one to choose if whoever administers that container is going to build the
+  conversion tags anyway.
+- **On the site directly**, which works today without waiting for container
+  access.
+
+Whichever is picked, the other must stay empty. Two GA4 configurations with the
+same measurement ID double every page view and every conversion, and the
+resulting numbers look plausible, which is what makes it dangerous.
 
 ### A5. WPML — account access, not a purchase
 - **What:** the login for the existing **wpml.org account**. Nothing needs to be
@@ -88,22 +99,24 @@ any time, without touching WordPress.
 
 ### A6. Services running in production but not yet on the new site
 
-**In scope — confirmed wanted, needs credentials**
+**In scope — answered**
 
-- **WooCommerce WeFact** — the Dutch accounting/invoicing integration. Every
-  paid order is pushed to WeFact so the bookkeeping matches the shop instead of
-  being re-typed. **Needs the WeFact API key** (WeFact → Instellingen → API).
-  Until it is connected, orders exist only in WooCommerce.
+- **WooCommerce WeFact** — wanted. The API key has been supplied.
+  **The key is deliberately not written into this repository.** It arrived over
+  chat, which means it should be treated as exposed: paste it into the plugin
+  settings and then regenerate it in WeFact, so the value that was in a message
+  no longer works.
+  Still to do: the WeFact plugin is not installed on the new site — production
+  has it, staging never did.
 
-**Each of the three below is a yes/no, with a recommendation**
+- **MailerLite — dropped.** No newsletter. Two consequences worth acting on:
+  the privacy statement should not mention newsletter processing, and any
+  marketing opt-in still present on a form has to go. A checkbox that asks
+  permission to send something nobody will send is consent collected under false
+  pretences. The contact form (form 5) carries a `marketingOptIn` field — it
+  needs removing.
 
-- **MailerLite** — the newsletter tool. It holds the existing subscriber list
-  and, in production, the forms and the shop feed signups into it. Two
-  questions: does the client want to keep sending newsletters, and does the
-  existing list move to the new site? If yes it needs an API key, and the
-  newsletter opt-in has to appear in the privacy statement.
-  *Recommendation: keep it only if someone actually sends newsletters. A
-  connected-but-unused list is a GDPR liability, not an asset.*
+**Each of the two below is a yes/no, with a recommendation**
 
 - **Hotjar** — records anonymised sessions and builds heatmaps of where people
   click and how far they scroll. It is a diagnostic tool for improving a page,
@@ -136,13 +149,20 @@ any time, without touching WordPress.
 
 ## B — Business decisions
 
-### B1. Belgium shipping cost
+### B1. Belgium shipping — answered: free
+Belgium ships free, same as the Netherlands. Needs setting on the Belgium
+shipping zone in WooCommerce.
+
+<!-- original question -->
 Staging charges a €14.95 flat rate to Belgium while the Netherlands is free, but
 every shop page advertises free shipping with no country caveat. The figure is
 inherited from the old site, so it is not a decision. Either make Belgium free,
 or keep a charge and add the caveat to the shop copy.
 
-### B2. Price of the Homey unit — €611 or €625
+### B2. Homey price — answered: €611
+The Homey variation is €611; the standard controller is €649.
+
+<!-- original question -->
 The static pages say **€611**. Legacy production and the old staging catalogue
 both say **€625**. The client confirmed the static pages are authoritative, so
 €611 is live — but the two sources disagreeing by €14 is worth an explicit yes.
@@ -244,24 +264,17 @@ rules are already in place, so nothing 404s while she thinks.
 - `/contact/` and `/en/contact-2/` — currently sent to `/over-ons/`, and the
   real answer depends on B10.
 
-### B10. There is no contact page
-Production has `/contact/` and an English `/en/contact-2/`. The new site has
-neither, and the **"Contact" link in the footer points at `/faq/`** — so a
-customer who wants to reach Solyx lands on a list of questions instead.
+### B10. Contact page — answered: there isn't one, send it to the FAQ
+Decision: no contact page is built. `/contact/` and `/en/contact-2/` redirect to
+`/faq/`, which carries the working contact form, and the footer's "Contact" link
+already points there.
 
-The phone number and email address are in the footer, so nobody is stranded, but
-this is the one page type a buyer expects to find before spending €1,700.
+Redirect table updated accordingly — the interim `/over-ons/` rule is gone.
 
-Three options, in order of effort:
-1. Build a real contact page — address, phone, email, opening hours, and the
-   existing contact form that already works on `/faq/`.
-2. Point the footer link at the contact section of `/faq/` with an anchor, so at
-   least the label matches the destination.
-3. Leave it, and 301 the old `/contact/` to `/over-ons/` — the interim rule
-   currently in the redirect table.
-
-Recommendation: option 1. It is an hour of work and it removes a real reason for
-someone to abandon a purchase.
+Worth keeping an eye on after launch: the FAQ page has to actually read as the
+place to reach Solyx. If the contact form sits far down the page, someone
+arriving from a `/contact/` bookmark may not find it. An anchor on the redirect
+target would fix that in one line if it turns out to be a problem.
 
 ### B8. Two pages have never been written — blocking a clean launch
 `/zonnestroomboiler/` and `/werken-bij/` both render:

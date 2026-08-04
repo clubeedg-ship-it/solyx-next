@@ -12,7 +12,7 @@ source,target,code,confidence,note
 /algemene-voorwaarden/,/algemene-voorwaarden/,301,exact,
 /ontdek-mogelijkheden/,/installatie/,301,judgement,"Known open item (REDIRECT-MAP.md §4c: no equivalent). ""Discover installation possibilities"" maps closest to the Installatie & Opstellingen page."
 /thank-you/,/installatie-formulier/,301,needs-decision,Generic old form/order confirmation page; unclear which flow it served (install form vs WooCommerce checkout). Recommend 301 to /installatie-formulier/ pending confirmation.
-/contact/,/over-ons/,301,needs-decision,"The new site has no standalone contact page. Recommend 301 to /over-ons/ as an interim target, or build a dedicated contact page before cutover."
+/contact/,/faq/,301,exact,client decision: no contact page; FAQ carries the contact form
 /installatie-formulier/,/installatie-formulier/,301,exact,
 /installatie-formulier-boilergarant/,/installatie-formulier-boilergarant/,301,exact,
 /calculator/,/besparen/,301,strong,"Old ""calculator"" slug is the same savings calculator, now titled/slugged besparen."
@@ -40,7 +40,7 @@ source,target,code,confidence,note
 /en/over-solyx-2/,/over-ons/,301,strong,EN — Dutch-only at launch; see English-URL note.
 /en/faqs/,/faq/,301,strong,EN — Dutch-only at launch; see English-URL note.
 /en/how-does-it-work/,/hoe-werkt-het/,301,strong,EN — Dutch-only at launch; see English-URL note.
-/en/contact-2/,/over-ons/,301,needs-decision,EN pair of /contact/ — same open question.
+/en/contact-2/,/faq/,301,exact,client decision: no contact page; FAQ carries the contact form
 /ik-wil-de-wateraccu/,/how-to-get-it/,301,judgement,"Old ""I want the WaterAccu"" CTA page; closest live equivalent is the Aan de slag get-started flow."
 /en/faqs-2/,/faq/,301,strong,"EN — duplicate legacy URL, same target as /en/faqs/."
 /en/customer-stories/,/klantverhalen/,301,strong,EN — Dutch-only at launch; see English-URL note.

@@ -154,6 +154,14 @@ enough — the translation files still had to be fetched, until which point
 WooCommerce kept rendering English. The four system pages were also renamed
 (Winkel, Winkelwagen, Afrekenen, Mijn account); their slugs are unchanged so
 WooCommerce settings and existing links still resolve.
+- **Client answers applied:** Homey is €611 and the standard controller €649 —
+already correct, no change needed. **Belgium now ships free**: a free-shipping
+method was added to the Belgium zone and the €14.95 flat rate disabled rather
+than deleted, so it is one click to restore if that decision reverses.
+- **WeFact is not installed.** Production has the plugin, staging never did. The
+API key has been supplied but is deliberately **not** recorded in this
+repository — it arrived over chat, so it should be pasted into the plugin and
+then regenerated in WeFact.
 - **Not verified:** no checkout has been run. Cart → checkout → Mollie redirect
 → order status → confirmation email are all unproven. The payment step itself
 needs the client, since it requires their bank login.
@@ -253,6 +261,14 @@ browser and a server push made every add count **twice** — caught in testing a
 removed. For the same reason, **do not add a Meta tag inside GTM-PXFF53F**: the
 pixel is hard-coded, and a container tag would double every event and report
 double revenue.
+- **Google Analytics 4 `G-644YBV3GY2` is live**, configured on the site rather
+than inside the container, because the container is not ours to edit. It
+inherits the Consent Mode defaults. Verified from a clean profile: no `_ga`
+cookie before consent, cookies only after accept. There is one pre-consent
+request — Consent Mode's cookieless ping, which carries no identifiers and
+stores nothing. **If a GA4 tag is ever added inside GTM-PXFF53F with this same
+ID, this block must be removed first**, or every page view and conversion counts
+twice.
 - **Next:** the container currently fires nothing — the tags still have to be
 built inside GTM by whoever administers it. `purchase` is the one event not yet
 observed live, because no order has been completed.
