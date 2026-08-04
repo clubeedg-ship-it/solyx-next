@@ -23,13 +23,20 @@ as an answer — it is inherited until the client confirms it.
   field is empty. The client should type it into the staging WP Mail SMTP
   settings directly — it should not travel through chat, email, or the repo.
 
-### A2. Google Tag Manager container ID
-- **What:** the `GTM-XXXXXXX` container ID, plus access to the Tag Manager
-  account if tags must be built rather than just fired.
-- **Why:** production runs Tag Manager; the new site has no tracking at all.
-- **Blocked without it:** the whole tracking lane, including the eight required
-  events (quote started, quote step completed, lead generated, item viewed, add
-  to cart, cart viewed, checkout begun, purchase).
+### A2. Google Tag Manager — answered and installed
+Container **GTM-PXFF53F** is live, loaded with Google Consent Mode set to denied
+by default so no tag inside it can store anything until the visitor chooses.
+Verified from a clean profile: before consent every signal reads denied and no
+Google cookie is set; on accept they all flip to granted.
+
+Still needed from the client:
+- **Access to the Tag Manager account**, if tags have to be built rather than
+  just fired. The container currently fires nothing — the eight launch events
+  (quote started, quote step completed, lead generated, item viewed, add to
+  cart, cart viewed, checkout begun, purchase) have to be defined either inside
+  the container by whoever owns it, or here as `dataLayer` pushes.
+- Confirmation of **who administers that container**, per A3 — anyone with
+  access can push tags onto the site without touching WordPress.
 
 ### A3. Meta Pixel — who owns it?
 Not a request for an ID. There already is one, and it is live.
