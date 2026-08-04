@@ -31,10 +31,30 @@ as an answer — it is inherited until the client confirms it.
   events (quote started, quote step completed, lead generated, item viewed, add
   to cart, cart viewed, checkout begun, purchase).
 
-### A3. Meta Pixel ID
-- **What:** the pixel ID. Separately, a Conversions API token if server-side
-  tracking is wanted rather than browser-only.
-- **Blocked without it:** Meta conversion tracking.
+### A3. Meta Pixel — who owns it?
+Not a request for an ID. There already is one, and it is live.
+
+Pixel **2264362454021133** was pasted into the site's head code and, until
+today, fired on the very first page view — dropping Meta's `_fbp` tracking
+cookie while the visitor's own consent record still said advertising: no. It is
+now gated: nothing loads until someone accepts advertising cookies.
+
+The open question is ownership. That pixel belongs to *some* Meta Business
+account, and every visitor it sees builds an audience inside that account. If it
+was set up by a previous agency or a partner, they may still be collecting from
+Solyx customers today.
+
+- Does the client control the Meta Business account this pixel belongs to?
+- If yes, keep it — history and audiences are preserved.
+- If no, or nobody knows, replace it with a pixel in an account they own. The
+  swap is one line.
+- Separately: a Conversions API token, if they want server-side tracking as well
+  as browser-side.
+
+**The same question applies to Google.** A2 asks for a Tag Manager container ID,
+A4 for an Analytics ID — but the more useful question is who holds those
+accounts. A container someone else administers can push any tag onto the site at
+any time, without touching WordPress.
 
 ### A4. Google Analytics measurement ID
 - **What:** the `G-XXXXXXX` ID, unless analytics is fired entirely from inside
