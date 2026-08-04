@@ -40,23 +40,58 @@ as an answer — it is inherited until the client confirms it.
 - **What:** the `G-XXXXXXX` ID, unless analytics is fired entirely from inside
   the Tag Manager container — the client should confirm which.
 
-### A5. WPML licence key
-- **What:** a site key for `2026.solyxenergy.nl`. WPML is paid, and a key is
-  tied to a domain.
-- **Why:** production uses the full WPML stack for Dutch/English.
+### A5. WPML — account access, not a purchase
+- **What:** the login for the existing **wpml.org account**. Nothing needs to be
+  bought.
+- **Why:** production already runs the paid WPML stack on `solyxenergy.nl`, and
+  that is the domain this site launches on — the new build replaces it, it does
+  not move to a different hostname. The licence that covers production covers
+  the launched site.
+- **Staging:** `2026.solyxenergy.nl` is a temporary hostname that disappears at
+  cutover. WPML subscriptions include development/staging registrations under
+  the same account, so staging costs nothing extra. It is registered from the
+  account, not bought.
 - **Blocked without it:** the English half of every lane — pages, forms,
   checkout, emails.
-- **Note:** the client should confirm the domain the key is registered to; a
-  second activation may be needed for the production hostname at cutover.
+- **Not yet verified:** which WPML components production runs (CMS, String
+  Translation, Translation Management are usually separate) and the renewal
+  date. The production admin session had expired at the time of writing, so this
+  needs one look at **Plugins → active** on production to make sure staging ends
+  up with the same set.
 
-### A6. Services running in production but not yet in the launch scope
-Confirm for each whether it is wanted on the new site; each needs its own
-credentials if so.
-- **MailerLite** — marketing email, connected to both the forms and the shop in
-  production. Needs an API key.
-- **WooCommerce WeFact** — Dutch accounting integration. Needs API credentials.
-- **Hotjar** — behaviour analytics. Needs a site ID.
-- **Google for WooCommerce** — product feed and ads. Needs an account link.
+### A6. Services running in production but not yet on the new site
+
+**In scope — confirmed wanted, needs credentials**
+
+- **WooCommerce WeFact** — the Dutch accounting/invoicing integration. Every
+  paid order is pushed to WeFact so the bookkeeping matches the shop instead of
+  being re-typed. **Needs the WeFact API key** (WeFact → Instellingen → API).
+  Until it is connected, orders exist only in WooCommerce.
+
+**Each of the three below is a yes/no, with a recommendation**
+
+- **MailerLite** — the newsletter tool. It holds the existing subscriber list
+  and, in production, the forms and the shop feed signups into it. Two
+  questions: does the client want to keep sending newsletters, and does the
+  existing list move to the new site? If yes it needs an API key, and the
+  newsletter opt-in has to appear in the privacy statement.
+  *Recommendation: keep it only if someone actually sends newsletters. A
+  connected-but-unused list is a GDPR liability, not an asset.*
+
+- **Hotjar** — records anonymised sessions and builds heatmaps of where people
+  click and how far they scroll. It is a diagnostic tool for improving a page,
+  not something customers benefit from.
+  *Recommendation: leave it off at launch. It needs its own consent category,
+  it slows pages down, and nobody reads the recordings unless there is a
+  specific question to answer. Easy to add later if a page underperforms.*
+
+- **Google for WooCommerce** — pushes the product catalogue to Google Merchant
+  Center so the two products can appear in Google Shopping, both as free
+  listings and as paid ads.
+  *Recommendation: only worth connecting if the client intends to advertise on
+  Google. It is a marketing decision with an ad budget attached, not launch
+  infrastructure. The catalogue is two products; it can be connected any time
+  after launch without rework.*
 
 ### A7. Cutover access — later, not now
 - Domain, DNS and SSL control for the switch to the live hostname.
@@ -142,10 +177,9 @@ Production is past invoice **656** and still issuing. Staging's counter was
 deliberately left alone; it must be set to production's final number on cutover
 day, or the accounting gets duplicate invoice numbers.
 
-### B7. Publishing the home page
-The front-page setting still points at the old home page, now trashed. It needs
-to point at migrated Home (page 626), which means publishing 626 — a publish
-decision, not a technical one.
+### B7. Publishing the home page — done, no longer a question
+Migrated Home (626) is published and is the front page; `/` serves it. Nothing
+to decide.
 
 ### B8. Two pages have never been written — blocking a clean launch
 `/zonnestroomboiler/` and `/werken-bij/` both render:
