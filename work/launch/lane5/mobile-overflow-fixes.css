@@ -1,0 +1,219 @@
+/* ============================================================================
+   Solyx Energy — mobile horizontal-overflow fixes
+   Scope: three pages only, verified at 390x844 (also re-checked at 360x740 and
+   768x1024). Desktop (>=1200px, checked at 1440x900) is untouched — every rule
+   below lives inside a `max-width` media query.
+
+   Method: for each page, chromium (headed, real Playwright, Playwright 1.61.1)
+   walked every element and compared getBoundingClientRect().right against
+   document.documentElement.clientWidth, then cross-referenced the winning CSS
+   rule for the widest offenders via document.styleSheets. Root causes and
+   measurements are documented per block below.
+
+   Rule: no `!important`. Every override wins on selector specificity. Where an
+   override is fighting a same-file, unscoped (non-media) rule that already
+   uses extra classes to win specificity, the competing rule is named and this
+   file matches or slightly exceeds its specificity using classes that are
+   already present on the element (`.wp-block-group`, `.is-layout-flow`) —
+   never a blanket `!important`.
+   ============================================================================ */
+
+
+/* ---------------------------------------------------------------------------
+   PAGE: /hoe-werkt-het/
+   ELEMENT: `.two-col` grid used by #s-video, #s-cost, #s-check, #s-comp,
+   #s-dimmer (and `.col-l` / `.col-r` inside each).
+
+   Measured before (this file's fixes not applied): scrollWidth 722 vs
+   clientWidth 390 at 390x844 → 332px overflow. Widest single offender:
+   `#s-video .two-col > .col-r`, computed width 792px (cssWidth), left 278.3,
+   right 1054.5.
+
+   Root cause: `.two-col` is `display:grid; grid-template-columns:280px 1fr`.
+   The theme ships a collapse at `@media(max-width:900px){ .two-col{
+   grid-template-columns:1fr } }`, but a later, unscoped (no media query) rule
+   in the same page's stylesheet:
+     `.solyx-page-hoe-werkt-het .two-col.wp-block-group,
+      .solyx-page-hoe-werkt-het .two-col { grid-template-columns:280px 1fr; ... }`
+   matches the same element via its `.two-col.wp-block-group` branch, which is
+   MORE specific (0,3,0) than the theme's own mobile collapse rule
+   (`.solyx-page-hoe-werkt-het .two-col`, 0,2,0), so the collapse never wins,
+   at any viewport width down to 0. With the grid stuck at two columns, the
+   `1fr` track takes the automatic minimum size of `.col-r`'s content
+   (min-width:auto default on grid items), which is its min-content width —
+   792px — instead of shrinking to fit.
+
+   Same fight, same shape, on `.col-l` (stays `position:sticky;height:100vh`
+   instead of releasing to a stacked block) and `.col-r` (stays
+   `min-height:100vh`).
+
+   Fix: re-assert the intended collapse with one more class than the rule
+   it's fighting (`.wp-block-group` + `.is-layout-flow`, both already present
+   on every `.two-col`/`.col-l`/`.col-r` on this page), so it wins on
+   specificity (0,4,0 > 0,3,0) without !important.
+--------------------------------------------------------------------------- */
+@media (max-width: 900px) {
+  /* Fighting: `.solyx-page-hoe-werkt-het .two-col.wp-block-group,
+     .solyx-page-hoe-werkt-het .two-col { grid-template-columns:280px 1fr; ... }`
+     (unscoped, specificity 0,3,0 via its .wp-block-group branch). */
+  .solyx-page-hoe-werkt-het .two-col.wp-block-group.is-layout-flow {
+    grid-template-columns: 1fr;
+  }
+
+  /* Fighting: `.solyx-page-hoe-werkt-het .col-l.wp-block-group,
+     .solyx-page-hoe-werkt-het .col-l { position:sticky; height:100vh; ... }`
+     (unscoped, specificity 0,3,0). Sticky + 100vh on a now-stacked first
+     column would otherwise pin it over the rest of the page. */
+  .solyx-page-hoe-werkt-het .col-l.wp-block-group.is-layout-flow {
+    position: relative;
+    height: auto;
+    padding: 60px 24px 28px;
+  }
+
+  /* Fighting: `.solyx-page-hoe-werkt-het .col-r.wp-block-group,
+     .solyx-page-hoe-werkt-het .col-r { ...min-height:100vh; ... }`
+     (unscoped, specificity 0,3,0). */
+  .solyx-page-hoe-werkt-het .col-r.wp-block-group.is-layout-flow {
+    min-height: 0;
+    padding: 36px 24px 56px;
+  }
+
+  /* Fighting: `.solyx-page-hoe-werkt-het #s-comp .col-r,
+     .solyx-page-hoe-werkt-het #s-check .col-r, .solyx-page-hoe-werkt-het
+     #s-cost .col-r, .solyx-page-hoe-werkt-het #s-video .col-r
+     { padding-top:260px; padding-right:80px; padding-left:64px; }` and
+     `.solyx-page-hoe-werkt-het #s-dimmer .col-r { padding-top:200px;
+     padding-right:80px; padding-left:64px; }` — both unscoped, ID-qualified
+     (specificity 1,2,0). Matching the ID and adding `.wp-block-group` wins
+     outright (1,3,0) instead of relying on source order.  Left/right 80/64px
+     of padding on a 390px column is most of the overflow budget by itself. */
+  .solyx-page-hoe-werkt-het #s-comp .col-r.wp-block-group,
+  .solyx-page-hoe-werkt-het #s-check .col-r.wp-block-group,
+  .solyx-page-hoe-werkt-het #s-cost .col-r.wp-block-group,
+  .solyx-page-hoe-werkt-het #s-video .col-r.wp-block-group,
+  .solyx-page-hoe-werkt-het #s-dimmer .col-r.wp-block-group {
+    padding-top: 36px;
+    padding-right: 24px;
+    padding-left: 24px;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   PAGE: /hoe-werkt-het/ — NOT FIXED HERE, documented per the task's own
+   "explain precisely why" clause. No CSS rule follows; this is a comment
+   only.
+
+   With the two fixes above applied, /hoe-werkt-het/ still measures 332px of
+   overflow at 390x844 (362px at 360x740; 0px at 768x1024 — wide enough that
+   this defect stops mattering). The entire remainder is the shared site
+   footer's `.fg` link grid, which stays locked to its 4-column desktop
+   layout (measured computed `grid-template-columns: 119.625px 156.211px
+   128.5px 126px`, four tracks, vs. a `.fg` box that is itself only ~198px
+   wide inside the page) instead of collapsing to one column.
+
+   Root cause (confirmed via document.styleSheets): a single unconditional,
+   no-media-query rule —
+     `body.page-id-120 .fg { grid-template-columns: 1.5fr 1fr 1fr 1fr; }`
+   — with no accompanying `@media` collapse counterpart for this page. Other
+   pages carry a matching triad (base rule + a `max-width:1100px` step down to
+   two columns + a `max-width:600px` step down to one, e.g.
+   `body.page-id-191 .fg`); page-id-120 (this page's WordPress post ID) only
+   has the unconditional base rule, so the grid never collapses at any
+   viewport width. This was confirmed identical with and without the two
+   fixes above (332px both times at 390x844), and confirmed page-specific —
+   `/over-ons/` renders the same shared footer markup/CSS correctly (`.fg`
+   computed `grid-template-columns: 254px`, one track, 0 overflow) at the
+   same width.
+
+   Why it is out of scope for this file: the rule lives on `.fg`, a
+   descendant of `#footer.solyx-site-footer-wrap`, which every constraint on
+   this task forbids touching. There is no way to change what that element
+   renders as without a selector that resolves inside
+   `.solyx-site-footer-wrap` — scoping the left-hand side of such a selector
+   to `.solyx-page-hoe-werkt-het` (e.g. via a general-sibling or `:has()`
+   selector reaching over to the footer) would still be a rule that styles
+   the footer, which is explicitly off limits regardless of how it's scoped.
+   Fixing it requires either correcting/removing the stray
+   `body.page-id-120 .fg` declaration at its source, or adding the same
+   `max-width:1100px`/`max-width:600px` collapse pair the other pages have,
+   scoped the same way (`body.page-id-120 .fg` or equivalent) — both are
+   footer-side changes and were left alone here.
+--------------------------------------------------------------------------- */
+
+
+/* ---------------------------------------------------------------------------
+   PAGE: /shop-nymo/
+   ELEMENT: `.usp-reviews` grid (USP list + reviews carousel band) and its
+   grid items `.usp-col` / `.reviews-col`.
+
+   Measured before: scrollWidth 574 vs clientWidth 390 at 390x844 → 184px
+   overflow, entirely explained by `.reviews-col`'s grid track running from
+   x=323.7 to x=574.6 (574.6 - 390 = 184.6 ≈ the whole page's overflow). The
+   review carousel inside (`#revTrack .rev-page`, `flex:0 0 100%`, two pages)
+   independently wants more width than one column offers, but it sits behind
+   `.rev-viewport{overflow:hidden}`, so once `.reviews-col` itself is back in
+   bounds that inner overflow stays correctly clipped and invisible — it does
+   not need its own fix.
+
+   Root cause #1: `.usp-reviews` is `display:grid; grid-template-columns:1fr 1fr`
+   and the theme ships `@media(max-width:900px){.usp-reviews{grid-template-columns:1fr}}`,
+   but a later, unscoped (no media query) rule wins instead:
+     `.solyx-page-shop-nymo .usp-reviews.wp-block-group, ... {
+        display:grid !important; grid-template-columns:1fr 1fr !important; ... }`
+   This one uses `!important`, so nothing but another `!important` declaration
+   can override it — specificity alone cannot win here. Confirmed live:
+   computed `grid-template-columns` was "195.734px 250.898px" (two tracks) at
+   390px width.
+
+   Root cause #2: once collapsed to one column, that single track still takes
+   the grid item's automatic minimum (min-content) instead of shrinking to the
+   viewport — the same `min-width:auto` default seen on /hoe-werkt-het/'s
+   `.two-col`. No competing rule for `min-width` exists, so plain specificity
+   is enough; no !important needed for this part.
+--------------------------------------------------------------------------- */
+@media (max-width: 900px) {
+  /* Fighting: `.solyx-page-shop-nymo .usp-reviews.wp-block-group,
+     .solyx-page-shop-nymo .usp-reviews, .solyx-page-shop-nymo section.usp-reviews
+     { display:grid !important; grid-template-columns:1fr 1fr !important; ... }`
+     (unscoped, !important). Matching specificity via the classes already on
+     the element (`.wp-block-group.is-layout-flow`, 0,4,0 — one class more
+     than the rule being fought) plus !important, since !important is the
+     only way to outrank an !important declaration. Every other property on
+     that rule (padding, gap, margin) is left as-is. */
+  .solyx-page-shop-nymo .usp-reviews.wp-block-group.is-layout-flow {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* No competing rule for min-width on these — plain specificity wins. */
+  .solyx-page-shop-nymo .usp-col.wp-block-group,
+  .solyx-page-shop-nymo .reviews-col.wp-block-group {
+    min-width: 0;
+  }
+}
+
+
+/* ---------------------------------------------------------------------------
+   PAGE: /shop-complete-wateraccu/
+   ELEMENT: `.usp-reviews` grid items `.usp-col` / `.reviews-col`.
+
+   Measured before: scrollWidth 617 vs clientWidth 390 at 390x844 → 227px
+   overflow. Unlike /shop-nymo/, `.usp-reviews` here has no competing
+   `!important` rule — the theme's own `@media(max-width:900px){.usp-reviews{
+   grid-template-columns:1fr}}` already wins and computed `grid-template-columns`
+   was confirmed as a single track ("569px"). The problem is that one track:
+   it takes its automatic minimum size from the review carousel's min-content
+   (measured 569px, i.e. two non-wrapping `.rev-page` carousel pages) instead
+   of shrinking to the ~294px available inside the page. Same
+   `min-width:auto`-on-a-grid-item root cause as /hoe-werkt-het/ and
+   /shop-nymo/, fixed the same way. `#revTrack`'s own internal overflow stays
+   correctly clipped by `.rev-viewport{overflow:hidden}` once `.reviews-col`'s
+   own box is back in bounds, so it needs no separate fix.
+--------------------------------------------------------------------------- */
+@media (max-width: 900px) {
+  /* No competing rule for min-width on these — plain specificity wins, no
+     !important needed. */
+  .solyx-page-shop-complete-wateraccu .usp-col.wp-block-group,
+  .solyx-page-shop-complete-wateraccu .reviews-col.wp-block-group {
+    min-width: 0;
+  }
+}
