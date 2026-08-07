@@ -203,6 +203,24 @@ in the second. Patched by decoding only that blob, rewriting the pre-migration
 file names, re-encoding, and splicing it back with the CSS literal left
 byte-identical; verified afterwards that the site still delivers ~8,600 scoped
 rules. Use the same approach for anything else buried in generated assets.
+- **The client's three answers are live (7 Aug 2026).** `/privacy/` is now her
+complete 12-section AVG policy, transcribed from the PDF she supplied, with one
+approved addition: Meta is named alongside Google in section 6, because the site
+runs an advertising pixel that sends visitor data to Meta once marketing cookies
+are accepted. `/zonnestroomboiler/` and `/werken-bij/` are retired — they 301 to
+`/landingspagina/` and `/over-ons/#vacatures`, and the footer links point
+straight at those. **No page on the site says "onder constructie" any more.**
+The Over ons rail scrolls by index rather than by anchor, so the `#vacatures`
+hash is translated into the rail's own action instead of adding a second
+scrolling mechanism.
+- **The Nymo widget's buy buttons were 404ing.** Snippet 301 held ten absolute
+`2026.solyxenergy.nl` links, and two pointed at routes that have never existed
+here — `/winkel/` and `/ik-wil-de-wateraccu/`, pre-migration names sitting on
+"Bestel direct" and "Meer info & bestellen" on `/hoe-werkt-het/`. Now `/shop/`
+and `/how-to-get-it/`, all root-relative. A full sweep of page content, posts,
+both template parts, every snippet and the header/footer fields now finds zero
+hard-coded staging URLs; the absolute URLs still in rendered pages are
+WordPress's own `home_url()` output and follow the site URL automatically.
 - **Editor instruction text is gone.** It came from the `solyx-blank` template,
 not a snippet, and no page uses that template any more. Confirmed absent from
 all 26 routes.
@@ -352,12 +370,38 @@ least-privilege WordPress access, draft-first edits, and approval gates.
 
 
 
+## Two things assumed to be risks that are not
+
+Both were raised as launch-critical and both turned out to be wrong, so they
+should not be re-raised:
+
+- **SiteGround's bot challenge does not block Mollie's webhook.** A plain
+server-to-server POST shaped like the webhook reaches WordPress — the 404/400/401
+answers come from WordPress and the plugin, not a captcha.
+- **It does not block search crawlers either.** Googlebot, Bingbot, a curl-style
+agent and a browser all receive the full page with a 200.
+
+The 202 challenges seen repeatedly during this work — the same behaviour that
+made the server-side media migration fail — are rate-triggered under bursts of
+automated traffic, not policy. They can still spoil an automated measurement,
+which is why a captcha check belongs in any script that measures the live site.
+Worth one re-check after the domain switch, since the challenge is per site.
+
 ## Needs review
 
 Client questions — credentials and business decisions — live in
-`work/launch/CLIENT-QUESTIONS.md`. Blocking right now: the SMTP password (A1),
-the delivery and returns text (B4), and Tag Manager / Meta / WPML credentials
-(A2, A3, A5) before tracking and English can start.
+`work/launch/CLIENT-QUESTIONS.md`. Almost everything there is now answered.
+
+**Only two things are still outstanding from the client:**
+
+1. **The SMTP password (A1).** Still the one real blocker — no form email leaves
+   the site, so every quotation request fails silently.
+2. **The WeFact plugin file (A6).** The API key has been supplied but the plugin
+   is not installed; production has it, staging never did, and a key cannot
+   install a plugin.
+
+Minor and non-blocking: the Google Business profile link, whether an
+installation video exists, and where `/sitemap/` and `/thank-you/` should point.
 
 **Staging is a clone of an old production site. Nothing already configured there
 is evidence of a decision — treat every pre-existing setting as unverified

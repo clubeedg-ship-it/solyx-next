@@ -106,12 +106,13 @@ resulting numbers look plausible, which is what makes it dangerous.
   Still to do: the WeFact plugin is not installed on the new site — production
   has it, staging never did.
 
-- **MailerLite — dropped.** No newsletter. Two consequences worth acting on:
-  the privacy statement should not mention newsletter processing, and any
-  marketing opt-in still present on a form has to go. A checkbox that asks
-  permission to send something nobody will send is consent collected under false
-  pretences. The contact form (form 5) carries a `marketingOptIn` field — it
-  needs removing.
+- **MailerLite — dropped as a tool, but the newsletter stays described.** No
+  MailerLite account is connected. The client chose to keep the newsletter
+  wording in the privacy policy anyway, knowing it describes processing that is
+  not currently running. The `marketingOptIn` field on the contact form (form 5)
+  is therefore left in place: the form and the policy agree, and removing the
+  field would have broken that agreement. If a newsletter is ever actually sent,
+  nothing needs changing.
 
 **Each of the two below is a yes/no, with a recommendation**
 
