@@ -172,7 +172,16 @@ Does not reconcile with €1,189 plus roughly €400 for installation. It works 
 if the package assumes the 150-litre tank (€1,329 + ~€400). Needed before that
 tier is advertised.
 
-### B4. Legal pages — LIVE, but the privacy policy needs a client update
+### B4. Legal pages — privacy answered 7 Aug 2026 and live
+She supplied a complete 12-section AVG policy dated 5 August 2026. It is live at
+`/privacy/`, transcribed verbatim from her PDF with one approved addition: Meta
+is named alongside Google in section 6, because the site runs an advertising
+pixel that sends visitor data to Meta once marketing cookies are accepted.
+
+She left the newsletter and MailerLite references in on purpose, having been
+told they describe processing that is not currently running.
+
+<!-- original entry -->
 
 All three legal pages are now published with real text. The compliance blocker
 is cleared; what remains is accuracy, not absence.
@@ -276,27 +285,25 @@ place to reach Solyx. If the contact form sits far down the page, someone
 arriving from a `/contact/` bookmark may not find it. An anchor on the redirect
 target would fix that in one line if it turns out to be a problem.
 
-### B8. Two pages have never been written — blocking a clean launch
-`/zonnestroomboiler/` and `/werken-bij/` both render:
+### B8. The two unwritten pages — answered 7 Aug 2026, and done
+Client's answers, applied:
 
-> **ONDER CONSTRUCTIE** — Deze pagina wordt binnenkort ingevuld.
+- **Zonnestroomboiler** → the landing page she supplied is the existing
+  `landingspagina`. `/zonnestroomboiler/` now 301s to `/landingspagina/` and the
+  footer link points straight there.
+- **Werken bij** → the vacancies section of Over ons. `/werken-bij/` now 301s to
+  `/over-ons/#vacatures`, and the footer link goes there directly. That page's
+  rail scrolls by index rather than by anchor, so the hash is translated into the
+  rail's own action instead of a second scrolling mechanism being invented.
 
-This is not a migration defect. The static design files say exactly the same
-thing, so the copy has never existed. Both pages are linked from the footer, so
-a visitor browsing the finished site lands on them.
+Both old paths are kept alive rather than deleted, so existing links still work.
+No page on the site says "onder constructie" any more.
 
-Between them these are a product page and a careers page — the text has to come
-from the client; inventing product claims or job descriptions is not an option.
-
-**Two choices, both one small change:**
-
-1. Client supplies the copy for either or both, and they go live properly.
-2. Ship without them: remove the two footer links so nothing points at an
-   unfinished page. The pages stay reachable by direct URL and can be linked
-   again the moment the copy arrives.
-
-Recommendation: option 2 if the copy will not be ready today. A production site
-should not advertise pages that announce they are unfinished.
+**One thing to raise with her:** `/landingspagina/` is written in **English**
+("Store your unused solar energy in the WaterAccu"). The site launches
+Dutch-only, and a Dutch footer link labelled "Zonnestroomboiler" now lands a
+Dutch visitor on an English page. Either a Dutch version of that page is needed,
+or the link should wait for the English phase after cutover.
 
 ### B9. The savings figure shown on the home page
 The home calculator was migrated as a static mock and has been made to work
