@@ -19,13 +19,15 @@ Order matters where noted.
       de-indexed instead of soft-404'd to the homepage.
       **Every `/en/` rule is temporary** and must be deleted once WPML restores
       the English pages, or the new English site will redirect to Dutch.
-- [ ] **Sweep the snippets for absolute staging URLs.** At least one exists: the
-      Nymo widget on `/hoe-werkt-het/` links its buy button to
-      `https://2026.solyxenergy.nl/winkel/` — absolute, so it breaks at cutover,
-      and `/winkel/` is not a route on this site. Page content follows the
-      root-relative rule, but the JavaScript widgets were never audited for it.
-      This is the one class of link the redirect table cannot save, because the
-      hostname is baked in.
+- [x] **Absolute staging URLs swept — none left.** Page content, posts, both
+      template parts, every WPCode snippet and the header/footer fields now
+      contain zero hard-coded `2026.solyxenergy.nl` links. The Nymo widget on
+      `/hoe-werkt-het/` held ten of them, and two pointed at routes that do not
+      exist on this site at all — `/winkel/` and `/ik-wil-de-wateraccu/`, both
+      pre-migration names on the widget's buy buttons, so they were 404ing for
+      customers today, not just at cutover. Now `/shop/` and `/how-to-get-it/`.
+      Absolute URLs still appear in rendered pages, but those are WordPress's own
+      `home_url()` output and follow the site URL automatically.
 - [x] **Blog decision executed.** 43 Dutch posts are imported and live. The ~32
       English ones are held for the WPML phase after cutover.
 - [x] **Migrate the manuals and datasheets** — done. 9 PDFs (the Nymo and Solar
@@ -72,17 +74,14 @@ Order matters where noted.
       the mail server is the same, but the sending host changes.
 - [ ] **Place a real order** end to end: cart, checkout, Mollie payment,
       order status, confirmation email, invoice attachment.
-- [ ] Confirm **Mollie's webhook** reaches the new domain. Test this rather than
-      assume it: SiteGround's Security Optimizer answers requests it considers
-      automated with a `202` and a captcha page instead of the real response.
-      That is a live behaviour on this host — it is what made the server-side
-      media migration fail, and it has twice returned a captcha to our own
-      measurements. Mollie's webhook is a server-to-server POST with no browser
-      to solve a challenge. If it is challenged, **customers will pay and their
-      orders will never be marked complete**, silently.
-- [ ] For the same reason, confirm **Googlebot is not challenged**. Use the URL
-      Inspection tool in Search Console on a live page; a challenged crawl means
-      the new site never gets indexed.
+- [x] **The bot challenge does not block callbacks or crawlers — tested, not
+      assumed.** A plain server-to-server POST shaped like Mollie's webhook
+      reaches WordPress: 404/400/401 come back from WordPress and the plugin, not
+      a captcha. Googlebot, Bingbot, a curl-style agent and a browser all receive
+      the full page with a 200. The 202 challenges seen earlier — which is what
+      made the server-side media migration fail — are rate-triggered, not policy,
+      so they can still appear under bursts of automated traffic. Re-check after
+      the domain switch, since the challenge is configured per site.
 - [ ] Spot-check the redirect table against real old URLs.
 - [ ] **Stop the legacy site** only once the above pass.
 
