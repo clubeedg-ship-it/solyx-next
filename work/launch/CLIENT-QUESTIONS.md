@@ -98,13 +98,28 @@ resulting numbers look plausible, which is what makes it dangerous.
 
 **In scope — answered**
 
-- **WooCommerce WeFact** — wanted. The API key has been supplied.
-  **The key is deliberately not written into this repository.** It arrived over
-  chat, which means it should be treated as exposed: paste it into the plugin
-  settings and then regenerate it in WeFact, so the value that was in a message
-  no longer works.
-  Still to do: the WeFact plugin is not installed on the new site — production
-  has it, staging never did.
+- **WooCommerce WeFact** — wanted. Version **3.11.2** on production. Both codes
+  it needs have been supplied: the API security code and a **plugin licence
+  key**. Neither is written into this repository, and both arrived over chat or
+  a screenshot, so both should be regenerated once they are in place.
+
+  **The blocker is the plugin file, not the codes.** WooCommerce WeFact is a
+  commercial plugin — it is not in the WordPress.org directory (checked: no
+  `woocommerce-wefact`, no `wefact`, nothing matching a search), which is
+  consistent with it having a licence field at all. So it cannot be installed
+  from inside WordPress. Two ways to get it:
+
+  1. Download the ZIP from the vendor account the licence belongs to, and
+     install it on the new site.
+  2. Copy the plugin folder off production through the hosting file manager or
+     SFTP, and upload it.
+
+  Either way the codes are entered by hand afterwards — API keys and licence
+  keys are not something to paste on someone's behalf.
+
+  Not a launch blocker: customer-facing invoices already work through PDF
+  Invoices. Without WeFact, paid orders are entered into the bookkeeping by
+  hand until the plugin lands.
 
 - **MailerLite — dropped as a tool, but the newsletter stays described.** No
   MailerLite account is connected. The client chose to keep the newsletter
