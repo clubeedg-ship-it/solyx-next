@@ -29,14 +29,11 @@ by default so no tag inside it can store anything until the visitor chooses.
 Verified from a clean profile: before consent every signal reads denied and no
 Google cookie is set; on accept they all flip to granted.
 
-Still needed from the client:
-- **Access to the Tag Manager account**, if tags have to be built rather than
-  just fired. The container currently fires nothing — the eight launch events
-  (quote started, quote step completed, lead generated, item viewed, add to
-  cart, cart viewed, checkout begun, purchase) have to be defined either inside
-  the container by whoever owns it, or here as `dataLayer` pushes.
-- Confirmation of **who administers that container**, per A3 — anyone with
-  access can push tags onto the site without touching WordPress.
+**Nothing further is needed from the client for this.** Analytics runs from
+GA4 configured on the site, and the Meta pixel fires directly, so neither
+depends on anyone building tags inside the container. The container is live
+and receiving the commerce events if they ever want to use it; until then it
+simply sits there doing no harm.
 
 ### A3. Meta Pixel — who owns it?
 Not a request for an ID. There already is one, and it is live.
@@ -167,10 +164,14 @@ The static pages say **€611**. Legacy production and the old staging catalogue
 both say **€625**. The client confirmed the static pages are authoritative, so
 €611 is live — but the two sources disagreeing by €14 is worth an explicit yes.
 
-### B3. What is in the €1,725 installed package
-Does not reconcile with €1,189 plus roughly €400 for installation. It works only
-if the package assumes the 150-litre tank (€1,329 + ~€400). Needed before that
-tier is advertised.
+### B3. The €1,725 package — not a question, closed
+There is no separate package to itemise. The catalogue is two products:
+Nymo without a boiler and Nymo with one, each with its own variations. The
+most expensive variation is the all-inclusive one, and what it contains is
+already described on the static product pages the site was built from.
+
+This entry came from an earlier reading of a price that no longer exists in
+the catalogue. Nothing is blocked by it.
 
 ### B4. Legal pages — privacy answered 7 Aug 2026 and live
 She supplied a complete 12-section AVG policy dated 5 August 2026. It is live at
@@ -298,12 +299,6 @@ Client's answers, applied:
 
 Both old paths are kept alive rather than deleted, so existing links still work.
 No page on the site says "onder constructie" any more.
-
-**One thing to raise with her:** `/landingspagina/` is written in **English**
-("Store your unused solar energy in the WaterAccu"). The site launches
-Dutch-only, and a Dutch footer link labelled "Zonnestroomboiler" now lands a
-Dutch visitor on an English page. Either a Dutch version of that page is needed,
-or the link should wait for the English phase after cutover.
 
 ### B9. The savings figure shown on the home page
 The home calculator was migrated as a static mock and has been made to work
