@@ -1,0 +1,45 @@
+# Deployment fragment for core, following the file-per-hostname convention
+# already in use (see /etc/nginx/sites-available/oopuo.nl.conf on core).
+# NOT applied by this project. To use: replace PUBLIC_HOSTNAME below with
+# the real hostname the owner wants for this tool (a separate DNS name —
+# never 2026.solyxenergy.nl or www.solyxenergy.nl, both are the client's own
+# site, out of scope for this project), save as
+# /etc/nginx/sites-available/PUBLIC_HOSTNAME.conf on core, symlink it into
+# sites-enabled/, `nginx -t`, then reload nginx. See README.md
+# "Deploy to core" for the full checklist, including the matching
+# cloudflared ingress block (cloudflared-ingress.snippet.yml in this folder).
+#
+# Unlike oopuo.nl.conf (which serves static files directly), this vhost
+# reverse-proxies to Traefik's tailnet-bound listener, which is what
+# actually starts/stops the container via Sablier. The Host header sent
+# upstream must be the *internal* Host() Traefik's router matches
+# (solyx-webui.internal in docker-compose.fragment.yml) — deliberately not
+# `include proxy_params`'s default of the request's own Host, which would
+# carry the public hostname and fail to match Traefik's router rule.
+
+server {
+    listen 127.0.0.1:80;
+    server_name PUBLIC_HOSTNAME;
+
+    set_real_ip_from 127.0.0.1;
+    real_ip_header CF-Connecting-IP;
+
+    access_log /var/log/nginx/solyx-webui.access.log;
+    error_log  /var/log/nginx/solyx-webui.error.log;
+
+    location / {
+        proxy_pass http://100.126.195.31:80;   # core's Tailscale IP, Traefik's `web` entrypoint
+        include proxy_params;
+        proxy_set_header Host solyx-webui.internal;
+
+        # WebSocket upgrade for /ws — proxy_params doesn't set these.
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+
+        # Sablier's dynamic-strategy loading page needs a live connection
+        # while the container cold-starts; keep this comfortably above the
+        # cold-start budget in PLAN.md §4 rather than nginx's low default.
+        proxy_read_timeout 30s;
+    }
+}

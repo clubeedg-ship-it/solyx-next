@@ -1,0 +1,1058 @@
+/* Solyx — design system for a calm, single-purpose tool: talk to Sol, watch
+   the draft take shape. Reference points: Linear, Vercel's dashboard,
+   Raycast — quiet confidence, not decoration. System UI font stack on
+   purpose (see AGENTS notes in the redesign commit): this is a native-feeling
+   companion to whatever OS it runs on, the same reasoning Raycast itself
+   uses San Francisco. Distinction comes from a deliberate type scale, a
+   monospace pairing for meta text, and restraint — not from an unusual
+   display face. Every color pair below is contrast-checked against WCAG AA
+   (4.5:1 body text, 3:1 large text) for both themes.
+
+   Light and dark are each composed on purpose, not derived from one another:
+   light is warm paper with a deep emerald accent; dark is a cooler, near-
+   black ground with warm-white text and a brighter, more luminous accent —
+   the same family, tuned for how each ground makes it read. */
+
+:root {
+  /* ---- surfaces (light) ---- */
+  --canvas: #f6f5f2;
+  --surface: #ffffff;
+  --surface-sunken: #efede8;
+  --surface-hover: #e7e4dd;
+  --border-subtle: rgba(28, 27, 24, 0.08);
+  --border: rgba(28, 27, 24, 0.14);
+
+  /* ---- text (light) ---- */
+  --text-primary: #1c1b18;
+  --text-secondary: #5c5850;
+  --text-tertiary: #6e6a63;
+
+  /* ---- accent (light): deep emerald ---- */
+  --accent: #1b6e4f;
+  --accent-strong: #14503a;
+  --accent-soft: rgba(27, 110, 79, 0.1);
+  --accent-soft-strong: rgba(27, 110, 79, 0.18);
+  --accent-contrast: #ffffff;
+
+  /* ---- danger (light) ---- */
+  --danger: #ae4530;
+  --danger-soft: rgba(174, 69, 48, 0.1);
+  --danger-contrast: #ffffff;
+
+  --shadow-color: rgba(28, 27, 24, 0.1);
+  --focus-ring: #1b6e4f;
+
+  /* ---- type scale ---- */
+  --font-ui:
+    -apple-system, BlinkMacSystemFont, "Segoe UI Variable", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --font-mono:
+    ui-monospace, "SF Mono", "Cascadia Code", "Roboto Mono", Menlo, Consolas, monospace;
+
+  --text-2xs: 0.6875rem; /* 11px — timestamps */
+  --text-xs: 0.78125rem; /* 12.5px — meta labels, monospace caps */
+  --text-sm: 0.84375rem; /* 13.5px — thread list, secondary UI */
+  --text-base: 0.9375rem; /* 15px — message body, composer */
+  --text-md: 1.03125rem; /* 16.5px — pane header title */
+  --text-lg: 1.25rem; /* 20px — empty-state / panel headings */
+  --text-xl: 1.625rem; /* 26px — login heading */
+
+  /* ---- geometry ---- */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-full: 999px;
+
+  --sidebar-width: 264px;
+  --draft-width: minmax(380px, 40%);
+
+  /* ---- motion ---- */
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --duration-slow: 420ms;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* ---- surfaces (dark) — cooler ground, elevation gets lighter ---- */
+    --canvas: #0d0e10;
+    --surface: #16171a;
+    --surface-sunken: #1b1d20;
+    --surface-hover: #212327;
+    --border-subtle: rgba(255, 255, 255, 0.06);
+    --border: rgba(255, 255, 255, 0.12);
+
+    /* ---- text (dark) — warm-white, not stark ---- */
+    --text-primary: #edece8;
+    --text-secondary: #a6a39b;
+    --text-tertiary: #89857d;
+
+    /* ---- accent (dark): brighter, more luminous green ---- */
+    --accent: #3fa980;
+    --accent-strong: #56c296;
+    --accent-soft: rgba(63, 169, 128, 0.14);
+    --accent-soft-strong: rgba(63, 169, 128, 0.24);
+    --accent-contrast: #08120d;
+
+    /* ---- danger (dark) ---- */
+    --danger: #e2897b;
+    --danger-soft: rgba(226, 137, 123, 0.14);
+    --danger-contrast: #2a0e09;
+
+    --shadow-color: rgba(0, 0, 0, 0.55);
+    --focus-ring: #56c296;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: var(--font-ui);
+  font-size: var(--text-base);
+  color: var(--text-primary);
+  background: var(--canvas);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+button,
+input,
+textarea,
+select {
+  font-family: inherit;
+  color: inherit;
+}
+
+:focus {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Thin, quiet scrollbars where the platform supports styling them. */
+.sidebar,
+.thread-viewport,
+.draft-frame-viewport {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+.sidebar::-webkit-scrollbar,
+.thread-viewport::-webkit-scrollbar {
+  width: 8px;
+}
+.sidebar::-webkit-scrollbar-thumb,
+.thread-viewport::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: var(--radius-full);
+}
+
+/* =========================================================================
+   App-level states (connecting)
+   ========================================================================= */
+
+.app-loading {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.875rem;
+  background: var(--canvas);
+  color: var(--text-secondary);
+}
+
+.app-loading-mark {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+  animation: pulse-scale 1.6s var(--ease) infinite;
+}
+
+.app-loading-text {
+  font-size: var(--text-sm);
+  letter-spacing: 0.01em;
+}
+
+@keyframes pulse-scale {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.55;
+    transform: scale(0.86);
+  }
+}
+
+/* =========================================================================
+   Layout
+   ========================================================================= */
+
+.layout {
+  display: grid;
+  grid-template-columns: var(--sidebar-width) 1fr var(--draft-width);
+  /* Load-bearing. With no explicit row track the single implicit row is
+     `auto`, so it grows to fit the tallest column: the transcript pushes the
+     whole page past 100vh instead of scrolling inside .thread-viewport, and
+     the window keeps growing as the conversation does. The 0 minimum is the
+     part that matters — grid items default to min-height: auto and refuse to
+     shrink below their own content without it. */
+  grid-template-rows: minmax(0, 1fr);
+  height: 100vh;
+  background: var(--canvas);
+}
+
+/* =========================================================================
+   Sidebar
+   ========================================================================= */
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  background: var(--surface-sunken);
+  border-right: 1px solid var(--border-subtle);
+  overflow-y: auto;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.125rem 1rem 0.875rem;
+}
+
+.brand-mark {
+  width: 20px;
+  height: 20px;
+  flex: none;
+  border-radius: 6px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+  box-shadow: 0 1px 2px var(--shadow-color);
+}
+
+.brand-name {
+  font-size: var(--text-base);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+}
+
+.thread-list {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 0.25rem 0.75rem 0.75rem;
+  min-height: 0;
+}
+
+.new-chat-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 0 0.875rem;
+  padding: 0.5rem 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text-primary);
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  box-shadow: 0 1px 2px var(--shadow-color);
+  transition:
+    background var(--duration-fast) var(--ease),
+    border-color var(--duration-fast) var(--ease),
+    transform var(--duration-fast) var(--ease);
+}
+
+.new-chat-button:hover {
+  background: var(--surface-hover);
+  border-color: var(--border);
+}
+
+.new-chat-button:active {
+  transform: scale(0.98);
+}
+
+.new-chat-button svg {
+  flex: none;
+  color: var(--accent);
+}
+
+.thread-items {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.thread-item-trigger {
+  display: block;
+  width: 100%;
+  padding: 0.5rem 0.65rem;
+  border: none;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  font: inherit;
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  border-left: 2px solid transparent;
+  transition:
+    background var(--duration-fast) var(--ease),
+    color var(--duration-fast) var(--ease);
+}
+
+.thread-item-trigger:hover {
+  background: var(--surface-hover);
+  color: var(--text-primary);
+}
+
+.thread-item[data-active="true"] .thread-item-trigger {
+  background: var(--surface);
+  color: var(--text-primary);
+  font-weight: 500;
+  border-left-color: var(--accent);
+  box-shadow: 0 1px 2px var(--shadow-color);
+}
+
+.sidebar-footer {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.75rem 1rem;
+  border-top: 1px solid var(--border-subtle);
+  color: var(--text-tertiary);
+  font-size: var(--text-xs);
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--ease);
+}
+
+.sidebar-footer:hover {
+  color: var(--text-primary);
+}
+
+.sidebar-footer svg {
+  flex: none;
+}
+
+/* =========================================================================
+   Chat pane
+   ========================================================================= */
+
+.chat-pane {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background: var(--canvas);
+  border-right: 1px solid var(--border-subtle);
+}
+
+.chat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.875rem 1.5rem;
+  border-bottom: 1px solid var(--border-subtle);
+  flex: none;
+}
+
+.chat-header-title {
+  font-size: var(--text-md);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chat-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-full);
+  background: var(--accent);
+  flex: none;
+}
+
+.chat-status[data-busy="true"] .status-dot {
+  animation: dot-breathe 1.4s var(--ease) infinite;
+}
+
+@keyframes dot-breathe {
+  0%,
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 0 0 var(--accent-soft-strong);
+  }
+  50% {
+    opacity: 0.6;
+    box-shadow: 0 0 0 4px transparent;
+  }
+}
+
+.thread-root {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+.thread-viewport {
+  flex: 1;
+  overflow-y: auto;
+  padding: 2rem 1.5rem;
+}
+
+.thread-column {
+  max-width: 46rem;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  min-height: 100%;
+}
+
+/* --- Empty state: teaches, doesn't apologize --- */
+
+.chat-empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 0.625rem;
+  padding: 2rem 0;
+}
+
+.chat-empty-mark {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  background: var(--accent-soft);
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: var(--text-md);
+  margin-bottom: 0.5rem;
+}
+
+.chat-empty-heading {
+  font-size: var(--text-lg);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.chat-empty-subtext {
+  max-width: 30rem;
+  color: var(--text-secondary);
+  font-size: var(--text-base);
+  line-height: 1.6;
+  margin: 0 0 0.5rem;
+}
+
+.chat-suggestions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.625rem;
+  width: 100%;
+  max-width: 34rem;
+  margin-top: 0.5rem;
+}
+
+.chat-suggestion {
+  display: block;
+  width: 100%;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  color: var(--text-primary);
+  text-align: left;
+  font: inherit;
+  font-size: var(--text-sm);
+  line-height: 1.45;
+  cursor: pointer;
+  transition:
+    border-color var(--duration-fast) var(--ease),
+    background var(--duration-fast) var(--ease),
+    transform var(--duration-fast) var(--ease);
+}
+
+.chat-suggestion:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.chat-suggestion:active {
+  transform: scale(0.98);
+}
+
+/* --- Messages: separated by label + alignment, not bubbles --- */
+
+.message {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  max-width: 88%;
+}
+
+.message-assistant {
+  align-self: flex-start;
+}
+
+.message-user {
+  align-self: flex-end;
+  align-items: flex-end;
+}
+
+.message-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.message-user .message-meta {
+  flex-direction: row-reverse;
+}
+
+.message-avatar {
+  width: 20px;
+  height: 20px;
+  flex: none;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 600;
+}
+
+.message-assistant .message-avatar {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.message-user .message-avatar {
+  background: var(--surface-hover);
+  color: var(--text-secondary);
+}
+
+.message-name {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+.message-body {
+  padding: 0.7rem 0.95rem;
+  border-radius: var(--radius-md);
+  line-height: 1.6;
+  font-size: var(--text-base);
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.message-assistant .message-body {
+  background: transparent;
+  padding-left: 0;
+  padding-right: 0;
+  color: var(--text-primary);
+}
+
+.message-user .message-body {
+  background: var(--surface-sunken);
+  color: var(--text-primary);
+  border: 1px solid var(--border-subtle);
+  text-align: left;
+}
+
+.message-body:empty {
+  display: none;
+}
+
+.message-thinking {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.28rem;
+  padding: 0.2rem 0;
+}
+
+.thinking-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: var(--radius-full);
+  background: var(--text-tertiary);
+  animation: thinking-bounce 1.1s var(--ease) infinite;
+}
+
+.thinking-dot:nth-child(2) {
+  animation-delay: 0.15s;
+}
+.thinking-dot:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes thinking-bounce {
+  0%,
+  60%,
+  100% {
+    opacity: 0.35;
+    transform: translateY(0);
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(-2px);
+  }
+}
+
+.message-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  background: var(--accent);
+  animation: cursor-blink 1s step-end infinite;
+}
+
+@keyframes cursor-blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.message-error {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 0.55rem 0.8rem;
+  border-radius: var(--radius-sm);
+  background: var(--danger-soft);
+  color: var(--danger);
+  font-size: var(--text-sm);
+  line-height: 1.45;
+}
+
+.message-error-lead {
+  font-weight: 550;
+}
+
+/* The Gateway's own wording, kept quieter than the lead line: it's there to
+   be readable when it matters without turning every hiccup into a wall of
+   red technical text. */
+.message-error-detail {
+  opacity: 0.85;
+  overflow-wrap: anywhere;
+}
+
+/* --- Composer: a floating card with real send/stop states --- */
+
+.composer-dock {
+  flex: none;
+  padding: 1rem 1.5rem 1.25rem;
+}
+
+.composer-dock-inner {
+  max-width: 46rem;
+  margin: 0 auto;
+}
+
+.composer {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.5rem;
+  padding: 0.6rem 0.6rem 0.6rem 0.95rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: 0 1px 2px var(--shadow-color);
+  transition: border-color var(--duration-fast) var(--ease);
+}
+
+.composer:focus-within {
+  border-color: var(--accent);
+  /* A soft ring on the pill itself, not a hard outline box on the textarea
+     inside it — browsers draw :focus-visible on a textarea even for a plain
+     mouse click (unlike a button), so leaving the default in place put a
+     rectangular outline poking out of this rounded composer on every click.
+     This quiet glow replaces it and, being on `:focus-within`, still shows
+     up for keyboard users tabbing in. */
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.composer-input {
+  flex: 1;
+  resize: none;
+  border: none;
+  background: transparent;
+  padding: 0.4rem 0;
+  font: inherit;
+  font-size: var(--text-base);
+  line-height: 1.5;
+  color: var(--text-primary);
+  max-height: 12rem;
+}
+
+.composer-input:focus {
+  /* The composer pill itself carries the focus treatment above. */
+  outline: none;
+}
+
+.composer-input::placeholder {
+  color: var(--text-tertiary);
+}
+
+.composer-actions {
+  flex: none;
+  display: flex;
+}
+
+.composer-send,
+.composer-cancel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  font: inherit;
+  transition:
+    background var(--duration-fast) var(--ease),
+    opacity var(--duration-fast) var(--ease),
+    transform var(--duration-fast) var(--ease);
+}
+
+.composer-send {
+  background: var(--accent);
+  color: var(--accent-contrast);
+}
+
+.composer-send:hover:not(:disabled) {
+  background: var(--accent-strong);
+}
+
+.composer-send:disabled {
+  background: var(--surface-hover);
+  color: var(--text-tertiary);
+  cursor: default;
+}
+
+.composer-send:active:not(:disabled) {
+  transform: scale(0.94);
+}
+
+.composer-cancel {
+  background: var(--surface-sunken);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+}
+
+.composer-cancel:hover {
+  background: var(--surface-hover);
+}
+
+.composer-hint {
+  margin: 0.5rem 0.25rem 0;
+  font-size: var(--text-2xs);
+  color: var(--text-tertiary);
+}
+
+.composer-hint kbd {
+  font-family: var(--font-mono);
+  font-size: inherit;
+}
+
+/* Calm, not alarming: text color only, no red block — this is a status,
+   not an error the user caused. Typing keeps working regardless; this just
+   explains why sending won't complete yet. */
+.composer-notice {
+  margin: 0.5rem 0.25rem 0;
+  font-size: var(--text-2xs);
+  color: var(--danger);
+}
+
+/* =========================================================================
+   Draft panel — the hero
+   ========================================================================= */
+
+.draft-panel {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background: radial-gradient(ellipse 120% 60% at 50% -10%, var(--accent-soft), transparent 55%), var(--canvas);
+}
+
+.draft-panel-header {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  padding: 0.875rem 1.25rem;
+  border-bottom: 1px solid var(--border-subtle);
+  flex: none;
+}
+
+.draft-panel-label {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  flex: none;
+}
+
+.draft-select-wrap {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+
+.draft-select {
+  width: 100%;
+  appearance: none;
+  padding: 0.4rem 1.85rem 0.4rem 0.65rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text-primary);
+  font: inherit;
+  font-size: var(--text-sm);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.draft-select:disabled {
+  color: var(--text-tertiary);
+  cursor: default;
+}
+
+.draft-select-chevron {
+  position: absolute;
+  right: 0.55rem;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: var(--text-tertiary);
+}
+
+.draft-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex: none;
+  padding: 0.3rem 0.6rem;
+  border-radius: var(--radius-full);
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: var(--text-2xs);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.draft-status-pill .status-dot {
+  animation: dot-breathe 1.4s var(--ease) infinite;
+}
+
+.draft-panel-body {
+  flex: 1;
+  min-height: 0;
+  padding: 1.5rem;
+  display: flex;
+}
+
+/* Deliberately not framed like a browser window — a plain, clearly-
+   delineated region (quiet border + surface shift), because this is the
+   page itself, not a simulation of one. What's loaded is already named by
+   the "Draft" selector in the header above; nothing here repeats it. */
+.draft-frame-card {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: 0 1px 2px var(--shadow-color);
+  overflow: hidden;
+}
+
+.draft-frame-viewport {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  background: var(--surface);
+}
+
+.draft-frame {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+}
+
+.draft-frame-loading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  background: var(--surface);
+  animation: fade-in var(--duration-slow) var(--ease);
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.draft-frame-loading .thinking-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--accent);
+}
+
+/* --- Empty draft state: a wireframe of what's coming, not dead text --- */
+
+.draft-empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 2rem;
+  text-align: center;
+}
+
+.draft-skeleton {
+  width: 100%;
+  max-width: 22rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 1.25rem;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-md);
+}
+
+.draft-skeleton-bar {
+  width: 40%;
+  height: 8px;
+  border-radius: var(--radius-full);
+  background: var(--surface-hover);
+}
+
+.draft-skeleton-hero {
+  width: 100%;
+  height: 4.5rem;
+  border-radius: var(--radius-sm);
+  background: var(--surface-sunken);
+  border: 1px solid var(--border-subtle);
+}
+
+.draft-skeleton-line {
+  width: 100%;
+  height: 7px;
+  border-radius: var(--radius-full);
+  background: var(--surface-hover);
+}
+
+.draft-skeleton-line.short {
+  width: 65%;
+}
+
+.draft-skeleton-button {
+  width: 5.5rem;
+  height: 1.4rem;
+  border-radius: var(--radius-sm);
+  background: var(--accent-soft);
+  margin-top: 0.25rem;
+}
+
+.draft-empty-text {
+  max-width: 24rem;
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* =========================================================================
+   Shared
+   ========================================================================= */
+
+.login-screen {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--canvas);
+}

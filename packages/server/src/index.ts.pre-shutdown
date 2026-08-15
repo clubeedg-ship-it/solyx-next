@@ -1,0 +1,46 @@
+import { createServer } from "node:http";
+import { createAuthChecker } from "./auth/authChecker.js";
+import { loadConfig } from "./config.js";
+import { GatewayAdapter } from "./gateway/gatewayAdapter.js";
+import { createOpenClawGatewayFactory } from "./gateway/openclawGatewayFactory.js";
+import { createStubGatewayFactory } from "./gateway/stubGatewayFactory.js";
+import { createRequestListener } from "./http/router.js";
+import { attachWsBridge } from "./ws/wsServer.js";
+
+async function main(): Promise<void> {
+  const config = loadConfig();
+  const auth = createAuthChecker(config);
+  console.log(`AUTH_MODE=${config.authMode}`);
+
+  if (config.gatewayMode === "stub") {
+    console.warn("OPENCLAW_GATEWAY_MODE=stub: talking to the in-process fake Gateway, not a real one. Do not use in production.");
+  }
+
+  const gateway = new GatewayAdapter({
+    agentId: config.gatewayAgentId,
+    createClient: config.gatewayMode === "stub" ? createStubGatewayFactory() : createOpenClawGatewayFactory(config),
+  });
+
+  console.log("Connecting to OpenClaw Gateway...");
+  await gateway.connect();
+  console.log("Connected.");
+
+  const server = createServer(createRequestListener({ config, auth }));
+  attachWsBridge(server, { gateway, auth });
+
+  server.listen(config.port, config.host, () => {
+    console.log(`solyx-webui server listening on ${config.host}:${config.port}`);
+  });
+
+  const shutdown = () => {
+    gateway.disconnect();
+    server.close(() => process.exit(0));
+  };
+  process.on("SIGINT", shutdown);
+  process.on("SIGTERM", shutdown);
+}
+
+main().catch((error) => {
+  console.error("Fatal startup error:", error);
+  process.exit(1);
+});

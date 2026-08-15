@@ -1,0 +1,16 @@
+# Add this block to /etc/cloudflared/config.yml's `ingress:` list on core,
+# ABOVE the final catch-all `- service: http_status:404` line (order
+# matters — cloudflared matches ingress rules top to bottom) — following the
+# file's own documented convention: "Add one block per app, then:
+# cloudflared tunnel route dns core <hostname>". Replace PUBLIC_HOSTNAME
+# with the same hostname used in nginx-vhost.conf.example.
+#
+# NOT applied by this project — this is the snippet a human adds, then runs:
+#   cloudflared tunnel route dns core PUBLIC_HOSTNAME
+#   systemctl reload cloudflared
+#
+# Cloudflare terminates public HTTPS at their edge; core's nginx never needs
+# a certificate for this (same as oopuo.nl today).
+
+  - hostname: PUBLIC_HOSTNAME
+    service: http://127.0.0.1:80
