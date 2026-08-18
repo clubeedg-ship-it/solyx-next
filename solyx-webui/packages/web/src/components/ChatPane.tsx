@@ -1,8 +1,16 @@
 import { useEffect, useMemo, useState } from "react";
 import { ComposerPrimitive, ErrorPrimitive, MessagePrimitive, ThreadPrimitive, useAui, useAuiState } from "@assistant-ui/react";
 import { createComposerSubmitHandler } from "../runtime/composerSubmit.js";
+import { EditableChatTitle } from "./EditableChatTitle.js";
 import { MarkdownText } from "./MarkdownText.js";
 import { ThreadReadiness, type ThreadReadinessStatus } from "../runtime/threadReadiness.js";
+
+// What every genuinely untitled session shows until it has one (see
+// server/src/ws/deriveTitle.ts's FALLBACK_TITLE — kept as a separate literal
+// here rather than imported, since this is the browser package and that
+// module lives in the server one; the two are already duplicated across the
+// wire boundary the same way protocol.ts is).
+const UNTITLED_CHAT = "New chat";
 
 const CANT_REACH_SOL = "Sol can't be reached right now. Your message is still in the box — try sending again in a moment.";
 
@@ -65,6 +73,15 @@ export function ChatPane() {
   );
   const [status, setStatus] = useState<ThreadReadinessStatus>(readiness.getStatus());
   const [sendErrors, setSendErrors] = useState<SendNotice[]>([]);
+  const [titleError, setTitleError] = useState<string | undefined>(undefined);
+
+  // The main thread's own title, not "Sol" — this used to be a hardcoded
+  // assistant-name label; now the header shows (and lets you edit) the
+  // actual session title. Read via `s.threads.threadItems`, not
+  // `threadListItem` — see the comment on `threadListItemId` above for why
+  // that context isn't available out here.
+  const activeTitle = useAuiState((s) => s.threads.threadItems.find((item) => item.id === s.threads.mainThreadId)?.title);
+  const displayTitle = activeTitle && activeTitle.trim().length > 0 ? activeTitle : UNTITLED_CHAT;
 
   useEffect(() => {
     setStatus(readiness.getStatus());
@@ -109,10 +126,21 @@ export function ChatPane() {
     },
   );
 
+  // @assistant-ui/core types ThreadListItemMethods.rename as returning
+  // `void`, but thread-list-item-runtime-client.js assigns it directly
+  // from ThreadListItemRuntime.rename, whose own signature — and actual
+  // implementation — is `Promise<void>` (confirmed by reading the
+  // installed package). The cast below corrects that upstream type gap;
+  // it changes nothing about what actually runs. EditableChatTitle needs
+  // the real promise to know whether the rename succeeded, so it can roll
+  // back and show *why* on failure rather than silently doing nothing.
+  const renameActiveThread = (newTitle: string): Promise<void> =>
+    aui.threadListItem.rename(newTitle) as unknown as Promise<void>;
+
   return (
     <section className="chat-pane">
       <header className="chat-header">
-        <span className="chat-header-title">Sol</span>
+        <EditableChatTitle title={displayTitle} onRename={renameActiveThread} onErrorChange={setTitleError} />
         <ThreadPrimitive.If running>
           <span className="chat-status" data-busy="true">
             <span className="status-dot" aria-hidden="true" />
@@ -120,6 +148,16 @@ export function ChatPane() {
           </span>
         </ThreadPrimitive.If>
       </header>
+      {titleError && (
+        // Same shape as the send-error banner below (lead + detail), just
+        // scoped to the header instead of the message column — the Gateway's
+        // own rename failure reason is what's actually useful here, same
+        // reasoning as MessageBubble's ErrorPrimitive.Message below.
+        <div className="message-error chat-header-error" role="alert">
+          <span className="message-error-lead">Couldn't rename this chat.</span>
+          <span className="message-error-detail">{titleError}</span>
+        </div>
+      )}
       <ThreadPrimitive.Root className="thread-root">
         <ThreadPrimitive.Viewport className="thread-viewport">
           <div className="thread-column">

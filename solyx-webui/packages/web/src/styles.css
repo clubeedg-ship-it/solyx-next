@@ -383,6 +383,9 @@ select {
 }
 
 .chat-header-title {
+  min-width: 0;
+  max-width: 100%;
+  font: inherit;
   font-size: var(--text-md);
   font-weight: 600;
   letter-spacing: -0.01em;
@@ -390,6 +393,47 @@ select {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+/* Button (view mode) and input (edit mode) both reuse .chat-header-title
+   for typography, then layer their own reset + affordance on top — this is
+   what keeps the two states from visibly jumping around as the title is
+   clicked into and out of edit. */
+button.chat-header-title {
+  display: block;
+  padding: 0.2rem 0.4rem;
+  margin: -0.2rem -0.4rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background var(--duration-fast) var(--ease),
+    border-color var(--duration-fast) var(--ease);
+}
+
+button.chat-header-title:hover {
+  background: var(--surface-hover);
+}
+
+input.chat-header-title {
+  display: block;
+  padding: 0.2rem 0.4rem;
+  margin: -0.2rem -0.4rem;
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+/* Positioned as its own full-width row under the header rather than inside
+   it — .chat-header is a tight flex row (title + status dot) with no room
+   for a wrapping error line. Reuses .message-error's lead/detail shape
+   (see below) so a rename failure reads the same as every other error in
+   this pane. */
+.chat-header-error {
+  margin: 0.75rem 1.5rem 0;
 }
 
 .chat-status {
