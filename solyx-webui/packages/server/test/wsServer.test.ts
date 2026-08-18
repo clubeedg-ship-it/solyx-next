@@ -122,6 +122,25 @@ describe("attachWsBridge", () => {
     ws.close();
   });
 
+  it("carries hasTitle:false through to the wire for an untitled session", async () => {
+    const gateway: Partial<GatewayAdapter> = {
+      listSessions: async () => [fakeSession({ sessionKey: "s1", title: "New chat", hasTitle: false })],
+      subscribeSessions: () => () => {},
+    };
+    const { server, url } = startServer(gateway, alwaysAuthenticated);
+    openServer = server;
+
+    const { ws, frames } = await connect(url);
+    send(ws, { id: "req-1", type: "sessions.list" });
+    const reply = await frames.next();
+
+    expect(reply).toMatchObject({ type: "result", id: "req-1", ok: true });
+    if (reply.type === "result" && reply.ok) {
+      expect(reply.result).toEqual([expect.objectContaining({ sessionKey: "s1", hasTitle: false })]);
+    }
+    ws.close();
+  });
+
   it("forwards sessions.changed pushes from the gateway to the browser", async () => {
     let pushChange: ((session: SessionSummary) => void) | undefined;
     const gateway: Partial<GatewayAdapter> = {
@@ -141,9 +160,19 @@ describe("attachWsBridge", () => {
     pushChange?.(fakeSession({ sessionKey: "s9", title: "Nieuwe titel" }));
     const frame = await framePromise;
 
+    // hasTitle must survive the trip to the wire — gatewayAdapter.ts computes
+    // it (toSessionSummary), but toWire() used to drop it, forcing the client
+    // to string-match the literal "New chat" placeholder instead of reading
+    // the real signal. See threadListFilter.ts for the client-side fallout.
     expect(frame).toEqual({
       type: "sessions.changed",
-      session: { sessionKey: "s9", title: "Nieuwe titel", updatedAt: "2026-08-12T00:00:00Z", archived: false },
+      session: {
+        sessionKey: "s9",
+        title: "Nieuwe titel",
+        updatedAt: "2026-08-12T00:00:00Z",
+        hasTitle: true,
+        archived: false,
+      },
     });
     ws.close();
   });

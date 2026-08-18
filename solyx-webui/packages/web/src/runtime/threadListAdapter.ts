@@ -45,10 +45,16 @@ export function createThreadListAdapter(socket: Pick<BackendSocket, "request">):
       return toThreadMetadata(session);
     },
 
-    // OpenClaw already generates a title for each session server-side
-    // (PLAN.md §1.1) and pushes it through sessions.changed — there's
-    // nothing for this UI to generate. An immediately-closed stream is
-    // assistant-ui's own documented no-op shape (mirrors
+    // OpenClaw does NOT generate a title for a session server-side — a live
+    // check against the Gateway found 42 sessions on the `solyx` agent, all
+    // with zero labels. Titling instead happens on this project's own
+    // backend, from the first chat message, the moment it's sent — see
+    // wsServer.ts's chat.send handler and its deriveTitle.ts helper — and
+    // is pushed to every client through sessions.changed. That's still
+    // nothing for *this* adapter method to do: assistant-ui only calls
+    // generateTitle from its own generate-on-demand flow, which this app
+    // never triggers, so an immediately-closed stream is correct here
+    // regardless of where titling happens (mirrors
     // InMemoryThreadListAdapter.generateTitle in @assistant-ui/core).
     async generateTitle(): Promise<AssistantStream> {
       return new ReadableStream<AssistantStreamChunk>({
@@ -66,5 +72,11 @@ function toThreadMetadata(session: SessionWire) {
     externalId: session.sessionKey,
     title: session.title,
     status: (session.archived ? "archived" : "regular") as "archived" | "regular",
+    // assistant-ui's own field for "when was this last touched" — Sidebar.tsx
+    // reads it (via relativeTime.ts) to show "3h", "2d", etc. next to each
+    // row. The wire only ever carries updatedAt as an ISO string (see
+    // protocol.ts); this is the one place that turns it into the Date
+    // RemoteThreadMetadata expects.
+    lastMessageAt: new Date(session.updatedAt),
   };
 }

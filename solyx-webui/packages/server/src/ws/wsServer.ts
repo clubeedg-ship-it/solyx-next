@@ -151,11 +151,12 @@ async function handleFrame(
   }
 }
 
-function toWire(session: { sessionKey: string; title: string; updatedAt: string; archived: boolean }): SessionWire {
+function toWire(session: { sessionKey: string; title: string; updatedAt: string; hasTitle: boolean; archived: boolean }): SessionWire {
   return {
     sessionKey: session.sessionKey,
     title: session.title,
     updatedAt: session.updatedAt,
+    hasTitle: session.hasTitle,
     archived: session.archived,
   };
 }

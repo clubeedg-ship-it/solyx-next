@@ -17,6 +17,18 @@ export interface SessionWire {
   sessionKey: string;
   title: string;
   updatedAt: string;
+  /**
+   * True once OpenClaw itself has a real label for this session (mirrors
+   * gateway/types.ts's SessionSummary.hasTitle). OpenClaw never generates
+   * this on its own — see wsServer.ts's chat.send handler, which is what
+   * actually sets it, by deriving a title from the first message and
+   * persisting it via sessions.rename. Without this field the client had
+   * no way to tell "genuinely untitled" apart from "happens to be titled
+   * the same as the placeholder", and fell back to string-matching the
+   * literal "New chat" (see runtime/threadListFilter.ts) — this is the
+   * real signal that replaces that guess.
+   */
+  hasTitle: boolean;
   archived: boolean;
 }
 

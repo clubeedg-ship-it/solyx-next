@@ -18,8 +18,8 @@ describe("createThreadListAdapter", () => {
   it("list() maps SessionWire[] to RemoteThreadMetadata, archived mapped to status", async () => {
     const fake = createFakeSocket({
       "sessions.list": [
-        { sessionKey: "s1", title: "Besparingen", updatedAt: "t1", archived: false },
-        { sessionKey: "s2", title: "Oud", updatedAt: "t2", archived: true },
+        { sessionKey: "s1", title: "Besparingen", updatedAt: "2026-08-12T00:00:00.000Z", hasTitle: true, archived: false },
+        { sessionKey: "s2", title: "Oud", updatedAt: "2026-08-10T00:00:00.000Z", hasTitle: true, archived: true },
       ],
     });
     const adapter = createThreadListAdapter(fake.socket);
@@ -27,8 +27,20 @@ describe("createThreadListAdapter", () => {
     const result = await adapter.list();
 
     expect(result.threads).toEqual([
-      { remoteId: "s1", externalId: "s1", title: "Besparingen", status: "regular" },
-      { remoteId: "s2", externalId: "s2", title: "Oud", status: "archived" },
+      {
+        remoteId: "s1",
+        externalId: "s1",
+        title: "Besparingen",
+        status: "regular",
+        lastMessageAt: new Date("2026-08-12T00:00:00.000Z"),
+      },
+      {
+        remoteId: "s2",
+        externalId: "s2",
+        title: "Oud",
+        status: "archived",
+        lastMessageAt: new Date("2026-08-10T00:00:00.000Z"),
+      },
     ]);
   });
 
@@ -62,7 +74,13 @@ describe("createThreadListAdapter", () => {
 
   it("fetch() maps a single session to RemoteThreadMetadata", async () => {
     const fake = createFakeSocket({
-      "sessions.get": { sessionKey: "s1", title: "Onderhoud", updatedAt: "t1", archived: false },
+      "sessions.get": {
+        sessionKey: "s1",
+        title: "Onderhoud",
+        updatedAt: "2026-08-11T00:00:00.000Z",
+        hasTitle: true,
+        archived: false,
+      },
     });
     const adapter = createThreadListAdapter(fake.socket);
 
@@ -71,6 +89,7 @@ describe("createThreadListAdapter", () => {
       externalId: "s1",
       title: "Onderhoud",
       status: "regular",
+      lastMessageAt: new Date("2026-08-11T00:00:00.000Z"),
     });
   });
 

@@ -119,7 +119,7 @@ describe("BackendSocket.on", () => {
     backend.on("sessions.changed", handler);
     fake.message({
       type: "sessions.changed",
-      session: { sessionKey: "s1", title: "x", updatedAt: "now", archived: false },
+      session: { sessionKey: "s1", title: "x", updatedAt: "now", hasTitle: false, archived: false },
     });
 
     expect(handler).toHaveBeenCalledTimes(1);
