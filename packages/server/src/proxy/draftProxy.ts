@@ -43,18 +43,18 @@ export function buildDraftRequest(postId: string, config: Pick<Config, "wordpres
   }
 
   const origin = config.wordpressOrigin.replace(/\/+$/, "");
-  // The plugin exposes previews on its own route. The generic WordPress
-  // preview URL (?p=<id>&preview=true) returns 404 for these drafts even
-  // with the agent's credentials — WP hides a draft the account cannot
-  // edit rather than refusing it — so this must not be "simplified" back.
-  const url = `${origin}/wp-json/solyx-agent/v1/drafts/${encodeURIComponent(postId)}/preview`;
+  // The draft's JSON, not its HTML. The preview is served from the source
+  // page's own permalink so that the theme's template, header, footer and
+  // body classes are the real ones, and only the plugin can mint the signed
+  // URL for that — so this call exists to go and read it.
+  const url = `${origin}/wp-json/solyx-agent/v1/drafts/${encodeURIComponent(postId)}`;
   const credentials = Buffer.from(`${config.wordpressUser}:${config.wordpressAppPassword}`).toString("base64");
 
   return {
     url,
     headers: {
       Authorization: `Basic ${credentials}`,
-      Accept: "text/html",
+      Accept: "application/json",
     },
   };
 }
@@ -88,8 +88,38 @@ export async function fetchDraftHtml(
     throw new DraftFetchError(`WordPress returned ${response.status} for draft ${postId}`, response.status);
   }
 
-  const html = await response.text();
-  return injectBaseTag(html, { baseHref: config.wordpressOrigin });
+  let previewUrl: unknown;
+  try {
+    previewUrl = (JSON.parse(await response.text()) as { previewUrl?: unknown }).previewUrl;
+  } catch {
+    throw new DraftFetchError(`WordPress returned a non-JSON draft for ${postId}`, response.status);
+  }
+
+  if (typeof previewUrl !== "string" || previewUrl === "") {
+    throw new DraftFetchError(`WordPress returned no preview URL for draft ${postId}`, response.status);
+  }
+
+  // The URL comes back from the API, so it is checked before it is fetched:
+  // this process holds the WordPress credentials, and a preview URL pointing
+  // somewhere else must never become a request this server makes on its behalf.
+  const origin = config.wordpressOrigin.replace(/\/+$/, "");
+  if (!previewUrl.startsWith(`${origin}/`)) {
+    throw new DraftFetchError(`Draft ${postId} returned a preview URL outside the WordPress origin`, response.status);
+  }
+
+  // No Authorization header: the signature in the URL is what authorises this,
+  // WordPress ignores application passwords on non-REST requests anyway, and
+  // the credential should not travel on an ordinary page request.
+  const pageResponse = await fetchImpl(previewUrl, { headers: { Accept: "text/html" } });
+
+  if (!pageResponse.ok) {
+    throw new DraftFetchError(
+      `WordPress returned ${pageResponse.status} rendering the preview page for draft ${postId}`,
+      pageResponse.status,
+    );
+  }
+
+  return injectBaseTag(await pageResponse.text(), { baseHref: config.wordpressOrigin });
 }
 
 /** One draft that exists in WordPress right now, ready for the Drafts selector. */

@@ -8,19 +8,19 @@ const config = {
 };
 
 describe("buildDraftRequest", () => {
-  it("builds a preview URL with Basic auth from the application password", () => {
+  it("builds the draft metadata URL with Basic auth from the application password", () => {
     const request = buildDraftRequest("42", config);
-    // The plugin serves draft previews on its own REST route. WordPress's
-    // generic ?p=<id>&preview=true 404s for these drafts — verified against
-    // the live site on 2026-08-18, which is what made the panel show a 502.
-    expect(request.url).toBe("https://2026.solyxenergy.nl/wp-json/solyx-agent/v1/drafts/42/preview");
+    // This fetches the draft's JSON, not HTML: the preview itself is served
+    // from the source page's own permalink, and only the plugin can mint the
+    // signed URL for it. See fetchDraftHtml below.
+    expect(request.url).toBe("https://2026.solyxenergy.nl/wp-json/solyx-agent/v1/drafts/42");
     const expectedAuth = `Basic ${Buffer.from("agent:abcd efgh ijkl mnop").toString("base64")}`;
     expect(request.headers.Authorization).toBe(expectedAuth);
   });
 
   it("strips a trailing slash on the configured origin before building the URL", () => {
     const request = buildDraftRequest("1", { ...config, wordpressOrigin: "https://2026.solyxenergy.nl/" });
-    expect(request.url).toBe("https://2026.solyxenergy.nl/wp-json/solyx-agent/v1/drafts/1/preview");
+    expect(request.url).toBe("https://2026.solyxenergy.nl/wp-json/solyx-agent/v1/drafts/1");
   });
 
   it("rejects non-numeric post ids", () => {
@@ -31,24 +31,40 @@ describe("buildDraftRequest", () => {
 });
 
 describe("fetchDraftHtml", () => {
-  it("fetches, authenticates, and rewrites the draft HTML with a base tag", async () => {
-    const fakeFetch = vi.fn().mockResolvedValue({
-      ok: true,
-      status: 200,
-      headers: { get: () => "text/html" },
-      text: async () => "<html><head></head><body>draft</body></html>",
-    });
+  const previewUrl =
+    "https://2026.solyxenergy.nl/besparen/?solyx_preview=7&solyx_preview_expires=99&solyx_preview_signature=deadbeef";
+
+  const respond = (body: string, contentType: string) => ({
+    ok: true,
+    status: 200,
+    headers: { get: () => contentType },
+    text: async () => body,
+  });
+
+  it("reads the signed preview URL from the draft, then fetches the page itself", async () => {
+    const fakeFetch = vi
+      .fn()
+      .mockResolvedValueOnce(respond(JSON.stringify({ draftId: 7, previewUrl }), "application/json"))
+      .mockResolvedValueOnce(respond("<html><head></head><body>real page</body></html>", "text/html"));
 
     const html = await fetchDraftHtml("7", config, fakeFetch);
 
-    expect(fakeFetch).toHaveBeenCalledWith(
-      "https://2026.solyxenergy.nl/wp-json/solyx-agent/v1/drafts/7/preview",
+    // 1. the draft's JSON, authenticated
+    expect(fakeFetch.mock.calls[0]?.[0]).toBe("https://2026.solyxenergy.nl/wp-json/solyx-agent/v1/drafts/7");
+    expect(fakeFetch.mock.calls[0]?.[1]).toEqual(
       expect.objectContaining({ headers: expect.objectContaining({ Authorization: expect.stringContaining("Basic ") }) }),
     );
+    // 2. the page URL the plugin signed. Deliberately WITHOUT the application
+    //    password: WordPress only honours it on REST requests, the signature is
+    //    what authorises this one, and the credential has no business being
+    //    attached to an ordinary page request.
+    expect(fakeFetch.mock.calls[1]?.[0]).toBe(previewUrl);
+    expect(fakeFetch.mock.calls[1]?.[1]?.headers).not.toHaveProperty("Authorization");
     expect(html).toContain('<base href="https://2026.solyxenergy.nl/">');
+    expect(html).toContain("real page");
   });
 
-  it("throws DraftFetchError with the upstream status on a non-OK response", async () => {
+  it("throws DraftFetchError with the upstream status when the draft lookup fails", async () => {
     const fakeFetch = vi.fn().mockResolvedValue({
       ok: false,
       status: 403,
@@ -59,6 +75,33 @@ describe("fetchDraftHtml", () => {
     await expect(fetchDraftHtml("7", config, fakeFetch)).rejects.toMatchObject(
       new DraftFetchError("WordPress returned 403 for draft 7", 403),
     );
+  });
+
+  it("throws DraftFetchError when the page render itself fails", async () => {
+    const fakeFetch = vi
+      .fn()
+      .mockResolvedValueOnce(respond(JSON.stringify({ draftId: 7, previewUrl }), "application/json"))
+      .mockResolvedValueOnce({ ok: false, status: 500, headers: { get: () => null }, text: async () => "" });
+
+    await expect(fetchDraftHtml("7", config, fakeFetch)).rejects.toMatchObject(
+      new DraftFetchError("WordPress returned 500 rendering the preview page for draft 7", 500),
+    );
+  });
+
+  it("refuses a preview URL that is not on the configured WordPress origin", async () => {
+    const fakeFetch = vi
+      .fn()
+      .mockResolvedValueOnce(
+        respond(JSON.stringify({ draftId: 7, previewUrl: "https://attacker.example/steal" }), "application/json"),
+      );
+
+    await expect(fetchDraftHtml("7", config, fakeFetch)).rejects.toThrow(DraftFetchError);
+    expect(fakeFetch).toHaveBeenCalledTimes(1);
+  });
+
+  it("throws when the draft JSON carries no preview URL", async () => {
+    const fakeFetch = vi.fn().mockResolvedValueOnce(respond(JSON.stringify({ draftId: 7 }), "application/json"));
+    await expect(fetchDraftHtml("7", config, fakeFetch)).rejects.toThrow(DraftFetchError);
   });
 
   it("never calls fetch for an invalid post id", async () => {
