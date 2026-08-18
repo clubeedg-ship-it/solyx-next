@@ -303,41 +303,65 @@ select {
 .thread-items {
   display: flex;
   flex-direction: column;
-  gap: 1px;
+  gap: 2px;
 }
 
+/* Two-line row: title, then a quiet relative timestamp underneath — replaces
+   the old single truncated line. The extra vertical padding also widens the
+   tap target, which the single-line version left too thin to comfortably
+   hit on a trackpad or touch screen. */
 .thread-item-trigger {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
   width: 100%;
-  padding: 0.5rem 0.65rem;
+  padding: 0.65rem 0.75rem;
   border: none;
   background: transparent;
   text-align: left;
   cursor: pointer;
   border-radius: var(--radius-sm);
   font: inherit;
+  border-left: 2px solid transparent;
+  transition:
+    background var(--duration-fast) var(--ease),
+    border-color var(--duration-fast) var(--ease);
+}
+
+.thread-item-title {
   font-size: var(--text-sm);
+  font-weight: 500;
   color: var(--text-secondary);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  border-left: 2px solid transparent;
-  transition:
-    background var(--duration-fast) var(--ease),
-    color var(--duration-fast) var(--ease);
+  transition: color var(--duration-fast) var(--ease);
+}
+
+.thread-item-time {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: 0.03em;
+  color: var(--text-tertiary);
 }
 
 .thread-item-trigger:hover {
   background: var(--surface-hover);
+}
+
+.thread-item-trigger:hover .thread-item-title {
   color: var(--text-primary);
 }
 
 .thread-item[data-active="true"] .thread-item-trigger {
   background: var(--surface);
-  color: var(--text-primary);
-  font-weight: 500;
   border-left-color: var(--accent);
   box-shadow: 0 1px 2px var(--shadow-color);
+}
+
+.thread-item[data-active="true"] .thread-item-title {
+  color: var(--text-primary);
+  font-weight: 600;
 }
 
 .sidebar-footer {

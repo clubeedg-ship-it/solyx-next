@@ -1,5 +1,6 @@
 import { ThreadListItemPrimitive, ThreadListPrimitive } from "@assistant-ui/react";
 import { authMode } from "../env.js";
+import { formatRelativeTime } from "../runtime/relativeTime.js";
 import { isUntitledThread } from "../runtime/threadListFilter.js";
 
 /**
@@ -41,7 +42,17 @@ export function Sidebar() {
               return (
                 <ThreadListItemPrimitive.Root key={threadListItem.id} className="thread-item">
                   <ThreadListItemPrimitive.Trigger className="thread-item-trigger">
-                    <ThreadListItemPrimitive.Title fallback="New chat" />
+                    <span className="thread-item-title">
+                      <ThreadListItemPrimitive.Title fallback="New chat" />
+                    </span>
+                    {/* threadListAdapter.ts's toThreadMetadata always sets
+                        lastMessageAt from the session's own updatedAt, so
+                        this is really just a defensive guard against a
+                        future adapter change rather than a case that's
+                        expected to happen today. */}
+                    {threadListItem.lastMessageAt && (
+                      <span className="thread-item-time">{formatRelativeTime(threadListItem.lastMessageAt)}</span>
+                    )}
                   </ThreadListItemPrimitive.Trigger>
                 </ThreadListItemPrimitive.Root>
               );
