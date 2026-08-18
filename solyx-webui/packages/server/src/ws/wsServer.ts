@@ -2,6 +2,7 @@ import type { IncomingMessage } from "node:http";
 import { WebSocketServer, type WebSocket } from "ws";
 import type { AuthChecker } from "../auth/types.js";
 import type { GatewayAdapter } from "../gateway/gatewayAdapter.js";
+import { deriveTitle, FALLBACK_TITLE } from "./deriveTitle.js";
 import type { ClientFrame, ServerFrame, SessionWire } from "./protocol.js";
 
 export interface WsBridgeOptions {
@@ -120,6 +121,11 @@ async function handleFrame(
       }
       case "chat.send": {
         respond(ws, frame.id, null);
+        // Runs alongside the turn, not before it — titling a session must
+        // never be the reason a message is slow to send. See its own doc
+        // comment for what "no title yet" means and why the fallback string
+        // itself must never be written back.
+        autoTitleIfUntitled(gateway, frame.sessionKey, frame.text);
         const handle = gateway.sendMessage(frame.sessionKey, frame.text, {
           onDelta: (delta) => send(ws, { type: "assistant.delta", sessionKey: delta.sessionKey, text: delta.text }),
           onToolEvent: (event) =>
@@ -149,6 +155,33 @@ async function handleFrame(
       respondError(ws, frame.id, message);
     }
   }
+}
+
+/**
+ * OpenClaw never generates a session title itself (confirmed live: agent
+ * `solyx` had 42 sessions, 0 labels), so a session's first message is also
+ * its title — chosen here, once, server-side, so every browser watching the
+ * same session agrees on it (see deriveTitle.ts's module doc for why this
+ * can't be client-derived or model-generated). Best-effort and
+ * fire-and-forget: if the Gateway round trip fails, the session simply
+ * stays untitled and the next message tries again — that's a strictly
+ * better failure mode than making the user's turn wait on it, or fail
+ * outright, over a title.
+ */
+function autoTitleIfUntitled(gateway: GatewayAdapter, sessionKey: string, text: string): void {
+  void (async () => {
+    const session = await gateway.getSession(sessionKey);
+    if (session.hasTitle) return;
+    const title = deriveTitle(text);
+    // Never persist the placeholder itself as if it were a real title —
+    // gatewayAdapter.ts's toSessionSummary treats any non-empty label as
+    // hasTitle:true, so writing "New chat" back through renameSession would
+    // permanently mark this session as titled without ever giving it one.
+    if (title === FALLBACK_TITLE) return;
+    await gateway.renameSession(sessionKey, title);
+  })().catch((error: unknown) => {
+    console.error(`Failed to auto-title session ${sessionKey}:`, error);
+  });
 }
 
 function toWire(session: { sessionKey: string; title: string; updatedAt: string; hasTitle: boolean; archived: boolean }): SessionWire {

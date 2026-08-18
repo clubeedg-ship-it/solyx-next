@@ -180,6 +180,10 @@ describe("attachWsBridge", () => {
   it("streams assistant.delta then assistant.done for chat.send", async () => {
     const gateway: Partial<GatewayAdapter> = {
       subscribeSessions: () => () => {},
+      // Already titled, so the auto-title path (tested separately below)
+      // does nothing here — this test is only about the delta/done stream.
+      getSession: async () => fakeSession({ hasTitle: true }),
+      renameSession: async () => {},
       sendMessage: (sessionKey, _text, handlers) => {
         handlers.onDelta({ sessionKey, text: "Bezig..." });
         handlers.onDone();
@@ -201,6 +205,89 @@ describe("attachWsBridge", () => {
     const doneFrame = await frames.next();
     expect(doneFrame).toEqual({ type: "assistant.done", sessionKey: "s1" });
 
+    ws.close();
+  });
+
+  it("chat.send derives and persists a title when the session has none yet", async () => {
+    const renameCalls: Array<{ sessionKey: string; title: string }> = [];
+    const gateway: Partial<GatewayAdapter> = {
+      subscribeSessions: () => () => {},
+      getSession: async (sessionKey) => fakeSession({ sessionKey, hasTitle: false, title: "New chat" }),
+      renameSession: async (sessionKey, title) => {
+        renameCalls.push({ sessionKey, title });
+      },
+      sendMessage: (sessionKey, _text, handlers) => {
+        handlers.onDone();
+        return { cancel: () => {} };
+      },
+    };
+    const { server, url } = startServer(gateway, alwaysAuthenticated);
+    openServer = server;
+
+    const { ws, frames } = await connect(url);
+    send(ws, { id: "req-1", type: "chat.send", sessionKey: "s1", text: "Update the homepage headline" });
+    await frames.next(); // ack
+    await frames.next(); // assistant.done
+    // The rename runs alongside the send, not gated on any frame the test
+    // can await directly, so give its microtask/RPC chain a tick to land.
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    expect(renameCalls).toEqual([{ sessionKey: "s1", title: "Update the homepage headline" }]);
+    ws.close();
+  });
+
+  it("chat.send does not rename a session that already has a title", async () => {
+    let renamed = false;
+    const gateway: Partial<GatewayAdapter> = {
+      subscribeSessions: () => () => {},
+      getSession: async (sessionKey) => fakeSession({ sessionKey, hasTitle: true, title: "Onderhoud" }),
+      renameSession: async () => {
+        renamed = true;
+      },
+      sendMessage: (sessionKey, _text, handlers) => {
+        handlers.onDone();
+        return { cancel: () => {} };
+      },
+    };
+    const { server, url } = startServer(gateway, alwaysAuthenticated);
+    openServer = server;
+
+    const { ws, frames } = await connect(url);
+    send(ws, { id: "req-1", type: "chat.send", sessionKey: "s1", text: "A follow-up message" });
+    await frames.next();
+    await frames.next();
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    expect(renamed).toBe(false);
+    ws.close();
+  });
+
+  it("chat.send never persists the New chat fallback as a real title", async () => {
+    let renamed = false;
+    const gateway: Partial<GatewayAdapter> = {
+      subscribeSessions: () => () => {},
+      getSession: async (sessionKey) => fakeSession({ sessionKey, hasTitle: false, title: "New chat" }),
+      renameSession: async () => {
+        renamed = true;
+      },
+      sendMessage: (sessionKey, _text, handlers) => {
+        handlers.onDone();
+        return { cancel: () => {} };
+      },
+    };
+    const { server, url } = startServer(gateway, alwaysAuthenticated);
+    openServer = server;
+
+    const { ws, frames } = await connect(url);
+    // Whitespace-only text derives to the fallback title itself, which must
+    // never be written back (see deriveTitle.ts / wsServer.ts's comment on
+    // why persisting the placeholder would poison hasTitle).
+    send(ws, { id: "req-1", type: "chat.send", sessionKey: "s1", text: "   " });
+    await frames.next();
+    await frames.next();
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    expect(renamed).toBe(false);
     ws.close();
   });
 
