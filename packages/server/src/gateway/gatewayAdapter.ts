@@ -318,17 +318,26 @@ interface RawSession {
   /** Epoch milliseconds. */
   updatedAt?: number;
   archived?: boolean;
+  /** Message count as reported by the Gateway, when it reports one at all. */
+  messageCount?: number;
 }
 
 function toSessionSummary(raw: Partial<RawSession>): SessionSummary {
   const label = typeof raw.label === "string" && raw.label.trim().length > 0 ? raw.label : undefined;
-  return {
+  const summary: SessionSummary = {
     sessionKey: raw.key ?? "",
     title: label ?? "New chat",
     updatedAt: typeof raw.updatedAt === "number" ? new Date(raw.updatedAt).toISOString() : new Date().toISOString(),
     hasTitle: label !== undefined,
     archived: raw.archived ?? false,
   };
+  // Only a real, non-negative integer is a count. Anything else leaves the
+  // key off entirely: defaulting to 0 would tell the UI a session is empty
+  // when all we know is that the Gateway did not say.
+  if (typeof raw.messageCount === "number" && Number.isInteger(raw.messageCount) && raw.messageCount >= 0) {
+    summary.messageCount = raw.messageCount;
+  }
+  return summary;
 }
 
 function readString(payload: Record<string, unknown>, key: string): string | undefined {

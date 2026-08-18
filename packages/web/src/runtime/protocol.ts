@@ -18,6 +18,10 @@ export interface SessionWire {
   title: string;
   updatedAt: string;
   archived: boolean;
+  // Count of user+assistant messages in the session. Optional on purpose:
+  // omitted means UNKNOWN, never zero. A server that does not send it must
+  // not make every session look empty.
+  messageCount?: number;
 }
 
 export type ServerFrame =

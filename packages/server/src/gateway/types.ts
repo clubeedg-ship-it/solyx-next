@@ -16,6 +16,9 @@ export interface SessionSummary {
   /** True once OpenClaw itself has generated a title beyond a placeholder. */
   hasTitle: boolean;
   archived: boolean;
+  /** User+assistant messages in the session. Absent when the Gateway did not
+   *  report a count -- 0 means empty, undefined means unknown. */
+  messageCount?: number;
 }
 
 export interface AssistantDelta {

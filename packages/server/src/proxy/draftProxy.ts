@@ -87,3 +87,80 @@ export async function fetchDraftHtml(
   const html = await response.text();
   return injectBaseTag(html, { baseHref: config.wordpressOrigin });
 }
+
+/** One draft that exists in WordPress right now, ready for the Drafts selector. */
+export interface DraftListEntry {
+  /** The draft post's own id — this is what /api/draft/:id previews. */
+  draftId: string;
+  /** The published page the draft was cloned from. */
+  pageId: number;
+  title: string;
+  slug: string;
+}
+
+type WpConfig = Pick<Config, "wordpressOrigin" | "wordpressUser" | "wordpressAppPassword">;
+
+function apiHeaders(config: WpConfig): Record<string, string> {
+  const credentials = Buffer.from(`${config.wordpressUser}:${config.wordpressAppPassword}`).toString("base64");
+  return { Authorization: `Basic ${credentials}`, Accept: "application/json" };
+}
+
+/**
+ * List every draft that exists in WordPress.
+ *
+ * Why it walks two endpoints: the plugin's page list reports `hasDraft` but not
+ * the draft's id, and the draft id is what the preview route needs. The agent
+ * account is deliberately not allowed to query core REST with `status=draft`
+ * (`rest_forbidden_status`), so this is the only route to the list — but only
+ * the handful of pages that claim a draft get a second call.
+ *
+ * A single page whose detail call fails is skipped rather than thrown, so one
+ * bad page cannot empty the client's Drafts selector.
+ */
+export async function fetchDraftList(config: WpConfig, fetchImpl: FetchLike = fetch): Promise<DraftListEntry[]> {
+  const origin = config.wordpressOrigin.replace(/\/+$/, "");
+  const headers = apiHeaders(config);
+
+  const listResponse = await fetchImpl(`${origin}/wp-json/solyx-agent/v1/pages`, { headers });
+  if (!listResponse.ok) {
+    throw new DraftFetchError(`WordPress returned ${listResponse.status} listing pages`, listResponse.status);
+  }
+
+  let pages: unknown;
+  try {
+    pages = JSON.parse(await listResponse.text());
+  } catch {
+    throw new DraftFetchError("WordPress returned a non-JSON page list", listResponse.status);
+  }
+  if (!Array.isArray(pages)) return [];
+
+  const drafts: DraftListEntry[] = [];
+  for (const page of pages) {
+    if (!page || typeof page !== "object") continue;
+    const record = page as Record<string, unknown>;
+    if (record.hasDraft !== true) continue;
+    const pageId = typeof record.id === "number" ? record.id : Number(record.id);
+    if (!Number.isInteger(pageId)) continue;
+
+    const detail = await fetchImpl(`${origin}/wp-json/solyx-agent/v1/pages/${pageId}`, { headers });
+    if (!detail.ok) continue;
+
+    let body: unknown;
+    try {
+      body = JSON.parse(await detail.text());
+    } catch {
+      continue;
+    }
+    const draftId = (body as Record<string, unknown> | null)?.draftId;
+    if (draftId === undefined || draftId === null || String(draftId).trim() === "") continue;
+
+    drafts.push({
+      draftId: String(draftId),
+      pageId,
+      title: typeof record.title === "string" ? record.title : "",
+      slug: typeof record.slug === "string" ? record.slug : "",
+    });
+  }
+
+  return drafts;
+}

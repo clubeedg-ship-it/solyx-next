@@ -28,6 +28,13 @@ export interface SessionWire {
   title: string;
   updatedAt: string;
   archived: boolean;
+  /**
+   * Number of user+assistant messages in the session. Optional on purpose:
+   * 0 means the session is empty, absent means the count is unknown and a
+   * consumer must not claim either way. Mirrored field-for-field in
+   * packages/web/src/runtime/protocol.ts (see the NOTE above).
+   */
+  messageCount?: number;
 }
 
 export type ServerFrame =
