@@ -132,10 +132,14 @@ export async function fetchDraftList(config: WpConfig, fetchImpl: FetchLike = fe
   } catch {
     throw new DraftFetchError("WordPress returned a non-JSON page list", listResponse.status);
   }
-  if (!Array.isArray(pages)) return [];
+  // The endpoint answers with an envelope, {"pages":[...]}, not a bare array.
+  // Verified against the live API on 2026-08-18 — an earlier version of this
+  // function assumed the array and silently returned no drafts at all.
+  const listed = Array.isArray(pages) ? pages : (pages as { pages?: unknown } | null)?.pages;
+  if (!Array.isArray(listed)) return [];
 
   const drafts: DraftListEntry[] = [];
-  for (const page of pages) {
+  for (const page of listed) {
     if (!page || typeof page !== "object") continue;
     const record = page as Record<string, unknown>;
     if (record.hasDraft !== true) continue;

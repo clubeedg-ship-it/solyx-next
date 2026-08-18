@@ -66,7 +66,7 @@ describe("fetchDraftHtml", () => {
 });
 
 // Shapes below are VERBATIM from the live plugin API (2026-08-18):
-//   GET /wp-json/solyx-agent/v1/pages       -> [{id,title,slug,status,hasDraft}]
+//   GET /wp-json/solyx-agent/v1/pages       -> {pages:[{id,title,slug,status,hasDraft}]}
 //   GET /wp-json/solyx-agent/v1/pages/:id   -> {...,hasDraft,draftId}
 // The list carries hasDraft but NOT draftId, so the id has to be read from the
 // per-page call — which is why this walks only the pages that claim a draft.
@@ -87,7 +87,7 @@ describe("fetchDraftList", () => {
         }
         return { ok: true, status: 200, headers: { get: () => "application/json" }, text: async () => JSON.stringify(pageDetail[id]) };
       }
-      return { ok: true, status: 200, headers: { get: () => "application/json" }, text: async () => JSON.stringify(PAGES) };
+      return { ok: true, status: 200, headers: { get: () => "application/json" }, text: async () => JSON.stringify({ pages: PAGES }) };
     });
   }
 
