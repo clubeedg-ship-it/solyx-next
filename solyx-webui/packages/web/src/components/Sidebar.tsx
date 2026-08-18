@@ -36,7 +36,13 @@ export function Sidebar() {
               // fails every untitled thread reads as "active" and the list
               // fills with "New chat" rows. The open conversation is already
               // on screen in the centre pane; it does not also need a row.
-              if (isUntitledThread(threadListItem.title)) {
+              //
+              // `custom` is an untyped bag (RemoteThreadMetadata.custom) —
+              // `=== true` is what turns "definitely titled" apart from
+              // "false, missing, or anything else" into the plain boolean
+              // isUntitledThread expects, rather than leaking `unknown`
+              // into it.
+              if (isUntitledThread(threadListItem.custom?.hasTitle === true)) {
                 return null;
               }
               return (

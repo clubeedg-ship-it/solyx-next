@@ -33,6 +33,7 @@ describe("createThreadListAdapter", () => {
         title: "Besparingen",
         status: "regular",
         lastMessageAt: new Date("2026-08-12T00:00:00.000Z"),
+        custom: { hasTitle: true },
       },
       {
         remoteId: "s2",
@@ -40,8 +41,22 @@ describe("createThreadListAdapter", () => {
         title: "Oud",
         status: "archived",
         lastMessageAt: new Date("2026-08-10T00:00:00.000Z"),
+        custom: { hasTitle: true },
       },
     ]);
+  });
+
+  it("list() carries hasTitle:false through to custom, for an untitled session", async () => {
+    const fake = createFakeSocket({
+      "sessions.list": [
+        { sessionKey: "s3", title: "New chat", updatedAt: "2026-08-12T00:00:00.000Z", hasTitle: false, archived: false },
+      ],
+    });
+    const adapter = createThreadListAdapter(fake.socket);
+
+    const result = await adapter.list();
+
+    expect(result.threads[0]?.custom).toEqual({ hasTitle: false });
   });
 
   it("initialize() creates a session and returns its key as remoteId", async () => {
@@ -90,6 +105,7 @@ describe("createThreadListAdapter", () => {
       title: "Onderhoud",
       status: "regular",
       lastMessageAt: new Date("2026-08-11T00:00:00.000Z"),
+      custom: { hasTitle: true },
     });
   });
 

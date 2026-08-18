@@ -78,5 +78,12 @@ function toThreadMetadata(session: SessionWire) {
     // protocol.ts); this is the one place that turns it into the Date
     // RemoteThreadMetadata expects.
     lastMessageAt: new Date(session.updatedAt),
+    // RemoteThreadMetadata has no dedicated field for "is this a real,
+    // server-assigned title" — `custom` is the documented free-form bag for
+    // exactly this kind of extra per-thread data, and it's what
+    // threadListFilter.ts's isUntitledThread reads to decide what
+    // Sidebar.tsx lists (replacing an earlier, fragile string match against
+    // the literal "New chat" placeholder).
+    custom: { hasTitle: session.hasTitle },
   };
 }

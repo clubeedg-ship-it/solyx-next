@@ -2,23 +2,21 @@ import { describe, expect, it } from "vitest";
 import { isUntitledThread } from "../runtime/threadListFilter.js";
 
 describe("isUntitledThread", () => {
-  it("treats undefined as untitled", () => {
+  it("treats hasTitle:false as untitled", () => {
+    expect(isUntitledThread(false)).toBe(true);
+  });
+
+  it("treats hasTitle:undefined (an older/unknown item) as untitled", () => {
+    // custom is an untyped bag (RemoteThreadMetadata.custom), so a thread
+    // item that somehow never got hasTitle set reads the same as false —
+    // fail closed (hidden), not open (shown as a fake "New chat" row).
     expect(isUntitledThread(undefined)).toBe(true);
   });
 
-  it("treats an empty or whitespace-only title as untitled", () => {
-    expect(isUntitledThread("")).toBe(true);
-    expect(isUntitledThread("   ")).toBe(true);
-  });
-
-  it("treats the server's own placeholder title as untitled", () => {
-    // gatewayAdapter.ts's toSessionSummary normalizes an empty raw title to
-    // exactly this string before it ever reaches the wire.
-    expect(isUntitledThread("New chat")).toBe(true);
-  });
-
-  it("does not hide a real, generated title", () => {
-    expect(isUntitledThread("Savings page")).toBe(false);
-    expect(isUntitledThread("About us")).toBe(false);
+  it("treats hasTitle:true as titled, regardless of what the title text happens to be", () => {
+    // This is the whole point of switching off the old string match: a
+    // session whose real, server-assigned title happens to equal the
+    // literal placeholder text no longer gets hidden by mistake.
+    expect(isUntitledThread(true)).toBe(false);
   });
 });

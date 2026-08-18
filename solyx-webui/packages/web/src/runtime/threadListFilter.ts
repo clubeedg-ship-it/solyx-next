@@ -1,17 +1,21 @@
 /**
- * A session with no messages is not a conversation. The wire protocol
- * (protocol.ts) only ever gives the client a `title` — never a message
- * count — and the server already normalizes an empty/untitled session's
- * title to the literal string "New chat" (see gatewayAdapter.ts's
- * toSessionSummary). That string is therefore the only signal the client
- * has for "this session has never actually been used" without changing the
- * wire protocol, so it's what Sidebar.tsx filters the thread list on.
+ * A session with no messages is not a conversation. This used to be a
+ * string match against the literal placeholder "New chat" (protocol.ts's
+ * SessionWire only ever carried a `title`, never the fact of whether it was
+ * real) — fragile in both directions: it would hide a genuine title that
+ * happened to equal the placeholder, and had no way to tell "really
+ * untitled" apart from "server hasn't gotten to it yet". SessionWire now
+ * carries hasTitle directly (see gatewayAdapter.ts's toSessionSummary,
+ * which computes it, and threadListAdapter.ts's toThreadMetadata, which
+ * forwards it into RemoteThreadMetadata.custom.hasTitle since that type has
+ * no dedicated field for it), so this is the real signal instead of a
+ * guess.
  *
  * This never deletes anything server-side — it only decides what the
  * sidebar lists. An untitled session that happens to be the one currently
  * open is a separate case Sidebar.tsx handles itself (never hide the
  * conversation someone is actively looking at).
  */
-export function isUntitledThread(title: string | undefined): boolean {
-  return !title || title.trim().length === 0 || title === "New chat";
+export function isUntitledThread(hasTitle: boolean | undefined): boolean {
+  return hasTitle !== true;
 }
