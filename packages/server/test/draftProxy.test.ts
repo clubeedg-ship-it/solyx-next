@@ -10,14 +10,17 @@ const config = {
 describe("buildDraftRequest", () => {
   it("builds a preview URL with Basic auth from the application password", () => {
     const request = buildDraftRequest("42", config);
-    expect(request.url).toBe("https://2026.solyxenergy.nl/?p=42&preview=true");
+    // The plugin serves draft previews on its own REST route. WordPress's
+    // generic ?p=<id>&preview=true 404s for these drafts — verified against
+    // the live site on 2026-08-18, which is what made the panel show a 502.
+    expect(request.url).toBe("https://2026.solyxenergy.nl/wp-json/solyx-agent/v1/drafts/42/preview");
     const expectedAuth = `Basic ${Buffer.from("agent:abcd efgh ijkl mnop").toString("base64")}`;
     expect(request.headers.Authorization).toBe(expectedAuth);
   });
 
   it("strips a trailing slash on the configured origin before building the URL", () => {
     const request = buildDraftRequest("1", { ...config, wordpressOrigin: "https://2026.solyxenergy.nl/" });
-    expect(request.url).toBe("https://2026.solyxenergy.nl/?p=1&preview=true");
+    expect(request.url).toBe("https://2026.solyxenergy.nl/wp-json/solyx-agent/v1/drafts/1/preview");
   });
 
   it("rejects non-numeric post ids", () => {
@@ -39,7 +42,7 @@ describe("fetchDraftHtml", () => {
     const html = await fetchDraftHtml("7", config, fakeFetch);
 
     expect(fakeFetch).toHaveBeenCalledWith(
-      "https://2026.solyxenergy.nl/?p=7&preview=true",
+      "https://2026.solyxenergy.nl/wp-json/solyx-agent/v1/drafts/7/preview",
       expect.objectContaining({ headers: expect.objectContaining({ Authorization: expect.stringContaining("Basic ") }) }),
     );
     expect(html).toContain('<base href="https://2026.solyxenergy.nl/">');

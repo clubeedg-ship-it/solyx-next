@@ -43,7 +43,11 @@ export function buildDraftRequest(postId: string, config: Pick<Config, "wordpres
   }
 
   const origin = config.wordpressOrigin.replace(/\/+$/, "");
-  const url = `${origin}/?p=${encodeURIComponent(postId)}&preview=true`;
+  // The plugin exposes previews on its own route. The generic WordPress
+  // preview URL (?p=<id>&preview=true) returns 404 for these drafts even
+  // with the agent's credentials — WP hides a draft the account cannot
+  // edit rather than refusing it — so this must not be "simplified" back.
+  const url = `${origin}/wp-json/solyx-agent/v1/drafts/${encodeURIComponent(postId)}/preview`;
   const credentials = Buffer.from(`${config.wordpressUser}:${config.wordpressAppPassword}`).toString("base64");
 
   return {
