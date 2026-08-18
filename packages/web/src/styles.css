@@ -1056,3 +1056,102 @@ select {
   justify-content: center;
   background: var(--canvas);
 }
+
+/* ---- thread row: label and delete share one line ------------------------
+   The row's trigger is display:block/width:100%, so an unstyled sibling
+   button drops onto its own line and the list reads as a stack of loose
+   controls rather than a list of conversations. These rules put the delete
+   affordance back on the row and keep it out of the way until it is wanted. */
+.thread-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  border-radius: var(--radius-sm);
+}
+
+.thread-item .thread-item-trigger {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.thread-item-delete,
+.thread-item-delete-cancel {
+  flex: 0 0 auto;
+  margin-right: 0.15rem;
+  padding: 0.2rem 0.45rem;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-tertiary);
+  font: inherit;
+  font-size: var(--text-2xs);
+  cursor: pointer;
+  /* Hidden until hover/focus, and un-clickable while hidden — an invisible
+     live delete target is worse than a visible one. */
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 120ms ease,
+    background-color 120ms ease,
+    color 120ms ease;
+}
+
+.thread-item:hover .thread-item-delete,
+.thread-item:hover .thread-item-delete-cancel,
+.thread-item:focus-within .thread-item-delete,
+.thread-item:focus-within .thread-item-delete-cancel {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.thread-item-delete:hover {
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+
+.thread-item-delete-cancel:hover {
+  background: var(--surface-hover);
+  color: var(--text-primary);
+}
+
+.thread-item-delete:focus-visible,
+.thread-item-delete-cancel:focus-visible {
+  opacity: 1;
+  pointer-events: auto;
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 1px;
+}
+
+/* The confirm step is a live question — it must never fade out mid-answer. */
+.thread-item-delete-confirm {
+  opacity: 1;
+  pointer-events: auto;
+  background: var(--danger-soft);
+  color: var(--danger);
+  font-weight: 500;
+}
+
+/* A session with nothing in it is scaffolding, not content. */
+.thread-item[data-empty] .thread-item-trigger {
+  color: var(--text-tertiary);
+  font-style: italic;
+}
+
+.thread-archived {
+  margin-top: 0.75rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.thread-archived-label {
+  display: block;
+  padding: 0 0.65rem 0.35rem;
+  font-size: var(--text-2xs);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
