@@ -1,0 +1,23 @@
+{
+  "name": "solyx-webui",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Client chat UI for Solyx Energy: chat with the WordPress-editing agent, watch drafts update live. Never touches production; never publishes.",
+  "workspaces": [
+    "packages/server",
+    "packages/web",
+    "packages/stub"
+  ],
+  "scripts": {
+    "build": "npm run build --workspace packages/server && npm run build --workspace packages/web",
+    "typecheck": "npm run typecheck --workspace packages/server && npm run typecheck --workspace packages/web && npm run typecheck --workspace packages/stub",
+    "test": "npm run test --workspace packages/server && npm run test --workspace packages/web",
+    "dev:stub": "npm run dev --workspace packages/stub",
+    "dev:server": "npm run dev --workspace packages/server",
+    "dev:web": "npm run dev --workspace packages/web",
+    "hash-password": "npm run hash-password --workspace packages/server"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

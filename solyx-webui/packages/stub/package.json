@@ -1,0 +1,16 @@
+{
+  "name": "@solyx-webui/stub",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "A local stand-in for WordPress, so the draft proxy can be built and run end-to-end without ever making a request to 2026.solyxenergy.nl or www.solyxenergy.nl. Does not fake the OpenClaw Gateway wire protocol — see server/src/gateway/stubGatewayFactory.ts for how local dev runs without a real Gateway instead.",
+  "scripts": {
+    "dev": "tsx watch --env-file=../../.env src/wpStub.ts",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "22.15.29",
+    "tsx": "4.20.6",
+    "typescript": "5.9.3"
+  }
+}

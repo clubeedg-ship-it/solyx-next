@@ -1,0 +1,79 @@
+# Deployment fragment for core, following /srv/infra's existing convention
+# (stacks/<name>/compose.yml, one folder per stack; see that repo's README).
+# This is NOT applied by this project — copy it into a new
+# stacks/solyx-webui/compose.yml in the infra repo and adjust the two
+# placeholders marked below, then deploy the infra repo's usual way
+# (git push to main -> Forgejo Actions, or `make up`). See README.md
+# "Deploy to core" for the full checklist.
+#
+# Verified against /srv/infra/stacks/platform/compose.yml (read-only, this
+# session): the `edge` Docker network, Traefik (v3.7.10, Docker-label-driven,
+# --providers.docker.network=edge), and Sablier (v1.16.2, provider=docker)
+# are real and already running. Sablier itself is running but, as of this
+# read, is not yet attached to any router's middlewares (Forgejo and Kuma
+# both route without it) — this service would be the first to actually use
+# it. `sablierUrl: http://sablier:10000` below assumes Sablier's default
+# port, since core's compose file doesn't override it explicitly; confirm
+# against the running container before relying on it.
+#
+# Traefik's only entrypoint is `web` (:80, bound to core's Tailscale IP,
+# never 0.0.0.0) — routing here uses the same `.internal` Host() convention
+# already used for forgejo.internal / kuma.internal / traefik.internal. This
+# hostname is never public; see nginx-vhost.conf.example for the actual
+# public hostname, which is a separate, real DNS name you choose.
+
+services:
+  solyx-webui:
+    build:
+      context: ../../..   # path to this repo's root from stacks/solyx-webui/, adjust to wherever it's cloned on core
+      dockerfile: deploy/core/Dockerfile
+      args:
+        # AUTH_MODE defaults to "password" if left unset — see Dockerfile.
+        # VITE_CLERK_PUBLISHABLE_KEY only matters when AUTH_MODE=clerk.
+        AUTH_MODE: ${AUTH_MODE}
+        VITE_CLERK_PUBLISHABLE_KEY: ${VITE_CLERK_PUBLISHABLE_KEY}
+    container_name: solyx-webui
+    restart: unless-stopped
+    networks: [edge]
+    env_file:
+      # Follow the infra repo's own convention: SOPS+age encrypted, safe to
+      # commit — see /srv/infra/secrets/*.sops.yaml and its README for how
+      # existing stacks wire this up. Do not commit a plaintext .env here.
+      # Must include AUTH_MODE at runtime (the server reads it directly,
+      # separately from the build arg above) plus whichever var group
+      # .env.example documents for that mode — SESSION_SECRET /
+      # AUTH_PASSWORD_HASH (+ optional AUTH_USERNAME / SESSION_MAX_AGE_DAYS)
+      # for the default password mode, CF_ACCESS_TEAM_DOMAIN /
+      # CF_ACCESS_AUD for access mode, or CLERK_SECRET_KEY /
+      # CLERK_PUBLISHABLE_KEY for clerk mode.
+      - ../../secrets/solyx-webui.env
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:8787/healthz').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    labels:
+      - traefik.enable=true
+      # PLACEHOLDER: pick the internal hostname Traefik's router matches —
+      # this is never the public hostname (see nginx-vhost.conf.example).
+      - traefik.http.routers.solyx-webui.rule=Host(`solyx-webui.internal`)
+      - traefik.http.services.solyx-webui.loadbalancer.server.port=8787
+      - traefik.http.routers.solyx-webui.middlewares=solyx-webui-sablier
+
+      # Sablier "dynamic" strategy: shows a loading page on the initial GET
+      # while the container starts, so by the time the page's own JS opens
+      # the WebSocket a few hundred ms later, the container is already up
+      # (see PLAN.md §4 — this is the whole reason frontend+backend ship in
+      # one container instead of two).
+      - traefik.http.middlewares.solyx-webui-sablier.plugin.sablier.sablierUrl=http://sablier:10000
+      - traefik.http.middlewares.solyx-webui-sablier.plugin.sablier.group=solyx-webui
+      - traefik.http.middlewares.solyx-webui-sablier.plugin.sablier.sessionDuration=15m
+      - traefik.http.middlewares.solyx-webui-sablier.plugin.sablier.dynamic.displayName=Solyx
+      - traefik.http.middlewares.solyx-webui-sablier.plugin.sablier.dynamic.showDetails=false
+      - traefik.http.middlewares.solyx-webui-sablier.plugin.sablier.dynamic.refreshFrequency=3s
+
+      # Tells the Sablier docker provider which containers it's allowed to
+      # stop/start for the group referenced above.
+      - sablier.enable=true
+      - sablier.group=solyx-webui
