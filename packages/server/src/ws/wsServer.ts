@@ -363,6 +363,14 @@ async function handleFrame(
         for (const replayed of turns.bind(frame.sessionKey, ws)) send(ws, replayed);
         return;
       }
+      // Restoring a reloaded thread. The transcript lives in OpenClaw's
+      // per-agent store and nowhere else, so this request is the only thing
+      // standing between a page refresh and an empty chat window.
+      case "sessions.history": {
+        const messages = await gateway.getHistory(frame.sessionKey);
+        respond(ws, frame.id, messages);
+        return;
+      }
       case "sessions.rename": {
         await gateway.renameSession(frame.sessionKey, frame.title);
         respond(ws, frame.id, null);

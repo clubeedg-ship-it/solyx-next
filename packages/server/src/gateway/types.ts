@@ -21,6 +21,21 @@ export interface SessionSummary {
   messageCount?: number;
 }
 
+/**
+ * One message restored from a session's stored transcript, used to repopulate
+ * a thread after a page reload. OpenClaw's per-agent store is the only place a
+ * transcript lives — this UI keeps none of its own (PLAN.md §6) — so a reload
+ * has to ask for it back rather than remember it.
+ *
+ * `at` is absent when the Gateway did not timestamp the message: absent means
+ * unknown, never "now".
+ */
+export interface HistoryMessage {
+  role: "user" | "assistant";
+  text: string;
+  at?: string;
+}
+
 export interface AssistantDelta {
   sessionKey: string;
   /** Cumulative text so far for this turn, not just the new fragment — this

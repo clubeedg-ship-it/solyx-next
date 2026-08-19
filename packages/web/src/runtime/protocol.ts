@@ -6,6 +6,7 @@ export type ClientFrame =
   | { id: string; type: "sessions.list" }
   | { id: string; type: "sessions.create" }
   | { id: string; type: "sessions.get"; sessionKey: string }
+  | { id: string; type: "sessions.history"; sessionKey: string }
   | { id: string; type: "sessions.rename"; sessionKey: string; title: string }
   | { id: string; type: "sessions.archive"; sessionKey: string }
   | { id: string; type: "sessions.unarchive"; sessionKey: string }
@@ -22,6 +23,16 @@ export interface SessionWire {
   // omitted means UNKNOWN, never zero. A server that does not send it must
   // not make every session look empty.
   messageCount?: number;
+}
+
+// One message replayed into a thread on load. Mirrors the server's
+// HistoryMessageWire field-for-field. `at` omitted means the Gateway did not
+// timestamp it — unknown, never "now". A sessions.history request answers
+// with an array of these, oldest first.
+export interface HistoryMessageWire {
+  role: "user" | "assistant";
+  text: string;
+  at?: string;
 }
 
 export type ServerFrame =

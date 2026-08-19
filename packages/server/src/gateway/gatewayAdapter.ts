@@ -1,5 +1,12 @@
 import { randomUUID } from "node:crypto";
-import type { AssistantDelta, SendMessageHandle, SendMessageHandlers, SessionSummary, ToolEvent } from "./types.js";
+import type {
+  AssistantDelta,
+  HistoryMessage,
+  SendMessageHandle,
+  SendMessageHandlers,
+  SessionSummary,
+  ToolEvent,
+} from "./types.js";
 
 // ============================================================================
 // WIRE CONTRACT — verified against the running Gateway (openclaw 2026.7.1-2)
@@ -38,6 +45,11 @@ import type { AssistantDelta, SendMessageHandle, SendMessageHandlers, SessionSum
 //   * There is no sessions.catalog.archive method; archiving is a patch.
 //   * `sessions.get` returns the message history, NOT a session summary.
 //     `sessions.describe` is the summary lookup.
+//   * `chat.history` is the method that reads a transcript back. It is the one
+//     method used here that keys on `sessionKey` rather than `key` — it is not
+//     in the sessions.* family, so the rule above does not apply to it.
+//     Verified live against the running Gateway on 2026-08-19, including that
+//     this backend's own operator token is already scoped to call it.
 //   * updatedAt is epoch milliseconds, not an ISO string.
 //
 // Events (payload):
@@ -156,6 +168,25 @@ export class GatewayAdapter {
   async getSession(sessionKey: string): Promise<SessionSummary> {
     const result = await this.client.request<{ session: RawSession }>("sessions.describe", { key: sessionKey });
     return toSessionSummary(result.session);
+  }
+
+  /**
+   * The stored transcript for one session, oldest first.
+   *
+   * Only text survives the mapping. A user message arrives as a plain string;
+   * an assistant message arrives as an array of blocks, of which `thinking`,
+   * `toolcall` and `tool_result` are deliberately dropped — the live path
+   * already surfaces tool activity separately as tool.event, and reasoning is
+   * never shown to the client. A message left with no text is dropped rather
+   * than rendered as an empty bubble.
+   */
+  async getHistory(sessionKey: string): Promise<HistoryMessage[]> {
+    const result = await this.client.request<{ messages?: RawHistoryMessage[] }>("chat.history", {
+      sessionKey,
+      agentId: this.agentId,
+      limit: HISTORY_MESSAGE_LIMIT,
+    });
+    return toHistoryMessages(result.messages ?? []);
   }
 
   async renameSession(sessionKey: string, title: string): Promise<void> {
@@ -308,6 +339,60 @@ export class GatewayAdapter {
       handlers.onToolEvent({ sessionKey, tool, payload: data, at: new Date().toISOString() });
     }
   }
+}
+
+/**
+ * How many messages a reload restores. The Gateway caps `limit` at 1000; this
+ * is deliberately lower, because the whole transcript renders at once and
+ * these are long agent turns on a small box.
+ */
+const HISTORY_MESSAGE_LIMIT = 200;
+
+interface RawHistoryMessage {
+  role?: string;
+  /** String for a user message, array of blocks for an assistant message. */
+  content?: unknown;
+  /** Epoch milliseconds, as updatedAt is elsewhere in this file. */
+  timestamp?: number;
+}
+
+function toHistoryMessages(raw: readonly RawHistoryMessage[]): HistoryMessage[] {
+  const messages: HistoryMessage[] = [];
+  for (const entry of raw) {
+    if (entry.role !== "user" && entry.role !== "assistant") continue;
+    const text = extractHistoryText(entry.content);
+    if (text.length === 0) continue;
+    const at = toIsoTimestamp(entry.timestamp);
+    messages.push(at === undefined ? { role: entry.role, text } : { role: entry.role, text, at });
+  }
+  return messages;
+}
+
+/**
+ * Anything that is neither a string nor an array of blocks yields "", which
+ * drops the message. That is deliberate: a shape this Gateway version does not
+ * produce must not reach the client rendered as "[object Object]".
+ */
+function extractHistoryText(content: unknown): string {
+  if (typeof content === "string") return content.trim();
+  if (!Array.isArray(content)) return "";
+  return content
+    .filter(
+      (block): block is { type: "text"; text: string } =>
+        typeof block === "object" &&
+        block !== null &&
+        (block as { type?: unknown }).type === "text" &&
+        typeof (block as { text?: unknown }).text === "string",
+    )
+    .map((block) => block.text)
+    .join("")
+    .trim();
+}
+
+function toIsoTimestamp(timestamp: number | undefined): string | undefined {
+  if (typeof timestamp !== "number" || !Number.isFinite(timestamp)) return undefined;
+  const date = new Date(timestamp);
+  return Number.isNaN(date.getTime()) ? undefined : date.toISOString();
 }
 
 interface RawSession {

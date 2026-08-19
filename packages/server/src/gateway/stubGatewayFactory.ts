@@ -97,6 +97,12 @@ async function handleRequest(
       return { messages: [] };
     }
 
+    case "chat.history": {
+      // Keys on sessionKey, not key — see the trap list in gatewayAdapter.ts.
+      // The stub keeps no transcript, so an empty history is the honest answer.
+      return { messages: [] };
+    }
+
     case "sessions.patch": {
       const key = requireKey(method, params);
       if ("title" in params) throw invalid(method, "at root: unexpected property 'title'");

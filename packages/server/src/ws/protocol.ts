@@ -16,6 +16,7 @@ export type ClientFrame =
   | { id: string; type: "sessions.list" }
   | { id: string; type: "sessions.create" }
   | { id: string; type: "sessions.get"; sessionKey: string }
+  | { id: string; type: "sessions.history"; sessionKey: string }
   | { id: string; type: "sessions.rename"; sessionKey: string; title: string }
   | { id: string; type: "sessions.archive"; sessionKey: string }
   | { id: string; type: "sessions.unarchive"; sessionKey: string }
@@ -35,6 +36,19 @@ export interface SessionWire {
    * packages/web/src/runtime/protocol.ts (see the NOTE above).
    */
   messageCount?: number;
+}
+
+/**
+ * One message replayed into a thread on load. Mirrors gateway/types.ts
+ * HistoryMessage field-for-field; `at` absent means the Gateway did not
+ * timestamp it. A `sessions.history` request answers with an array of these,
+ * oldest first. Mirrored in packages/web/src/runtime/protocol.ts (see the
+ * NOTE above).
+ */
+export interface HistoryMessageWire {
+  role: "user" | "assistant";
+  text: string;
+  at?: string;
 }
 
 export type ServerFrame =

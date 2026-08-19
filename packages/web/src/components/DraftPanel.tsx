@@ -1,9 +1,12 @@
 import { useEffect, useState, useSyncExternalStore } from "react";
 import { useAuiState } from "@assistant-ui/react";
 import type { DraftSelectionStore } from "../runtime/draftSelection.js";
+import { PanelToggleButton } from "./PanelToggleButton.js";
 
 export interface DraftPanelProps {
   store: DraftSelectionStore;
+  collapsed: boolean;
+  onToggleCollapsed: () => void;
 }
 
 /**
@@ -23,7 +26,7 @@ export interface DraftPanelProps {
  * shows what a draft looks like. Going live happens in WordPress, by a
  * human, elsewhere.
  */
-export function DraftPanel({ store }: DraftPanelProps) {
+export function DraftPanel({ store, collapsed, onToggleCollapsed }: DraftPanelProps) {
   const state = useSyncExternalStore(
     (onChange) => store.subscribe(onChange),
     () => store.get(),
@@ -51,6 +54,14 @@ export function DraftPanel({ store }: DraftPanelProps) {
     const fallback = setTimeout(() => setIsFrameLoading(false), 4000);
     return () => clearTimeout(fallback);
   }, [state.currentPostId]);
+
+  // After every hook, never before. Collapsing unmounts the iframe, so
+  // expanding re-fetches the draft: a preview hidden for a while should come
+  // back current rather than showing what the page looked like before the
+  // agent last touched it.
+  if (collapsed) {
+    return <DraftRail onExpand={onToggleCollapsed} isRunning={isRunning} />;
+  }
 
   return (
     <section className="draft-panel">
@@ -81,6 +92,12 @@ export function DraftPanel({ store }: DraftPanelProps) {
             Sol is working
           </span>
         )}
+        <PanelToggleButton
+          direction="right"
+          label="Collapse draft preview"
+          className="panel-collapse-button"
+          onClick={onToggleCollapsed}
+        />
       </header>
       <div className="draft-panel-body">
         <div className="draft-frame-card">
@@ -109,6 +126,23 @@ export function DraftPanel({ store }: DraftPanelProps) {
         </div>
       </div>
     </section>
+  );
+}
+
+/**
+ * The collapsed draft panel. Keeps the "Sol is working" dot: the whole
+ * reason to collapse this panel is to stop watching it, so the one thing
+ * worth 44px is the signal that there is something new to come back to.
+ */
+function DraftRail({ onExpand, isRunning }: { onExpand: () => void; isRunning: boolean }) {
+  return (
+    <aside className="draft-rail">
+      <PanelToggleButton direction="left" label="Expand draft preview" className="rail-button" onClick={onExpand} />
+      <span className="rail-label" aria-hidden="true">
+        Draft
+      </span>
+      {isRunning && <span className="status-dot rail-status-dot" role="status" aria-label="Sol is working" />}
+    </aside>
   );
 }
 

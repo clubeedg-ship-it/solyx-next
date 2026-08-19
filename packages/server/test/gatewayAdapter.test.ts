@@ -382,3 +382,128 @@ describe("GatewayAdapter session CRUD wrappers", () => {
     expect(fake.requests.some((r) => r.method === "sessions.get")).toBe(false);
   });
 });
+
+
+/**
+ * Restoring a reloaded thread. These exist because the UI had no transport for
+ * a transcript at all: a reopened thread only ever received whatever turn was
+ * still in the backend's in-memory TurnStore, so a refresh read as an empty
+ * chat while OpenClaw's own store held every message the whole time.
+ */
+describe("GatewayAdapter.getHistory", () => {
+  it("asks chat.history for the session, keyed on sessionKey rather than key", async () => {
+    const fake = createFakeGateway();
+    fake.setResponse("chat.history", { messages: [] });
+    const adapter = new GatewayAdapter({ agentId: "sol", createClient: fake.factory });
+
+    await adapter.getHistory("agent:sol:dashboard:abc");
+
+    const request = fake.requests.find((entry) => entry.method === "chat.history");
+    expect(request).toBeDefined();
+    // The sessions.* family rejects sessionKey and demands key. chat.history is
+    // the inverse, and getting it backwards fails the whole call.
+    expect(request?.params).toMatchObject({ sessionKey: "agent:sol:dashboard:abc", agentId: "sol" });
+    expect(request?.params).not.toHaveProperty("key");
+    expect(typeof request?.params.limit).toBe("number");
+  });
+
+  it("reads a user string and an assistant block array as one ordered transcript", async () => {
+    const fake = createFakeGateway();
+    fake.setResponse("chat.history", {
+      messages: [
+        { role: "user", content: "Can we please edit the home page?", timestamp: 1787136497875 },
+        {
+          role: "assistant",
+          content: [
+            { type: "thinking", thinking: "..." },
+            { type: "text", text: "The home page is open." },
+          ],
+          timestamp: 1787136502362,
+        },
+      ],
+    });
+    const adapter = new GatewayAdapter({ agentId: "sol", createClient: fake.factory });
+
+    await expect(adapter.getHistory("agent:sol:one")).resolves.toEqual([
+      {
+        role: "user",
+        text: "Can we please edit the home page?",
+        at: new Date(1787136497875).toISOString(),
+      },
+      {
+        role: "assistant",
+        text: "The home page is open.",
+        at: new Date(1787136502362).toISOString(),
+      },
+    ]);
+  });
+
+  it("drops a turn that produced only reasoning and tool calls", async () => {
+    const fake = createFakeGateway();
+    fake.setResponse("chat.history", {
+      messages: [
+        { role: "assistant", content: [{ type: "thinking", thinking: "long" }], timestamp: 1 },
+        {
+          role: "assistant",
+          content: [
+            { type: "toolcall", id: "t1", name: "mcp__solyx-wp__open_draft", arguments: { page_id: 626 } },
+            { type: "tool_result", tool_use_id: "t1", content: [{ type: "text", text: "draft 1414" }] },
+          ],
+          timestamp: 2,
+        },
+        { role: "assistant", content: [{ type: "text", text: "Done." }], timestamp: 3 },
+      ],
+    });
+    const adapter = new GatewayAdapter({ agentId: "sol", createClient: fake.factory });
+
+    // Tool activity reaches the client as tool.event on the live path, and
+    // reasoning is never shown at all — replaying either here would put empty
+    // bubbles in the thread.
+    await expect(adapter.getHistory("agent:sol:one")).resolves.toEqual([
+      { role: "assistant", text: "Done.", at: new Date(3).toISOString() },
+    ]);
+  });
+
+  it("skips roles it cannot render and content shapes it does not recognise", async () => {
+    const fake = createFakeGateway();
+    fake.setResponse("chat.history", {
+      messages: [
+        { role: "system", content: "you are sol", timestamp: 1 },
+        { role: "tool", content: [{ type: "text", text: "tool chatter" }], timestamp: 2 },
+        { role: "assistant", content: { unexpected: "object" }, timestamp: 3 },
+        { role: "user", content: "still here", timestamp: 4 },
+      ],
+    });
+    const adapter = new GatewayAdapter({ agentId: "sol", createClient: fake.factory });
+
+    // An unrecognised content shape must never reach the client as
+    // "[object Object]" — dropping the message is the safe failure.
+    await expect(adapter.getHistory("agent:sol:one")).resolves.toEqual([
+      { role: "user", text: "still here", at: new Date(4).toISOString() },
+    ]);
+  });
+
+  it("omits at rather than inventing a timestamp the Gateway did not send", async () => {
+    const fake = createFakeGateway();
+    fake.setResponse("chat.history", {
+      messages: [
+        { role: "user", content: "no timestamp" },
+        { role: "user", content: "bad timestamp", timestamp: Number.NaN },
+      ],
+    });
+    const adapter = new GatewayAdapter({ agentId: "sol", createClient: fake.factory });
+
+    await expect(adapter.getHistory("agent:sol:one")).resolves.toEqual([
+      { role: "user", text: "no timestamp" },
+      { role: "user", text: "bad timestamp" },
+    ]);
+  });
+
+  it("treats a response with no messages array as an empty transcript", async () => {
+    const fake = createFakeGateway();
+    fake.setResponse("chat.history", {});
+    const adapter = new GatewayAdapter({ agentId: "sol", createClient: fake.factory });
+
+    await expect(adapter.getHistory("agent:sol:empty")).resolves.toEqual([]);
+  });
+});
