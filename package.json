@@ -15,7 +15,8 @@
     "dev:stub": "npm run dev --workspace packages/stub",
     "dev:server": "npm run dev --workspace packages/server",
     "dev:web": "npm run dev --workspace packages/web",
-    "hash-password": "npm run hash-password --workspace packages/server"
+    "hash-password": "npm run hash-password --workspace packages/server",
+    "deploy": "npm run typecheck && npm run test && npm run build && systemctl --user restart solyx-webui && sleep 3 && systemctl --user is-active solyx-webui"
   },
   "engines": {
     "node": ">=20"

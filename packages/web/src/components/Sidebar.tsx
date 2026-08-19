@@ -1,137 +1,59 @@
-import { useCallback, useState } from "react";
-import { ThreadListItemPrimitive, ThreadListPrimitive, useAui, useAuiState } from "@assistant-ui/react";
+import { ThreadListItemPrimitive, ThreadListPrimitive } from "@assistant-ui/react";
 import { authMode } from "../env.js";
-import {
-  nextThreadAfterDelete,
-  readMessageCount,
-  selectEmptyThreadIds,
-  threadRowLabel,
-} from "../runtime/threadListFilter.js";
+import { PanelToggleButton } from "./PanelToggleButton.js";
+import { threadRowLabel } from "../runtime/threadListFilter.js";
 
 /**
  * Left column: session list + "new chat". Backed entirely by
  * RemoteThreadListRuntime (runtime/threadListAdapter.ts) — this component
- * holds no session state of its own beyond the two delete confirmations, and
- * makes no decisions: what a row says, which sessions count as empty, and
- * where the user lands after a delete all come from
- * runtime/threadListFilter.ts. That split is deliberate — packages/web runs
- * vitest with environment "node" and no jsdom, so logic that lives here cannot
- * be tested at all.
+ * holds no state of its own and makes no decisions: what a row says comes
+ * from runtime/threadListFilter.ts. That split is deliberate — packages/web
+ * runs vitest with environment "node" and no jsdom, so logic that lives here
+ * cannot be tested at all.
+ *
+ * The sidebar is a selector and nothing else. It used to carry a per-row
+ * delete behind a two-step "Zeker weten?" confirmation, a bulk "N lege
+ * gesprekken verwijderen" action, and a "Gearchiveerd" section. All three are
+ * gone, and two of them could never have worked: the archived list has no way
+ * to be non-empty because nothing ever sets `archived` on a session, and the
+ * bulk action could never appear because `messageCount` is not in the
+ * Gateway's sessions.list projection, so every row reads as UNKNOWN rather
+ * than empty. The per-row delete did work, but it reserved its width on every
+ * row for a button that stayed invisible until hover, so it narrowed every
+ * title to pay for a control nobody could see.
  */
-export function Sidebar() {
-  const aui = useAui();
-  const threadItems = useAuiState((s) => s.threads.threadItems);
-  const regularIds = useAuiState((s) => s.threads.threadIds);
-  const mainThreadId = useAuiState((s) => s.threads.mainThreadId);
-  const [confirmingBulk, setConfirmingBulk] = useState(false);
+export interface SidebarProps {
+  collapsed: boolean;
+  onToggleCollapsed: () => void;
+}
 
-  const emptyThreadIds = selectEmptyThreadIds(threadItems);
-
-  /**
-   * The one place a session is deleted, per row and in bulk alike.
-   * assistant-ui's own delete drops the thread from the store but leaves
-   * mainThreadId pointing at it (@assistant-ui/core remote-thread-state.js:69-71),
-   * so without the follow-up switch the user is left staring at a thread that
-   * no longer exists. That is the common case here, not the edge case: the
-   * open thread is usually the eagerly created empty one the bulk action
-   * removes.
-   */
-  const deleteThreads = useCallback(
-    (ids: readonly string[]) => {
-      const deleted: string[] = [];
-      for (const id of ids) {
-        try {
-          aui.threads.item({ id }).delete();
-          deleted.push(id);
-        } catch (error) {
-          // One unknown or already-removed id must not abandon the rest of a
-          // bulk delete. The thread stays in the list, which is the visible,
-          // recoverable failure.
-          console.error(`Kon gesprek ${id} niet verwijderen`, error);
-        }
-      }
-      if (deleted.length === 0) return;
-
-      const next = nextThreadAfterDelete({ mainThreadId, deletedIds: deleted, regularIds });
-      if (next.kind === "switch") aui.threads.switchToThread(next.threadId);
-      else if (next.kind === "new") aui.threads.switchToNewThread();
-    },
-    [aui, mainThreadId, regularIds],
-  );
+export function Sidebar({ collapsed, onToggleCollapsed }: SidebarProps) {
+  // The rail is a different tree, not a hidden one. At 44px there is nothing
+  // left of a session list to show, and an off-screen-but-present list would
+  // still be in the tab order.
+  if (collapsed) return <SidebarRail onExpand={onToggleCollapsed} />;
 
   return (
     <aside className="sidebar">
       <div className="sidebar-header">
         <span className="brand-mark" aria-hidden="true" />
         <span className="brand-name">Solyx</span>
+        <PanelToggleButton
+          direction="left"
+          label="Collapse sidebar"
+          className="panel-collapse-button"
+          onClick={onToggleCollapsed}
+        />
       </div>
       <ThreadListPrimitive.Root className="thread-list">
         <ThreadListPrimitive.New className="new-chat-button">
           <PlusIcon />
           New chat
         </ThreadListPrimitive.New>
-        {/* Opening the app creates a session whether or not anything is typed
-            in it (ChatPane's eager readiness check), so empty sessions pile up
-            on their own. Bulk removal is offered only when there is something
-            known-empty to remove — a session whose count never arrived is
-            UNKNOWN and is never in this set. */}
-        {emptyThreadIds.length > 0 && (
-          <div className="thread-bulk-delete">
-            {confirmingBulk ? (
-              <>
-                <button
-                  type="button"
-                  className="thread-item-delete thread-item-delete-confirm"
-                  aria-label={`${emptyThreadIds.length} lege gesprekken definitief verwijderen`}
-                  onClick={() => {
-                    setConfirmingBulk(false);
-                    deleteThreads(emptyThreadIds);
-                  }}
-                >
-                  Zeker weten?
-                </button>
-                <button
-                  type="button"
-                  className="thread-item-delete-cancel"
-                  aria-label="Verwijderen annuleren"
-                  onClick={() => setConfirmingBulk(false)}
-                >
-                  Annuleren
-                </button>
-              </>
-            ) : (
-              <button
-                type="button"
-                className="thread-item-delete"
-                onClick={() => setConfirmingBulk(true)}
-              >
-                {`${emptyThreadIds.length} lege gesprekken verwijderen`}
-              </button>
-            )}
-          </div>
-        )}
         <div className="thread-items">
-          {/* Every session is listed. There used to be a filter here that hid
-              untitled sessions; because the gateway titles every untitled
-              session "New chat", it hid all of them (see
-              runtime/threadListFilter.ts). Rows are told apart by
-              threadRowLabel, not by hiding them. */}
           <ThreadListPrimitive.Items>
-            {({ threadListItem }) => (
-              <ThreadRow key={threadListItem.id} threadListItem={threadListItem} onDelete={deleteThreads} />
-            )}
+            {({ threadListItem }) => <ThreadRow key={threadListItem.id} threadListItem={threadListItem} />}
           </ThreadListPrimitive.Items>
-          {/* Archiving must not make a session unreachable: archived items are
-              a separate list in the runtime and are invisible without their
-              own Items block. */}
-          <div className="thread-archived">
-            <span className="thread-archived-label">Gearchiveerd</span>
-            <ThreadListPrimitive.Items archived>
-              {({ threadListItem }) => (
-                <ThreadRow key={threadListItem.id} threadListItem={threadListItem} onDelete={deleteThreads} />
-              )}
-            </ThreadListPrimitive.Items>
-          </div>
         </div>
       </ThreadListPrimitive.Root>
       {/* Only password mode has a session to log out of — Access mode has
@@ -159,76 +81,48 @@ type ThreadRowItem = {
   readonly id: string;
   readonly title?: string | undefined;
   readonly lastMessageAt?: Date | undefined;
-  readonly custom?: Record<string, unknown> | undefined;
 };
 
-/**
- * One session row. Split out of the Items render callback because it owns
- * state: deleting is immediate and irreversible, and these are real client
- * conversations, so a single stray click must not be enough. The confirmation
- * lives in component state only — it is deliberately forgotten on re-render or
- * unmount, which is the safe direction.
- */
-function ThreadRow({
-  threadListItem,
-  onDelete,
-}: {
-  threadListItem: ThreadRowItem;
-  onDelete: (ids: readonly string[]) => void;
-}) {
-  const [confirmingDelete, setConfirmingDelete] = useState(false);
-  const messageCount = readMessageCount(threadListItem.custom);
+/** One session row: a label you click. Nothing else belongs on it. */
+function ThreadRow({ threadListItem }: { threadListItem: ThreadRowItem }) {
   const label = threadRowLabel({
     title: threadListItem.title,
     lastMessageAt: threadListItem.lastMessageAt,
-    messageCount,
   });
 
   return (
-    // data-empty is presentational only — the label already says "leeg", so the
-    // row stays readable without a stylesheet rule for it. packages/web/src/styles.css
-    // is owned elsewhere this round.
-    <ThreadListItemPrimitive.Root className="thread-item" data-empty={messageCount === 0 ? "" : undefined}>
-      <ThreadListItemPrimitive.Trigger className="thread-item-trigger">
-        {/* Plain text, not ThreadListItemPrimitive.Title: Title renders the
-            store's own title verbatim and cannot show a derived label. */}
-        {label}
-      </ThreadListItemPrimitive.Trigger>
-      {confirmingDelete ? (
-        <>
-          {/* A plain button rather than ThreadListItemPrimitive.Delete: that
-              primitive deletes without moving the user off the dead thread. */}
-          <button
-            type="button"
-            className="thread-item-delete thread-item-delete-confirm"
-            aria-label={`Gesprek "${label}" definitief verwijderen`}
-            onClick={() => {
-              setConfirmingDelete(false);
-              onDelete([threadListItem.id]);
-            }}
-          >
-            Zeker weten?
-          </button>
-          <button
-            type="button"
-            className="thread-item-delete-cancel"
-            aria-label="Verwijderen annuleren"
-            onClick={() => setConfirmingDelete(false)}
-          >
-            Annuleren
-          </button>
-        </>
-      ) : (
-        <button
-          type="button"
-          className="thread-item-delete"
-          aria-label={`Gesprek "${label}" verwijderen`}
-          onClick={() => setConfirmingDelete(true)}
-        >
-          Verwijderen
-        </button>
-      )}
+    <ThreadListItemPrimitive.Root className="thread-item">
+      {/* Plain text, not ThreadListItemPrimitive.Title: Title renders the
+          store's own title verbatim and cannot show a derived label. */}
+      <ThreadListItemPrimitive.Trigger className="thread-item-trigger">{label}</ThreadListItemPrimitive.Trigger>
     </ThreadListItemPrimitive.Root>
+  );
+}
+
+/**
+ * The collapsed sidebar: expand, start a new chat, sign out. Everything
+ * else the sidebar does needs width to be worth anything, and all of it is
+ * one click away again.
+ *
+ * `ThreadListPrimitive.New` is used outside a `ThreadListPrimitive.Root`
+ * here — checked against the installed package: it reads the runtime
+ * through `useThreadListNew()`, not through any context Root provides.
+ */
+function SidebarRail({ onExpand }: { onExpand: () => void }) {
+  return (
+    <aside className="sidebar sidebar-rail">
+      <span className="brand-mark" aria-hidden="true" />
+      <PanelToggleButton direction="right" label="Expand sidebar" className="rail-button" onClick={onExpand} />
+      <ThreadListPrimitive.New className="rail-button" aria-label="New chat" title="New chat">
+        <PlusIcon />
+      </ThreadListPrimitive.New>
+      <span className="rail-spacer" />
+      {authMode === "password" && (
+        <a className="rail-button" href="/logout" aria-label="Sign out" title="Sign out">
+          <SignOutIcon />
+        </a>
+      )}
+    </aside>
   );
 }
 

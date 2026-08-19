@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { ComposerPrimitive, ErrorPrimitive, MessagePrimitive, ThreadPrimitive, useAui, useAuiState } from "@assistant-ui/react";
 import { createComposerSubmitHandler } from "../runtime/composerSubmit.js";
 import { ThreadReadiness, type ThreadReadinessStatus } from "../runtime/threadReadiness.js";
+import { MarkdownText } from "./MarkdownText.js";
 
 const CANT_REACH_SOL = "Sol can't be reached right now. Your message is still in the box — try sending again in a moment.";
 
@@ -208,7 +209,7 @@ function MessageBubble({ role }: { role: "user" | "assistant" | "system" }) {
         <span className="message-name">{isAssistant ? "Sol" : "You"}</span>
       </div>
       <div className="message-body">
-        <MessagePrimitive.Content />
+        <MessagePrimitive.Content components={{ Text: MarkdownText }} />
         {isAssistant && (
           <MessagePrimitive.If last>
             <ThreadPrimitive.If running>
