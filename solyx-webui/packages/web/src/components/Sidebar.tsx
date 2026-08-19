@@ -2,20 +2,38 @@ import { ThreadListItemPrimitive, ThreadListPrimitive } from "@assistant-ui/reac
 import { authMode } from "../env.js";
 import { formatRelativeTime } from "../runtime/relativeTime.js";
 import { isUntitledThread } from "../runtime/threadListFilter.js";
+import { PanelToggleButton } from "./PanelToggleButton.js";
+
+export interface SidebarProps {
+  collapsed: boolean;
+  onToggleCollapsed: () => void;
+}
 
 /**
  * Left column: session list + "new chat". Backed entirely by
  * RemoteThreadListRuntime (runtime/threadListAdapter.ts) — this component
  * only arranges assistant-ui's own ThreadList primitives, it holds no
  * session state itself.
+ *
+ * Collapses to a rail (see SidebarRail below) so the chat can have the
+ * screen. The rail is a different tree rather than the same one hidden
+ * with CSS: at 44px there is nothing left of a session list to show, and
+ * an off-screen-but-present list would still be in the tab order.
  */
-export function Sidebar() {
+export function Sidebar({ collapsed, onToggleCollapsed }: SidebarProps) {
+  if (collapsed) return <SidebarRail onExpand={onToggleCollapsed} />;
 
   return (
     <aside className="sidebar">
       <div className="sidebar-header">
         <span className="brand-mark" aria-hidden="true" />
         <span className="brand-name">Solyx</span>
+        <PanelToggleButton
+          direction="left"
+          label="Collapse sidebar"
+          className="panel-collapse-button"
+          onClick={onToggleCollapsed}
+        />
       </div>
       <ThreadListPrimitive.Root className="thread-list">
         <ThreadListPrimitive.New className="new-chat-button">
@@ -75,6 +93,33 @@ export function Sidebar() {
         <a className="sidebar-footer" href="/logout">
           <SignOutIcon />
           Sign out
+        </a>
+      )}
+    </aside>
+  );
+}
+
+/**
+ * The collapsed sidebar: expand, start a new chat, sign out. Everything
+ * else the sidebar does needs width to be worth anything, and all of it is
+ * one click away again.
+ *
+ * `ThreadListPrimitive.New` is used outside a `ThreadListPrimitive.Root`
+ * here — checked against the installed package: it reads the runtime
+ * through `useThreadListNew()`, not through any context Root provides.
+ */
+function SidebarRail({ onExpand }: { onExpand: () => void }) {
+  return (
+    <aside className="sidebar sidebar-rail">
+      <span className="brand-mark" aria-hidden="true" />
+      <PanelToggleButton direction="right" label="Expand sidebar" className="rail-button" onClick={onExpand} />
+      <ThreadListPrimitive.New className="rail-button" aria-label="New chat" title="New chat">
+        <PlusIcon />
+      </ThreadListPrimitive.New>
+      <span className="rail-spacer" />
+      {authMode === "password" && (
+        <a className="rail-button" href="/logout" aria-label="Sign out" title="Sign out">
+          <SignOutIcon />
         </a>
       )}
     </aside>

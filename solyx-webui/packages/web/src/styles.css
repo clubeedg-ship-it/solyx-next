@@ -62,8 +62,12 @@
   --radius-lg: 18px;
   --radius-full: 999px;
 
-  --sidebar-width: 264px;
-  --draft-width: minmax(380px, 40%);
+  /* Both side columns are runtime state now, not tokens — dragged, stored
+     per browser, and written onto .layout as --layout-left / --layout-right
+     by App.tsx. Their limits live in runtime/panelLayout.ts, which is where
+     they can be tested. Only the divider's own geometry stays here. */
+  --divider-width: 1px;
+  --divider-grab: 5px; /* hit area either side of the visible line */
 
   /* ---- motion ---- */
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
@@ -214,22 +218,179 @@ select {
    Layout
    ========================================================================= */
 
+/* Five columns: panel, divider, chat, divider, panel. The dividers are real
+   elements in the grid rather than borders on the panes, because they have
+   to be grabbable — and giving them their own column is what keeps the
+   panes' widths honest (a border would sit inside one of them). The chat
+   column is minmax(0, 1fr) rather than 1fr so a long unbroken line in a
+   message can't push the grid wider than the window. */
 .layout {
   display: grid;
-  grid-template-columns: var(--sidebar-width) 1fr var(--draft-width);
+  grid-template-columns:
+    var(--layout-left)
+    var(--divider-width)
+    minmax(0, 1fr)
+    var(--divider-width)
+    var(--layout-right);
   height: 100vh;
   background: var(--canvas);
+}
+
+/* =========================================================================
+   Panel dividers and rails
+   ========================================================================= */
+
+.panel-divider {
+  position: relative;
+  z-index: 2;
+  background: var(--border-subtle);
+  cursor: col-resize;
+  /* Without this the browser claims the gesture for panning and the
+     pointermove stream stops arriving on touch and some trackpads. */
+  touch-action: none;
+  transition: background var(--duration-base) var(--ease);
+}
+
+/* The line stays 1px; the target is 11px. Anything thinner is a line you
+   have to aim at, which is the usual reason drag handles feel broken. */
+.panel-divider::before {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  left: calc(-1 * var(--divider-grab));
+  right: calc(-1 * var(--divider-grab));
+}
+
+.panel-divider:hover,
+.panel-divider[data-dragging="true"] {
+  background: var(--accent);
+}
+
+/* The 1px element itself is too thin to show a 2px ring convincingly, so
+   focus is drawn as the accent line plus a soft halo — the same treatment
+   the composer uses. */
+.panel-divider:focus-visible {
+  outline: none;
+  background: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-soft);
+}
+
+/* Held on <body> for the length of a drag: the cursor has to survive
+   leaving the 1px divider, nothing may select, and the draft iframe must
+   stop taking pointer events or it swallows the rest of the gesture the
+   moment the pointer crosses into it. */
+body.is-resizing {
+  cursor: col-resize;
+  user-select: none;
+}
+
+body.is-resizing .draft-frame {
+  pointer-events: none;
+}
+
+/* --- the collapsed state: a thin bar with just its way back out --- */
+
+.sidebar-rail,
+.draft-rail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.875rem 0;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.draft-rail {
+  background: var(--canvas);
+}
+
+.rail-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  transition:
+    background var(--duration-fast) var(--ease),
+    color var(--duration-fast) var(--ease);
+}
+
+.rail-button:hover {
+  background: var(--surface-hover);
+  color: var(--text-primary);
+}
+
+.rail-spacer {
+  flex: 1;
+}
+
+.rail-label {
+  writing-mode: vertical-rl;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-top: 0.25rem;
+}
+
+.rail-status-dot {
+  animation: dot-breathe 1.4s var(--ease) infinite;
+}
+
+/* The collapse control in an expanded pane's header. Quiet until the
+   header is hovered — it's an occasional action, and the header already
+   carries the two things that matter (the title, the status). */
+.panel-collapse-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 26px;
+  height: 26px;
+  margin-left: auto;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  opacity: 0;
+  transition:
+    opacity var(--duration-base) var(--ease),
+    background var(--duration-fast) var(--ease),
+    color var(--duration-fast) var(--ease);
+}
+
+.sidebar-header:hover .panel-collapse-button,
+.draft-panel-header:hover .panel-collapse-button,
+.panel-collapse-button:focus-visible {
+  opacity: 1;
+}
+
+.panel-collapse-button:hover {
+  background: var(--surface-hover);
+  color: var(--text-primary);
 }
 
 /* =========================================================================
    Sidebar
    ========================================================================= */
 
+/* No border-right: the divider element to its right draws that line now,
+   and owns it in both states (a rail keeps the same seam). */
 .sidebar {
   display: flex;
   flex-direction: column;
   background: var(--surface-sunken);
-  border-right: 1px solid var(--border-subtle);
   overflow-y: auto;
 }
 
@@ -393,7 +554,6 @@ select {
   flex-direction: column;
   min-width: 0;
   background: var(--canvas);
-  border-right: 1px solid var(--border-subtle);
 }
 
 .chat-header {
