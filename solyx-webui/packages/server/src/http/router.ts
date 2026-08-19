@@ -3,7 +3,7 @@ import type { AuthChecker } from "../auth/types.js";
 import type { Config } from "../config.js";
 import { LOGIN_PATH, LOGOUT_PATH, handleLoginRoute, handleLogoutRoute } from "./loginRoutes.js";
 import { LoginRateLimiter } from "./loginRateLimiter.js";
-import { DraftFetchError, InvalidPostIdError, fetchDraftHtml } from "../proxy/draftProxy.js";
+import { DraftFetchError, InvalidPostIdError, fetchDraftHtml, fetchDraftList } from "../proxy/draftProxy.js";
 import { serveStaticFile } from "./staticFiles.js";
 
 export interface RouterOptions {
@@ -37,6 +37,14 @@ export function createRequestListener(options: RouterOptions) {
           handleLogoutRoute(req, res);
           return;
         }
+      }
+
+      // The Drafts selector asks for this on load, so the panel reflects what
+      // actually exists in WordPress instead of only what it saw the agent
+      // touch during this session.
+      if (url.pathname === "/api/drafts") {
+        await handleDraftList(req, res, options);
+        return;
       }
 
       const draftMatch = DRAFT_PATH.exec(url.pathname);
@@ -73,6 +81,26 @@ export function createRequestListener(options: RouterOptions) {
       }
     }
   };
+}
+
+async function handleDraftList(req: IncomingMessage, res: ServerResponse, options: RouterOptions): Promise<void> {
+  const auth = await options.auth.isAuthenticated(req);
+  if (!auth.authenticated) {
+    res.writeHead(401, { "Content-Type": "text/plain" }).end("Unauthorized");
+    return;
+  }
+
+  try {
+    const drafts = await fetchDraftList(options.config);
+    res.writeHead(200, { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" });
+    res.end(JSON.stringify({ drafts }));
+  } catch (error) {
+    if (error instanceof DraftFetchError) {
+      res.writeHead(502, { "Content-Type": "text/plain" }).end(error.message);
+      return;
+    }
+    throw error;
+  }
 }
 
 async function handleDraft(req: IncomingMessage, res: ServerResponse, options: RouterOptions, postId: string): Promise<void> {

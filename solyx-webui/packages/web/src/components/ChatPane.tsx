@@ -88,24 +88,22 @@ export function ChatPane() {
     return readiness.subscribe(setStatus);
   }, [readiness]);
 
-  // Initialize the thread on mount, not only on send.
+  // No eager readiness call. `initialize()` is a real, persisted
+  // `sessions.create`, so running it on mount created and stored a session on
+  // every page load — that is where dozens of empty "New chat" rows came from.
+  // Its only caller is the submit path below, so a session now exists exactly
+  // when the user has actually said something.
   //
-  // This looks like the eager creation that was removed for spamming the
-  // sidebar, and it is — but it is not optional. RemoteThreadListRuntime's
-  // item store is populated from our `list()` adapter, which can only return
-  // *persisted* sessions. Until `initialize()` runs there is an active main
-  // thread with no matching item, so any resolution of that thread's list
-  // item calls `getItemById` on an id the store has never seen and throws
-  // "Entry not available in the store" (subscribable.ts) — on mount and on
-  // every re-render, which is every keystroke. That crash is what made the
-  // composer look dead.
-  //
-  // The sidebar clutter this used to cause is handled on the read side now:
-  // runtime/threadListFilter.ts hides untitled/empty sessions from the list,
-  // so an unused session is invisible rather than noise.
-  useEffect(() => {
-    void readiness.ensureReady();
-  }, [readiness]);
+  // The comment removed here argued the eager call was load-bearing: that the
+  // active thread has no entry in RemoteThreadListRuntime's store until
+  // `initialize()` runs, so resolving its list item throws "Entry not
+  // available in the store" on every render. Not true of the pinned
+  // @assistant-ui/react 0.15.14 — its runtime constructor calls
+  // switchToNewThread(), and _switchToNewThread() mints a local
+  // `__LOCALID_<id>` thread with its own threadIdMap and threadData entries
+  // (status "new", remoteId undefined) before any adapter call. The entry
+  // exists from the first render, unpersisted, and classifyThreads() files
+  // only "regular" and "archived" into threadIds so it is not a row either.
 
   // Shared by both the form's onSubmit (Enter key, ComposerPrimitive.Root)
   // and the Send button's own onClick below (ComposerPrimitive.Send) — see

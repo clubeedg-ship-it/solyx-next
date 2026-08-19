@@ -62,12 +62,8 @@
   --radius-lg: 18px;
   --radius-full: 999px;
 
-  /* Both side columns are runtime state now, not tokens — dragged, stored
-     per browser, and written onto .layout as --layout-left / --layout-right
-     by App.tsx. Their limits live in runtime/panelLayout.ts, which is where
-     they can be tested. Only the divider's own geometry stays here. */
-  --divider-width: 1px;
-  --divider-grab: 5px; /* hit area either side of the visible line */
+  --sidebar-width: 264px;
+  --draft-width: minmax(380px, 40%);
 
   /* ---- motion ---- */
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
@@ -218,186 +214,22 @@ select {
    Layout
    ========================================================================= */
 
-/* Five columns: panel, divider, chat, divider, panel. The dividers are real
-   elements in the grid rather than borders on the panes, because they have
-   to be grabbable — and giving them their own column is what keeps the
-   panes' widths honest (a border would sit inside one of them). The chat
-   column is minmax(0, 1fr) rather than 1fr so a long unbroken line in a
-   message can't push the grid wider than the window. */
 .layout {
   display: grid;
-  grid-template-columns:
-    var(--layout-left)
-    var(--divider-width)
-    minmax(0, 1fr)
-    var(--divider-width)
-    var(--layout-right);
-  /* Load-bearing. With no explicit row track the single implicit row is
-     `auto`, so it grows to fit the tallest column: the transcript pushes the
-     whole page past 100vh instead of scrolling inside .thread-viewport, and
-     the window keeps growing as the conversation does. The 0 minimum is the
-     part that matters — grid items default to min-height: auto and refuse to
-     shrink below their own content without it. */
-  grid-template-rows: minmax(0, 1fr);
+  grid-template-columns: var(--sidebar-width) 1fr var(--draft-width);
   height: 100vh;
   background: var(--canvas);
-}
-
-/* =========================================================================
-   Panel dividers and rails
-   ========================================================================= */
-
-.panel-divider {
-  position: relative;
-  z-index: 2;
-  background: var(--border-subtle);
-  cursor: col-resize;
-  /* Without this the browser claims the gesture for panning and the
-     pointermove stream stops arriving on touch and some trackpads. */
-  touch-action: none;
-  transition: background var(--duration-base) var(--ease);
-}
-
-/* The line stays 1px; the target is 11px. Anything thinner is a line you
-   have to aim at, which is the usual reason drag handles feel broken. */
-.panel-divider::before {
-  content: "";
-  position: absolute;
-  inset-block: 0;
-  left: calc(-1 * var(--divider-grab));
-  right: calc(-1 * var(--divider-grab));
-}
-
-.panel-divider:hover,
-.panel-divider[data-dragging="true"] {
-  background: var(--accent);
-}
-
-/* The 1px element itself is too thin to show a 2px ring convincingly, so
-   focus is drawn as the accent line plus a soft halo — the same treatment
-   the composer uses. */
-.panel-divider:focus-visible {
-  outline: none;
-  background: var(--accent);
-  box-shadow: 0 0 0 2px var(--accent-soft);
-}
-
-/* Held on <body> for the length of a drag: the cursor has to survive
-   leaving the 1px divider, nothing may select, and the draft iframe must
-   stop taking pointer events or it swallows the rest of the gesture the
-   moment the pointer crosses into it. */
-body.is-resizing {
-  cursor: col-resize;
-  user-select: none;
-}
-
-body.is-resizing .draft-frame {
-  pointer-events: none;
-}
-
-/* --- the collapsed state: a thin bar with just its way back out --- */
-
-.sidebar-rail,
-.draft-rail {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.875rem 0;
-  min-width: 0;
-  overflow: hidden;
-}
-
-.draft-rail {
-  background: var(--canvas);
-}
-
-.rail-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex: none;
-  width: 32px;
-  height: 32px;
-  padding: 0;
-  border: none;
-  border-radius: var(--radius-sm);
-  background: transparent;
-  color: var(--text-tertiary);
-  cursor: pointer;
-  transition:
-    background var(--duration-fast) var(--ease),
-    color var(--duration-fast) var(--ease);
-}
-
-.rail-button:hover {
-  background: var(--surface-hover);
-  color: var(--text-primary);
-}
-
-.rail-spacer {
-  flex: 1;
-}
-
-.rail-label {
-  writing-mode: vertical-rl;
-  font-family: var(--font-mono);
-  font-size: var(--text-2xs);
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--text-tertiary);
-  margin-top: 0.25rem;
-}
-
-.rail-status-dot {
-  animation: dot-breathe 1.4s var(--ease) infinite;
-}
-
-/* The collapse control in an expanded pane's header. Quiet until the
-   header is hovered — it's an occasional action, and the header already
-   carries the two things that matter (the title, the status). */
-.panel-collapse-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex: none;
-  width: 26px;
-  height: 26px;
-  margin-left: auto;
-  padding: 0;
-  border: none;
-  border-radius: var(--radius-sm);
-  background: transparent;
-  color: var(--text-tertiary);
-  cursor: pointer;
-  opacity: 0;
-  transition:
-    opacity var(--duration-base) var(--ease),
-    background var(--duration-fast) var(--ease),
-    color var(--duration-fast) var(--ease);
-}
-
-.sidebar-header:hover .panel-collapse-button,
-.draft-panel-header:hover .panel-collapse-button,
-.panel-collapse-button:focus-visible {
-  opacity: 1;
-}
-
-.panel-collapse-button:hover {
-  background: var(--surface-hover);
-  color: var(--text-primary);
 }
 
 /* =========================================================================
    Sidebar
    ========================================================================= */
 
-/* No border-right: the divider element to its right draws that line now,
-   and owns it in both states (a rail keeps the same seam). */
 .sidebar {
   display: flex;
   flex-direction: column;
   background: var(--surface-sunken);
+  border-right: 1px solid var(--border-subtle);
   overflow-y: auto;
 }
 
@@ -471,65 +303,41 @@ body.is-resizing .draft-frame {
 .thread-items {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 1px;
 }
 
-/* Two-line row: title, then a quiet relative timestamp underneath — replaces
-   the old single truncated line. The extra vertical padding also widens the
-   tap target, which the single-line version left too thin to comfortably
-   hit on a trackpad or touch screen. */
 .thread-item-trigger {
-  display: flex;
-  flex-direction: column;
-  gap: 0.15rem;
+  display: block;
   width: 100%;
-  padding: 0.65rem 0.75rem;
+  padding: 0.5rem 0.65rem;
   border: none;
   background: transparent;
   text-align: left;
   cursor: pointer;
   border-radius: var(--radius-sm);
   font: inherit;
-  border-left: 2px solid transparent;
-  transition:
-    background var(--duration-fast) var(--ease),
-    border-color var(--duration-fast) var(--ease);
-}
-
-.thread-item-title {
   font-size: var(--text-sm);
-  font-weight: 500;
   color: var(--text-secondary);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  transition: color var(--duration-fast) var(--ease);
-}
-
-.thread-item-time {
-  font-family: var(--font-mono);
-  font-size: var(--text-2xs);
-  letter-spacing: 0.03em;
-  color: var(--text-tertiary);
+  border-left: 2px solid transparent;
+  transition:
+    background var(--duration-fast) var(--ease),
+    color var(--duration-fast) var(--ease);
 }
 
 .thread-item-trigger:hover {
   background: var(--surface-hover);
-}
-
-.thread-item-trigger:hover .thread-item-title {
   color: var(--text-primary);
 }
 
 .thread-item[data-active="true"] .thread-item-trigger {
   background: var(--surface);
+  color: var(--text-primary);
+  font-weight: 500;
   border-left-color: var(--accent);
   box-shadow: 0 1px 2px var(--shadow-color);
-}
-
-.thread-item[data-active="true"] .thread-item-title {
-  color: var(--text-primary);
-  font-weight: 600;
 }
 
 .sidebar-footer {
@@ -561,6 +369,7 @@ body.is-resizing .draft-frame {
   flex-direction: column;
   min-width: 0;
   background: var(--canvas);
+  border-right: 1px solid var(--border-subtle);
 }
 
 .chat-header {
@@ -574,9 +383,6 @@ body.is-resizing .draft-frame {
 }
 
 .chat-header-title {
-  min-width: 0;
-  max-width: 100%;
-  font: inherit;
   font-size: var(--text-md);
   font-weight: 600;
   letter-spacing: -0.01em;
@@ -584,47 +390,6 @@ body.is-resizing .draft-frame {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-/* Button (view mode) and input (edit mode) both reuse .chat-header-title
-   for typography, then layer their own reset + affordance on top — this is
-   what keeps the two states from visibly jumping around as the title is
-   clicked into and out of edit. */
-button.chat-header-title {
-  display: block;
-  padding: 0.2rem 0.4rem;
-  margin: -0.2rem -0.4rem;
-  border: 1px solid transparent;
-  border-radius: var(--radius-sm);
-  background: transparent;
-  text-align: left;
-  cursor: pointer;
-  transition:
-    background var(--duration-fast) var(--ease),
-    border-color var(--duration-fast) var(--ease);
-}
-
-button.chat-header-title:hover {
-  background: var(--surface-hover);
-}
-
-input.chat-header-title {
-  display: block;
-  padding: 0.2rem 0.4rem;
-  margin: -0.2rem -0.4rem;
-  border: 1px solid var(--accent);
-  border-radius: var(--radius-sm);
-  background: var(--surface);
-  box-shadow: 0 0 0 3px var(--accent-soft);
-}
-
-/* Positioned as its own full-width row under the header rather than inside
-   it — .chat-header is a tight flex row (title + status dot) with no room
-   for a wrapping error line. Reuses .message-error's lead/detail shape
-   (see below) so a rename failure reads the same as every other error in
-   this pane. */
-.chat-header-error {
-  margin: 0.75rem 1.5rem 0;
 }
 
 .chat-status {
@@ -830,6 +595,7 @@ input.chat-header-title {
   border-radius: var(--radius-md);
   line-height: 1.6;
   font-size: var(--text-base);
+  white-space: pre-wrap;
   word-wrap: break-word;
 }
 
@@ -841,10 +607,6 @@ input.chat-header-title {
 }
 
 .message-user .message-body {
-  /* Only what she typed is preserved verbatim. Assistant replies are parsed
-     into real elements (components/MarkdownText.tsx), where pre-wrap would
-     render the newlines between blocks as extra blank lines. */
-  white-space: pre-wrap;
   background: var(--surface-sunken);
   color: var(--text-primary);
   border: 1px solid var(--border-subtle);
@@ -855,250 +617,42 @@ input.chat-header-title {
   display: none;
 }
 
-/* =========================================================================
-   Rendered markdown (assistant messages)
-
-   Sol replies in markdown; components/MarkdownText.tsx parses it. Every value
-   below comes from the tokens at the top of this file, so dark mode follows
-   without a second set of rules.
-
-   Sizes stay close to body text on purpose. This is someone talking, not a
-   document — a heading that reads like a page title would be louder than the
-   sentence next to it, and Sol uses headings freely.
-   ========================================================================= */
-
-.message-md > :first-child {
-  margin-top: 0;
-}
-
-.message-md > :last-child {
-  margin-bottom: 0;
-}
-
-.message-md p {
-  margin: 0 0 0.7em;
-}
-
-.message-md h1,
-.message-md h2,
-.message-md h3,
-.message-md h4,
-.message-md h5,
-.message-md h6 {
-  margin: 1.15em 0 0.45em;
-  font-weight: 600;
-  line-height: 1.3;
-  color: var(--text-primary);
-}
-
-.message-md h1 {
-  font-size: var(--text-lg);
-  letter-spacing: -0.01em;
-}
-
-.message-md h2 {
-  font-size: var(--text-md);
-  letter-spacing: -0.006em;
-}
-
-.message-md h3 {
-  font-size: var(--text-base);
-}
-
-.message-md h4,
-.message-md h5,
-.message-md h6 {
-  font-size: var(--text-sm);
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: var(--text-secondary);
-}
-
-.message-md ul,
-.message-md ol {
-  margin: 0 0 0.7em;
-  padding-left: 1.3rem;
-}
-
-.message-md li {
-  margin-bottom: 0.28em;
-}
-
-.message-md li:last-child {
-  margin-bottom: 0;
-}
-
-.message-md li::marker {
-  color: var(--text-tertiary);
-}
-
-.message-md li > ul,
-.message-md li > ol {
-  margin: 0.28em 0 0;
-}
-
-.message-md a {
-  color: var(--accent);
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 2px;
-}
-
-.message-md a:hover {
-  color: var(--accent-strong);
-}
-
-.message-md strong {
-  font-weight: 600;
-}
-
-.message-md del {
-  color: var(--text-tertiary);
-}
-
-.message-md blockquote {
-  margin: 0 0 0.7em;
-  padding: 0.1rem 0 0.1rem 0.85rem;
-  border-left: 2px solid var(--accent-soft-strong);
-  color: var(--text-secondary);
-}
-
-.message-md hr {
-  margin: 1.2em 0;
-  border: 0;
-  border-top: 1px solid var(--border-subtle);
-}
-
-.message-md img {
-  max-width: 100%;
-  height: auto;
-  border-radius: var(--radius-sm);
-}
-
-/* Inline code only — the :not(pre) keeps this off fenced blocks. */
-.message-md :not(pre) > code {
-  padding: 0.1em 0.32em;
-  border: 1px solid var(--border-subtle);
-  border-radius: 4px;
-  background: var(--surface-sunken);
-  font-family: var(--font-mono);
-  font-size: 0.86em;
-  word-break: break-word;
-}
-
-/* ---- fenced blocks: header strip and body read as one object ---- */
-
-.message-md-code-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem;
-  margin-top: 0.7em;
-  padding: 0.3rem 0.4rem 0.3rem 0.8rem;
-  border: 1px solid var(--border-subtle);
-  border-bottom: 0;
-  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
-  background: var(--surface-hover);
-}
-
-.message-md-code-lang {
-  font-family: var(--font-mono);
-  font-size: var(--text-2xs);
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: var(--text-tertiary);
-}
-
-.message-md-code-copy {
+.message-thinking {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  flex: none;
-  width: 24px;
-  height: 24px;
-  padding: 0;
-  border: 0;
-  border-radius: var(--radius-sm);
-  background: transparent;
-  color: var(--text-tertiary);
-  cursor: pointer;
-  transition:
-    background var(--duration-fast) var(--ease),
-    color var(--duration-fast) var(--ease);
+  gap: 0.28rem;
+  padding: 0.2rem 0;
 }
 
-.message-md-code-copy:hover {
-  background: var(--surface);
-  color: var(--text-primary);
+.thinking-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: var(--radius-full);
+  background: var(--text-tertiary);
+  animation: thinking-bounce 1.1s var(--ease) infinite;
 }
 
-.message-md pre {
-  margin: 0 0 0.7em;
-  padding: 0.75rem 0.85rem;
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-sm);
-  background: var(--surface-sunken);
-  overflow-x: auto;
+.thinking-dot:nth-child(2) {
+  animation-delay: 0.15s;
+}
+.thinking-dot:nth-child(3) {
+  animation-delay: 0.3s;
 }
 
-/* Square off the seam where the header sits directly on top of the block. */
-.message-md-code-header + pre {
-  margin-top: 0;
-  border-top: 0;
-  border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+@keyframes thinking-bounce {
+  0%,
+  60%,
+  100% {
+    opacity: 0.35;
+    transform: translateY(0);
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(-2px);
+  }
 }
 
-.message-md pre code {
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  line-height: 1.55;
-  color: var(--text-primary);
-}
-
-/* ---- tables ---- */
-
-.message-md-table-wrap {
-  margin: 0 0 0.7em;
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-sm);
-  overflow-x: auto;
-}
-
-.message-md table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: var(--text-sm);
-}
-
-.message-md th,
-.message-md td {
-  padding: 0.42rem 0.7rem;
-  text-align: left;
-  border-bottom: 1px solid var(--border-subtle);
-  white-space: nowrap;
-}
-
-.message-md thead th {
-  background: var(--surface-sunken);
-  font-family: var(--font-mono);
-  font-size: var(--text-2xs);
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: var(--text-tertiary);
-}
-
-.message-md tbody tr:last-child td {
-  border-bottom: 0;
-}
-
-/* ---- streaming cursor ----
-   Drawn here rather than as an element in ChatPane: an inline span placed
-   after block-level markdown lands on a line of its own. Hanging it off the
-   last block's ::after keeps it at the end of the final line, where a caret
-   belongs. */
-.message-md[data-status="running"] > :last-child::after {
-  content: "";
+.message-cursor {
   display: inline-block;
   width: 2px;
   height: 1em;
@@ -1106,125 +660,6 @@ input.chat-header-title {
   vertical-align: text-bottom;
   background: var(--accent);
   animation: cursor-blink 1s step-end infinite;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .message-md[data-status="running"] > :last-child::after {
-    animation: none;
-  }
-}
-
-/* Shown while Sol has accepted the turn but no text has arrived yet. A single
-   accent orb breathing under a slow ring, next to a label with a light sweeping
-   across it — the same "quiet confidence" register as the rest of the app, and
-   legible as activity without demanding attention on every turn. */
-.message-thinking {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.55rem;
-  padding: 0.25rem 0;
-}
-
-.thinking-orb {
-  position: relative;
-  width: 8px;
-  height: 8px;
-  flex: none;
-  border-radius: var(--radius-full);
-  background: var(--accent);
-  animation: thinking-orb-breathe 1.8s var(--ease) infinite;
-}
-
-/* The ring travelling outward from the orb — drawn on the pseudo-element so
-   the orb's own scale animation doesn't compound with it. */
-.thinking-orb::after {
-  content: "";
-  position: absolute;
-  inset: -3px;
-  border-radius: var(--radius-full);
-  border: 1px solid var(--accent);
-  opacity: 0;
-  animation: thinking-orb-ring 1.8s var(--ease) infinite;
-}
-
-.thinking-label {
-  font-size: var(--text-sm);
-  letter-spacing: 0.01em;
-  color: var(--text-tertiary);
-  /* The sweep is a moving highlight clipped to the glyphs. background-clip
-     needs a transparent fill to show through, so the flat color above is the
-     fallback wherever text-fill-color isn't honoured. */
-  background: linear-gradient(
-    100deg,
-    var(--text-tertiary) 0%,
-    var(--text-tertiary) 38%,
-    var(--text-primary) 50%,
-    var(--text-tertiary) 62%,
-    var(--text-tertiary) 100%
-  );
-  background-size: 220% 100%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: thinking-sweep 2.2s linear infinite;
-}
-
-@keyframes thinking-orb-breathe {
-  0%,
-  100% {
-    transform: scale(0.82);
-    opacity: 0.55;
-  }
-  50% {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-@keyframes thinking-orb-ring {
-  0% {
-    transform: scale(0.7);
-    opacity: 0.5;
-  }
-  70%,
-  100% {
-    transform: scale(1.9);
-    opacity: 0;
-  }
-}
-
-@keyframes thinking-sweep {
-  0% {
-    background-position: 130% 0;
-  }
-  100% {
-    background-position: -30% 0;
-  }
-}
-
-/* Motion is the whole point here, so the reduced-motion fallback still has to
-   read as "busy": the orb holds a steady mid-opacity and the label stops
-   sweeping rather than everything freezing into something indistinguishable
-   from a finished message. */
-@media (prefers-reduced-motion: reduce) {
-  .thinking-orb,
-  .thinking-orb::after,
-  .thinking-label {
-    animation: none;
-  }
-
-  .thinking-orb {
-    opacity: 0.8;
-  }
-
-  .thinking-orb::after {
-    opacity: 0.35;
-  }
-
-  .thinking-label {
-    -webkit-text-fill-color: var(--text-secondary);
-    color: var(--text-secondary);
-  }
 }
 
 @keyframes cursor-blink {

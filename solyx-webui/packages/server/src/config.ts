@@ -20,6 +20,11 @@ function optional(name: string, fallback: string): string {
 export interface Config {
   /** Port the HTTP+WS server listens on. */
   port: number;
+  /** Address the HTTP+WS server binds to. Loopback by default: cloudflared
+   *  terminates the public tunnel on this same host and only ever connects to
+   *  127.0.0.1, so binding the wildcard would let anything on the LAN or the
+   *  tailnet reach the dashboard directly and skip Cloudflare Access. */
+  host: string;
 
   /** "real" (default) talks to an actual OpenClaw Gateway; "stub" uses the
    *  in-process fake in gateway/stubGatewayFactory.ts for local dev without
@@ -127,11 +132,12 @@ export function loadConfig(): Config {
 
   cached = {
     port: Number(optional("PORT", "8787")),
+    host: optional("HOST", "127.0.0.1"),
 
     gatewayMode,
     gatewayUrl: gatewayMode === "real" ? required("OPENCLAW_GATEWAY_URL") : optional("OPENCLAW_GATEWAY_URL", ""),
     gatewayToken: gatewayMode === "real" ? required("OPENCLAW_GATEWAY_TOKEN") : optional("OPENCLAW_GATEWAY_TOKEN", ""),
-    gatewayAgentId: optional("OPENCLAW_AGENT_ID", "sol"),
+    gatewayAgentId: optional("OPENCLAW_AGENT_ID", "solyx"),
 
     wordpressOrigin: required("WORDPRESS_ORIGIN"),
     wordpressUser: required("WORDPRESS_APP_USER"),

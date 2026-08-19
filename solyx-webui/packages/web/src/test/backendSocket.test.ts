@@ -69,13 +69,63 @@ describe("BackendSocket.request", () => {
     await expect(requestPromise).rejects.toThrow("gateway offline");
   });
 
-  it("rejects immediately if the socket is not open", async () => {
+  // Rejecting the instant the socket is down is exactly what the client hit:
+  // one dropped connection and every message failed with "Backend socket is
+  // not open" until she reloaded the page by hand.
+  it("waits for a reconnection instead of failing the moment the socket is down", async () => {
     const fake = createFakeSocket();
-    fake.socket = { ...fake.socket, readyState: 0 };
-    const backend = new BackendSocket(() => fake.socket);
+    let readyState = 0;
+    const flipping: MinimalSocket = {
+      ...fake.socket,
+      get readyState() {
+        return readyState;
+      },
+    };
+    const backend = new BackendSocket(() => flipping);
     backend.connect();
 
+    const requestPromise = backend.request<{ ok: boolean }>({ type: "sessions.list" });
+    expect(fake.sent).toHaveLength(0);
+
+    readyState = 1;
+    fake.open();
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    const sentFrame = JSON.parse(fake.sent[0] ?? "{}");
+    expect(sentFrame).toMatchObject({ type: "sessions.list" });
+    fake.message({ type: "result", id: sentFrame.id, ok: true, result: { ok: true } });
+    await expect(requestPromise).resolves.toEqual({ ok: true });
+  });
+
+  it("still fails once the caller has closed the socket for good", async () => {
+    const fake = createFakeSocket();
+    const backend = new BackendSocket(() => fake.socket);
+    backend.connect();
+    fake.open();
+    backend.close();
+
     await expect(backend.request({ type: "sessions.list" })).rejects.toThrow("not open");
+  });
+
+  it("reconnects on its own after the socket drops unexpectedly", async () => {
+    vi.useFakeTimers();
+    try {
+      const fake = createFakeSocket();
+      let created = 0;
+      const backend = new BackendSocket(() => {
+        created += 1;
+        return fake.socket;
+      });
+      backend.connect();
+      fake.open();
+      expect(created).toBe(1);
+
+      fake.close();
+      await vi.advanceTimersByTimeAsync(600);
+      expect(created).toBe(2);
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   it("rejects pending requests when the socket closes", async () => {
@@ -119,7 +169,7 @@ describe("BackendSocket.on", () => {
     backend.on("sessions.changed", handler);
     fake.message({
       type: "sessions.changed",
-      session: { sessionKey: "s1", title: "x", updatedAt: "now", hasTitle: false, archived: false },
+      session: { sessionKey: "s1", title: "x", updatedAt: "now", hasTitle: true, archived: false },
     });
 
     expect(handler).toHaveBeenCalledTimes(1);
