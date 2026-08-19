@@ -1,4 +1,5 @@
 import { useEffect, useState, useSyncExternalStore } from "react";
+import { PageBrowser, type ContentItem } from "./PageBrowser.js";
 import { useAuiState } from "@assistant-ui/react";
 import type { DraftSelectionStore } from "../runtime/draftSelection.js";
 import { PanelToggleButton } from "./PanelToggleButton.js";
@@ -33,6 +34,10 @@ export function DraftPanel({ store, collapsed, onToggleCollapsed }: DraftPanelPr
   );
   const isRunning = useAuiState((s) => s.thread.isRunning);
   const [isFrameLoading, setIsFrameLoading] = useState(false);
+  // A published page being looked at, chosen from the card grid. Separate from
+  // the draft selection above: a draft and a live page are different things to
+  // be looking at, and picking one must not silently change the other.
+  const [viewing, setViewing] = useState<ContentItem | null>(null);
 
   // Ask the server which drafts exist the moment the panel mounts, so a fresh
   // page load shows the client's saved drafts instead of sitting empty until
@@ -50,11 +55,11 @@ export function DraftPanel({ store, collapsed, onToggleCollapsed }: DraftPanelPr
   // draft's own page (a theme font, a hung third-party embed) can never
   // leave this overlay showing forever — legible states must resolve.
   useEffect(() => {
-    if (!state.currentPostId) return;
+    if (!state.currentPostId && !viewing) return;
     setIsFrameLoading(true);
     const fallback = setTimeout(() => setIsFrameLoading(false), 4000);
     return () => clearTimeout(fallback);
-  }, [state.currentPostId]);
+  }, [state.currentPostId, viewing]);
 
   // After every hook, never before — the rail is a different tree, not a
   // different early exit from this one.
@@ -71,9 +76,15 @@ export function DraftPanel({ store, collapsed, onToggleCollapsed }: DraftPanelPr
   return (
     <section className="draft-panel">
       <header className="draft-panel-header">
+        {viewing ? (
+          <button type="button" className="browse-back browse-back-header" onClick={() => setViewing(null)}>
+            <span aria-hidden="true">&#8249;</span> Terug
+          </button>
+        ) : null}
         <label htmlFor="draft-select" className="draft-panel-label">
-          Draft
+          {viewing ? viewing.title : "Draft"}
         </label>
+        {viewing ? null : (
         <div className="draft-select-wrap">
           <select
             id="draft-select"
@@ -91,6 +102,7 @@ export function DraftPanel({ store, collapsed, onToggleCollapsed }: DraftPanelPr
           </select>
           <ChevronIcon className="draft-select-chevron" />
         </div>
+        )}
         {isRunning && (
           <span className="draft-status-pill" role="status">
             <span className="status-dot" aria-hidden="true" />
@@ -107,12 +119,12 @@ export function DraftPanel({ store, collapsed, onToggleCollapsed }: DraftPanelPr
       <div className="draft-panel-body">
         <div className="draft-frame-card">
           <div className="draft-frame-viewport">
-            {state.currentPostId ? (
+            {viewing || state.currentPostId ? (
               <>
                 <iframe
-                  key={state.currentPostId}
-                  title="Draft preview"
-                  src={`/api/draft/${state.currentPostId}`}
+                  key={viewing ? `${viewing.type}-${viewing.id}` : state.currentPostId}
+                  title={viewing ? `Preview van ${viewing.title}` : "Draft preview"}
+                  src={viewing ? `/api/page/${viewing.type}/${viewing.id}` : `/api/draft/${state.currentPostId}`}
                   className="draft-frame"
                   onLoad={() => setIsFrameLoading(false)}
                 />
@@ -125,7 +137,11 @@ export function DraftPanel({ store, collapsed, onToggleCollapsed }: DraftPanelPr
                 )}
               </>
             ) : (
-              <EmptyDraft />
+              // Nothing chosen yet: the card navigation is the resting state of
+              // this panel, not an empty message. EmptyDraft is gone -- there is
+              // always something to look at now, because the whole published
+              // site is reachable from here.
+              <PageBrowser onSelect={setViewing} />
             )}
           </div>
         </div>

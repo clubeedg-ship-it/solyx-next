@@ -20,6 +20,13 @@ function optional(name: string, fallback: string): string {
 export interface Config {
   /** Port the HTTP+WS server listens on. */
   port: number;
+  /** Where rendered page thumbnails are kept. Outside the repo on purpose:
+   *  they are a cache, they are large, and a checkout must never carry them. */
+  thumbnailCacheDir: string;
+  /** Chromium binary used to render those thumbnails. Empty means "whatever
+   *  is on PATH", which is correct on the box this runs on. */
+  chromiumPath: string;
+
   /** Address the HTTP+WS server binds to. Loopback by default: cloudflared
    *  terminates the public tunnel on this same host and only ever connects to
    *  127.0.0.1, so binding the wildcard would let anything on the LAN or the
@@ -133,6 +140,8 @@ export function loadConfig(): Config {
   cached = {
     port: Number(optional("PORT", "8787")),
     host: optional("HOST", "127.0.0.1"),
+    thumbnailCacheDir: optional("THUMBNAIL_CACHE_DIR", `${process.env.HOME ?? "."}/.cache/solyx-webui/thumbs`),
+    chromiumPath: optional("SOLYX_CHROMIUM_PATH", ""),
 
     gatewayMode,
     gatewayUrl: gatewayMode === "real" ? required("OPENCLAW_GATEWAY_URL") : optional("OPENCLAW_GATEWAY_URL", ""),

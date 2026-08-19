@@ -1614,3 +1614,140 @@ input.chat-header-title {
   justify-content: center;
   background: var(--canvas);
 }
+
+/* =========================================================================
+   Card navigation (components/PageBrowser.tsx)
+
+   The site's own card language from design-canvas.html: a bordered card that
+   lifts and takes an accent border on hover. Tokens only, so the dark palette
+   follows without a second copy.
+   ========================================================================= */
+
+.browse-grid {
+  display: grid;
+  /* auto-fill, not auto-fit: at a narrow panel width auto-fit stretches a lone
+     card across the whole row, which reads as a broken layout rather than a
+     grid with one item in it. */
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 0.75rem;
+  padding: 0.9rem;
+  align-content: start;
+  overflow-y: auto;
+  height: 100%;
+}
+
+.browse-grid-kinds {
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+}
+
+.browse-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.6rem;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    transform var(--duration-fast) var(--ease),
+    box-shadow var(--duration-fast) var(--ease),
+    border-color var(--duration-fast) var(--ease);
+}
+
+.browse-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 26px var(--shadow-color);
+  border-color: var(--accent-soft-strong);
+}
+
+.browse-card:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+/* Fixed aspect so the grid rows stay level whether or not a picture has been
+   rendered yet — a card that grows when its image lands makes the whole grid
+   jump under the cursor. */
+.browse-thumb {
+  display: block;
+  aspect-ratio: 16 / 10;
+  border-radius: var(--radius-sm);
+  background: var(--surface-sunken);
+  overflow: hidden;
+}
+
+.browse-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+}
+
+.browse-card-title {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--text-primary);
+  /* Two lines, then ellipsis: page titles here run long ("Hoe werkt de
+     WaterAccu? | De Nymo") and a single line cuts most of them mid-word. */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.browse-card-kind {
+  gap: 0.3rem;
+  padding: 1rem 0.9rem;
+}
+
+.browse-card-count {
+  font-size: var(--text-xl);
+  font-weight: 600;
+  line-height: 1.1;
+  color: var(--accent);
+}
+
+.browse-card-blurb {
+  font-size: var(--text-2xs);
+  color: var(--text-tertiary);
+}
+
+.browse-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0.75rem 0.9rem 0;
+  padding: 0.3rem 0.5rem;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-secondary);
+  font: inherit;
+  font-size: var(--text-xs);
+  cursor: pointer;
+}
+
+.browse-back:hover {
+  background: var(--surface-hover);
+  color: var(--text-primary);
+}
+
+.browse-back-header {
+  margin: 0;
+}
+
+.browse-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  height: 100%;
+  padding: 1.5rem;
+  color: var(--text-tertiary);
+  font-size: var(--text-sm);
+  text-align: center;
+}
