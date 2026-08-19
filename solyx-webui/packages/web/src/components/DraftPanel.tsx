@@ -34,6 +34,14 @@ export function DraftPanel({ store, collapsed, onToggleCollapsed }: DraftPanelPr
   const isRunning = useAuiState((s) => s.thread.isRunning);
   const [isFrameLoading, setIsFrameLoading] = useState(false);
 
+  // Ask the server which drafts exist the moment the panel mounts, so a fresh
+  // page load shows the client's saved drafts instead of sitting empty until
+  // the agent happens to touch one. Tool events only ever reveal drafts
+  // touched while this page was open, which is not the same set.
+  useEffect(() => {
+    void store.loadFromServer();
+  }, [store]);
+
   // The iframe below remounts (via `key`) whenever the selected draft
   // changes, so a fresh load genuinely starts here — this isn't a
   // simulated delay, it tracks the real network fetch through the proxy.
