@@ -20,10 +20,15 @@ import type { HistoryMessageWire } from "./protocol.js";
  */
 export function createThreadHistoryAdapter(
   socket: Pick<BackendSocket, "request">,
-  sessionKey: string,
+  resolveSessionKey: () => string,
 ): ThreadHistoryAdapter {
   return {
     async load() {
+      // Resolved per load, for the same reason chatModelAdapter resolves per
+      // turn: before initialize() there is only a local `__LOCALID_` id, and
+      // asking the backend for its transcript is meaningless.
+      const sessionKey = resolveSessionKey();
+      if (sessionKey.startsWith("__LOCALID_")) return ExportedMessageRepository.fromArray([]);
       const messages = await socket.request<HistoryMessageWire[]>({
         type: "sessions.history",
         sessionKey,

@@ -52,7 +52,7 @@ async function collect<T>(gen: AsyncGenerator<T>): Promise<T[]> {
 describe("createChatModelAdapter", () => {
   it("sends chat.send with the latest user message text and the bound session key", async () => {
     const fake = createFakeSocket();
-    const adapter = createChatModelAdapter(fake.socket, "s1");
+    const adapter = createChatModelAdapter(fake.socket, () => "s1");
     const controller = new AbortController();
 
     const runPromise = collect(
@@ -74,7 +74,7 @@ describe("createChatModelAdapter", () => {
 
   it("yields each cumulative assistant.delta as a text content update", async () => {
     const fake = createFakeSocket();
-    const adapter = createChatModelAdapter(fake.socket, "s1");
+    const adapter = createChatModelAdapter(fake.socket, () => "s1");
     const controller = new AbortController();
 
     const results: { content: readonly { type: string; text: string }[] }[] = [];
@@ -114,7 +114,7 @@ describe("createChatModelAdapter", () => {
 
   it("ignores frames for other sessions", async () => {
     const fake = createFakeSocket();
-    const adapter = createChatModelAdapter(fake.socket, "s1");
+    const adapter = createChatModelAdapter(fake.socket, () => "s1");
     const controller = new AbortController();
 
     const iterator = (
@@ -141,7 +141,7 @@ describe("createChatModelAdapter", () => {
 
   it("propagates assistant.error as a thrown error", async () => {
     const fake = createFakeSocket();
-    const adapter = createChatModelAdapter(fake.socket, "s1");
+    const adapter = createChatModelAdapter(fake.socket, () => "s1");
     const controller = new AbortController();
 
     const iterable = adapter.run({
@@ -158,5 +158,44 @@ describe("createChatModelAdapter", () => {
     fake.fire({ type: "assistant.error", sessionKey: "s1", error: "gateway offline" });
 
     await expect(resultPromise).rejects.toThrow("gateway offline");
+  });
+});
+
+describe("session key resolution", () => {
+  it("reads the session key when the turn runs, not when the adapter is built", async () => {
+    const fake = createFakeSocket();
+
+    // A thread is local until it is persisted, and sessions are created lazily
+    // on first send — so at construction time all that exists is assistant-ui's
+    // own __LOCALID_ placeholder. The real key appears only once initialize()
+    // has run, which the submit path awaits before it sends.
+    let key = "__LOCALID_abc";
+    const adapter = createChatModelAdapter(fake.socket, () => key);
+    key = "agent:solyx:dashboard:real";
+
+    const controller = new AbortController();
+    const runPromise = collect(
+      adapter.run({
+        messages: [userMessage("hoi")],
+        abortSignal: controller.signal,
+        runConfig: {},
+        context: { getModelContext: () => ({}) } as never,
+        unstable_getMessage: () => userMessage("hoi"),
+      } as never) as AsyncGenerator<{ content: readonly { type: string; text: string }[] }>,
+    );
+
+    await Promise.resolve();
+    // The Gateway parses this as agent:<id>:<session>. A __LOCALID_ key does
+    // not parse, falls back to agent "main", and every send is rejected with
+    // `invalid agent params` — exactly what shipped once the eager session
+    // creation that had been masking it was removed.
+    expect(fake.sent[0]).toMatchObject({
+      type: "chat.send",
+      sessionKey: "agent:solyx:dashboard:real",
+      text: "hoi",
+    });
+
+    fake.fire({ type: "assistant.done", sessionKey: "agent:solyx:dashboard:real" });
+    await expect(runPromise).resolves.toEqual([]);
   });
 });

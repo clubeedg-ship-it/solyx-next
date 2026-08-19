@@ -166,7 +166,14 @@ export class GatewayAdapter {
 
   /** `sessions.describe`, not `sessions.get` — the latter returns messages. */
   async getSession(sessionKey: string): Promise<SessionSummary> {
-    const result = await this.client.request<{ session: RawSession }>("sessions.describe", { key: sessionKey });
+    const result = await this.client.request<{ session: RawSession | null }>("sessions.describe", { key: sessionKey });
+    // sessions.describe answers with a null session for a key it does not
+    // know — an unpersisted `__LOCALID_` thread, or one already deleted.
+    // Dereferencing that threw a bare TypeError out of toSessionSummary and
+    // surfaced as an unhandled rejection in the auto-title path.
+    if (!result.session) {
+      throw new Error(`No such session: ${sessionKey}`);
+    }
     return toSessionSummary(result.session);
   }
 

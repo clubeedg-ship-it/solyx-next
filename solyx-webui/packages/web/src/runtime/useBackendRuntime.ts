@@ -25,9 +25,15 @@ export function useBackendRuntime(socket: BackendSocket) {
   return useRemoteThreadListRuntime({
     runtimeHook: () => {
       const aui = useAui();
-      const sessionKey = aui.threadListItem.getState().remoteId ?? aui.threadListItem.getState().id;
-      return useLocalRuntime(createChatModelAdapter(socket, sessionKey), {
-        adapters: { history: createThreadHistoryAdapter(socket, sessionKey) },
+      // A getter, never a captured value: `remoteId` is undefined until the
+      // thread is persisted, and it is persisted lazily on first send. Reading
+      // it once here bound both adapters to `__LOCALID_...` forever.
+      const resolveSessionKey = () => {
+        const state = aui.threadListItem.getState();
+        return state.remoteId ?? state.id;
+      };
+      return useLocalRuntime(createChatModelAdapter(socket, resolveSessionKey), {
+        adapters: { history: createThreadHistoryAdapter(socket, resolveSessionKey) },
       });
     },
     adapter: createThreadListAdapter(socket),

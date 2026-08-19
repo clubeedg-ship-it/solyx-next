@@ -9,13 +9,23 @@ import type { BackendSocket } from "./backendSocket.js";
  * whatever the backend forwards from the Gateway's `assistant` events. The
  * Gateway credential lives only in the backend process (see server/src/gateway).
  *
- * One adapter instance is bound to one session (sessionKey) — assistant-ui's
- * RemoteThreadListRuntime creates a fresh per-thread runtime via its
- * `runtimeHook`, which is where this factory is called (see threadListAdapter.ts).
+ * The session key is resolved per turn, not captured at construction, and that
+ * is load-bearing. A thread exists locally before it is persisted: until
+ * `initialize()` runs, assistant-ui's own `__LOCALID_<id>` is all there is, and
+ * sessions are created lazily on first send so that a page load does not write
+ * an empty one. Binding the key at construction therefore froze the adapter to
+ * `__LOCALID_...`, which the Gateway cannot parse as `agent:<id>:<session>` —
+ * it fell back to agent "main" and rejected every send with `invalid agent
+ * params`. Resolving inside run() reads the key after the submit path has
+ * awaited readiness, so it is the real one by then.
  */
-export function createChatModelAdapter(socket: Pick<BackendSocket, "on" | "request">, sessionKey: string): ChatModelAdapter {
+export function createChatModelAdapter(
+  socket: Pick<BackendSocket, "on" | "request">,
+  resolveSessionKey: () => string,
+): ChatModelAdapter {
   return {
     async *run({ messages, abortSignal }: ChatModelRunOptions) {
+      const sessionKey = resolveSessionKey();
       const text = extractLatestUserText(messages);
       const queue = new AsyncQueue<string>();
 
