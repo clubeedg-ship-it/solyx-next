@@ -11,7 +11,12 @@ import type {
 // ============================================================================
 // WIRE CONTRACT — verified against the running Gateway (openclaw 2026.7.1-2)
 // on 2026-08-13 by probing every method/event below with `openclaw gateway
-// call` and a live GatewayClient event capture. It is NOT taken from
+// call` and a live GatewayClient event capture, and RE-VERIFIED 2026-08-25
+// against Gateway openclaw 2026.8.1 (ws://127.0.0.1:18789) via a live
+// @openclaw/gateway-client connection: HELLO_OK at protocol
+// 2026.8.1-beta.1; `sessions.rename` and `sessions.unarchive` still do not
+// exist (server replies "unknown method"); `sessions.patch` accepted for
+// both label and archived. It is NOT taken from
 // @openclaw/gateway-protocol's schema: that package is pinned to
 // 2026.8.1-beta.1, a *newer* wire version than the Gateway we talk to, and
 // an earlier version of this file was written against it. Every difference
