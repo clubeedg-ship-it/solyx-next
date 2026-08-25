@@ -4,9 +4,12 @@ Short snapshot + rules. Long-form lives in `PROJECT.md`, retrieved by section an
 
 ## 1. Identity
 - Project: `solyx-next` — static marketing website for **Solyx Energy**, selling the **Nymo WaterAccu** (a "water battery" / hot-water energy-storage product). Dutch market.
-- Repo: `/Users/ottogen/Downloads/solyx-next` (work only here). Not a git repo.
+- Repo: git repository at `/home/diorno/solyx-next` on host `core`, origin
+  `https://github.com/clubeedg-ship-it/solyx-next` (verified 2026-08-25). Work
+  here. The repo has two halves with different invariants — see §5.
 - Live site: `https://www.solyxenergy.nl` (WordPress) — these static pages are a redesign/working copy that hot-links the live site's images.
-- Branch: n/a (no version control).
+- Branch: `session-key-await` as of 2026-08-25 (`git branch --show-current` is
+  the truth; this line rots).
 
 ## 2. Session start
 Read `PROJECT.md §E` (handoff) first. Then `§A` if the task is structural, `§D` for your lane (`content` / `build`). Read the cited §§ only — never the whole thing. Prefer the per-page facts in `§G` over re-scanning every file.
@@ -25,7 +28,12 @@ Read `PROJECT.md §E` (handoff) first. Then `§A` if the task is structural, `§
 - `working copy` = this folder — where page content is finished before it goes live.
 
 ## 5. Invariants (byte-identical mirror of `PROJECT.md §A.10`)
-- No build step, no framework, no npm: every page is a single standalone `.html` with inline `<style>` and inline `<script>`. Don't add bundlers, shared CSS/JS files, or dependencies.
+
+Two halves of this repo, two rule sets. Do not apply one half's invariants to
+the other.
+
+### 5a. Static marketing pages (repo root, `*.html`)
+- No build step, no framework, no npm **for these pages only**: every page is a single standalone `.html` with inline `<style>` and inline `<script>`. Don't add bundlers, shared CSS/JS files, or dependencies here.
 - Each page carries its own `<nav>` and scripts — there is no shared shell; edits to nav/footer must be repeated per page.
 - Brand palette is fixed: primary green `#35A847`, dark green `#1E7A30`, ink `#1c2422`. Fonts: Inter + DM Sans via Google Fonts (`--font-head` / `--font-body`).
 - User-facing copy is Dutch, regardless of the `<html lang>` attribute.
@@ -33,6 +41,14 @@ Read `PROJECT.md §E` (handoff) first. Then `§A` if the task is structural, `§
 - All internal nav/footer/CTA links are local relative `.html` paths — never point them at `solyxenergy.nl`. Only `<img>` and `mailto:` may reference the live domain. Watch for JS bounces too (`onclick="window.location.href=…"`, `window.open(…)`), not just `href`.
 - `index.html` is a **redirect** to `home.html`; the page registry (source of truth for which pages should exist) is **`hub.html`** — keep `hub.html` in sync when adding/removing pages. Serve via `.claude/launch.json` → `solyx-next-static` (python no-cache server on :4599, `/` → home).
 - Nav/footer logos are the **transparent inline SVG wordmark** (dark `#1C2422` mark + "SOLYX ENERGY" text; copy from any current page). Never use a base64 **JPEG** logo — JPEG has no alpha, so it shows a white square block. Verification screenshots go in `screenshots/`, not the repo root.
+
+### 5b. `solyx-webui/` (pnpm monorepo: React + Node)
+- This half is the opposite of 5a: it has a build step, npm dependencies, and a
+  compiled server (`packages/server/dist/index.js`). Do not edit its output
+  bundles; build from source. Its own README carries the detailed rules —
+  read `solyx-webui/README.md` before touching it. Live deployment:
+  `solyx-webui.service` on `core` behind `solyx-tunnel` at `solyx.oopuo.nl`
+  (as of 2026-08-25); do not restart or redeploy without Otto's say-so.
 
 ## 6. Current snapshot
 > Hot state — overwritten at session close. YAML.

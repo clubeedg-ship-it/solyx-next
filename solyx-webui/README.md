@@ -5,10 +5,12 @@ WordPress-editing agent ("Sol") and watch drafts update live. No publish
 button anywhere — this app only ever produces drafts; going live happens in
 WordPress, by a human.
 
-Read `work/client-agent/webui/PLAN.md` (in the `solyx-next` repo) for the
+Read `work/client-agent/ROADMAP.md` (in the `solyx-next` repo) for the
 full design reasoning this implements: the OpenClaw Gateway protocol
 research, the framework comparison, the deployment host, and the phased
-plan. This README covers running and deploying what was actually built.
+plan. (The old pointer to `work/client-agent/webui/PLAN.md` was removed
+2026-08-25 — that file no longer exists.) This README covers running and
+deploying what was actually built.
 
 ## Architecture
 
@@ -535,10 +537,13 @@ compose by construction, the same reasoning that already applied to
 
 ## What is stubbed, incomplete, or unverifiable from here
 
-- **No real OpenClaw Gateway exists yet.** PLAN.md Phase 0 (provision a
-  dedicated profile + agent "Sol") hasn't happened. `OPENCLAW_GATEWAY_MODE=real`
-  is implemented and typechecked against the real `@openclaw/gateway-client`
-  package's types, but has never connected to an actual Gateway.
+- **A real OpenClaw Gateway exists and this repo is deployed and live.** A
+  gateway runs on host `core` at `ws://127.0.0.1:18789`, and the app is live
+  behind `solyx-tunnel` at `https://solyx.oopuo.nl` (`solyx-webui.service`,
+  runs `packages/server/dist/index.js`) — both verified 2026-08-25. Whether
+  the *deployed* service currently runs with `OPENCLAW_GATEWAY_MODE=real` and
+  a working device-pairing against that gateway is checked from the service's
+  env (`~/.config/solyx-webui.env` on core), not assumed here.
 - **The WordPress draft-preview round trip is unverified against the real
   site**, by hard constraint — see "Draft panel: the proxy" above.
 - **The WordPress-editing tool's `tool.event` payload shape is unverified**
@@ -570,7 +575,10 @@ compose by construction, the same reasoning that already applied to
   `sessions.patch` for both (setting `title` / `archived: false`), which is
   the closest documented fit but hasn't been confirmed against a live
   Gateway. Flagged with a comment at each call site.
-- **Real cold-start time under Sablier is unmeasured** — this repo isn't
-  deployed anywhere (hard constraint), so there's nothing to measure yet.
+- **Real cold-start time under Sablier is measured only for the always-on
+  deployment** — as of 2026-08-25 the service runs via systemd without Sablier,
+  so cold-start under Sablier specifically remains unmeasured. The earlier
+  "this repo isn't deployed anywhere" claim was wrong: it is deployed and
+  live at `https://solyx.oopuo.nl`.
 - **`npm audit` is clean at time of writing** (0 vulnerabilities); re-check
   before deploying since this wasn't re-verified at handoff time.
