@@ -35,12 +35,20 @@ an agent can decide to break is not an invariant.
 2. **No delete.** Carried forward unchanged. There is no delete route today and
    there will not be one.
 3. **No settings.** Carried forward unchanged.
-4. **Validate before write.** Block markup is parsed and checked server-side
-   before it is saved. A malformed block is rejected at the REST layer rather
-   than discovered later in the editor as a recovery prompt.
-5. **Curated vocabulary, not free markup.** The agent composes from a registered
-   set of block types and patterns. A small readable vocabulary beats arbitrary
-   generated HTML, for the same reason the rest of this system stays readable.
+4. **Validate what can be validated, and know what cannot.** Verified
+   2026-08-25: WordPress core runs no block validation on save. The parser is
+   lenient and accepts unclosed delimiters, unknown block names and malformed
+   attribute JSON without error. Block invalidity is decided in the browser,
+   when the editor regenerates each block's `save` output and string-compares it
+   to what was stored. A server gate is therefore partial. It can
+   `parse_blocks()`, check every node against an allowlist and the registered
+   block types, validate attributes against their schema, then
+   `serialize_blocks()` and require a byte-identical round trip. That catches
+   structural corruption and cannot catch editor-side invalidation.
+5. **Curated vocabulary, not free markup.** This carries the weight rule 4
+   cannot. The only markup certain to survive is markup matching a known-good
+   `save` byte for byte, so the agent never hand-writes block markup. It
+   composes from registered patterns and block types and fills in text.
 6. **Every write is revertible.** A revision is forced before each agent write,
    so any change can be rolled back without reconstructing it.
 7. **Preview without login.** A draft gets a shareable preview link so Otto can
@@ -52,10 +60,18 @@ The OpenClaw instance moves to `bubble`. The plugin talks to the gateway there
 rather than to a process on Otto's workstation, so the agent stays up when his
 machines are not.
 
+## The capability set
+
+Verified 2026-08-25. There is no `create_pages` in WordPress: `edit_pages`
+governs creating a page, and `map_meta_cap` resolves editing a published page to
+the separate `edit_published_pages`. So the invariant is free.
+
+Granted: `edit_pages`. Denied: `publish_pages`, `edit_published_pages`,
+`edit_others_pages`, every `delete_*`, all settings caps. Posts identical with
+`_posts`.
+
 ## Open
 
-- The exact minimal capability set that permits draft creation and editing while
-  making publish and delete impossible.
 - Whether the curated vocabulary is registered block patterns, reusable blocks,
   or a plugin-owned list.
 - Whether the plugin or the gateway owns validation.
