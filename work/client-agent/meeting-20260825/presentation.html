@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Solyx — what is done and live, 25 August 2026</title>
+<style>
+  :root { --green:#35A847; --ink:#1c2422; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:"DM Sans",system-ui,sans-serif; color:var(--ink); background:#f7f7f5; line-height:1.55; }
+  section { max-width:1100px; margin:0 auto; padding:56px 32px; border-bottom:1px solid #e4e4e0; }
+  h1 { font-size:2.4rem; line-height:1.15; margin-bottom:8px; }
+  h2 { font-size:1.6rem; color:var(--green); margin-bottom:16px; }
+  p.lead { font-size:1.15rem; max-width:46rem; }
+  .kicker { text-transform:uppercase; letter-spacing:.12em; font-size:.78rem; color:#6b756f; margin-bottom:10px; }
+  img.shot { width:100%; border:1px solid #d8d8d3; border-radius:10px; margin:18px 0 6px; box-shadow:0 10px 30px rgba(28,36,34,.08); }
+  figcaption { font-size:.85rem; color:#6b756f; margin-bottom:14px; }
+  ul { margin:12px 0 0 20px; }
+  li { margin:6px 0; }
+  .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:22px; }
+  .grid3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; }
+  .stat { background:#fff; border:1px solid #e4e4e0; border-radius:10px; padding:18px; }
+  .stat b { font-size:1.9rem; display:block; color:var(--green); }
+  footer { max-width:1100px; margin:0 auto; padding:32px; font-size:.85rem; color:#6b756f; }
+</style>
+</head>
+<body>
+
+<section>
+  <div class="kicker">Solyx Energy · status · 25 August 2026</div>
+  <h1>What is done, and running, today.</h1>
+  <p class="lead">Everything on this page is live or captured from a running
+  system — nothing here is a mock-up or a plan.</p>
+</section>
+
+<section>
+  <h2>The numbers</h2>
+  <div class="grid3">
+    <div class="stat"><b>314</b> automated tests, all passing<br>(191 backend + 123 frontend)</div>
+    <div class="stat"><b>45</b> commits since 1 August</div>
+    <div class="stat"><b>2</b> live services, both up:<br>solyxenergy.nl + the content assistant</div>
+  </div>
+</section>
+
+<section>
+  <h2>The content assistant — live since 19 August</h2>
+  <p class="lead">solyx.oopuo.nl. A change to the website is asked for in plain
+  language instead of being done by hand in WordPress.</p>
+  <figure>
+    <img class="shot" src="01-assistant-chat.png" alt="The assistant chat interface with the conversation threads on the left and the draft panel on the right">
+    <figcaption>The working app: conversations on the left, each thread keeps its own history; the draft panel sits beside the chat.</figcaption>
+  </figure>
+  <ul>
+    <li>Threads keep their history; titles are generated from the first message.</li>
+    <li>A drafts panel reads live from WordPress, with previews of every draft.</li>
+    <li>A page browser shows every published page as a card.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Safety, as it stands today</h2>
+  <ul>
+    <li>The assistant edits <b>text only</b>.</li>
+    <li>It cannot delete a page.</li>
+    <li>It cannot touch a page that is already published.</li>
+    <li>It cannot change a setting.</li>
+  </ul>
+  <p style="margin-top:12px;">These are audited properties of the account it
+  runs under, not promises in code.</p>
+</section>
+
+<section>
+  <h2>The new website — every page redesigned</h2>
+  <p class="lead">The full Dutch redesign is built as fast, standalone pages.
+  A selection, captured at desktop size:</p>
+  <figure><img class="shot" src="static-home.png" alt="Home page"><figcaption>Home</figcaption></figure>
+  <div class="grid2">
+    <figure><img class="shot" src="static-hoe-werkt-het.png" alt="How it works page"><figcaption>Hoe werkt het (how it works)</figcaption></figure>
+    <figure><img class="shot" src="static-besparen.png" alt="Savings page"><figcaption>Besparen (saving)</figcaption></figure>
+    <figure><img class="shot" src="static-shop-nymo.png" alt="Nymo shop page"><figcaption>Shop — Nymo WaterAccu</figcaption></figure>
+    <figure><img class="shot" src="static-wateraccu.png" alt="Wateraccu product page"><figcaption>WaterAccu product page</figcaption></figure>
+  </div>
+  <p style="margin-top:10px;color:#6b756f;">Also captured: FAQ and customer stories — see the image files next to this document.</p>
+</section>
+
+<section>
+  <h2>It works on phones</h2>
+  <div class="grid3">
+    <figure><img class="shot" src="mobile-home.png" alt="Home on mobile"><figcaption>Home, 390 px wide</figcaption></figure>
+    <figure><img class="shot" src="mobile-hoe-werkt-het.png" alt="How it works on mobile"><figcaption>Hoe werkt het, mobile</figcaption></figure>
+    <figure><img class="shot" src="mobile-shop-nymo.png" alt="Shop on mobile"><figcaption>Shop, mobile</figcaption></figure>
+  </div>
+</section>
+
+<section>
+  <h2>Closed out this month</h2>
+  <ul>
+    <li>Migration finished: analytics behind Google Consent Mode; commerce funnel measured for Meta and Tag Manager.</li>
+    <li>Verified 301 redirect table; privacy policy published.</li>
+    <li>Every mobile overflow cleared; every dead link repaired.</li>
+    <li>Last dependency on the legacy domain cut.</li>
+    <li>This week: the assistant was connected to its agent runtime end-to-end and verified; all project documentation corrected and brought up to date.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Next</h2>
+  <p class="lead">The assistant graduates from editing words to building pages:
+  composing a page from the site's existing design blocks instead of only
+  changing text inside blocks someone else placed. The safety guarantee moves
+  with it: everything it builds is a draft, and WordPress itself denies it the
+  permission to publish. Approval stays human.</p>
+</section>
+
+<footer>Screenshots captured 25 August 2026 from the running systems. This file opens directly in any browser; images are loaded from the same folder.</footer>
+</body>
+</html>
