@@ -1,5 +1,9 @@
 import { useAui, useLocalRuntime, useRemoteThreadListRuntime } from "@assistant-ui/react";
-import { createChatModelAdapter } from "./chatModelAdapter.js";
+import { createChatModelAdapter, LOCAL_ID_PREFIX } from "./chatModelAdapter.js";
+
+/** How long a send waits for the thread to be persisted before giving up. */
+const RESOLVE_TIMEOUT_MS = 8000;
+const RESOLVE_POLL_MS = 50;
 import { createThreadHistoryAdapter } from "./historyAdapter.js";
 import { createThreadListAdapter } from "./threadListAdapter.js";
 import type { BackendSocket } from "./backendSocket.js";
@@ -25,12 +29,36 @@ export function useBackendRuntime(socket: BackendSocket) {
   return useRemoteThreadListRuntime({
     runtimeHook: () => {
       const aui = useAui();
-      // A getter, never a captured value: `remoteId` is undefined until the
-      // thread is persisted, and it is persisted lazily on first send. Reading
-      // it once here bound both adapters to `__LOCALID_...` forever.
-      const resolveSessionKey = () => {
-        const state = aui.threadListItem.getState();
-        return state.remoteId ?? state.id;
+      // Awaited, and it waits.
+      //
+      // `remoteId` is undefined until the thread is persisted, and it is
+      // persisted lazily by the very send that needs the key. Capturing the
+      // value froze both adapters to `__LOCALID_...`; reading it fresh per turn
+      // was still too early, because the submit path awaits initialize() while
+      // the runtime applies its result to the store afterwards, so the first
+      // read can land in the gap between the two. That gap is why every first
+      // message came back as `invalid agent params: agent "solyx" does not
+      // match session key agent "main"` — the Gateway cannot parse a local id
+      // as `agent:<id>:<session>` and falls back to the default agent.
+      //
+      // So: poll briefly for the id to appear, and if it never does, fail with
+      // something a person can read instead of sending a key the Gateway will
+      // reject. Sending a known-bad key is the one option that must not remain.
+      const resolveSessionKey = async () => {
+        const read = () => {
+          const state = aui.threadListItem.getState();
+          return state.remoteId ?? state.id;
+        };
+        let key = read();
+        const deadline = Date.now() + RESOLVE_TIMEOUT_MS;
+        while (key.startsWith(LOCAL_ID_PREFIX) && Date.now() < deadline) {
+          await new Promise((resolve) => setTimeout(resolve, RESOLVE_POLL_MS));
+          key = read();
+        }
+        if (key.startsWith(LOCAL_ID_PREFIX)) {
+          throw new Error("Sol kon dit gesprek niet openen.");
+        }
+        return key;
       };
       return useLocalRuntime(createChatModelAdapter(socket, resolveSessionKey), {
         adapters: { history: createThreadHistoryAdapter(socket, resolveSessionKey) },

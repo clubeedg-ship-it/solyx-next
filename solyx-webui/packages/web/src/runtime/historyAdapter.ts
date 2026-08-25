@@ -1,5 +1,6 @@
 import { ExportedMessageRepository, type ThreadHistoryAdapter } from "@assistant-ui/react";
 import type { BackendSocket } from "./backendSocket.js";
+import { LOCAL_ID_PREFIX } from "./chatModelAdapter.js";
 import type { HistoryMessageWire } from "./protocol.js";
 
 /**
@@ -20,15 +21,20 @@ import type { HistoryMessageWire } from "./protocol.js";
  */
 export function createThreadHistoryAdapter(
   socket: Pick<BackendSocket, "request">,
-  resolveSessionKey: () => string,
+  resolveSessionKey: () => Promise<string>,
 ): ThreadHistoryAdapter {
   return {
     async load() {
       // Resolved per load, for the same reason chatModelAdapter resolves per
       // turn: before initialize() there is only a local `__LOCALID_` id, and
       // asking the backend for its transcript is meaningless.
-      const sessionKey = resolveSessionKey();
-      if (sessionKey.startsWith("__LOCALID_")) return ExportedMessageRepository.fromArray([]);
+      // A thread with no persisted id has no transcript by definition, so this
+      // must not wait for one to appear — it would block every fresh thread's
+      // first render for the whole resolve timeout.
+      const sessionKey = await resolveSessionKey().catch(() => "");
+      if (sessionKey === "" || sessionKey.startsWith(LOCAL_ID_PREFIX)) {
+        return ExportedMessageRepository.fromArray([]);
+      }
       const messages = await socket.request<HistoryMessageWire[]>({
         type: "sessions.history",
         sessionKey,

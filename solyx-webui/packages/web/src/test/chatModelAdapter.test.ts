@@ -49,10 +49,20 @@ async function collect<T>(gen: AsyncGenerator<T>): Promise<T[]> {
   return out;
 }
 
+/**
+ * Let `run()` get as far as subscribing before a test fires a frame at it.
+ *
+ * `await Promise.resolve()` used to be enough, but run() now awaits the
+ * session key first, so a single microtask no longer reaches the listeners.
+ * Production is unaffected: run() subscribes before it issues chat.send, and
+ * chat.send is what causes any frame to exist, so nothing can arrive earlier.
+ */
+const flush = () => new Promise((resolve) => setTimeout(resolve, 0));
+
 describe("createChatModelAdapter", () => {
   it("sends chat.send with the latest user message text and the bound session key", async () => {
     const fake = createFakeSocket();
-    const adapter = createChatModelAdapter(fake.socket, () => "s1");
+    const adapter = createChatModelAdapter(fake.socket, async () => "s1");
     const controller = new AbortController();
 
     const runPromise = collect(
@@ -65,7 +75,7 @@ describe("createChatModelAdapter", () => {
       } as never) as AsyncGenerator<{ content: readonly { type: string; text: string }[] }>,
     );
 
-    await Promise.resolve();
+    await flush();
     expect(fake.sent[0]).toMatchObject({ type: "chat.send", sessionKey: "s1", text: "Verander de titel" });
 
     fake.fire({ type: "assistant.done", sessionKey: "s1" });
@@ -74,7 +84,7 @@ describe("createChatModelAdapter", () => {
 
   it("yields each cumulative assistant.delta as a text content update", async () => {
     const fake = createFakeSocket();
-    const adapter = createChatModelAdapter(fake.socket, () => "s1");
+    const adapter = createChatModelAdapter(fake.socket, async () => "s1");
     const controller = new AbortController();
 
     const results: { content: readonly { type: string; text: string }[] }[] = [];
@@ -88,20 +98,24 @@ describe("createChatModelAdapter", () => {
       } as never) as AsyncGenerator<{ content: readonly { type: string; text: string }[] }>
     )[Symbol.asyncIterator]();
 
-    // Each `.next()` call resumes the generator synchronously up to its next
-    // suspend point (registering the assistant.delta listener before the
-    // first call even settles) — so the matching fire() must happen right
-    // after starting `.next()`, not after awaiting it, or there is nothing
-    // listening yet and the fired event is lost.
+    // Start `.next()`, then let it settle, then fire. The listeners are
+    // registered synchronously when the generator body starts, but a frame
+    // only counts once the session key has resolved — and resolving it is
+    // asynchronous, because the thread is persisted lazily by this very send.
+    // Production never hits that window: the frames exist only in response to
+    // chat.send, which is issued after the key resolves.
     const p1 = iterator.next();
+    await flush();
     fake.fire({ type: "assistant.delta", sessionKey: "s1", text: "Bezig" });
     results.push((await p1).value);
 
     const p2 = iterator.next();
+    await flush();
     fake.fire({ type: "assistant.delta", sessionKey: "s1", text: "Bezig..." });
     results.push((await p2).value);
 
     const p3 = iterator.next();
+    await flush();
     fake.fire({ type: "assistant.done", sessionKey: "s1" });
     const final = await p3;
 
@@ -114,7 +128,7 @@ describe("createChatModelAdapter", () => {
 
   it("ignores frames for other sessions", async () => {
     const fake = createFakeSocket();
-    const adapter = createChatModelAdapter(fake.socket, () => "s1");
+    const adapter = createChatModelAdapter(fake.socket, async () => "s1");
     const controller = new AbortController();
 
     const iterator = (
@@ -128,6 +142,7 @@ describe("createChatModelAdapter", () => {
     )[Symbol.asyncIterator]();
 
     const p1 = iterator.next();
+    await flush();
     fake.fire({ type: "assistant.delta", sessionKey: "s2", text: "niet voor mij" });
     fake.fire({ type: "assistant.delta", sessionKey: "s1", text: "wel voor mij" });
     const first = await p1;
@@ -135,13 +150,14 @@ describe("createChatModelAdapter", () => {
     expect(first.value).toEqual({ content: [{ type: "text", text: "wel voor mij" }] });
 
     const p2 = iterator.next();
+    await flush();
     fake.fire({ type: "assistant.done", sessionKey: "s1" });
     await p2;
   });
 
   it("propagates assistant.error as a thrown error", async () => {
     const fake = createFakeSocket();
-    const adapter = createChatModelAdapter(fake.socket, () => "s1");
+    const adapter = createChatModelAdapter(fake.socket, async () => "s1");
     const controller = new AbortController();
 
     const iterable = adapter.run({
@@ -152,9 +168,14 @@ describe("createChatModelAdapter", () => {
       unstable_getMessage: () => userMessage("hoi"),
     } as never) as AsyncGenerator<unknown>;
 
-    // collect() must be started first so its `for await` registers the
-    // assistant.error listener before the event fires.
+    // collect() must be started first so its `for await` drives the generator
+    // far enough to register the assistant.error listener, and then settle, so
+    // the session key has resolved by the time the event fires. A frame that
+    // arrives before the key is known belongs to no turn yet and is ignored —
+    // which cannot happen in production, where the frames exist only in
+    // response to the chat.send issued after the key resolves.
     const resultPromise = collect(iterable);
+    await flush();
     fake.fire({ type: "assistant.error", sessionKey: "s1", error: "gateway offline" });
 
     await expect(resultPromise).rejects.toThrow("gateway offline");
@@ -170,7 +191,7 @@ describe("session key resolution", () => {
     // own __LOCALID_ placeholder. The real key appears only once initialize()
     // has run, which the submit path awaits before it sends.
     let key = "__LOCALID_abc";
-    const adapter = createChatModelAdapter(fake.socket, () => key);
+    const adapter = createChatModelAdapter(fake.socket, async () => key);
     key = "agent:solyx:dashboard:real";
 
     const controller = new AbortController();
@@ -184,7 +205,7 @@ describe("session key resolution", () => {
       } as never) as AsyncGenerator<{ content: readonly { type: string; text: string }[] }>,
     );
 
-    await Promise.resolve();
+    await flush();
     // The Gateway parses this as agent:<id>:<session>. A __LOCALID_ key does
     // not parse, falls back to agent "main", and every send is rejected with
     // `invalid agent params` — exactly what shipped once the eager session
@@ -197,5 +218,29 @@ describe("session key resolution", () => {
 
     fake.fire({ type: "assistant.done", sessionKey: "agent:solyx:dashboard:real" });
     await expect(runPromise).resolves.toEqual([]);
+  });
+
+  it("never sends when the key cannot be resolved", async () => {
+    const fake = createFakeSocket();
+    // What the resolver does when a thread is never persisted: it gives up
+    // rather than handing the Gateway a `__LOCALID_` key it will reject with
+    // `invalid agent params`. A visible failure beats a cryptic one.
+    const adapter = createChatModelAdapter(fake.socket, async () => {
+      throw new Error("Sol kon dit gesprek niet openen.");
+    });
+
+    const controller = new AbortController();
+    const run = collect(
+      adapter.run({
+        messages: [userMessage("hoi")],
+        abortSignal: controller.signal,
+        runConfig: {},
+        context: { getModelContext: () => ({}) } as never,
+        unstable_getMessage: () => userMessage("hoi"),
+      } as never) as AsyncGenerator<{ content: readonly { type: string; text: string }[] }>,
+    );
+
+    await expect(run).rejects.toThrow(/niet openen/);
+    expect(fake.sent).toEqual([]);
   });
 });

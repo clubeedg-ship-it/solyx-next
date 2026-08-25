@@ -19,32 +19,54 @@ import type { BackendSocket } from "./backendSocket.js";
  * params`. Resolving inside run() reads the key after the submit path has
  * awaited readiness, so it is the real one by then.
  */
+export const LOCAL_ID_PREFIX = "__LOCALID_";
+
 export function createChatModelAdapter(
   socket: Pick<BackendSocket, "on" | "request">,
-  resolveSessionKey: () => string,
+  resolveSessionKey: () => Promise<string>,
 ): ChatModelAdapter {
   return {
     async *run({ messages, abortSignal }: ChatModelRunOptions) {
-      const sessionKey = resolveSessionKey();
       const text = extractLatestUserText(messages);
       const queue = new AsyncQueue<string>();
 
+      // Subscribed before the first await, on purpose. A generator body runs
+      // synchronously up to its first suspend point, so registering here means
+      // the listeners exist the moment run() is started rather than a tick
+      // later. Nothing can actually arrive before chat.send is issued below —
+      // the send is what causes the frames — but keeping the registration
+      // synchronous removes the question entirely.
+      //
+      // The key is filled in once it resolves; until then no frame can match,
+      // which is correct, because until then no frame for this turn exists.
+      let sessionKey: string | undefined;
+      const mine = (frame: { sessionKey: string }): boolean =>
+        sessionKey !== undefined && frame.sessionKey === sessionKey;
+
       const offDelta = socket.on("assistant.delta", (frame) => {
-        if (frame.sessionKey === sessionKey) queue.push(frame.text);
+        if (mine(frame)) queue.push(frame.text);
       });
       const offDone = socket.on("assistant.done", (frame) => {
-        if (frame.sessionKey === sessionKey) queue.end();
+        if (mine(frame)) queue.end();
       });
       const offError = socket.on("assistant.error", (frame) => {
-        if (frame.sessionKey === sessionKey) queue.fail(new Error(frame.error));
+        if (mine(frame)) queue.fail(new Error(frame.error));
       });
       const onAbort = () => {
-        void socket.request({ type: "chat.abort", sessionKey }).catch(() => {});
+        // Nothing to abort if the turn never got a key, and chat.abort with an
+        // unresolved one would be the same bad request this all exists to stop.
+        if (sessionKey !== undefined) {
+          void socket.request({ type: "chat.abort", sessionKey }).catch(() => {});
+        }
         queue.end();
       };
       abortSignal.addEventListener("abort", onAbort);
 
       try {
+        // Awaited, not read: the real key only exists once the thread has been
+        // persisted, and persistence is triggered by this very send. See
+        // useBackendRuntime for why reading it synchronously was not enough.
+        sessionKey = await resolveSessionKey();
         await socket.request({ type: "chat.send", sessionKey, text });
         for await (const cumulativeText of queue) {
           // assistant-ui's contract: yield the full state each time, not a
